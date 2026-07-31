@@ -71,7 +71,52 @@ CDN compared by `version`, not a server. Nothing here needs one.
 
 ### Growing the catalogue
 
-`scripts/import-csv.mjs` converts a spreadsheet into a validated data file:
+Two steps: collect the spreadsheets, then map them onto the schema.
+
+#### 1. Collect (`scripts/scrape-sheets.mjs`)
+
+Many grinder write-ups publish their measurements as an embedded Google Sheet,
+one per article. This walks a series, finds the sheets, and saves every tab as
+CSV:
+
+```bash
+# from an index page that links the articles
+node scripts/scrape-sheets.mjs \
+  --index https://example.com/blog/series/ --path-contains /series/ \
+  --out data/raw/series
+
+# or from an explicit list, one URL per line
+node scripts/scrape-sheets.mjs --urls articles.txt --out data/raw/series
+
+# add --browser if the articles are rendered client-side
+node scripts/scrape-sheets.mjs --urls articles.txt --out data/raw/series --browser
+```
+
+A browser is only needed to *discover* links on client-rendered pages —
+downloading is a plain `export?format=csv` request, so the static path needs no
+Playwright at all. If a static fetch finds no sheets, the script retries that
+article through a browser by itself rather than reporting a false negative.
+
+Two failure modes it refuses to paper over:
+
+- **Multi-tab sheets.** `export?format=csv` without a `gid` returns *only the
+  first tab*. The script reads the tab strip from `pubhtml`/`htmlview` first and
+  exports each tab explicitly — otherwise a sheet with one tab per grinder comes
+  back nearly empty and looks like it worked.
+- **Private sheets.** A login wall answers `200` with an HTML page. Writing that
+  to a `.csv` would poison the import, so HTML responses are reported instead.
+
+Output is `<out>/*.csv` plus a `manifest.json` recording which article each sheet
+came from, so provenance carries into the dataset's `sources`.
+
+Only reaches sheets that are already publicly readable, runs sequentially with a
+`--delay` between requests, and does not attempt to bypass any access control.
+Check that the source's terms allow reuse before republishing its data; the
+per-entry `sources` field exists so attribution survives.
+
+#### 2. Map (`scripts/import-csv.mjs`)
+
+Converts a spreadsheet into a validated data file:
 
 ```bash
 node scripts/import-csv.mjs grinders.csv my-source --source https://example.com/db

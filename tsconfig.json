@@ -5,6 +5,10 @@
     "module": "ESNext",
     "moduleResolution": "bundler",
     "resolveJsonModule": true,
+    // The Node-only scripts are plain JS annotated with JSDoc. Allowing them in
+    // lets TypeScript read those annotations instead of the tests having to
+    // suppress the import.
+    "allowJs": true,
     "types": ["chrome", "vitest/globals"],
     "strict": true,
     "noUncheckedIndexedAccess": true,
