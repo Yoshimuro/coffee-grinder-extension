@@ -1,0 +1,17 @@
+{
+  "$comment": "Recommended micron ranges per brew method. Deliberately wide: these are the ranges the specialty-coffee community converges on, not a single 'correct' number.",
+  "sources": [
+    "https://honestcoffeeguide.com/coffee-grind-size-chart/",
+    "https://notabarista.org/grind-size-chart/"
+  ],
+  "methods": [
+    { "id": "turkish", "name": "Turkish", "min": 40, "max": 220 },
+    { "id": "espresso", "name": "Espresso", "min": 180, "max": 380 },
+    { "id": "moka", "name": "Moka pot", "min": 360, "max": 660 },
+    { "id": "aeropress", "name": "AeroPress", "min": 320, "max": 960 },
+    { "id": "pourover", "name": "Pour-over", "min": 410, "max": 930 },
+    { "id": "filter", "name": "Batch filter", "min": 550, "max": 1100 },
+    { "id": "frenchpress", "name": "French press", "min": 690, "max": 1300 },
+    { "id": "coldbrew", "name": "Cold brew", "min": 800, "max": 1400 }
+  ]
+}

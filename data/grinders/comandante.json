@@ -1,0 +1,28 @@
+[
+  {
+    "id": "comandante-c40-mk4",
+    "brand": "Comandante",
+    "model": "C40 MK4 Nitro Blade",
+    "type": "manual",
+    "burr": "conical",
+    "scale": { "min": 0, "max": 60, "step": 1, "unit": "click" },
+    "calibration": { "kind": "linear", "micronsPerStep": 30, "zeroOffsetMicrons": 0 },
+    "confidence": "manufacturer",
+    "sources": ["https://honestcoffeeguide.com/comandante-c40-mk4-grind-settings/"],
+    "aliases": ["C40", "MK3"],
+    "note": "Stock axle. Espresso lands around 7-12 clicks, which is why the Red Clix upgrade exists."
+  },
+  {
+    "id": "comandante-c40-red-clix",
+    "brand": "Comandante",
+    "model": "C40 + Red Clix RX35",
+    "type": "manual",
+    "burr": "conical",
+    "scale": { "min": 0, "max": 120, "step": 1, "unit": "click" },
+    "calibration": { "kind": "linear", "micronsPerStep": 15, "zeroOffsetMicrons": 0 },
+    "confidence": "manufacturer",
+    "sources": ["https://prima-coffee.com/equipment/comandante/1960-coman-sp"],
+    "aliases": ["RX35", "Red Clix"],
+    "note": "Replacement axle that halves the stock 30 um step to 15 um."
+  }
+]

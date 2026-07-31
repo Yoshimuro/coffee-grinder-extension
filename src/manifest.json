@@ -1,0 +1,14 @@
+{
+  "manifest_version": 3,
+  "name": "Grind Converter",
+  "version": "0.1.0",
+  "description": "Convert a grind setting from one coffee grinder to another via a micron scale.",
+  "action": {
+    "default_title": "Grind Converter",
+    "default_popup": "popup.html"
+  },
+  "permissions": ["storage"],
+  "minimum_chrome_version": "116",
+  "$key_comment": "Public half of a throwaway developer keypair. Pins the unpacked extension ID to ciegkfflbbhhnikhadbgncefaenaflhg so E2E tests can address chrome-extension:// URLs without scraping chrome://extensions. Not a secret and not the signing key — the Web Store assigns its own on upload.",
+  "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAjn57z3t8jSZz63UqKNoXUiM4OrkcCGSrq5OPPo2pmNYysWdSwK8oJbhd2JBJLAOQiV7X6u5gNMgtMjcZnhuiO75RG1WhcOQua7SZN0gdNg6N7phUlMruky67g2BDWDILSS34As+fosw/AS52MPrEaZs7VSy7D3E8fKujG0GJkUik8jy+CZgwkCHtn4ywc0wGBSyG8DnOUN0L/1k+LnRjNpPMiSd0MVRDIIA6iR4AgA+LWAPNuCCauCAZv9e+VLIrwB53WLt2VarBUh3phQ/hCC666dQ8IKlBwUqXIPSoq36tQU3AO8Wp4D46TNKUANFCv1XOX7/4H6InPIKUZdzz/wIDAQAB"
+}

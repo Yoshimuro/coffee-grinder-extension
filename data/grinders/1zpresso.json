@@ -1,0 +1,83 @@
+[
+  {
+    "id": "1zpresso-jx-pro",
+    "brand": "1Zpresso",
+    "model": "JX-Pro",
+    "type": "manual",
+    "burr": "conical",
+    "scale": { "min": 0, "max": 160, "step": 1, "unit": "click", "clicksPerRotation": 40 },
+    "calibration": { "kind": "linear", "micronsPerStep": 12.5, "zeroOffsetMicrons": 0 },
+    "confidence": "manufacturer",
+    "sources": ["https://1zpresso.coffee/jx-vs-jxpro/"],
+    "note": "Zeroed at burr contact. 40 clicks per rotation; the dial reads rotations.clicks."
+  },
+  {
+    "id": "1zpresso-jx",
+    "brand": "1Zpresso",
+    "model": "JX",
+    "type": "manual",
+    "burr": "conical",
+    "scale": { "min": 0, "max": 80, "step": 1, "unit": "click", "clicksPerRotation": 40 },
+    "calibration": { "kind": "linear", "micronsPerStep": 25, "zeroOffsetMicrons": 0 },
+    "confidence": "community",
+    "sources": ["https://1zpresso.coffee/jx-vs-jxpro/"],
+    "note": "Twice the step of the JX-Pro; filter-oriented."
+  },
+  {
+    "id": "1zpresso-j-max",
+    "brand": "1Zpresso",
+    "model": "J-Max",
+    "type": "manual",
+    "burr": "conical",
+    "scale": { "min": 0, "max": 200, "step": 1, "unit": "click", "clicksPerRotation": 90 },
+    "calibration": { "kind": "linear", "micronsPerStep": 8.8, "zeroOffsetMicrons": 0 },
+    "confidence": "manufacturer",
+    "sources": ["https://1zpresso.coffee/jmax-vs-jxpro/"],
+    "note": "Finest step in the J series; built for espresso dialling."
+  },
+  {
+    "id": "1zpresso-k-plus",
+    "brand": "1Zpresso",
+    "model": "K-Plus",
+    "type": "manual",
+    "burr": "conical",
+    "scale": { "min": 0, "max": 90, "step": 1, "unit": "click", "clicksPerRotation": 90 },
+    "calibration": { "kind": "linear", "micronsPerStep": 22, "zeroOffsetMicrons": 0 },
+    "confidence": "manufacturer",
+    "sources": ["https://1zpresso.coffee/jxpro-vs-kpro-vs-kplus-vs-kmax/"],
+    "note": "External adjustment ring. Whole K series shares the 22 um step."
+  },
+  {
+    "id": "1zpresso-k-max",
+    "brand": "1Zpresso",
+    "model": "K-Max",
+    "type": "manual",
+    "burr": "conical",
+    "scale": { "min": 0, "max": 90, "step": 1, "unit": "click", "clicksPerRotation": 90 },
+    "calibration": { "kind": "linear", "micronsPerStep": 22, "zeroOffsetMicrons": 0 },
+    "confidence": "manufacturer",
+    "sources": ["https://1zpresso.coffee/jxpro-vs-kpro-vs-kplus-vs-kmax/"]
+  },
+  {
+    "id": "1zpresso-k-pro",
+    "brand": "1Zpresso",
+    "model": "K-Pro",
+    "type": "manual",
+    "burr": "conical",
+    "scale": { "min": 0, "max": 90, "step": 1, "unit": "click", "clicksPerRotation": 90 },
+    "calibration": { "kind": "linear", "micronsPerStep": 22, "zeroOffsetMicrons": 0 },
+    "confidence": "manufacturer",
+    "sources": ["https://1zpresso.coffee/jxpro-vs-kpro-vs-kplus-vs-kmax/"]
+  },
+  {
+    "id": "1zpresso-x-ultra",
+    "brand": "1Zpresso",
+    "model": "X-Ultra",
+    "type": "manual",
+    "burr": "conical",
+    "scale": { "min": 0, "max": 90, "step": 1, "unit": "click", "clicksPerRotation": 30 },
+    "calibration": { "kind": "linear", "micronsPerStep": 20, "zeroOffsetMicrons": 0 },
+    "confidence": "manufacturer",
+    "sources": ["https://honestcoffeeguide.com/1zpresso-x-ultra-grind-settings/"]
+  }
+]

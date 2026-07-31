@@ -1,0 +1,36 @@
+[
+  {
+    "id": "timemore-c2",
+    "brand": "Timemore",
+    "model": "Chestnut C2",
+    "type": "manual",
+    "burr": "conical",
+    "scale": { "min": 0, "max": 40, "step": 1, "unit": "click" },
+    "calibration": { "kind": "linear", "micronsPerStep": 33, "zeroOffsetMicrons": 0 },
+    "confidence": "manufacturer",
+    "sources": ["https://www.timemore.cn/en/index.php?c=show&id=28"]
+  },
+  {
+    "id": "timemore-c3",
+    "brand": "Timemore",
+    "model": "Chestnut C3",
+    "type": "manual",
+    "burr": "conical",
+    "scale": { "min": 0, "max": 40, "step": 1, "unit": "click" },
+    "calibration": { "kind": "linear", "micronsPerStep": 30, "zeroOffsetMicrons": 0 },
+    "confidence": "community",
+    "sources": ["https://www.brewcoffeehome.com/timemore-c3-review/"],
+    "note": "Timemore publishes 23 um for the C3 ESP; the plain C3 is coarser per click."
+  },
+  {
+    "id": "timemore-c3-esp",
+    "brand": "Timemore",
+    "model": "Chestnut C3 ESP",
+    "type": "manual",
+    "burr": "conical",
+    "scale": { "min": 0, "max": 60, "step": 1, "unit": "click" },
+    "calibration": { "kind": "linear", "micronsPerStep": 23, "zeroOffsetMicrons": 0 },
+    "confidence": "manufacturer",
+    "sources": ["https://www.brewcoffeehome.com/timemore-c3-review/"]
+  }
+]

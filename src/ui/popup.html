@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Grind Converter</title>
+    <link rel="stylesheet" href="./popup.css" />
+  </head>
+  <body>
+    <main class="app">
+      <header class="head">
+        <h1 class="head__title">Grind Converter</h1>
+        <span class="head__meta" data-testid="dataset-meta"></span>
+      </header>
+
+      <section class="panel" aria-labelledby="from-label">
+        <h2 class="panel__label" id="from-label">From</h2>
+        <select class="select" id="from-grinder" data-testid="from-grinder" aria-label="Source grinder"></select>
+
+        <div class="stepper">
+          <button class="stepper__btn" type="button" data-testid="setting-down" aria-label="Decrease setting">&minus;</button>
+          <input
+            class="stepper__input"
+            id="from-setting"
+            data-testid="from-setting"
+            type="number"
+            inputmode="decimal"
+            aria-label="Setting on the source grinder"
+          />
+          <button class="stepper__btn" type="button" data-testid="setting-up" aria-label="Increase setting">+</button>
+        </div>
+        <p class="panel__hint" data-testid="from-hint"></p>
+      </section>
+
+      <div class="rule" role="presentation"></div>
+
+      <section class="panel" aria-labelledby="to-label">
+        <h2 class="panel__label" id="to-label">To</h2>
+        <select class="select" id="to-grinder" data-testid="to-grinder" aria-label="Target grinder"></select>
+
+        <output class="result" data-testid="result" aria-live="polite">
+          <span class="result__value" data-testid="result-value">&mdash;</span>
+          <span class="result__unit" data-testid="result-unit"></span>
+        </output>
+        <p class="result__band" data-testid="result-band"></p>
+      </section>
+
+      <footer class="foot">
+        <p class="foot__microns" data-testid="microns"></p>
+        <ul class="chips" data-testid="methods"></ul>
+        <p class="foot__warn" data-testid="warning" hidden></p>
+      </footer>
+    </main>
+
+    <script type="module" src="./popup.ts"></script>
+  </body>
+</html>

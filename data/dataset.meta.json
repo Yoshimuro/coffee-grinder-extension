@@ -1,0 +1,5 @@
+{
+  "$comment": "Bump `version` on every data change. The extension compares it against a remote feed to decide whether an update is newer than the bundled copy. `updated` keeps the generated bundle byte-for-byte reproducible.",
+  "version": 1,
+  "updated": "2026-07-31"
+}

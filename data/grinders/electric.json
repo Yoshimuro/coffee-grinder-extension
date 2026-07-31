@@ -1,0 +1,80 @@
+[
+  {
+    "id": "baratza-encore",
+    "brand": "Baratza",
+    "model": "Encore",
+    "type": "electric",
+    "burr": "conical",
+    "scale": { "min": 1, "max": 40, "step": 1, "unit": "number" },
+    "calibration": {
+      "kind": "anchors",
+      "points": [
+        { "setting": 1, "microns": 250 },
+        { "setting": 10, "microns": 520 },
+        { "setting": 20, "microns": 810 },
+        { "setting": 30, "microns": 1100 },
+        { "setting": 40, "microns": 1400 }
+      ]
+    },
+    "confidence": "estimated",
+    "sources": ["https://honestcoffeeguide.com/coffee-grind-size-chart/"],
+    "note": "Arbitrary 1-40 dial with no published micron figures. Anchors approximate the commonly cited brew ranges."
+  },
+  {
+    "id": "baratza-encore-esp",
+    "brand": "Baratza",
+    "model": "Encore ESP",
+    "type": "electric",
+    "burr": "conical",
+    "scale": { "min": 1, "max": 40, "step": 1, "unit": "number" },
+    "calibration": {
+      "kind": "anchors",
+      "points": [
+        { "setting": 1, "microns": 200 },
+        { "setting": 20, "microns": 580 },
+        { "setting": 40, "microns": 1300 }
+      ]
+    },
+    "confidence": "community",
+    "sources": ["https://prima-coffee.com/blog/what-grinder-is-right-for-me-espresso/"],
+    "note": "Ramped stepping: roughly 20 um per step over the first 20 clicks, then noticeably coarser. The two-segment anchor set captures the kink."
+  },
+  {
+    "id": "fellow-ode-gen2",
+    "brand": "Fellow",
+    "model": "Ode Gen 2",
+    "type": "electric",
+    "burr": "flat",
+    "scale": { "min": 1, "max": 11, "step": 0.25, "unit": "number" },
+    "calibration": {
+      "kind": "anchors",
+      "points": [
+        { "setting": 1, "microns": 300 },
+        { "setting": 6, "microns": 800 },
+        { "setting": 11, "microns": 1300 }
+      ]
+    },
+    "confidence": "estimated",
+    "sources": ["https://coffeemaster.app/guides/fellow-ode-gen-2-grind-settings"],
+    "note": "11 numbered positions with 3 sub-clicks between each, hence the 0.25 step."
+  },
+  {
+    "id": "niche-zero",
+    "brand": "Niche",
+    "model": "Zero",
+    "type": "electric",
+    "burr": "conical",
+    "scale": { "min": 0, "max": 50, "step": 1, "unit": "mark" },
+    "calibration": {
+      "kind": "anchors",
+      "points": [
+        { "setting": 0, "microns": 180 },
+        { "setting": 25, "microns": 700 },
+        { "setting": 50, "microns": 1250 }
+      ]
+    },
+    "confidence": "estimated",
+    "sources": ["https://honestcoffeeguide.com/coffee-grind-size-chart/"],
+    "note": "Stepless collar with 50 reference marks. Anchors are approximate."
+  }
+]
