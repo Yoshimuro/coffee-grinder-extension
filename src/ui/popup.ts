@@ -160,6 +160,8 @@ async function persist(): Promise<void> {
     fromId: fromSelect.value,
     toId: toSelect.value,
     fromSetting: Number(settingInput.value),
+    // Placeholder until the picker owns this; nothing reads recents yet.
+    recentIds: [],
   });
 }
 

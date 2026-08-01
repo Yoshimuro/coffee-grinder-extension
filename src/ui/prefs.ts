@@ -8,11 +8,18 @@ export interface Prefs {
   fromId: string | null;
   toId: string | null;
   fromSetting: number | null;
+  /** Most recently selected grinder ids, newest first. Shared by both fields. */
+  recentIds: string[];
 }
 
 const KEY = 'cgc.prefs.v1';
 
-export const DEFAULT_PREFS: Prefs = { fromId: null, toId: null, fromSetting: null };
+export const DEFAULT_PREFS: Prefs = {
+  fromId: null,
+  toId: null,
+  fromSetting: null,
+  recentIds: [],
+};
 
 /** True when running inside an extension rather than a plain page or a test. */
 function hasStorage(): boolean {
@@ -37,4 +44,15 @@ export async function savePrefs(prefs: Prefs): Promise<void> {
   } catch {
     // Persistence is a convenience; losing it must not surface as an error.
   }
+}
+
+/**
+ * The recents list with `id` moved to the front.
+ *
+ * The storage key is unchanged: `loadPrefs` merges over `DEFAULT_PREFS`, so an
+ * object stored before this field existed reads back with an empty list rather
+ * than `undefined`, and needs no migration.
+ */
+export function pushRecent(recents: string[], id: string, limit = 5): string[] {
+  return [id, ...recents.filter((existing) => existing !== id)].slice(0, limit);
 }
