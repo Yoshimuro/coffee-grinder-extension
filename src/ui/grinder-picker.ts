@@ -8,7 +8,7 @@
  * belong to the browser.
  */
 
-import { displayName, searchGrinders } from '../core/dataset.js';
+import { displayName, groupByBrand, searchGrinders } from '../core/dataset.js';
 import type { Grinder } from '../core/types.js';
 
 export interface GrinderPickerOptions {
@@ -32,6 +32,7 @@ export function createGrinderPicker(options: GrinderPickerOptions): GrinderPicke
   const field = mount.dataset.testid ?? 'grinder';
   let selectedId = options.selectedId;
   let recentIds: string[] = [];
+  const expanded = new Set<string>();
 
   const root = document.createElement('div');
   root.className = 'picker';
@@ -88,26 +89,61 @@ export function createGrinderPicker(options: GrinderPickerOptions): GrinderPicke
     return item;
   }
 
+  function groupRow(brand: string, members: Grinder[]): HTMLLIElement {
+    const item = document.createElement('li');
+    item.className = 'picker__group';
+    item.setAttribute('role', 'presentation');
+    item.dataset.brand = brand;
+
+    const toggle = document.createElement('button');
+    toggle.type = 'button';
+    toggle.className = 'picker__group-toggle';
+    toggle.setAttribute('aria-expanded', String(expanded.has(brand)));
+    toggle.textContent = `${brand} (${members.length})`;
+    toggle.addEventListener('click', () => {
+      if (expanded.has(brand)) expanded.delete(brand);
+      else expanded.add(brand);
+      renderList();
+    });
+
+    item.append(toggle);
+    return item;
+  }
+
   function renderList(): void {
     const query = search.value.trim();
-    const matches = query ? searchGrinders(query) : grinders;
 
-    if (matches.length === 0) {
-      const empty = document.createElement('li');
-      empty.className = 'picker__empty';
-      empty.setAttribute('role', 'presentation');
-      empty.textContent = 'No grinders match';
-      list.replaceChildren(empty);
+    if (query) {
+      const matches = searchGrinders(query);
+      if (matches.length === 0) {
+        const empty = document.createElement('li');
+        empty.className = 'picker__empty';
+        empty.setAttribute('role', 'presentation');
+        empty.textContent = 'No grinders match';
+        list.replaceChildren(empty);
+        return;
+      }
+      list.replaceChildren(...matches.map((g) => optionRow(g)));
       return;
     }
 
-    list.replaceChildren(...matches.map(optionRow));
+    // No query: one row per brand, and the models of whichever are expanded.
+    // 42 rows instead of 134 is the difference between scanning and scrolling.
+    const rows: HTMLLIElement[] = [];
+    for (const [brand, members] of groupByBrand(grinders)) {
+      rows.push(groupRow(brand, members));
+      if (expanded.has(brand)) rows.push(...members.map((g) => optionRow(g)));
+    }
+    list.replaceChildren(...rows);
   }
 
   function open(): void {
     panel.hidden = false;
     button.setAttribute('aria-expanded', 'true');
     search.value = '';
+    // Every visit starts short; a group left open from last time would defeat
+    // the point of collapsing them.
+    expanded.clear();
     renderList();
     search.focus();
   }
@@ -129,8 +165,15 @@ export function createGrinderPicker(options: GrinderPickerOptions): GrinderPicke
   search.addEventListener('input', renderList);
 
   // A click anywhere else dismisses the panel, the way a native select does.
+  //
+  // The path is read rather than `root.contains(event.target)`: expanding a
+  // group re-renders the list while the click is still bubbling, which detaches
+  // the very button that was clicked. `contains` then answers false for a node
+  // that was inside the panel a moment ago, and the panel closes on its own.
+  // `composedPath()` is captured at dispatch, so it still names the real
+  // ancestors.
   document.addEventListener('click', (event) => {
-    if (!panel.hidden && !root.contains(event.target as Node)) close();
+    if (!panel.hidden && !event.composedPath().includes(root)) close();
   });
 
   renderButton();

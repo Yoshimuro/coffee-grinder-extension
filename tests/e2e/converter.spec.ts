@@ -160,3 +160,34 @@ test('remembers the last grinders and setting across popup opens', async ({ popu
 
   await reopened.close();
 });
+
+test('shows collapsed brands before anything is typed', async ({ popup }) => {
+  await popup.getByTestId('from-grinder-button').click();
+
+  const list = popup.getByTestId('from-grinder-list');
+  // Brands are collapsed, so no model rows are visible yet.
+  await expect(list.locator('li[role="option"]')).toHaveCount(0);
+  await expect(list.locator('li.picker__group')).not.toHaveCount(0);
+
+  await list.locator('li.picker__group[data-brand="Comandante"] button').click();
+  await expect(list.locator('li[role="option"]')).not.toHaveCount(0);
+  await expect(list).toContainText('C40 MK4 Nitro Blade');
+
+  // Expanding re-renders the list, which detaches the clicked button mid-event.
+  // The panel must not read that as a click outside itself.
+  await expect(popup.getByTestId('from-grinder-search')).toBeVisible();
+});
+
+test('typing replaces the groups with a flat result list', async ({ popup }) => {
+  await popup.getByTestId('from-grinder-button').click();
+  const list = popup.getByTestId('from-grinder-list');
+
+  await popup.getByTestId('from-grinder-search').fill('c40');
+  await expect(list.locator('li.picker__group')).toHaveCount(0);
+  await expect(list.locator('li[role="option"]')).not.toHaveCount(0);
+
+  // Clearing the query brings the collapsed groups back.
+  await popup.getByTestId('from-grinder-search').fill('');
+  await expect(list.locator('li[role="option"]')).toHaveCount(0);
+  await expect(list.locator('li.picker__group')).not.toHaveCount(0);
+});
