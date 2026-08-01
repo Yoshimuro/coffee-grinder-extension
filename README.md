@@ -48,8 +48,9 @@ The converter never reports a number it cannot justify.
 
 ## Data
 
-The dataset lives in [`data/`](data/) as reviewable JSON, one file per brand.
-Every entry cites its sources; the build rejects uncited entries.
+The dataset lives in [`packages/core/data/`](packages/core/data/) as reviewable
+JSON, one file per brand. Every entry cites its sources; the build rejects
+uncited entries.
 
 The build reports its own size budget:
 
@@ -81,7 +82,8 @@ CDN compared by `version`, not a server. Nothing here needs one.
 
 Every path ends at the same place — a CSV in the shape `import-csv.mjs` reads —
 so the schema, the validation and the provenance rules are shared no matter
-where the numbers came from.
+where the numbers came from. The ingestion scripts live in `@coffee/core`; every
+`node scripts/…` command below is run from `packages/core/`.
 
 ```
 Google Sheets ──> scrape-sheets.mjs ─────┐
@@ -234,22 +236,27 @@ keep — an extrapolated fit that read −126 µm at zero, and another reaching
 
 ## Development
 
+The repo is an npm-workspaces monorepo. Every command below is run from the
+root; the root scripts delegate to the workspace that owns the step.
+
 ```bash
 npm install
-npm run build          # -> dist/
+npm run build          # -> apps/extension/dist/
 npm run verify         # data + typecheck + unit + build + e2e
 ```
 
-Load `dist/` via `chrome://extensions` → Developer mode → *Load unpacked*.
+Load `apps/extension/dist/` via `chrome://extensions` → Developer mode →
+*Load unpacked*.
 
 ### Tests
 
-- **Unit** (`tests/unit`, Vitest) — the conversion maths: round-tripping,
-  snapping, extrapolation, band widening, and invariants across the shipped
-  dataset (every grinder monotonic, within a plausible micron range, and
-  offering more than a handful of positions).
-- **E2E** (`tests/e2e`, Playwright) — a real Chromium with the real unpacked
-  extension loaded, driving the real popup.
+- **Unit** (`packages/core/tests/unit`, Vitest) — the conversion maths:
+  round-tripping, snapping, extrapolation, band widening, and invariants across
+  the shipped dataset (every grinder monotonic, within a plausible micron range,
+  and offering more than a handful of positions). The extension keeps its own
+  unit suite in `apps/extension/tests/unit` for the prefs store.
+- **E2E** (`apps/extension/tests/e2e`, Playwright) — a real Chromium with the
+  real unpacked extension loaded, driving the real popup.
 
 Two things make the E2E suite work that are worth knowing before touching it:
 
@@ -264,13 +271,23 @@ Two things make the E2E suite work that are worth knowing before touching it:
 ### Layout
 
 ```
-src/core/      pure conversion + dataset access, no DOM, no chrome APIs
-src/ui/        popup markup, styles, controller, prefs
-src/generated/ built dataset (checked in; CI verifies it matches data/)
-data/grinders/ reviewable source data, one file per brand or per source
-data/raw/      scraped material, gitignored; provenance lives in each entry
-scripts/       dataset build, ingestion, screenshot rendering
-tests/         unit (Vitest) and e2e (Playwright)
+packages/core/                 @coffee/core — the engine, shared by every app
+  src/                         pure conversion + dataset access, no DOM, no chrome APIs
+  src/index.ts                 the package's public surface
+  src/generated/               built dataset (checked in; CI verifies it matches data/)
+  data/grinders/               reviewable source data, one file per brand or per source
+  data/raw/                    scraped material, gitignored; provenance lives in each entry
+  scripts/                     dataset build and ingestion
+  tests/unit/                  conversion maths + dataset invariants (Vitest)
+
+apps/extension/                @coffee/extension — the Chrome extension
+  src/                         popup markup, styles, controller, prefs, manifest
+  scripts/screenshot.mjs       renders the popup states into docs/screens/
+  tests/unit/                  prefs store (Vitest)
+  tests/e2e/                   real Chromium against the real unpacked build (Playwright)
+  dist/                        build output, gitignored
+
+apps/journal/                  @coffee/journal — the Brew Journal app (BJ-2)
 ```
 
 Ingestion scripts, in the order data flows through them:
@@ -290,8 +307,10 @@ means re-fetching, which is the honest behaviour anyway since the sources
 change. What has to survive is the attribution, and that lives in each entry's
 `sources`.
 
-`src/core` has no dependency on `chrome.*` or the DOM, so the conversion logic is
-testable in plain Node and reusable outside the extension.
+`@coffee/core` has no dependency on `chrome.*` or the DOM — its `tsconfig` drops
+the DOM lib outright, so a stray `document` is a compile error — which is what
+makes the conversion logic testable in plain Node and reusable outside the
+extension. Apps import it as `@coffee/core`, never by relative path.
 
 ## Preferences
 

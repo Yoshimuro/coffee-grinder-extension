@@ -6,8 +6,8 @@ import {
   resolutionMicrons,
   settingSteps,
   settingToMicrons,
-} from '../../src/core/convert.js';
-import type { Grinder } from '../../src/core/types.js';
+} from '../../src/convert.js';
+import type { Grinder } from '../../src/types.js';
 
 const linear = (over: Partial<Grinder> = {}): Grinder => ({
   id: 'test-linear',

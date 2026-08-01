@@ -1,4 +1,5 @@
 import { createHash } from 'node:crypto';
+import { createRequire } from 'node:module';
 import { mkdtempSync, readFileSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
@@ -6,6 +7,11 @@ import { fileURLToPath } from 'node:url';
 import { test as base, chromium, type BrowserContext, type Page } from '@playwright/test';
 
 export const EXTENSION_PATH = resolve(dirname(fileURLToPath(import.meta.url)), '../../dist');
+
+// Resolved through the package rather than by walking up the tree: the dataset
+// lives in @coffee/core, and where that sits inside the monorepo is not this
+// suite's business.
+const DATASET_PATH = createRequire(import.meta.url).resolve('@coffee/core/generated/dataset.json');
 
 /**
  * Chrome derives an extension's ID from its public key: SHA-256 the DER bytes,
@@ -85,9 +91,9 @@ export const expect = test.expect;
  * the catalogue says "Ode Gen 2".
  */
 function queryFor(id: string): string {
-  const dataset = JSON.parse(
-    readFileSync(join(EXTENSION_PATH, '..', 'src/generated/dataset.json'), 'utf8'),
-  ) as { grinders: Array<{ id: string; brand: string; model: string }> };
+  const dataset = JSON.parse(readFileSync(DATASET_PATH, 'utf8')) as {
+    grinders: Array<{ id: string; brand: string; model: string }>;
+  };
 
   const grinder = dataset.grinders.find((g) => g.id === id);
   if (!grinder) throw new Error(`no grinder with id "${id}" in the built dataset`);

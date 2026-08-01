@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { DEFAULT_PREFS, pushRecent } from '../../src/ui/prefs.js';
+import { DEFAULT_PREFS, pushRecent } from '../../src/prefs.js';
 
 describe('pushRecent', () => {
   it('puts the newest id first', () => {

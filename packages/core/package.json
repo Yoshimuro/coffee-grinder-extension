@@ -1,0 +1,25 @@
+{
+  "name": "@coffee/core",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Grind conversion engine, grinder types and the compiled grinder dataset.",
+  "license": "MIT",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./generated/dataset.json": "./src/generated/dataset.json"
+  },
+  "scripts": {
+    "build:data": "node scripts/build-dataset.mjs",
+    "check:data": "node scripts/build-dataset.mjs --check",
+    "import:csv": "node scripts/import-csv.mjs",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "devDependencies": {
+    "@types/node": "22.10.2",
+    "typescript": "5.7.3",
+    "vitest": "2.1.8"
+  }
+}

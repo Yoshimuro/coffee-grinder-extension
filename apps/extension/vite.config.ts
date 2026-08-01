@@ -2,7 +2,7 @@ import { copyFileSync, mkdirSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { defineConfig, type Plugin } from 'vite';
 
-const root = resolve(__dirname, 'src/ui');
+const root = resolve(__dirname, 'src');
 const outDir = resolve(__dirname, 'dist');
 
 /**

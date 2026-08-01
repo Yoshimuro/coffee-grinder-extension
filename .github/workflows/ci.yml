@@ -36,7 +36,7 @@ jobs:
         run: npm test
 
       - name: Build extension
-        run: npx vite build
+        run: npm run build
 
       # The full Chromium build, not headless-shell — headless-shell ignores
       # --load-extension, so the E2E suite would silently test nothing.
@@ -53,12 +53,12 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: playwright-report
-          path: playwright-report/
+          path: apps/extension/playwright-report/
           retention-days: 7
 
       - name: Upload built extension
         uses: actions/upload-artifact@v4
         with:
           name: extension-unpacked
-          path: dist/
+          path: apps/extension/dist/
           retention-days: 7

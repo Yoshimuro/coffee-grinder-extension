@@ -1,0 +1,11 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    // No DOM: the engine has to stay usable from a browser extension, a React
+    // app and a Node script alike, and dropping the lib makes that a compile
+    // error rather than a review note.
+    "lib": ["ES2022"],
+    "types": ["node", "vitest/globals"]
+  },
+  "include": ["src", "tests", "scripts", "*.config.ts"]
+}

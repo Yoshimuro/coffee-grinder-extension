@@ -1,9 +1,12 @@
 task_id: BJ-1
 title: "Монорепо-рефакторинг: packages/core + apps/extension + apps/journal"
 profile: standard
-status: READY_FOR_DEVELOPMENT
-owner: dev-agent (opus)
+status: TESTING_READY
+owner: main-session
 created_at: "2026-08-02T21:30:00Z"
-updated_at: "2026-08-02T21:30:00Z"
+updated_at: "2026-08-02T22:20:00Z"
 transitions:
   - {at: "2026-08-02T21:30:00Z", from: RESEARCH_IN_PROGRESS, to: READY_FOR_DEVELOPMENT, reason: "research выполнен в рамках воркфлоу изучения (отчёт read:extension); план предодобрен пользователем, цитата в decisions.md D-1"}
+  - {at: "2026-08-02T21:40:00Z", from: READY_FOR_DEVELOPMENT, to: DEVELOPMENT_IN_PROGRESS, reason: "dev-агент (opus) запущен"}
+  - {at: "2026-08-02T22:10:00Z", from: DEVELOPMENT_IN_PROGRESS, to: READY_FOR_REVIEW, reason: "verify зелёный у dev-агента; dev_notes.md записан"}
+  - {at: "2026-08-02T22:20:00Z", from: READY_FOR_REVIEW, to: TESTING_READY, reason: "ревью main-session: engine-файлы перенесены байт-в-байт (diff против HEAD), dataset.ts — только путь импорта; git-инцидент с преждевременно закоммиченными renames исправлен пересборкой истории (34cd672 → f81e6fa + отдельный refactor-коммит); независимый прогон verify — см. review_notes.md. DONE подтверждает пользователь утром."}

@@ -9,7 +9,7 @@
     // lets TypeScript read those annotations instead of the tests having to
     // suppress the import.
     "allowJs": true,
-    "types": ["chrome", "vitest/globals"],
+    // `types` is per package: only the extension knows about `chrome`.
     "strict": true,
     "noUncheckedIndexedAccess": true,
     "noImplicitOverride": true,
@@ -21,6 +21,5 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true
   },
-  "include": ["src", "tests", "scripts", "*.config.ts"],
   "exclude": ["dist", "node_modules"]
 }

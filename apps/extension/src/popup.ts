@@ -1,6 +1,12 @@
-import { convert, formatSetting, settingToMicrons } from '../core/convert.js';
-import { DATASET, allGrinders, grinderById } from '../core/dataset.js';
-import type { Grinder } from '../core/types.js';
+import {
+  DATASET,
+  allGrinders,
+  convert,
+  formatSetting,
+  grinderById,
+  settingToMicrons,
+  type Grinder,
+} from '@coffee/core';
 import { createGrinderPicker, type GrinderPicker } from './grinder-picker.js';
 import { loadPrefs, pushRecent, savePrefs } from './prefs.js';
 

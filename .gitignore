@@ -3,7 +3,7 @@ dist/
 # Scraped source material: spreadsheets, PDF exports, API dumps. Kept locally so
 # an import can be re-run and audited; the dataset itself carries the provenance
 # in each entry's `sources`.
-data/raw/
+packages/core/data/raw/
 test-results/
 playwright-report/
 blob-report/

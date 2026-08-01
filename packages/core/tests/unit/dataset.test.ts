@@ -6,8 +6,8 @@ import {
   grinderById,
   groupByBrand,
   searchGrinders,
-} from '../../src/core/dataset.js';
-import { micronsToSetting, settingSteps, settingToMicrons } from '../../src/core/convert.js';
+} from '../../src/dataset.js';
+import { micronsToSetting, settingSteps, settingToMicrons } from '../../src/convert.js';
 
 describe('bundled dataset', () => {
   it('ships grinders and brew methods', () => {

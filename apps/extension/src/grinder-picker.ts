@@ -8,8 +8,7 @@
  * belong to the browser.
  */
 
-import { displayName, groupByBrand, searchGrinders } from '../core/dataset.js';
-import type { Grinder } from '../core/types.js';
+import { displayName, groupByBrand, searchGrinders, type Grinder } from '@coffee/core';
 
 export interface GrinderPickerOptions {
   /** Element the picker replaces. Its `data-testid` is inherited by the root. */

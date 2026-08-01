@@ -1,25 +1,28 @@
 #!/usr/bin/env node
 /**
  * Renders the popup in a few representative states and writes PNGs to
- * docs/screens/. Useful for review and for the store listing later.
+ * docs/screens/ at the repo root. Useful for review and for the store listing
+ * later.
  *
- *   node scripts/screenshot.mjs
+ *   npm run screenshot -w @coffee/extension
  */
 
 import { createHash } from 'node:crypto';
 import { mkdirSync, mkdtempSync, readFileSync, rmSync } from 'node:fs';
+import { createRequire } from 'node:module';
 import { tmpdir } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { chromium } from '@playwright/test';
 
-const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
-const EXT = join(ROOT, 'dist');
-const OUT = join(ROOT, 'docs', 'screens');
+const PKG = resolve(dirname(fileURLToPath(import.meta.url)), '..');
+const REPO = resolve(PKG, '../..');
+const EXT = join(PKG, 'dist');
+const OUT = join(REPO, 'docs', 'screens');
 
 const manifest = JSON.parse(readFileSync(join(EXT, 'manifest.json'), 'utf8'));
 const { grinders: catalogue } = JSON.parse(
-  readFileSync(join(ROOT, 'src', 'generated', 'dataset.json'), 'utf8'),
+  readFileSync(createRequire(import.meta.url).resolve('@coffee/core/generated/dataset.json'), 'utf8'),
 );
 const digest = createHash('sha256').update(Buffer.from(manifest.key, 'base64')).digest();
 const id = [...digest.subarray(0, 16)]
@@ -73,7 +76,7 @@ for (const scheme of ['light', 'dark']) {
 
     const file = join(OUT, `${state.name}-${scheme}.png`);
     await page.locator('.app').screenshot({ path: file });
-    console.log(`wrote ${file.replace(`${ROOT}/`, '')}`);
+    console.log(`wrote ${file.replace(`${REPO}/`, '')}`);
     await page.close();
   }
 

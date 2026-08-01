@@ -1,4 +1,4 @@
-import bundled from '../generated/dataset.json';
+import bundled from './generated/dataset.json';
 import type { Dataset, Grinder } from './types.js';
 
 /**
