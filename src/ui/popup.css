@@ -398,3 +398,19 @@ body {
 .picker__option + .picker__option {
   padding-left: calc(var(--step) * 4);
 }
+
+.picker__section {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  padding: calc(var(--step) * 2) calc(var(--step) * 2) var(--step);
+}
+
+/* Recents are a shortcut list, not part of a brand, so they keep the flush
+   left edge that grouped models give up. */
+.picker__section + .picker__option,
+.picker__option[data-recent="true"] + .picker__option[data-recent="true"] {
+  padding-left: calc(var(--step) * 2);
+}

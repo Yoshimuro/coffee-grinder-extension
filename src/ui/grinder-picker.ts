@@ -78,14 +78,23 @@ export function createGrinderPicker(options: GrinderPickerOptions): GrinderPicke
     root.dataset.value = selectedId;
   }
 
-  function optionRow(grinder: Grinder): HTMLLIElement {
+  function optionRow(grinder: Grinder, recent = false): HTMLLIElement {
     const item = document.createElement('li');
     item.className = 'picker__option';
     item.setAttribute('role', 'option');
     item.setAttribute('aria-selected', String(grinder.id === selectedId));
     item.dataset.id = grinder.id;
+    if (recent) item.dataset.recent = 'true';
     item.textContent = displayName(grinder);
     item.addEventListener('click', () => choose(grinder.id));
+    return item;
+  }
+
+  function sectionRow(text: string): HTMLLIElement {
+    const item = document.createElement('li');
+    item.className = 'picker__section';
+    item.setAttribute('role', 'presentation');
+    item.textContent = text;
     return item;
   }
 
@@ -127,9 +136,22 @@ export function createGrinderPicker(options: GrinderPickerOptions): GrinderPicke
       return;
     }
 
-    // No query: one row per brand, and the models of whichever are expanded.
-    // 42 rows instead of 134 is the difference between scanning and scrolling.
     const rows: HTMLLIElement[] = [];
+
+    // Offering the current selection as a shortcut to itself is noise, and a
+    // stored id can name a grinder a later dataset dropped.
+    const recents = recentIds
+      .filter((id) => id !== selectedId)
+      .map((id) => grinders.find((g) => g.id === id))
+      .filter((g): g is Grinder => g !== undefined);
+
+    if (recents.length > 0) {
+      rows.push(sectionRow('Recent'));
+      rows.push(...recents.map((g) => optionRow(g, true)));
+    }
+
+    // Then one row per brand, and the models of whichever are expanded.
+    // 42 rows instead of 134 is the difference between scanning and scrolling.
     for (const [brand, members] of groupByBrand(grinders)) {
       rows.push(groupRow(brand, members));
       if (expanded.has(brand)) rows.push(...members.map((g) => optionRow(g)));
@@ -186,6 +208,8 @@ export function createGrinderPicker(options: GrinderPickerOptions): GrinderPicke
     getSelected: () => selectedId,
     setRecents(ids) {
       recentIds = ids;
+      // A pick in the other field changes this one's history while it is open.
+      if (!panel.hidden) renderList();
     },
   };
 }

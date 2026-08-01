@@ -191,3 +191,24 @@ test('typing replaces the groups with a flat result list', async ({ popup }) => 
   await expect(list.locator('li[role="option"]')).toHaveCount(0);
   await expect(list.locator('li.picker__group')).not.toHaveCount(0);
 });
+
+test('offers recently used grinders on the next open', async ({ popup }) => {
+  await selectGrinder(popup, 'from-grinder', C40);
+  await selectGrinder(popup, 'from-grinder', JX_PRO);
+
+  await popup.getByTestId('from-grinder-button').click();
+  const list = popup.getByTestId('from-grinder-list');
+
+  await expect(list.locator('li.picker__section')).toContainText('Recent');
+  // The current selection is not offered as a shortcut to itself.
+  await expect(list.locator(`li[data-recent="true"][data-id="${JX_PRO}"]`)).toHaveCount(0);
+  await expect(list.locator(`li[data-recent="true"][data-id="${C40}"]`)).toHaveCount(1);
+});
+
+test('hides recents while a query is active', async ({ popup }) => {
+  await selectGrinder(popup, 'from-grinder', C40);
+
+  await popup.getByTestId('from-grinder-button').click();
+  await popup.getByTestId('from-grinder-search').fill('timemore');
+  await expect(popup.getByTestId('from-grinder-list').locator('li.picker__section')).toHaveCount(0);
+});
