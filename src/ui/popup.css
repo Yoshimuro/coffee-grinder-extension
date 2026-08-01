@@ -260,3 +260,102 @@ body {
 .foot__warn[hidden] {
   display: none;
 }
+
+/*
+ * Grinder picker. Shares the field treatment of .select — the panel is a
+ * hairline box, not a floating card, so it reads as an extension of the field
+ * rather than a separate surface.
+ */
+.picker {
+  position: relative;
+}
+
+.picker__button {
+  width: 100%;
+  font-family: inherit;
+  font-size: 13px;
+  text-align: left;
+  color: var(--ink);
+  background: var(--field);
+  border: 1px solid var(--line);
+  border-radius: 2px;
+  padding: calc(var(--step) * 1.5) calc(var(--step) * 7)
+    calc(var(--step) * 1.5) calc(var(--step) * 2);
+  cursor: pointer;
+  /* Same inline chevron as .select, so the two read as one control family. */
+  background-image: linear-gradient(45deg, transparent 50%, currentColor 50%),
+    linear-gradient(135deg, currentColor 50%, transparent 50%);
+  background-position: right 15px center, right 10px center;
+  background-size: 5px 5px, 5px 5px;
+  background-repeat: no-repeat;
+}
+
+.picker__button:focus-visible,
+.picker__search:focus-visible {
+  outline: 2px solid var(--line-strong);
+  outline-offset: -1px;
+}
+
+.picker__panel {
+  position: absolute;
+  z-index: 10;
+  inset-inline: 0;
+  margin-top: 2px;
+  background: var(--paper);
+  border: 1px solid var(--line-strong);
+  border-radius: 2px;
+}
+
+.picker__search {
+  width: 100%;
+  font-family: inherit;
+  font-size: 13px;
+  color: var(--ink);
+  background: var(--field);
+  border: 0;
+  border-bottom: 1px solid var(--line);
+  border-radius: 0;
+  padding: calc(var(--step) * 1.5) calc(var(--step) * 2);
+}
+
+/* Chrome decorates type="search" with a blue clear button — the one spot of
+   colour the rest of this popup refuses. */
+.picker__search::-webkit-search-cancel-button,
+.picker__search::-webkit-search-decoration {
+  appearance: none;
+  display: none;
+}
+
+/*
+ * Bounded so a long catalogue scrolls inside the panel instead of stretching
+ * the popup, which Chrome caps near 600px anyway.
+ */
+.picker__list {
+  max-height: 240px;
+  margin: 0;
+  padding: 0;
+  overflow-y: auto;
+  list-style: none;
+}
+
+.picker__option {
+  font-size: 13px;
+  color: var(--ink);
+  padding: calc(var(--step) * 1.25) calc(var(--step) * 2);
+  cursor: pointer;
+}
+
+.picker__option:hover,
+.picker__option[data-active='true'] {
+  background: var(--field);
+}
+
+.picker__option[aria-selected='true'] {
+  font-weight: 600;
+}
+
+.picker__empty {
+  font-size: 13px;
+  color: var(--ink-muted);
+  padding: calc(var(--step) * 2);
+}

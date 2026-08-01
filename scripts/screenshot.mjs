@@ -50,8 +50,16 @@ for (const scheme of ['light', 'dark']) {
     await page.goto(`chrome-extension://${id}/popup.html`);
     await page.waitForSelector('body[data-ready="true"]');
 
-    await page.getByTestId('from-grinder').selectOption(state.from);
-    await page.getByTestId('to-grinder').selectOption(state.to);
+    // The picker is a custom widget, not a <select>: open it, type enough of the
+    // id (a slug of brand and model) to narrow the list, then click the row.
+    for (const [field, id] of [
+      ['from-grinder', state.from],
+      ['to-grinder', state.to],
+    ]) {
+      await page.getByTestId(`${field}-button`).click();
+      await page.getByTestId(`${field}-search`).fill(id.replace(/-/g, ' '));
+      await page.getByTestId(`${field}-list`).locator(`li[data-id="${id}"]`).click();
+    }
     await page.getByTestId('from-setting').fill(String(state.setting));
     await page.getByTestId('from-setting').dispatchEvent('change');
     await page.waitForTimeout(120);

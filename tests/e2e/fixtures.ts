@@ -76,3 +76,22 @@ export const test = base.extend<ExtensionFixtures>({
 });
 
 export const expect = test.expect;
+
+/**
+ * Pick a grinder by id through the real widget: open, type, click.
+ *
+ * The query is derived from the id, which is a slug of brand and model, so its
+ * words are exactly what `searchGrinders` matches against. If an id ever stops
+ * matching its own name the click fails loudly rather than selecting the wrong
+ * grinder.
+ */
+export async function selectGrinder(
+  popup: Page,
+  field: 'from-grinder' | 'to-grinder',
+  id: string,
+): Promise<void> {
+  await popup.getByTestId(`${field}-button`).click();
+  await popup.getByTestId(`${field}-search`).fill(id.replace(/-/g, ' '));
+  await popup.getByTestId(`${field}-list`).locator(`li[data-id="${id}"]`).click();
+  await expect(popup.getByTestId(field)).toHaveAttribute('data-value', id);
+}

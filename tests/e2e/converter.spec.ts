@@ -1,4 +1,5 @@
-import { expect, test } from './fixtures.js';
+import type { Page } from '@playwright/test';
+import { expect, selectGrinder, test } from './fixtures.js';
 
 const JX_PRO = '1zpresso-jx-pro';
 const C40 = 'comandante-c40-mk4';
@@ -6,22 +7,55 @@ const RED_CLIX = 'comandante-c40-red-clix';
 const HARIO = 'hario-slim';
 const TIMEMORE_C2 = 'timemore-c2';
 
+/** Names a picker offers for a given query. */
+async function optionNames(popup: Page, field: string, query: string): Promise<string[]> {
+  await popup.getByTestId(`${field}-button`).click();
+  await popup.getByTestId(`${field}-search`).fill(query);
+  const names = await popup
+    .getByTestId(`${field}-list`)
+    .locator('li[role="option"]')
+    .allTextContents();
+  // Toggle shut rather than pressing Escape: an open panel would sit over the
+  // other field's button and swallow the next click.
+  await popup.getByTestId(`${field}-button`).click();
+  return names;
+}
+
 test('loads the bundled dataset into both pickers', async ({ popup }) => {
   await expect(popup.getByTestId('dataset-meta')).toContainText('grinders');
 
-  const options = popup.getByTestId('from-grinder').locator('option');
-  await expect(options).not.toHaveCount(0);
-
-  // Both selects must offer the same catalogue — a converter that can read a
+  // Both pickers must offer the same catalogue — a converter that can read a
   // grinder but not write to it would be a silent gap.
-  const from = await popup.getByTestId('from-grinder').locator('option').allTextContents();
-  const to = await popup.getByTestId('to-grinder').locator('option').allTextContents();
+  const from = await optionNames(popup, 'from-grinder', 'comandante');
+  const to = await optionNames(popup, 'to-grinder', 'comandante');
   expect(from).toEqual(to);
+  expect(from.length).toBeGreaterThan(0);
+});
+
+test('narrows the list as characters are typed', async ({ popup }) => {
+  await popup.getByTestId('from-grinder-button').click();
+  const search = popup.getByTestId('from-grinder-search');
+  const options = popup.getByTestId('from-grinder-list').locator('li[role="option"]');
+
+  await search.fill('c');
+  const loose = await options.count();
+
+  await search.fill('c40');
+  const tight = await options.count();
+
+  expect(tight).toBeLessThan(loose);
+  await expect(options.first()).toContainText('C40');
+});
+
+test('reports when nothing matches', async ({ popup }) => {
+  await popup.getByTestId('from-grinder-button').click();
+  await popup.getByTestId('from-grinder-search').fill('zzzz');
+  await expect(popup.getByTestId('from-grinder-list')).toContainText('No grinders match');
 });
 
 test('converts a setting between two grinders', async ({ popup }) => {
-  await popup.getByTestId('from-grinder').selectOption(JX_PRO);
-  await popup.getByTestId('to-grinder').selectOption(C40);
+  await selectGrinder(popup, 'from-grinder', JX_PRO);
+  await selectGrinder(popup, 'to-grinder', C40);
   await popup.getByTestId('from-setting').fill('24');
   await popup.getByTestId('from-setting').dispatchEvent('change');
 
@@ -33,8 +67,8 @@ test('converts a setting between two grinders', async ({ popup }) => {
 });
 
 test('classifies the resulting grind by brew method', async ({ popup }) => {
-  await popup.getByTestId('from-grinder').selectOption(JX_PRO);
-  await popup.getByTestId('to-grinder').selectOption(C40);
+  await selectGrinder(popup, 'from-grinder', JX_PRO);
+  await selectGrinder(popup, 'to-grinder', C40);
   await popup.getByTestId('from-setting').fill('24');
   await popup.getByTestId('from-setting').dispatchEvent('change');
 
@@ -50,7 +84,7 @@ test('classifies the resulting grind by brew method', async ({ popup }) => {
 });
 
 test('stepper moves by exactly one detent and clamps at the ends', async ({ popup }) => {
-  await popup.getByTestId('from-grinder').selectOption(C40);
+  await selectGrinder(popup, 'from-grinder', C40);
   await popup.getByTestId('from-setting').fill('10');
   await popup.getByTestId('from-setting').dispatchEvent('change');
 
@@ -68,8 +102,8 @@ test('stepper moves by exactly one detent and clamps at the ends', async ({ popu
 
 test('warns when the target grinder cannot reach the grind size', async ({ popup }) => {
   // C40 at 60 clicks is 1800 um; the C2 tops out at 40 x 33 = 1320 um.
-  await popup.getByTestId('from-grinder').selectOption(C40);
-  await popup.getByTestId('to-grinder').selectOption(TIMEMORE_C2);
+  await selectGrinder(popup, 'from-grinder', C40);
+  await selectGrinder(popup, 'to-grinder', TIMEMORE_C2);
   await popup.getByTestId('from-setting').fill('60');
   await popup.getByTestId('from-setting').dispatchEvent('change');
 
@@ -79,8 +113,8 @@ test('warns when the target grinder cannot reach the grind size', async ({ popup
 });
 
 test('flags estimated calibrations instead of implying precision', async ({ popup }) => {
-  await popup.getByTestId('from-grinder').selectOption(JX_PRO);
-  await popup.getByTestId('to-grinder').selectOption(HARIO);
+  await selectGrinder(popup, 'from-grinder', JX_PRO);
+  await selectGrinder(popup, 'to-grinder', HARIO);
   await popup.getByTestId('from-setting').fill('40');
   await popup.getByTestId('from-setting').dispatchEvent('change');
 
@@ -95,14 +129,14 @@ test('shows a wider band for a less certain pairing', async ({ popup }) => {
     return Number(match[2]) - Number(match[1]);
   };
 
-  await popup.getByTestId('from-grinder').selectOption(JX_PRO);
+  await selectGrinder(popup, 'from-grinder', JX_PRO);
   await popup.getByTestId('from-setting').fill('40');
   await popup.getByTestId('from-setting').dispatchEvent('change');
 
-  await popup.getByTestId('to-grinder').selectOption(RED_CLIX);
+  await selectGrinder(popup, 'to-grinder', RED_CLIX);
   const confident = await bandWidth();
 
-  await popup.getByTestId('to-grinder').selectOption(HARIO);
+  await selectGrinder(popup, 'to-grinder', HARIO);
   const uncertain = await bandWidth();
 
   // Both land near 500 um, but the Hario entry is only an estimate, so its
@@ -111,8 +145,8 @@ test('shows a wider band for a less certain pairing', async ({ popup }) => {
 });
 
 test('remembers the last grinders and setting across popup opens', async ({ popup, context, extensionId }) => {
-  await popup.getByTestId('from-grinder').selectOption(RED_CLIX);
-  await popup.getByTestId('to-grinder').selectOption(JX_PRO);
+  await selectGrinder(popup, 'from-grinder', RED_CLIX);
+  await selectGrinder(popup, 'to-grinder', JX_PRO);
   await popup.getByTestId('from-setting').fill('33');
   await popup.getByTestId('from-setting').dispatchEvent('change');
 
@@ -120,8 +154,8 @@ test('remembers the last grinders and setting across popup opens', async ({ popu
   await reopened.goto(`chrome-extension://${extensionId}/popup.html`);
   await reopened.waitForSelector('body[data-ready="true"]');
 
-  await expect(reopened.getByTestId('from-grinder')).toHaveValue(RED_CLIX);
-  await expect(reopened.getByTestId('to-grinder')).toHaveValue(JX_PRO);
+  await expect(reopened.getByTestId('from-grinder')).toHaveAttribute('data-value', RED_CLIX);
+  await expect(reopened.getByTestId('to-grinder')).toHaveAttribute('data-value', JX_PRO);
   await expect(reopened.getByTestId('from-setting')).toHaveValue('33');
 
   await reopened.close();

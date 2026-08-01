@@ -1,7 +1,8 @@
 import { convert, formatSetting, settingToMicrons } from '../core/convert.js';
-import { DATASET, allGrinders, displayName, grinderById, groupByBrand } from '../core/dataset.js';
+import { DATASET, allGrinders, grinderById } from '../core/dataset.js';
 import type { Grinder } from '../core/types.js';
-import { loadPrefs, savePrefs } from './prefs.js';
+import { createGrinderPicker, type GrinderPicker } from './grinder-picker.js';
+import { loadPrefs, pushRecent, savePrefs } from './prefs.js';
 
 const el = <T extends HTMLElement>(testId: string): T => {
   const node = document.querySelector<T>(`[data-testid="${testId}"]`);
@@ -9,8 +10,10 @@ const el = <T extends HTMLElement>(testId: string): T => {
   return node;
 };
 
-const fromSelect = el<HTMLSelectElement>('from-grinder');
-const toSelect = el<HTMLSelectElement>('to-grinder');
+let fromPicker: GrinderPicker;
+let toPicker: GrinderPicker;
+let recentIds: string[] = [];
+
 const settingInput = el<HTMLInputElement>('from-setting');
 const downBtn = el<HTMLButtonElement>('setting-down');
 const upBtn = el<HTMLButtonElement>('setting-up');
@@ -30,26 +33,12 @@ const UNIT_PLURAL: Record<Grinder['scale']['unit'], string> = {
   mark: 'marks',
 };
 
-function populate(select: HTMLSelectElement): void {
-  for (const [brand, grinders] of groupByBrand(allGrinders())) {
-    const group = document.createElement('optgroup');
-    group.label = brand;
-    for (const g of grinders) {
-      const option = document.createElement('option');
-      option.value = g.id;
-      option.textContent = g.model;
-      group.append(option);
-    }
-    select.append(group);
-  }
-}
-
 function currentFrom(): Grinder {
-  return grinderById(fromSelect.value) ?? allGrinders()[0]!;
+  return grinderById(fromPicker.getSelected()) ?? allGrinders()[0]!;
 }
 
 function currentTo(): Grinder {
-  return grinderById(toSelect.value) ?? allGrinders()[1] ?? allGrinders()[0]!;
+  return grinderById(toPicker.getSelected()) ?? allGrinders()[1] ?? allGrinders()[0]!;
 }
 
 /**
@@ -157,26 +146,50 @@ function setWarning(message: string | null): void {
 
 async function persist(): Promise<void> {
   await savePrefs({
-    fromId: fromSelect.value,
-    toId: toSelect.value,
+    fromId: fromPicker.getSelected(),
+    toId: toPicker.getSelected(),
     fromSetting: Number(settingInput.value),
-    // Placeholder until the picker owns this; nothing reads recents yet.
-    recentIds: [],
+    recentIds,
   });
 }
 
 async function init(): Promise<void> {
-  populate(fromSelect);
-  populate(toSelect);
-
   datasetMeta.textContent = `${allGrinders().length} grinders · v${DATASET.version}`;
 
   const grinders = allGrinders();
   const prefs = await loadPrefs();
+  recentIds = prefs.recentIds;
 
-  fromSelect.value = (prefs.fromId && grinderById(prefs.fromId)?.id) || grinders[0]!.id;
-  toSelect.value =
-    (prefs.toId && grinderById(prefs.toId)?.id) || (grinders[1] ?? grinders[0]!).id;
+  const fromId = (prefs.fromId && grinderById(prefs.fromId)?.id) || grinders[0]!.id;
+  const toId = (prefs.toId && grinderById(prefs.toId)?.id) || (grinders[1] ?? grinders[0]!).id;
+
+  // Both fields share one history, so a pick in either updates the other.
+  const onPick = (id: string): void => {
+    recentIds = pushRecent(recentIds, id);
+    fromPicker.setRecents(recentIds);
+    toPicker.setRecents(recentIds);
+    render();
+    void persist();
+  };
+
+  fromPicker = createGrinderPicker({
+    mount: el<HTMLElement>('from-grinder'),
+    grinders,
+    selectedId: fromId,
+    label: 'Source grinder',
+    onSelect: onPick,
+  });
+
+  toPicker = createGrinderPicker({
+    mount: el<HTMLElement>('to-grinder'),
+    grinders,
+    selectedId: toId,
+    label: 'Target grinder',
+    onSelect: onPick,
+  });
+
+  fromPicker.setRecents(recentIds);
+  toPicker.setRecents(recentIds);
 
   const from = currentFrom();
   settingInput.value = String(
@@ -185,12 +198,10 @@ async function init(): Promise<void> {
 
   render();
 
-  for (const node of [fromSelect, toSelect, settingInput]) {
-    node.addEventListener('change', () => {
-      render();
-      void persist();
-    });
-  }
+  settingInput.addEventListener('change', () => {
+    render();
+    void persist();
+  });
   settingInput.addEventListener('input', render);
 
   downBtn.addEventListener('click', () => {
