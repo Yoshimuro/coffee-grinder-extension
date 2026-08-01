@@ -64,17 +64,26 @@
     "model": "Zero",
     "type": "electric",
     "burr": "conical",
-    "scale": { "min": 0, "max": 50, "step": 1, "unit": "mark" },
+    "scale": { "min": 26, "max": 48, "step": 0.5, "unit": "mark" },
     "calibration": {
       "kind": "anchors",
       "points": [
-        { "setting": 0, "microns": 180 },
-        { "setting": 25, "microns": 700 },
-        { "setting": 50, "microns": 1250 }
+        { "setting": 26, "microns": 400 },
+        { "setting": 33.5, "microns": 430 },
+        { "setting": 34, "microns": 500 },
+        { "setting": 36, "microns": 525 },
+        { "setting": 38, "microns": 550 },
+        { "setting": 42, "microns": 600 },
+        { "setting": 44, "microns": 625 },
+        { "setting": 46, "microns": 650 },
+        { "setting": 48, "microns": 675 }
       ]
     },
-    "confidence": "estimated",
-    "sources": ["https://honestcoffeeguide.com/coffee-grind-size-chart/"],
-    "note": "Stepless collar with 50 reference marks. Anchors are approximate."
+    "confidence": "community",
+    "sources": [
+      "https://honestcoffeeguide.com/coffee-grind-size-chart/",
+      "https://theweldercatherine.ru/blog/articles/oborudovanie/svyashchennyy-pomol-chast-9/"
+    ],
+    "note": "Stepless collar with 50 reference marks. Replaces an approximate 0-50 estimate with sieved measurements, which only cover marks 26-48; outside that the converter reports the grind as unreachable rather than extrapolating."
   }
 ]

@@ -17,11 +17,11 @@
     "model": "JX",
     "type": "manual",
     "burr": "conical",
-    "scale": { "min": 0, "max": 80, "step": 1, "unit": "click", "clicksPerRotation": 40 },
+    "scale": { "min": 0, "max": 80, "step": 1, "unit": "click", "clicksPerRotation": 30 },
     "calibration": { "kind": "linear", "micronsPerStep": 25, "zeroOffsetMicrons": 0 },
     "confidence": "community",
     "sources": ["https://1zpresso.coffee/jx-vs-jxpro/"],
-    "note": "Twice the step of the JX-Pro; filter-oriented."
+    "note": "Twice the step of the JX-Pro; filter-oriented. The cited source gives 30 clicks per rotation for the JX against the JX-Pro's 40."
   },
   {
     "id": "1zpresso-j-max",

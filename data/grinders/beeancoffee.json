@@ -1,0 +1,2557 @@
+[
+  {
+    "id": "acaia-orbit",
+    "brand": "Acaia",
+    "model": "Orbit",
+    "type": "electric",
+    "burr": "conical",
+    "scale": {
+      "min": 0.7,
+      "max": 13.3,
+      "step": 0.1,
+      "unit": "mark"
+    },
+    "calibration": {
+      "kind": "linear",
+      "micronsPerStep": 78.53,
+      "zeroOffsetMicrons": 47
+    },
+    "confidence": "community",
+    "sources": [
+      "https://converter.beeancoffee.com/"
+    ],
+    "note": "Derived by converting from a Timemore Chestnut C2 at 33 um per click; the service states correspondences, not particle sizes."
+  },
+  {
+    "id": "aeropress-manual-grinder",
+    "brand": "AeroPress",
+    "model": "Manual Grinder",
+    "type": "manual",
+    "burr": "conical",
+    "scale": {
+      "min": 1,
+      "max": 67,
+      "step": 1,
+      "unit": "click"
+    },
+    "calibration": {
+      "kind": "anchors",
+      "points": [
+        {
+          "setting": 1,
+          "microns": 99
+        },
+        {
+          "setting": 7,
+          "microns": 198
+        },
+        {
+          "setting": 12,
+          "microns": 264
+        },
+        {
+          "setting": 18,
+          "microns": 363
+        },
+        {
+          "setting": 25,
+          "microns": 462
+        },
+        {
+          "setting": 31,
+          "microns": 561
+        },
+        {
+          "setting": 36,
+          "microns": 627
+        },
+        {
+          "setting": 42,
+          "microns": 726
+        },
+        {
+          "setting": 49,
+          "microns": 825
+        },
+        {
+          "setting": 56,
+          "microns": 924
+        },
+        {
+          "setting": 60,
+          "microns": 990
+        },
+        {
+          "setting": 67,
+          "microns": 1089
+        }
+      ]
+    },
+    "confidence": "community",
+    "sources": [
+      "https://converter.beeancoffee.com/"
+    ],
+    "note": "Derived by converting from a Timemore Chestnut C2 at 33 um per click; the service states correspondences, not particle sizes. Fit was non-linear (worst residual 6%), so measured points are kept as anchors."
+  },
+  {
+    "id": "anfim-sp-ii",
+    "brand": "Anfim",
+    "model": "SP II",
+    "type": "electric",
+    "burr": "conical",
+    "scale": {
+      "min": 16,
+      "max": 61,
+      "step": 1,
+      "unit": "click"
+    },
+    "calibration": {
+      "kind": "anchors",
+      "points": [
+        {
+          "setting": 16,
+          "microns": 99
+        },
+        {
+          "setting": 29,
+          "microns": 198
+        },
+        {
+          "setting": 37,
+          "microns": 264
+        },
+        {
+          "setting": 49,
+          "microns": 363
+        },
+        {
+          "setting": 61,
+          "microns": 462
+        }
+      ]
+    },
+    "confidence": "community",
+    "sources": [
+      "https://converter.beeancoffee.com/"
+    ],
+    "note": "Derived by converting from a Timemore Chestnut C2 at 33 um per click; the service states correspondences, not particle sizes. Fit was non-linear (worst residual 3%), so measured points are kept as anchors."
+  },
+  {
+    "id": "baratza-encore-esp-pro-filter-mode",
+    "brand": "Baratza",
+    "model": "Encore ESP Pro (Filter mode)",
+    "type": "electric",
+    "burr": "conical",
+    "scale": {
+      "min": 81,
+      "max": 113,
+      "step": 1,
+      "unit": "click"
+    },
+    "calibration": {
+      "kind": "linear",
+      "micronsPerStep": 22.72,
+      "zeroOffsetMicrons": -1485
+    },
+    "confidence": "community",
+    "sources": [
+      "https://converter.beeancoffee.com/"
+    ],
+    "note": "Derived by converting from a Timemore Chestnut C2 at 33 um per click; the service states correspondences, not particle sizes."
+  },
+  {
+    "id": "baratza-forte-bg",
+    "brand": "Baratza",
+    "model": "Forté BG",
+    "type": "electric",
+    "burr": "conical",
+    "scale": {
+      "min": 49,
+      "max": 248,
+      "step": 1,
+      "unit": "click"
+    },
+    "calibration": {
+      "kind": "linear",
+      "micronsPerStep": 3.64,
+      "zeroOffsetMicrons": 20
+    },
+    "confidence": "community",
+    "sources": [
+      "https://converter.beeancoffee.com/"
+    ],
+    "note": "Derived by converting from a Timemore Chestnut C2 at 33 um per click; the service states correspondences, not particle sizes."
+  },
+  {
+    "id": "breville-dose-control-pro",
+    "brand": "Breville",
+    "model": "Dose Control Pro",
+    "type": "electric",
+    "burr": "conical",
+    "scale": {
+      "min": 0,
+      "max": 58,
+      "step": 1,
+      "unit": "click"
+    },
+    "calibration": {
+      "kind": "linear",
+      "micronsPerStep": 10.81,
+      "zeroOffsetMicrons": 201
+    },
+    "confidence": "community",
+    "sources": [
+      "https://converter.beeancoffee.com/"
+    ],
+    "note": "Derived by converting from a Timemore Chestnut C2 at 33 um per click; the service states correspondences, not particle sizes."
+  },
+  {
+    "id": "breville-smart-grinder-pro",
+    "brand": "Breville",
+    "model": "Smart Grinder Pro",
+    "type": "manual",
+    "burr": "conical",
+    "scale": {
+      "min": 4,
+      "max": 58,
+      "step": 1,
+      "unit": "click"
+    },
+    "calibration": {
+      "kind": "anchors",
+      "points": [
+        {
+          "setting": 4,
+          "microns": 99
+        },
+        {
+          "setting": 10,
+          "microns": 198
+        },
+        {
+          "setting": 13,
+          "microns": 264
+        },
+        {
+          "setting": 19,
+          "microns": 363
+        },
+        {
+          "setting": 24,
+          "microns": 462
+        },
+        {
+          "setting": 30,
+          "microns": 561
+        },
+        {
+          "setting": 33,
+          "microns": 627
+        },
+        {
+          "setting": 39,
+          "microns": 726
+        },
+        {
+          "setting": 44,
+          "microns": 825
+        },
+        {
+          "setting": 49,
+          "microns": 924
+        },
+        {
+          "setting": 53,
+          "microns": 990
+        },
+        {
+          "setting": 58,
+          "microns": 1089
+        }
+      ]
+    },
+    "confidence": "community",
+    "sources": [
+      "https://converter.beeancoffee.com/"
+    ],
+    "note": "Derived by converting from a Timemore Chestnut C2 at 33 um per click; the service states correspondences, not particle sizes. Fit was non-linear (worst residual 7%), so measured points are kept as anchors."
+  },
+  {
+    "id": "breville-barista-pro",
+    "brand": "Breville",
+    "model": "Barista Pro",
+    "type": "electric",
+    "burr": "conical",
+    "scale": {
+      "min": 10,
+      "max": 28,
+      "step": 1,
+      "unit": "click"
+    },
+    "calibration": {
+      "kind": "anchors",
+      "points": [
+        {
+          "setting": 10,
+          "microns": 99
+        },
+        {
+          "setting": 14,
+          "microns": 198
+        },
+        {
+          "setting": 16,
+          "microns": 264
+        },
+        {
+          "setting": 19,
+          "microns": 363
+        },
+        {
+          "setting": 22,
+          "microns": 462
+        },
+        {
+          "setting": 26,
+          "microns": 561
+        },
+        {
+          "setting": 28,
+          "microns": 627
+        }
+      ]
+    },
+    "confidence": "community",
+    "sources": [
+      "https://converter.beeancoffee.com/"
+    ],
+    "note": "Derived by converting from a Timemore Chestnut C2 at 33 um per click; the service states correspondences, not particle sizes. Fit was non-linear (worst residual 8%), so measured points are kept as anchors."
+  },
+  {
+    "id": "bravito-hand-grinder",
+    "brand": "Bravito",
+    "model": "Hand Grinder",
+    "type": "electric",
+    "burr": "conical",
+    "scale": {
+      "min": 22,
+      "max": 120,
+      "step": 1,
+      "unit": "click"
+    },
+    "calibration": {
+      "kind": "linear",
+      "micronsPerStep": 10.12,
+      "zeroOffsetMicrons": -126
+    },
+    "confidence": "community",
+    "sources": [
+      "https://converter.beeancoffee.com/"
+    ],
+    "note": "Derived by converting from a Timemore Chestnut C2 at 33 um per click; the service states correspondences, not particle sizes."
+  },
+  {
+    "id": "capresso-infinity",
+    "brand": "Capresso",
+    "model": "Infinity",
+    "type": "electric",
+    "burr": "conical",
+    "scale": {
+      "min": 0,
+      "max": 13,
+      "step": 1,
+      "unit": "click"
+    },
+    "calibration": {
+      "kind": "anchors",
+      "points": [
+        {
+          "setting": 0,
+          "microns": 198
+        },
+        {
+          "setting": 1,
+          "microns": 264
+        },
+        {
+          "setting": 3,
+          "microns": 363
+        },
+        {
+          "setting": 4,
+          "microns": 462
+        },
+        {
+          "setting": 5,
+          "microns": 561
+        },
+        {
+          "setting": 7,
+          "microns": 627
+        },
+        {
+          "setting": 8,
+          "microns": 726
+        },
+        {
+          "setting": 9,
+          "microns": 825
+        },
+        {
+          "setting": 11,
+          "microns": 924
+        },
+        {
+          "setting": 12,
+          "microns": 990
+        },
+        {
+          "setting": 13,
+          "microns": 1089
+        }
+      ]
+    },
+    "confidence": "community",
+    "sources": [
+      "https://converter.beeancoffee.com/"
+    ],
+    "note": "Derived by converting from a Timemore Chestnut C2 at 33 um per click; the service states correspondences, not particle sizes. Fit was non-linear (worst residual 8%), so measured points are kept as anchors."
+  },
+  {
+    "id": "capresso-infinity-plus",
+    "brand": "Capresso",
+    "model": "Infinity Plus",
+    "type": "electric",
+    "burr": "conical",
+    "scale": {
+      "min": 0,
+      "max": 13,
+      "step": 1,
+      "unit": "click"
+    },
+    "calibration": {
+      "kind": "anchors",
+      "points": [
+        {
+          "setting": 0,
+          "microns": 198
+        },
+        {
+          "setting": 1,
+          "microns": 264
+        },
+        {
+          "setting": 3,
+          "microns": 363
+        },
+        {
+          "setting": 4,
+          "microns": 462
+        },
+        {
+          "setting": 5,
+          "microns": 561
+        },
+        {
+          "setting": 7,
+          "microns": 627
+        },
+        {
+          "setting": 8,
+          "microns": 726
+        },
+        {
+          "setting": 9,
+          "microns": 825
+        },
+        {
+          "setting": 11,
+          "microns": 924
+        },
+        {
+          "setting": 12,
+          "microns": 990
+        },
+        {
+          "setting": 13,
+          "microns": 1089
+        }
+      ]
+    },
+    "confidence": "community",
+    "sources": [
+      "https://converter.beeancoffee.com/"
+    ],
+    "note": "Derived by converting from a Timemore Chestnut C2 at 33 um per click; the service states correspondences, not particle sizes. Fit was non-linear (worst residual 8%), so measured points are kept as anchors."
+  },
+  {
+    "id": "comandante-c60-baracuda",
+    "brand": "Comandante",
+    "model": "C60 Baracuda",
+    "type": "electric",
+    "burr": "conical",
+    "scale": {
+      "min": 5,
+      "max": 53,
+      "step": 1,
+      "unit": "click"
+    },
+    "calibration": {
+      "kind": "anchors",
+      "points": [
+        {
+          "setting": 5,
+          "microns": 99
+        },
+        {
+          "setting": 10,
+          "microns": 198
+        },
+        {
+          "setting": 13,
+          "microns": 264
+        },
+        {
+          "setting": 18,
+          "microns": 363
+        },
+        {
+          "setting": 22,
+          "microns": 462
+        },
+        {
+          "setting": 27,
+          "microns": 561
+        },
+        {
+          "setting": 30,
+          "microns": 627
+        },
+        {
+          "setting": 35,
+          "microns": 726
+        },
+        {
+          "setting": 40,
+          "microns": 825
+        },
+        {
+          "setting": 45,
+          "microns": 924
+        },
+        {
+          "setting": 48,
+          "microns": 990
+        },
+        {
+          "setting": 53,
+          "microns": 1089
+        }
+      ]
+    },
+    "confidence": "community",
+    "sources": [
+      "https://converter.beeancoffee.com/"
+    ],
+    "note": "Derived by converting from a Timemore Chestnut C2 at 33 um per click; the service states correspondences, not particle sizes. Fit was non-linear (worst residual 3%), so measured points are kept as anchors."
+  },
+  {
+    "id": "ceado-e5sd",
+    "brand": "Ceado",
+    "model": "E5SD",
+    "type": "electric",
+    "burr": "conical",
+    "scale": {
+      "min": 12,
+      "max": 132,
+      "step": 1,
+      "unit": "click"
+    },
+    "calibration": {
+      "kind": "linear",
+      "micronsPerStep": 8.25,
+      "zeroOffsetMicrons": 0
+    },
+    "confidence": "community",
+    "sources": [
+      "https://converter.beeancoffee.com/"
+    ],
+    "note": "Derived by converting from a Timemore Chestnut C2 at 33 um per click; the service states correspondences, not particle sizes."
+  },
+  {
+    "id": "ceado-e37sd",
+    "brand": "Ceado",
+    "model": "E37SD",
+    "type": "electric",
+    "burr": "conical",
+    "scale": {
+      "min": 33,
+      "max": 78,
+      "step": 1,
+      "unit": "click"
+    },
+    "calibration": {
+      "kind": "anchors",
+      "points": [
+        {
+          "setting": 33,
+          "microns": 99
+        },
+        {
+          "setting": 38,
+          "microns": 198
+        },
+        {
+          "setting": 42,
+          "microns": 264
+        },
+        {
+          "setting": 47,
+          "microns": 363
+        },
+        {
+          "setting": 52,
+          "microns": 462
+        },
+        {
+          "setting": 57,
+          "microns": 561
+        },
+        {
+          "setting": 60,
+          "microns": 627
+        },
+        {
+          "setting": 65,
+          "microns": 726
+        },
+        {
+          "setting": 70,
+          "microns": 825
+        },
+        {
+          "setting": 75,
+          "microns": 924
+        },
+        {
+          "setting": 78,
+          "microns": 990
+        }
+      ]
+    },
+    "confidence": "community",
+    "sources": [
+      "https://converter.beeancoffee.com/"
+    ],
+    "note": "Derived by converting from a Timemore Chestnut C2 at 33 um per click; the service states correspondences, not particle sizes. Fit was non-linear (worst residual 8%), so measured points are kept as anchors."
+  },
+  {
+    "id": "df-64v-2023",
+    "brand": "DF",
+    "model": "64V (2023)",
+    "type": "electric",
+    "burr": "conical",
+    "scale": {
+      "min": 8,
+      "max": 86,
+      "step": 1,
+      "unit": "click"
+    },
+    "calibration": {
+      "kind": "linear",
+      "micronsPerStep": 10.09,
+      "zeroOffsetMicrons": 120
+    },
+    "confidence": "community",
+    "sources": [
+      "https://converter.beeancoffee.com/"
+    ],
+    "note": "Derived by converting from a Timemore Chestnut C2 at 33 um per click; the service states correspondences, not particle sizes."
+  },
+  {
+    "id": "df-54",
+    "brand": "DF",
+    "model": "54",
+    "type": "electric",
+    "burr": "conical",
+    "scale": {
+      "min": 10,
+      "max": 81,
+      "step": 1,
+      "unit": "click"
+    },
+    "calibration": {
+      "kind": "linear",
+      "micronsPerStep": 8.85,
+      "zeroOffsetMicrons": 107
+    },
+    "confidence": "community",
+    "sources": [
+      "https://converter.beeancoffee.com/"
+    ],
+    "note": "Derived by converting from a Timemore Chestnut C2 at 33 um per click; the service states correspondences, not particle sizes."
+  },
+  {
+    "id": "mahlkonig-ek43s",
+    "brand": "Mahlkönig",
+    "model": "EK43s",
+    "type": "electric",
+    "burr": "conical",
+    "scale": {
+      "min": 0.4,
+      "max": 15.9,
+      "step": 0.1,
+      "unit": "mark"
+    },
+    "calibration": {
+      "kind": "linear",
+      "micronsPerStep": 46.78,
+      "zeroOffsetMicrons": 180
+    },
+    "confidence": "community",
+    "sources": [
+      "https://converter.beeancoffee.com/"
+    ],
+    "note": "Derived by converting from a Timemore Chestnut C2 at 33 um per click; the service states correspondences, not particle sizes."
+  },
+  {
+    "id": "lelit-william-pl72",
+    "brand": "Lelit",
+    "model": "William PL72",
+    "type": "electric",
+    "burr": "conical",
+    "scale": {
+      "min": 1.4,
+      "max": 9.6,
+      "step": 0.1,
+      "unit": "mark"
+    },
+    "calibration": {
+      "kind": "linear",
+      "micronsPerStep": 32.29,
+      "zeroOffsetMicrons": 152
+    },
+    "confidence": "community",
+    "sources": [
+      "https://converter.beeancoffee.com/"
+    ],
+    "note": "Derived by converting from a Timemore Chestnut C2 at 33 um per click; the service states correspondences, not particle sizes."
+  },
+  {
+    "id": "mahlkonig-x54",
+    "brand": "Mahlkönig",
+    "model": "X54",
+    "type": "electric",
+    "burr": "conical",
+    "scale": {
+      "min": 2.9,
+      "max": 33,
+      "step": 0.1,
+      "unit": "mark"
+    },
+    "calibration": {
+      "kind": "linear",
+      "micronsPerStep": 29.61,
+      "zeroOffsetMicrons": 111
+    },
+    "confidence": "community",
+    "sources": [
+      "https://converter.beeancoffee.com/"
+    ],
+    "note": "Derived by converting from a Timemore Chestnut C2 at 33 um per click; the service states correspondences, not particle sizes."
+  },
+  {
+    "id": "mahlkonig-x64-sd",
+    "brand": "Mahlkönig",
+    "model": "X64 SD",
+    "type": "electric",
+    "burr": "conical",
+    "scale": {
+      "min": 4,
+      "max": 57,
+      "step": 1,
+      "unit": "click"
+    },
+    "calibration": {
+      "kind": "linear",
+      "micronsPerStep": 16.92,
+      "zeroOffsetMicrons": 127
+    },
+    "confidence": "community",
+    "sources": [
+      "https://converter.beeancoffee.com/"
+    ],
+    "note": "Derived by converting from a Timemore Chestnut C2 at 33 um per click; the service states correspondences, not particle sizes."
+  },
+  {
+    "id": "eureka-mignon-classico",
+    "brand": "Eureka",
+    "model": "Mignon Classico",
+    "type": "electric",
+    "burr": "conical",
+    "scale": {
+      "min": 1,
+      "max": 17,
+      "step": 1,
+      "unit": "click"
+    },
+    "calibration": {
+      "kind": "anchors",
+      "points": [
+        {
+          "setting": 1,
+          "microns": 198
+        },
+        {
+          "setting": 2,
+          "microns": 264
+        },
+        {
+          "setting": 4,
+          "microns": 363
+        },
+        {
+          "setting": 5,
+          "microns": 462
+        },
+        {
+          "setting": 7,
+          "microns": 561
+        },
+        {
+          "setting": 8,
+          "microns": 627
+        },
+        {
+          "setting": 10,
+          "microns": 726
+        },
+        {
+          "setting": 12,
+          "microns": 825
+        },
+        {
+          "setting": 14,
+          "microns": 924
+        },
+        {
+          "setting": 15,
+          "microns": 990
+        },
+        {
+          "setting": 17,
+          "microns": 1089
+        }
+      ]
+    },
+    "confidence": "community",
+    "sources": [
+      "https://converter.beeancoffee.com/"
+    ],
+    "note": "Derived by converting from a Timemore Chestnut C2 at 33 um per click; the service states correspondences, not particle sizes. Fit was non-linear (worst residual 9%), so measured points are kept as anchors."
+  },
+  {
+    "id": "eureka-mignon-specialita",
+    "brand": "Eureka",
+    "model": "Mignon Specialità",
+    "type": "electric",
+    "burr": "conical",
+    "scale": {
+      "min": 2,
+      "max": 43,
+      "step": 1,
+      "unit": "click"
+    },
+    "calibration": {
+      "kind": "linear",
+      "micronsPerStep": 20.15,
+      "zeroOffsetMicrons": 222
+    },
+    "confidence": "community",
+    "sources": [
+      "https://converter.beeancoffee.com/"
+    ],
+    "note": "Derived by converting from a Timemore Chestnut C2 at 33 um per click; the service states correspondences, not particle sizes."
+  },
+  {
+    "id": "eureka-mignon-silenzio",
+    "brand": "Eureka",
+    "model": "Mignon Silenzio",
+    "type": "electric",
+    "burr": "conical",
+    "scale": {
+      "min": 2,
+      "max": 43,
+      "step": 1,
+      "unit": "click"
+    },
+    "calibration": {
+      "kind": "linear",
+      "micronsPerStep": 20.15,
+      "zeroOffsetMicrons": 222
+    },
+    "confidence": "community",
+    "sources": [
+      "https://converter.beeancoffee.com/"
+    ],
+    "note": "Derived by converting from a Timemore Chestnut C2 at 33 um per click; the service states correspondences, not particle sizes."
+  },
+  {
+    "id": "fellow-ode-ssp-burrs",
+    "brand": "Fellow",
+    "model": "Ode (SSP burrs)",
+    "type": "electric",
+    "burr": "conical",
+    "scale": {
+      "min": 3,
+      "max": 30,
+      "step": 1,
+      "unit": "click"
+    },
+    "calibration": {
+      "kind": "linear",
+      "micronsPerStep": 33,
+      "zeroOffsetMicrons": 99
+    },
+    "confidence": "community",
+    "sources": [
+      "https://converter.beeancoffee.com/"
+    ],
+    "note": "Derived by converting from a Timemore Chestnut C2 at 33 um per click; the service states correspondences, not particle sizes."
+  },
+  {
+    "id": "femobook-a2",
+    "brand": "Femobook",
+    "model": "A2",
+    "type": "electric",
+    "burr": "conical",
+    "scale": {
+      "min": 0,
+      "max": 120,
+      "step": 1,
+      "unit": "click"
+    },
+    "calibration": {
+      "kind": "linear",
+      "micronsPerStep": 7.41,
+      "zeroOffsetMicrons": 198
+    },
+    "confidence": "community",
+    "sources": [
+      "https://converter.beeancoffee.com/"
+    ],
+    "note": "Derived by converting from a Timemore Chestnut C2 at 33 um per click; the service states correspondences, not particle sizes."
+  },
+  {
+    "id": "femobook-a4z",
+    "brand": "Femobook",
+    "model": "A4z",
+    "type": "electric",
+    "burr": "conical",
+    "scale": {
+      "min": 12,
+      "max": 271,
+      "step": 1,
+      "unit": "click"
+    },
+    "calibration": {
+      "kind": "linear",
+      "micronsPerStep": 3.44,
+      "zeroOffsetMicrons": 158
+    },
+    "confidence": "community",
+    "sources": [
+      "https://converter.beeancoffee.com/"
+    ],
+    "note": "Derived by converting from a Timemore Chestnut C2 at 33 um per click; the service states correspondences, not particle sizes."
+  },
+  {
+    "id": "goat-story-arco",
+    "brand": "Goat Story",
+    "model": "Arco",
+    "type": "electric",
+    "burr": "conical",
+    "scale": {
+      "min": 16,
+      "max": 176,
+      "step": 1,
+      "unit": "click"
+    },
+    "calibration": {
+      "kind": "linear",
+      "micronsPerStep": 6.18,
+      "zeroOffsetMicrons": 3
+    },
+    "confidence": "community",
+    "sources": [
+      "https://converter.beeancoffee.com/"
+    ],
+    "note": "Derived by converting from a Timemore Chestnut C2 at 33 um per click; the service states correspondences, not particle sizes."
+  },
+  {
+    "id": "helor-101",
+    "brand": "Helor",
+    "model": "101",
+    "type": "manual",
+    "burr": "conical",
+    "scale": {
+      "min": 6,
+      "max": 60,
+      "step": 1,
+      "unit": "click"
+    },
+    "calibration": {
+      "kind": "anchors",
+      "points": [
+        {
+          "setting": 6,
+          "microns": 99
+        },
+        {
+          "setting": 11,
+          "microns": 198
+        },
+        {
+          "setting": 15,
+          "microns": 264
+        },
+        {
+          "setting": 20,
+          "microns": 363
+        },
+        {
+          "setting": 26,
+          "microns": 462
+        },
+        {
+          "setting": 31,
+          "microns": 561
+        },
+        {
+          "setting": 35,
+          "microns": 627
+        },
+        {
+          "setting": 40,
+          "microns": 726
+        },
+        {
+          "setting": 45,
+          "microns": 825
+        },
+        {
+          "setting": 51,
+          "microns": 924
+        },
+        {
+          "setting": 55,
+          "microns": 990
+        },
+        {
+          "setting": 60,
+          "microns": 1089
+        }
+      ]
+    },
+    "confidence": "community",
+    "sources": [
+      "https://converter.beeancoffee.com/"
+    ],
+    "note": "Derived by converting from a Timemore Chestnut C2 at 33 um per click; the service states correspondences, not particle sizes. Fit was non-linear (worst residual 3%), so measured points are kept as anchors."
+  },
+  {
+    "id": "kingrinder-k0",
+    "brand": "KINGrinder",
+    "model": "K0",
+    "type": "manual",
+    "burr": "conical",
+    "scale": {
+      "min": 14,
+      "max": 130,
+      "step": 1,
+      "unit": "click"
+    },
+    "calibration": {
+      "kind": "linear",
+      "micronsPerStep": 7.66,
+      "zeroOffsetMicrons": -7
+    },
+    "confidence": "community",
+    "sources": [
+      "https://converter.beeancoffee.com/"
+    ],
+    "note": "Derived by converting from a Timemore Chestnut C2 at 33 um per click; the service states correspondences, not particle sizes."
+  },
+  {
+    "id": "kingrinder-k1",
+    "brand": "KINGrinder",
+    "model": "K1",
+    "type": "manual",
+    "burr": "conical",
+    "scale": {
+      "min": 14,
+      "max": 130,
+      "step": 1,
+      "unit": "click"
+    },
+    "calibration": {
+      "kind": "linear",
+      "micronsPerStep": 7.66,
+      "zeroOffsetMicrons": -7
+    },
+    "confidence": "community",
+    "sources": [
+      "https://converter.beeancoffee.com/"
+    ],
+    "note": "Derived by converting from a Timemore Chestnut C2 at 33 um per click; the service states correspondences, not particle sizes."
+  },
+  {
+    "id": "kingrinder-k2",
+    "brand": "KINGrinder",
+    "model": "K2",
+    "type": "manual",
+    "burr": "conical",
+    "scale": {
+      "min": 14,
+      "max": 130,
+      "step": 1,
+      "unit": "click"
+    },
+    "calibration": {
+      "kind": "linear",
+      "micronsPerStep": 7.66,
+      "zeroOffsetMicrons": -7
+    },
+    "confidence": "community",
+    "sources": [
+      "https://converter.beeancoffee.com/"
+    ],
+    "note": "Derived by converting from a Timemore Chestnut C2 at 33 um per click; the service states correspondences, not particle sizes."
+  },
+  {
+    "id": "kingrinder-k3",
+    "brand": "KINGrinder",
+    "model": "K3",
+    "type": "manual",
+    "burr": "conical",
+    "scale": {
+      "min": 14,
+      "max": 130,
+      "step": 1,
+      "unit": "click"
+    },
+    "calibration": {
+      "kind": "linear",
+      "micronsPerStep": 7.66,
+      "zeroOffsetMicrons": -7
+    },
+    "confidence": "community",
+    "sources": [
+      "https://converter.beeancoffee.com/"
+    ],
+    "note": "Derived by converting from a Timemore Chestnut C2 at 33 um per click; the service states correspondences, not particle sizes."
+  },
+  {
+    "id": "kingrinder-k4",
+    "brand": "KINGrinder",
+    "model": "K4",
+    "type": "manual",
+    "burr": "conical",
+    "scale": {
+      "min": 12,
+      "max": 160,
+      "step": 1,
+      "unit": "click"
+    },
+    "calibration": {
+      "kind": "linear",
+      "micronsPerStep": 5.36,
+      "zeroOffsetMicrons": 132
+    },
+    "confidence": "community",
+    "sources": [
+      "https://converter.beeancoffee.com/"
+    ],
+    "note": "Derived by converting from a Timemore Chestnut C2 at 33 um per click; the service states correspondences, not particle sizes."
+  },
+  {
+    "id": "kingrinder-k5",
+    "brand": "KINGrinder",
+    "model": "K5",
+    "type": "manual",
+    "burr": "conical",
+    "scale": {
+      "min": 14,
+      "max": 130,
+      "step": 1,
+      "unit": "click"
+    },
+    "calibration": {
+      "kind": "linear",
+      "micronsPerStep": 7.66,
+      "zeroOffsetMicrons": -7
+    },
+    "confidence": "community",
+    "sources": [
+      "https://converter.beeancoffee.com/"
+    ],
+    "note": "Derived by converting from a Timemore Chestnut C2 at 33 um per click; the service states correspondences, not particle sizes."
+  },
+  {
+    "id": "kingrinder-k7",
+    "brand": "KINGrinder",
+    "model": "K7",
+    "type": "manual",
+    "burr": "conical",
+    "scale": {
+      "min": 22,
+      "max": 104,
+      "step": 1,
+      "unit": "click"
+    },
+    "calibration": {
+      "kind": "linear",
+      "micronsPerStep": 12,
+      "zeroOffsetMicrons": -162
+    },
+    "confidence": "community",
+    "sources": [
+      "https://converter.beeancoffee.com/"
+    ],
+    "note": "Derived by converting from a Timemore Chestnut C2 at 33 um per click; the service states correspondences, not particle sizes."
+  },
+  {
+    "id": "kingrinder-p0",
+    "brand": "KINGrinder",
+    "model": "P0",
+    "type": "manual",
+    "burr": "conical",
+    "scale": {
+      "min": 9,
+      "max": 98,
+      "step": 1,
+      "unit": "click"
+    },
+    "calibration": {
+      "kind": "linear",
+      "micronsPerStep": 11.17,
+      "zeroOffsetMicrons": -4
+    },
+    "confidence": "community",
+    "sources": [
+      "https://converter.beeancoffee.com/"
+    ],
+    "note": "Derived by converting from a Timemore Chestnut C2 at 33 um per click; the service states correspondences, not particle sizes."
+  },
+  {
+    "id": "kingrinder-p1",
+    "brand": "KINGrinder",
+    "model": "P1",
+    "type": "manual",
+    "burr": "conical",
+    "scale": {
+      "min": 9,
+      "max": 98,
+      "step": 1,
+      "unit": "click"
+    },
+    "calibration": {
+      "kind": "linear",
+      "micronsPerStep": 11.17,
+      "zeroOffsetMicrons": -4
+    },
+    "confidence": "community",
+    "sources": [
+      "https://converter.beeancoffee.com/"
+    ],
+    "note": "Derived by converting from a Timemore Chestnut C2 at 33 um per click; the service states correspondences, not particle sizes."
+  },
+  {
+    "id": "kingrinder-p2",
+    "brand": "KINGrinder",
+    "model": "P2",
+    "type": "manual",
+    "burr": "conical",
+    "scale": {
+      "min": 9,
+      "max": 93,
+      "step": 1,
+      "unit": "click"
+    },
+    "calibration": {
+      "kind": "anchors",
+      "points": [
+        {
+          "setting": 9,
+          "microns": 99
+        },
+        {
+          "setting": 18,
+          "microns": 198
+        },
+        {
+          "setting": 23,
+          "microns": 264
+        },
+        {
+          "setting": 32,
+          "microns": 363
+        },
+        {
+          "setting": 40,
+          "microns": 462
+        },
+        {
+          "setting": 49,
+          "microns": 561
+        },
+        {
+          "setting": 54,
+          "microns": 627
+        },
+        {
+          "setting": 63,
+          "microns": 726
+        },
+        {
+          "setting": 71,
+          "microns": 825
+        },
+        {
+          "setting": 79,
+          "microns": 924
+        },
+        {
+          "setting": 85,
+          "microns": 990
+        },
+        {
+          "setting": 93,
+          "microns": 1089
+        }
+      ]
+    },
+    "confidence": "community",
+    "sources": [
+      "https://converter.beeancoffee.com/"
+    ],
+    "note": "Derived by converting from a Timemore Chestnut C2 at 33 um per click; the service states correspondences, not particle sizes. Fit was non-linear (worst residual 4%), so measured points are kept as anchors."
+  },
+  {
+    "id": "kinu-m47-pour-over-burr-gold",
+    "brand": "Kinu",
+    "model": "M47 (Pour-Over burr - gold)",
+    "type": "electric",
+    "burr": "conical",
+    "scale": {
+      "min": 4,
+      "max": 247,
+      "step": 1,
+      "unit": "click"
+    },
+    "calibration": {
+      "kind": "linear",
+      "micronsPerStep": 3.67,
+      "zeroOffsetMicrons": 183
+    },
+    "confidence": "community",
+    "sources": [
+      "https://converter.beeancoffee.com/"
+    ],
+    "note": "Derived by converting from a Timemore Chestnut C2 at 33 um per click; the service states correspondences, not particle sizes."
+  },
+  {
+    "id": "kinu-m47-pour-over-burr-black",
+    "brand": "Kinu",
+    "model": "M47 (Pour-Over burr - black)",
+    "type": "electric",
+    "burr": "conical",
+    "scale": {
+      "min": 21,
+      "max": 284,
+      "step": 1,
+      "unit": "click"
+    },
+    "calibration": {
+      "kind": "linear",
+      "micronsPerStep": 3.39,
+      "zeroOffsetMicrons": 126
+    },
+    "confidence": "community",
+    "sources": [
+      "https://converter.beeancoffee.com/"
+    ],
+    "note": "Derived by converting from a Timemore Chestnut C2 at 33 um per click; the service states correspondences, not particle sizes."
+  },
+  {
+    "id": "knock-aergrind",
+    "brand": "Knock",
+    "model": "Aergrind",
+    "type": "manual",
+    "burr": "conical",
+    "scale": {
+      "min": 5,
+      "max": 48,
+      "step": 1,
+      "unit": "click"
+    },
+    "calibration": {
+      "kind": "anchors",
+      "points": [
+        {
+          "setting": 5,
+          "microns": 99
+        },
+        {
+          "setting": 9,
+          "microns": 198
+        },
+        {
+          "setting": 12,
+          "microns": 264
+        },
+        {
+          "setting": 16,
+          "microns": 363
+        },
+        {
+          "setting": 21,
+          "microns": 462
+        },
+        {
+          "setting": 25,
+          "microns": 561
+        },
+        {
+          "setting": 28,
+          "microns": 627
+        },
+        {
+          "setting": 32,
+          "microns": 726
+        },
+        {
+          "setting": 37,
+          "microns": 825
+        },
+        {
+          "setting": 41,
+          "microns": 924
+        },
+        {
+          "setting": 44,
+          "microns": 990
+        },
+        {
+          "setting": 48,
+          "microns": 1089
+        }
+      ]
+    },
+    "confidence": "community",
+    "sources": [
+      "https://converter.beeancoffee.com/"
+    ],
+    "note": "Derived by converting from a Timemore Chestnut C2 at 33 um per click; the service states correspondences, not particle sizes. Fit was non-linear (worst residual 5%), so measured points are kept as anchors."
+  },
+  {
+    "id": "mazzer-philos-i200d-burrs",
+    "brand": "Mazzer",
+    "model": "Philos (i200D burrs)",
+    "type": "electric",
+    "burr": "conical",
+    "scale": {
+      "min": 13,
+      "max": 141,
+      "step": 1,
+      "unit": "click"
+    },
+    "calibration": {
+      "kind": "linear",
+      "micronsPerStep": 7.73,
+      "zeroOffsetMicrons": -1
+    },
+    "confidence": "community",
+    "sources": [
+      "https://converter.beeancoffee.com/"
+    ],
+    "note": "Derived by converting from a Timemore Chestnut C2 at 33 um per click; the service states correspondences, not particle sizes."
+  },
+  {
+    "id": "mazzer-omega",
+    "brand": "Mazzer",
+    "model": "Omega",
+    "type": "electric",
+    "burr": "conical",
+    "scale": {
+      "min": 21,
+      "max": 78,
+      "step": 1,
+      "unit": "click"
+    },
+    "calibration": {
+      "kind": "anchors",
+      "points": [
+        {
+          "setting": 21,
+          "microns": 99
+        },
+        {
+          "setting": 28,
+          "microns": 198
+        },
+        {
+          "setting": 32,
+          "microns": 264
+        },
+        {
+          "setting": 38,
+          "microns": 363
+        },
+        {
+          "setting": 44,
+          "microns": 462
+        },
+        {
+          "setting": 51,
+          "microns": 561
+        },
+        {
+          "setting": 55,
+          "microns": 627
+        },
+        {
+          "setting": 61,
+          "microns": 726
+        },
+        {
+          "setting": 67,
+          "microns": 825
+        },
+        {
+          "setting": 74,
+          "microns": 924
+        },
+        {
+          "setting": 78,
+          "microns": 990
+        }
+      ]
+    },
+    "confidence": "community",
+    "sources": [
+      "https://converter.beeancoffee.com/"
+    ],
+    "note": "Derived by converting from a Timemore Chestnut C2 at 33 um per click; the service states correspondences, not particle sizes. Fit was non-linear (worst residual 5%), so measured points are kept as anchors."
+  },
+  {
+    "id": "mazzer-omega-x",
+    "brand": "Mazzer",
+    "model": "Omega X",
+    "type": "electric",
+    "burr": "conical",
+    "scale": {
+      "min": 43,
+      "max": 169,
+      "step": 1,
+      "unit": "click"
+    },
+    "calibration": {
+      "kind": "linear",
+      "micronsPerStep": 7.85,
+      "zeroOffsetMicrons": -236
+    },
+    "confidence": "community",
+    "sources": [
+      "https://converter.beeancoffee.com/"
+    ],
+    "note": "Derived by converting from a Timemore Chestnut C2 at 33 um per click; the service states correspondences, not particle sizes."
+  },
+  {
+    "id": "porlex-mini",
+    "brand": "Porlex",
+    "model": "Mini",
+    "type": "manual",
+    "burr": "conical",
+    "scale": {
+      "min": 1,
+      "max": 9,
+      "step": 1,
+      "unit": "click"
+    },
+    "calibration": {
+      "kind": "anchors",
+      "points": [
+        {
+          "setting": 1,
+          "microns": 99
+        },
+        {
+          "setting": 2,
+          "microns": 264
+        },
+        {
+          "setting": 3,
+          "microns": 363
+        },
+        {
+          "setting": 4,
+          "microns": 462
+        },
+        {
+          "setting": 5,
+          "microns": 627
+        },
+        {
+          "setting": 6,
+          "microns": 726
+        },
+        {
+          "setting": 7,
+          "microns": 825
+        },
+        {
+          "setting": 8,
+          "microns": 990
+        },
+        {
+          "setting": 9,
+          "microns": 1089
+        }
+      ]
+    },
+    "confidence": "community",
+    "sources": [
+      "https://converter.beeancoffee.com/"
+    ],
+    "note": "Derived by converting from a Timemore Chestnut C2 at 33 um per click; the service states correspondences, not particle sizes. Fit was non-linear (worst residual 18%), so measured points are kept as anchors."
+  },
+  {
+    "id": "porlex-tall",
+    "brand": "Porlex",
+    "model": "Tall",
+    "type": "manual",
+    "burr": "conical",
+    "scale": {
+      "min": 1,
+      "max": 9,
+      "step": 1,
+      "unit": "click"
+    },
+    "calibration": {
+      "kind": "anchors",
+      "points": [
+        {
+          "setting": 1,
+          "microns": 99
+        },
+        {
+          "setting": 2,
+          "microns": 264
+        },
+        {
+          "setting": 3,
+          "microns": 363
+        },
+        {
+          "setting": 4,
+          "microns": 462
+        },
+        {
+          "setting": 5,
+          "microns": 627
+        },
+        {
+          "setting": 6,
+          "microns": 726
+        },
+        {
+          "setting": 7,
+          "microns": 825
+        },
+        {
+          "setting": 8,
+          "microns": 990
+        },
+        {
+          "setting": 9,
+          "microns": 1089
+        }
+      ]
+    },
+    "confidence": "community",
+    "sources": [
+      "https://converter.beeancoffee.com/"
+    ],
+    "note": "Derived by converting from a Timemore Chestnut C2 at 33 um per click; the service states correspondences, not particle sizes. Fit was non-linear (worst residual 18%), so measured points are kept as anchors."
+  },
+  {
+    "id": "timemore-chestnut-s3-esp",
+    "brand": "Timemore",
+    "model": "Chestnut S3 ESP",
+    "type": "electric",
+    "burr": "conical",
+    "scale": {
+      "min": 1,
+      "max": 8.9,
+      "step": 0.1,
+      "unit": "mark"
+    },
+    "calibration": {
+      "kind": "linear",
+      "micronsPerStep": 92.04,
+      "zeroOffsetMicrons": 108
+    },
+    "confidence": "community",
+    "sources": [
+      "https://converter.beeancoffee.com/"
+    ],
+    "note": "Derived by converting from a Timemore Chestnut C2 at 33 um per click; the service states correspondences, not particle sizes."
+  },
+  {
+    "id": "timemore-chestnut-c5",
+    "brand": "Timemore",
+    "model": "Chestnut C5",
+    "type": "electric",
+    "burr": "conical",
+    "scale": {
+      "min": 3,
+      "max": 44,
+      "step": 1,
+      "unit": "click"
+    },
+    "calibration": {
+      "kind": "anchors",
+      "points": [
+        {
+          "setting": 3,
+          "microns": 99
+        },
+        {
+          "setting": 9,
+          "microns": 198
+        },
+        {
+          "setting": 12,
+          "microns": 264
+        },
+        {
+          "setting": 18,
+          "microns": 363
+        },
+        {
+          "setting": 23,
+          "microns": 462
+        },
+        {
+          "setting": 29,
+          "microns": 561
+        },
+        {
+          "setting": 33,
+          "microns": 627
+        },
+        {
+          "setting": 38,
+          "microns": 726
+        },
+        {
+          "setting": 44,
+          "microns": 825
+        }
+      ]
+    },
+    "confidence": "community",
+    "sources": [
+      "https://converter.beeancoffee.com/"
+    ],
+    "note": "Derived by converting from a Timemore Chestnut C2 at 33 um per click; the service states correspondences, not particle sizes. Fit was non-linear (worst residual 4%), so measured points are kept as anchors."
+  },
+  {
+    "id": "timemore-chestnut-c5-esp-pro",
+    "brand": "Timemore",
+    "model": "Chestnut C5 ESP Pro",
+    "type": "electric",
+    "burr": "conical",
+    "scale": {
+      "min": 11,
+      "max": 127,
+      "step": 1,
+      "unit": "click"
+    },
+    "calibration": {
+      "kind": "linear",
+      "micronsPerStep": 8.56,
+      "zeroOffsetMicrons": 5
+    },
+    "confidence": "community",
+    "sources": [
+      "https://converter.beeancoffee.com/"
+    ],
+    "note": "Derived by converting from a Timemore Chestnut C2 at 33 um per click; the service states correspondences, not particle sizes."
+  },
+  {
+    "id": "timemore-bricks-01s",
+    "brand": "Timemore",
+    "model": "Bricks 01s",
+    "type": "electric",
+    "burr": "conical",
+    "scale": {
+      "min": 5,
+      "max": 149,
+      "step": 1,
+      "unit": "click"
+    },
+    "calibration": {
+      "kind": "linear",
+      "micronsPerStep": 6.88,
+      "zeroOffsetMicrons": 62
+    },
+    "confidence": "community",
+    "sources": [
+      "https://converter.beeancoffee.com/"
+    ],
+    "note": "Derived by converting from a Timemore Chestnut C2 at 33 um per click; the service states correspondences, not particle sizes."
+  },
+  {
+    "id": "timemore-millab-m01",
+    "brand": "Timemore",
+    "model": "Millab M01",
+    "type": "electric",
+    "burr": "conical",
+    "scale": {
+      "min": 0.8,
+      "max": 9.8,
+      "step": 0.1,
+      "unit": "mark"
+    },
+    "calibration": {
+      "kind": "linear",
+      "micronsPerStep": 110,
+      "zeroOffsetMicrons": 11
+    },
+    "confidence": "community",
+    "sources": [
+      "https://converter.beeancoffee.com/"
+    ],
+    "note": "Derived by converting from a Timemore Chestnut C2 at 33 um per click; the service states correspondences, not particle sizes."
+  },
+  {
+    "id": "timemore-millab-e01",
+    "brand": "Timemore",
+    "model": "Millab E01",
+    "type": "electric",
+    "burr": "conical",
+    "scale": {
+      "min": 4,
+      "max": 56,
+      "step": 1,
+      "unit": "click"
+    },
+    "calibration": {
+      "kind": "linear",
+      "micronsPerStep": 12.72,
+      "zeroOffsetMicrons": 216
+    },
+    "confidence": "community",
+    "sources": [
+      "https://converter.beeancoffee.com/"
+    ],
+    "note": "Derived by converting from a Timemore Chestnut C2 at 33 um per click; the service states correspondences, not particle sizes."
+  },
+  {
+    "id": "timemore-sculptor-078-turbo-burrs",
+    "brand": "Timemore",
+    "model": "Sculptor 078 (Turbo burrs)",
+    "type": "electric",
+    "burr": "conical",
+    "scale": {
+      "min": 3,
+      "max": 34,
+      "step": 1,
+      "unit": "click"
+    },
+    "calibration": {
+      "kind": "anchors",
+      "points": [
+        {
+          "setting": 3,
+          "microns": 363
+        },
+        {
+          "setting": 8,
+          "microns": 462
+        },
+        {
+          "setting": 12,
+          "microns": 561
+        },
+        {
+          "setting": 15,
+          "microns": 627
+        },
+        {
+          "setting": 19,
+          "microns": 726
+        },
+        {
+          "setting": 23,
+          "microns": 825
+        },
+        {
+          "setting": 27,
+          "microns": 924
+        },
+        {
+          "setting": 30,
+          "microns": 990
+        },
+        {
+          "setting": 34,
+          "microns": 1089
+        }
+      ]
+    },
+    "confidence": "community",
+    "sources": [
+      "https://converter.beeancoffee.com/"
+    ],
+    "note": "Derived by converting from a Timemore Chestnut C2 at 33 um per click; the service states correspondences, not particle sizes. Fit was non-linear (worst residual 4%), so measured points are kept as anchors."
+  },
+  {
+    "id": "timemore-sculptor-078-ssp-burrs",
+    "brand": "Timemore",
+    "model": "Sculptor 078 (SSP burrs)",
+    "type": "electric",
+    "burr": "conical",
+    "scale": {
+      "min": 4,
+      "max": 32,
+      "step": 1,
+      "unit": "click"
+    },
+    "calibration": {
+      "kind": "linear",
+      "micronsPerStep": 19.01,
+      "zeroOffsetMicrons": 118
+    },
+    "confidence": "community",
+    "sources": [
+      "https://converter.beeancoffee.com/"
+    ],
+    "note": "Derived by converting from a Timemore Chestnut C2 at 33 um per click; the service states correspondences, not particle sizes."
+  },
+  {
+    "id": "timemore-sculptor-078s",
+    "brand": "Timemore",
+    "model": "Sculptor 078s",
+    "type": "electric",
+    "burr": "conical",
+    "scale": {
+      "min": 1.1,
+      "max": 18,
+      "step": 0.1,
+      "unit": "mark"
+    },
+    "calibration": {
+      "kind": "linear",
+      "micronsPerStep": 52.72,
+      "zeroOffsetMicrons": 40
+    },
+    "confidence": "community",
+    "sources": [
+      "https://converter.beeancoffee.com/"
+    ],
+    "note": "Derived by converting from a Timemore Chestnut C2 at 33 um per click; the service states correspondences, not particle sizes."
+  },
+  {
+    "id": "option-o-lagom-p100",
+    "brand": "Option-O",
+    "model": "Lagom P100",
+    "type": "electric",
+    "burr": "conical",
+    "scale": {
+      "min": 0.4,
+      "max": 9,
+      "step": 0.1,
+      "unit": "mark"
+    },
+    "calibration": {
+      "kind": "anchors",
+      "points": [
+        {
+          "setting": 0.4,
+          "microns": 99
+        },
+        {
+          "setting": 1.3,
+          "microns": 198
+        },
+        {
+          "setting": 2,
+          "microns": 264
+        },
+        {
+          "setting": 2.9,
+          "microns": 363
+        },
+        {
+          "setting": 3.9,
+          "microns": 462
+        },
+        {
+          "setting": 4.8,
+          "microns": 561
+        },
+        {
+          "setting": 5.5,
+          "microns": 627
+        },
+        {
+          "setting": 6.4,
+          "microns": 726
+        },
+        {
+          "setting": 7.4,
+          "microns": 825
+        },
+        {
+          "setting": 8.4,
+          "microns": 924
+        },
+        {
+          "setting": 9,
+          "microns": 990
+        }
+      ]
+    },
+    "confidence": "community",
+    "sources": [
+      "https://converter.beeancoffee.com/"
+    ],
+    "note": "Derived by converting from a Timemore Chestnut C2 at 33 um per click; the service states correspondences, not particle sizes. Fit was non-linear (worst residual 3%), so measured points are kept as anchors."
+  },
+  {
+    "id": "option-o-lagom-casa",
+    "brand": "Option-O",
+    "model": "Lagom Casa",
+    "type": "electric",
+    "burr": "conical",
+    "scale": {
+      "min": 21,
+      "max": 95,
+      "step": 1,
+      "unit": "click"
+    },
+    "calibration": {
+      "kind": "linear",
+      "micronsPerStep": 12.03,
+      "zeroOffsetMicrons": -153
+    },
+    "confidence": "community",
+    "sources": [
+      "https://converter.beeancoffee.com/"
+    ],
+    "note": "Derived by converting from a Timemore Chestnut C2 at 33 um per click; the service states correspondences, not particle sizes."
+  },
+  {
+    "id": "option-o-lagom-mini-moonshine-burrs",
+    "brand": "Option-O",
+    "model": "Lagom Mini (Moonshine burrs)",
+    "type": "electric",
+    "burr": "conical",
+    "scale": {
+      "min": 2,
+      "max": 89,
+      "step": 1,
+      "unit": "click"
+    },
+    "calibration": {
+      "kind": "anchors",
+      "points": [
+        {
+          "setting": 2,
+          "microns": 99
+        },
+        {
+          "setting": 10,
+          "microns": 198
+        },
+        {
+          "setting": 16,
+          "microns": 264
+        },
+        {
+          "setting": 25,
+          "microns": 363
+        },
+        {
+          "setting": 34,
+          "microns": 462
+        },
+        {
+          "setting": 42,
+          "microns": 561
+        },
+        {
+          "setting": 48,
+          "microns": 627
+        },
+        {
+          "setting": 57,
+          "microns": 726
+        },
+        {
+          "setting": 65,
+          "microns": 825
+        },
+        {
+          "setting": 74,
+          "microns": 924
+        },
+        {
+          "setting": 80,
+          "microns": 990
+        },
+        {
+          "setting": 89,
+          "microns": 1089
+        }
+      ]
+    },
+    "confidence": "community",
+    "sources": [
+      "https://converter.beeancoffee.com/"
+    ],
+    "note": "Derived by converting from a Timemore Chestnut C2 at 33 um per click; the service states correspondences, not particle sizes. Fit was non-linear (worst residual 4%), so measured points are kept as anchors."
+  },
+  {
+    "id": "option-o-lagom-mini-obsidian-burrs",
+    "brand": "Option-O",
+    "model": "Lagom Mini (Obsidian burrs)",
+    "type": "electric",
+    "burr": "conical",
+    "scale": {
+      "min": 12,
+      "max": 110,
+      "step": 1,
+      "unit": "click"
+    },
+    "calibration": {
+      "kind": "linear",
+      "micronsPerStep": 10.12,
+      "zeroOffsetMicrons": -24
+    },
+    "confidence": "community",
+    "sources": [
+      "https://converter.beeancoffee.com/"
+    ],
+    "note": "Derived by converting from a Timemore Chestnut C2 at 33 um per click; the service states correspondences, not particle sizes."
+  },
+  {
+    "id": "option-o-lagom-mini-2",
+    "brand": "Option-O",
+    "model": "Lagom Mini 2",
+    "type": "electric",
+    "burr": "conical",
+    "scale": {
+      "min": 31,
+      "max": 113,
+      "step": 1,
+      "unit": "click"
+    },
+    "calibration": {
+      "kind": "linear",
+      "micronsPerStep": 12.04,
+      "zeroOffsetMicrons": -274
+    },
+    "confidence": "community",
+    "sources": [
+      "https://converter.beeancoffee.com/"
+    ],
+    "note": "Derived by converting from a Timemore Chestnut C2 at 33 um per click; the service states correspondences, not particle sizes."
+  },
+  {
+    "id": "option-o-lagom-p80-mizen-burrs",
+    "brand": "Option-O",
+    "model": "Lagom P80 (Mizen burrs)",
+    "type": "electric",
+    "burr": "conical",
+    "scale": {
+      "min": 0,
+      "max": 3.8,
+      "step": 0.1,
+      "unit": "mark"
+    },
+    "calibration": {
+      "kind": "linear",
+      "micronsPerStep": 121.32,
+      "zeroOffsetMicrons": 98
+    },
+    "confidence": "community",
+    "sources": [
+      "https://converter.beeancoffee.com/"
+    ],
+    "note": "Derived by converting from a Timemore Chestnut C2 at 33 um per click; the service states correspondences, not particle sizes."
+  },
+  {
+    "id": "option-o-lagom-01-mizen-om-burrs",
+    "brand": "Option-O",
+    "model": "Lagom 01 (Mizen-OM burrs)",
+    "type": "electric",
+    "burr": "conical",
+    "scale": {
+      "min": 0.9,
+      "max": 12.3,
+      "step": 0.1,
+      "unit": "mark"
+    },
+    "calibration": {
+      "kind": "linear",
+      "micronsPerStep": 78.02,
+      "zeroOffsetMicrons": 130
+    },
+    "confidence": "community",
+    "sources": [
+      "https://converter.beeancoffee.com/"
+    ],
+    "note": "Derived by converting from a Timemore Chestnut C2 at 33 um per click; the service states correspondences, not particle sizes."
+  },
+  {
+    "id": "option-o-lagom-01-ssp-hu-burrs",
+    "brand": "Option-O",
+    "model": "Lagom 01 (SSP HU burrs)",
+    "type": "electric",
+    "burr": "conical",
+    "scale": {
+      "min": 0.3,
+      "max": 9.5,
+      "step": 0.1,
+      "unit": "mark"
+    },
+    "calibration": {
+      "kind": "linear",
+      "micronsPerStep": 68.38,
+      "zeroOffsetMicrons": 77
+    },
+    "confidence": "community",
+    "sources": [
+      "https://converter.beeancoffee.com/"
+    ],
+    "note": "Derived by converting from a Timemore Chestnut C2 at 33 um per click; the service states correspondences, not particle sizes."
+  },
+  {
+    "id": "option-o-lagom-01-ssp-brew-silver-knight-burrs",
+    "brand": "Option-O",
+    "model": "Lagom 01 (SSP Brew Silver Knight burrs)",
+    "type": "electric",
+    "burr": "conical",
+    "scale": {
+      "min": 0.3,
+      "max": 9.5,
+      "step": 0.1,
+      "unit": "mark"
+    },
+    "calibration": {
+      "kind": "linear",
+      "micronsPerStep": 68.38,
+      "zeroOffsetMicrons": 77
+    },
+    "confidence": "community",
+    "sources": [
+      "https://converter.beeancoffee.com/"
+    ],
+    "note": "Derived by converting from a Timemore Chestnut C2 at 33 um per click; the service states correspondences, not particle sizes."
+  },
+  {
+    "id": "oxo-conical-burr-grinder",
+    "brand": "OXO",
+    "model": "Conical Burr Grinder",
+    "type": "manual",
+    "burr": "conical",
+    "scale": {
+      "min": 3,
+      "max": 42,
+      "step": 1,
+      "unit": "click"
+    },
+    "calibration": {
+      "kind": "anchors",
+      "points": [
+        {
+          "setting": 3,
+          "microns": 99
+        },
+        {
+          "setting": 7,
+          "microns": 198
+        },
+        {
+          "setting": 9,
+          "microns": 264
+        },
+        {
+          "setting": 13,
+          "microns": 363
+        },
+        {
+          "setting": 17,
+          "microns": 462
+        },
+        {
+          "setting": 21,
+          "microns": 561
+        },
+        {
+          "setting": 24,
+          "microns": 627
+        },
+        {
+          "setting": 28,
+          "microns": 726
+        },
+        {
+          "setting": 31,
+          "microns": 825
+        },
+        {
+          "setting": 35,
+          "microns": 924
+        },
+        {
+          "setting": 38,
+          "microns": 990
+        },
+        {
+          "setting": 42,
+          "microns": 1089
+        }
+      ]
+    },
+    "confidence": "community",
+    "sources": [
+      "https://converter.beeancoffee.com/"
+    ],
+    "note": "Derived by converting from a Timemore Chestnut C2 at 33 um per click; the service states correspondences, not particle sizes. Fit was non-linear (worst residual 4%), so measured points are kept as anchors."
+  },
+  {
+    "id": "varia-evo-hybrid",
+    "brand": "Varia",
+    "model": "Evo Hybrid",
+    "type": "electric",
+    "burr": "conical",
+    "scale": {
+      "min": 11,
+      "max": 132,
+      "step": 1,
+      "unit": "click"
+    },
+    "calibration": {
+      "kind": "linear",
+      "micronsPerStep": 8.16,
+      "zeroOffsetMicrons": 11
+    },
+    "confidence": "community",
+    "sources": [
+      "https://converter.beeancoffee.com/"
+    ],
+    "note": "Derived by converting from a Timemore Chestnut C2 at 33 um per click; the service states correspondences, not particle sizes."
+  },
+  {
+    "id": "varia-vs4",
+    "brand": "Varia",
+    "model": "VS4",
+    "type": "electric",
+    "burr": "conical",
+    "scale": {
+      "min": 12,
+      "max": 174,
+      "step": 1,
+      "unit": "click"
+    },
+    "calibration": {
+      "kind": "linear",
+      "micronsPerStep": 6.1,
+      "zeroOffsetMicrons": 25
+    },
+    "confidence": "community",
+    "sources": [
+      "https://converter.beeancoffee.com/"
+    ],
+    "note": "Derived by converting from a Timemore Chestnut C2 at 33 um per click; the service states correspondences, not particle sizes."
+  },
+  {
+    "id": "varia-vs6",
+    "brand": "Varia",
+    "model": "VS6",
+    "type": "electric",
+    "burr": "conical",
+    "scale": {
+      "min": 12,
+      "max": 174,
+      "step": 1,
+      "unit": "click"
+    },
+    "calibration": {
+      "kind": "linear",
+      "micronsPerStep": 6.1,
+      "zeroOffsetMicrons": 25
+    },
+    "confidence": "community",
+    "sources": [
+      "https://converter.beeancoffee.com/"
+    ],
+    "note": "Derived by converting from a Timemore Chestnut C2 at 33 um per click; the service states correspondences, not particle sizes."
+  },
+  {
+    "id": "wilfa-svart-aroma",
+    "brand": "Wilfa",
+    "model": "Svart Aroma",
+    "type": "electric",
+    "burr": "conical",
+    "scale": {
+      "min": 2,
+      "max": 17,
+      "step": 1,
+      "unit": "click"
+    },
+    "calibration": {
+      "kind": "anchors",
+      "points": [
+        {
+          "setting": 2,
+          "microns": 363
+        },
+        {
+          "setting": 4,
+          "microns": 462
+        },
+        {
+          "setting": 6,
+          "microns": 561
+        },
+        {
+          "setting": 7,
+          "microns": 627
+        },
+        {
+          "setting": 9,
+          "microns": 726
+        },
+        {
+          "setting": 11,
+          "microns": 825
+        },
+        {
+          "setting": 14,
+          "microns": 924
+        },
+        {
+          "setting": 15,
+          "microns": 990
+        },
+        {
+          "setting": 17,
+          "microns": 1089
+        }
+      ]
+    },
+    "confidence": "community",
+    "sources": [
+      "https://converter.beeancoffee.com/"
+    ],
+    "note": "Derived by converting from a Timemore Chestnut C2 at 33 um per click; the service states correspondences, not particle sizes. Fit was non-linear (worst residual 3%), so measured points are kept as anchors."
+  },
+  {
+    "id": "weber-eg-1",
+    "brand": "Weber",
+    "model": "EG-1",
+    "type": "electric",
+    "burr": "conical",
+    "scale": {
+      "min": 26,
+      "max": 210,
+      "step": 1,
+      "unit": "click"
+    },
+    "calibration": {
+      "kind": "linear",
+      "micronsPerStep": 5.37,
+      "zeroOffsetMicrons": -40
+    },
+    "confidence": "community",
+    "sources": [
+      "https://converter.beeancoffee.com/"
+    ],
+    "note": "Derived by converting from a Timemore Chestnut C2 at 33 um per click; the service states correspondences, not particle sizes."
+  },
+  {
+    "id": "weber-eg-1-ssp-ultra-burrs",
+    "brand": "Weber",
+    "model": "EG-1 (SSP Ultra burrs)",
+    "type": "electric",
+    "burr": "conical",
+    "scale": {
+      "min": 7,
+      "max": 205,
+      "step": 1,
+      "unit": "click"
+    },
+    "calibration": {
+      "kind": "linear",
+      "micronsPerStep": 5,
+      "zeroOffsetMicrons": 64
+    },
+    "confidence": "community",
+    "sources": [
+      "https://converter.beeancoffee.com/"
+    ],
+    "note": "Derived by converting from a Timemore Chestnut C2 at 33 um per click; the service states correspondences, not particle sizes."
+  },
+  {
+    "id": "xbloom-studio",
+    "brand": "xBloom",
+    "model": "Studio",
+    "type": "electric",
+    "burr": "conical",
+    "scale": {
+      "min": 7,
+      "max": 76,
+      "step": 1,
+      "unit": "click"
+    },
+    "calibration": {
+      "kind": "linear",
+      "micronsPerStep": 10.51,
+      "zeroOffsetMicrons": 287
+    },
+    "confidence": "community",
+    "sources": [
+      "https://converter.beeancoffee.com/"
+    ],
+    "note": "Derived by converting from a Timemore Chestnut C2 at 33 um per click; the service states correspondences, not particle sizes."
+  },
+  {
+    "id": "zerno-z1",
+    "brand": "Zerno",
+    "model": "Z1",
+    "type": "electric",
+    "burr": "conical",
+    "scale": {
+      "min": 146,
+      "max": 1151,
+      "step": 1,
+      "unit": "click"
+    },
+    "calibration": {
+      "kind": "linear",
+      "micronsPerStep": 0.99,
+      "zeroOffsetMicrons": -45
+    },
+    "confidence": "community",
+    "sources": [
+      "https://converter.beeancoffee.com/"
+    ],
+    "note": "Derived by converting from a Timemore Chestnut C2 at 33 um per click; the service states correspondences, not particle sizes."
+  }
+]

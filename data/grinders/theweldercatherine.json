@@ -1,0 +1,3008 @@
+[
+  {
+    "id": "anfim-drogheria",
+    "brand": "Anfim",
+    "model": "Drogheria",
+    "type": "electric",
+    "burr": "flat",
+    "scale": {
+      "min": 3,
+      "max": 17.5,
+      "step": 0.5,
+      "unit": "click"
+    },
+    "calibration": {
+      "kind": "anchors",
+      "points": [
+        {
+          "setting": 3,
+          "microns": 400
+        },
+        {
+          "setting": 5,
+          "microns": 425
+        },
+        {
+          "setting": 7,
+          "microns": 450
+        },
+        {
+          "setting": 9,
+          "microns": 478
+        },
+        {
+          "setting": 10.5,
+          "microns": 510
+        },
+        {
+          "setting": 12,
+          "microns": 548
+        },
+        {
+          "setting": 13,
+          "microns": 565
+        },
+        {
+          "setting": 14,
+          "microns": 625
+        },
+        {
+          "setting": 15.5,
+          "microns": 665
+        },
+        {
+          "setting": 17.5,
+          "microns": 710
+        }
+      ]
+    },
+    "confidence": "community",
+    "sources": [
+      "https://theweldercatherine.ru/blog/articles/oborudovanie/svyashchennyy-pomol-chast-12/"
+    ],
+    "note": "Calibrated against the Mazzer ZM micron dial in the same table. Dropped: conflicting reading at 5.5; conflicting reading at 7.5; conflicting reading at 11; conflicting reading at 15; conflicting reading at 19."
+  },
+  {
+    "id": "baratza-sette-30",
+    "brand": "Baratza",
+    "model": "Sette 30",
+    "type": "electric",
+    "burr": "conical",
+    "scale": {
+      "min": 9,
+      "max": 31,
+      "step": 0.5,
+      "unit": "click"
+    },
+    "calibration": {
+      "kind": "anchors",
+      "points": [
+        {
+          "setting": 9,
+          "microns": 400
+        },
+        {
+          "setting": 11,
+          "microns": 425
+        },
+        {
+          "setting": 13,
+          "microns": 450
+        },
+        {
+          "setting": 17,
+          "microns": 488
+        },
+        {
+          "setting": 18,
+          "microns": 510
+        },
+        {
+          "setting": 19,
+          "microns": 539
+        },
+        {
+          "setting": 21,
+          "microns": 571
+        },
+        {
+          "setting": 23,
+          "microns": 575
+        },
+        {
+          "setting": 25,
+          "microns": 600
+        },
+        {
+          "setting": 25.5,
+          "microns": 625
+        },
+        {
+          "setting": 29,
+          "microns": 650
+        },
+        {
+          "setting": 29.5,
+          "microns": 665
+        },
+        {
+          "setting": 31,
+          "microns": 675
+        }
+      ]
+    },
+    "confidence": "community",
+    "sources": [
+      "https://theweldercatherine.ru/blog/articles/oborudovanie/svyashchennyy-pomol-chast-12/"
+    ],
+    "note": "Calibrated against the Mazzer ZM micron dial in the same table. Dropped: conflicting reading at 13.5; conflicting reading at 15; conflicting reading at 27."
+  },
+  {
+    "id": "baratza-virtuoso",
+    "brand": "Baratza",
+    "model": "Virtuoso+",
+    "type": "electric",
+    "burr": "conical",
+    "scale": {
+      "min": 4,
+      "max": 24.5,
+      "step": 0.5,
+      "unit": "click"
+    },
+    "calibration": {
+      "kind": "anchors",
+      "points": [
+        {
+          "setting": 4,
+          "microns": 400
+        },
+        {
+          "setting": 6,
+          "microns": 425
+        },
+        {
+          "setting": 8,
+          "microns": 450
+        },
+        {
+          "setting": 10,
+          "microns": 475
+        },
+        {
+          "setting": 10.5,
+          "microns": 480
+        },
+        {
+          "setting": 12,
+          "microns": 500
+        },
+        {
+          "setting": 12.5,
+          "microns": 510
+        },
+        {
+          "setting": 14,
+          "microns": 539
+        },
+        {
+          "setting": 16,
+          "microns": 571
+        },
+        {
+          "setting": 17,
+          "microns": 625
+        },
+        {
+          "setting": 18.5,
+          "microns": 665
+        },
+        {
+          "setting": 20.5,
+          "microns": 710
+        },
+        {
+          "setting": 21,
+          "microns": 730
+        },
+        {
+          "setting": 22.5,
+          "microns": 770
+        },
+        {
+          "setting": 23.5,
+          "microns": 800
+        },
+        {
+          "setting": 24.5,
+          "microns": 830
+        }
+      ]
+    },
+    "confidence": "community",
+    "sources": [
+      "https://theweldercatherine.ru/blog/articles/oborudovanie/svyashchennyy-pomol-chast-12/"
+    ],
+    "note": "Calibrated against the Mazzer ZM micron dial in the same table. Dropped: conflicting reading at 8.5; conflicting reading at 9; conflicting reading at 18; conflicting reading at 20; conflicting reading at 22."
+  },
+  {
+    "id": "turin-df64",
+    "brand": "Turin",
+    "model": "DF64",
+    "type": "electric",
+    "burr": "flat",
+    "scale": {
+      "min": 25,
+      "max": 72.5,
+      "step": 0.5,
+      "unit": "click"
+    },
+    "calibration": {
+      "kind": "anchors",
+      "points": [
+        {
+          "setting": 25,
+          "microns": 400
+        },
+        {
+          "setting": 30,
+          "microns": 425
+        },
+        {
+          "setting": 32.5,
+          "microns": 430
+        },
+        {
+          "setting": 35,
+          "microns": 450
+        },
+        {
+          "setting": 37.5,
+          "microns": 480
+        },
+        {
+          "setting": 42.5,
+          "microns": 510
+        },
+        {
+          "setting": 45,
+          "microns": 532
+        },
+        {
+          "setting": 50,
+          "microns": 565
+        },
+        {
+          "setting": 53,
+          "microns": 625
+        },
+        {
+          "setting": 55,
+          "microns": 627
+        },
+        {
+          "setting": 60,
+          "microns": 665
+        },
+        {
+          "setting": 62.5,
+          "microns": 730
+        },
+        {
+          "setting": 70,
+          "microns": 800
+        },
+        {
+          "setting": 72.5,
+          "microns": 830
+        }
+      ]
+    },
+    "confidence": "community",
+    "sources": [
+      "https://theweldercatherine.ru/blog/articles/oborudovanie/svyashchennyy-pomol-chast-12/"
+    ],
+    "note": "Calibrated against the Mazzer ZM micron dial in the same table. Dropped: conflicting reading at 27.5; conflicting reading at 40; conflicting reading at 65."
+  },
+  {
+    "id": "turin-df83v",
+    "brand": "Turin",
+    "model": "DF83V",
+    "type": "electric",
+    "burr": "flat",
+    "scale": {
+      "min": 20,
+      "max": 56,
+      "step": 1,
+      "unit": "click"
+    },
+    "calibration": {
+      "kind": "anchors",
+      "points": [
+        {
+          "setting": 20,
+          "microns": 400
+        },
+        {
+          "setting": 25,
+          "microns": 408
+        },
+        {
+          "setting": 28,
+          "microns": 450
+        },
+        {
+          "setting": 35,
+          "microns": 487
+        },
+        {
+          "setting": 38,
+          "microns": 515
+        },
+        {
+          "setting": 41,
+          "microns": 548
+        },
+        {
+          "setting": 44,
+          "microns": 573
+        },
+        {
+          "setting": 47,
+          "microns": 608
+        },
+        {
+          "setting": 50,
+          "microns": 643
+        },
+        {
+          "setting": 53,
+          "microns": 682
+        },
+        {
+          "setting": 56,
+          "microns": 703
+        }
+      ]
+    },
+    "confidence": "community",
+    "sources": [
+      "https://theweldercatherine.ru/blog/articles/oborudovanie/svyashchennyy-pomol-chast-12/"
+    ],
+    "note": "Calibrated against the Mazzer ZM micron dial in the same table. Dropped: conflicting reading at 30."
+  },
+  {
+    "id": "ditting-807-lab-sweet",
+    "brand": "Ditting",
+    "model": "807 LAB SWEET",
+    "type": "electric",
+    "burr": "flat",
+    "scale": {
+      "min": 4,
+      "max": 10.5,
+      "step": 0.5,
+      "unit": "click"
+    },
+    "calibration": {
+      "kind": "anchors",
+      "points": [
+        {
+          "setting": 4,
+          "microns": 400
+        },
+        {
+          "setting": 4.5,
+          "microns": 425
+        },
+        {
+          "setting": 4.9,
+          "microns": 430
+        },
+        {
+          "setting": 5,
+          "microns": 450
+        },
+        {
+          "setting": 5.3,
+          "microns": 480
+        },
+        {
+          "setting": 5.6,
+          "microns": 510
+        },
+        {
+          "setting": 6.2,
+          "microns": 548
+        },
+        {
+          "setting": 6.9,
+          "microns": 585
+        },
+        {
+          "setting": 7.3,
+          "microns": 625
+        },
+        {
+          "setting": 7.6,
+          "microns": 665
+        },
+        {
+          "setting": 8,
+          "microns": 673
+        },
+        {
+          "setting": 8.2,
+          "microns": 730
+        },
+        {
+          "setting": 8.6,
+          "microns": 770
+        },
+        {
+          "setting": 9.5,
+          "microns": 800
+        },
+        {
+          "setting": 10.5,
+          "microns": 830
+        }
+      ]
+    },
+    "confidence": "community",
+    "sources": [
+      "https://theweldercatherine.ru/blog/articles/oborudovanie/svyashchennyy-pomol-chast-12/"
+    ],
+    "note": "Calibrated against the Mazzer ZM micron dial in the same table. Dropped: conflicting reading at 4.7; conflicting reading at 5.5; conflicting reading at 6; conflicting reading at 6.5; conflicting reading at 7; conflicting reading at 7.5; conflicting reading at 8.5; conflicting reading at 9."
+  },
+  {
+    "id": "eureka-atom-pro",
+    "brand": "Eureka",
+    "model": "Atom Pro",
+    "type": "electric",
+    "burr": "conical",
+    "scale": {
+      "min": 4,
+      "max": 12.75,
+      "step": 0.5,
+      "unit": "click"
+    },
+    "calibration": {
+      "kind": "anchors",
+      "points": [
+        {
+          "setting": 4,
+          "microns": 400
+        },
+        {
+          "setting": 5,
+          "microns": 425
+        },
+        {
+          "setting": 5.5,
+          "microns": 430
+        },
+        {
+          "setting": 6,
+          "microns": 450
+        },
+        {
+          "setting": 6.5,
+          "microns": 480
+        },
+        {
+          "setting": 6.75,
+          "microns": 510
+        },
+        {
+          "setting": 7.5,
+          "microns": 548
+        },
+        {
+          "setting": 8.25,
+          "microns": 585
+        },
+        {
+          "setting": 8.75,
+          "microns": 625
+        },
+        {
+          "setting": 10.25,
+          "microns": 710
+        },
+        {
+          "setting": 10.75,
+          "microns": 730
+        },
+        {
+          "setting": 11.75,
+          "microns": 800
+        },
+        {
+          "setting": 12.75,
+          "microns": 830
+        }
+      ]
+    },
+    "confidence": "community",
+    "sources": [
+      "https://theweldercatherine.ru/blog/articles/oborudovanie/svyashchennyy-pomol-chast-12/"
+    ],
+    "note": "Calibrated against the Mazzer ZM micron dial in the same table. Dropped: conflicting reading at 4.75; conflicting reading at 7; conflicting reading at 8; conflicting reading at 9; conflicting reading at 10; conflicting reading at 11; conflicting reading at 12."
+  },
+  {
+    "id": "eureka-drogheria",
+    "brand": "Eureka",
+    "model": "Drogheria",
+    "type": "electric",
+    "burr": "conical",
+    "scale": {
+      "min": 2,
+      "max": 8,
+      "step": 0.5,
+      "unit": "click",
+      "clicksPerRotation": 11
+    },
+    "calibration": {
+      "kind": "anchors",
+      "points": [
+        {
+          "setting": 2,
+          "microns": 400
+        },
+        {
+          "setting": 2.5,
+          "microns": 425
+        },
+        {
+          "setting": 2.75,
+          "microns": 430
+        },
+        {
+          "setting": 3,
+          "microns": 450
+        },
+        {
+          "setting": 3.25,
+          "microns": 480
+        },
+        {
+          "setting": 3.75,
+          "microns": 510
+        },
+        {
+          "setting": 4.25,
+          "microns": 548
+        },
+        {
+          "setting": 4.75,
+          "microns": 585
+        },
+        {
+          "setting": 5.25,
+          "microns": 625
+        },
+        {
+          "setting": 5.5,
+          "microns": 635
+        },
+        {
+          "setting": 6.25,
+          "microns": 710
+        },
+        {
+          "setting": 7.25,
+          "microns": 770
+        },
+        {
+          "setting": 8,
+          "microns": 787
+        }
+      ]
+    },
+    "confidence": "community",
+    "sources": [
+      "https://theweldercatherine.ru/blog/articles/oborudovanie/svyashchennyy-pomol-chast-12/"
+    ],
+    "note": "Calibrated against the Mazzer ZM micron dial in the same table. Turns resolved at 11 positions per rotation. Dropped: conflicting reading at 2.25; conflicting reading at 3.5; conflicting reading at 4; conflicting reading at 4.5; conflicting reading at 5; conflicting reading at 6; conflicting reading at 6.5; conflicting reading at 7; conflicting reading at 7.5."
+  },
+  {
+    "id": "eureka-mignon-50mm-filtro-pro-new",
+    "brand": "Eureka",
+    "model": "Mignon жернова 50mm Filtro Pro NEW",
+    "type": "electric",
+    "burr": "conical",
+    "scale": {
+      "min": 4,
+      "max": 13,
+      "step": 0.5,
+      "unit": "click",
+      "clicksPerRotation": 6
+    },
+    "calibration": {
+      "kind": "anchors",
+      "points": [
+        {
+          "setting": 4,
+          "microns": 400
+        },
+        {
+          "setting": 5,
+          "microns": 425
+        },
+        {
+          "setting": 5.75,
+          "microns": 430
+        },
+        {
+          "setting": 6,
+          "microns": 450
+        },
+        {
+          "setting": 6.75,
+          "microns": 480
+        },
+        {
+          "setting": 7.25,
+          "microns": 510
+        },
+        {
+          "setting": 7.75,
+          "microns": 548
+        },
+        {
+          "setting": 8.25,
+          "microns": 585
+        },
+        {
+          "setting": 9.25,
+          "microns": 665
+        },
+        {
+          "setting": 9.75,
+          "microns": 710
+        },
+        {
+          "setting": 12,
+          "microns": 800
+        },
+        {
+          "setting": 13,
+          "microns": 830
+        }
+      ]
+    },
+    "confidence": "community",
+    "sources": [
+      "https://theweldercatherine.ru/blog/articles/oborudovanie/svyashchennyy-pomol-chast-12/"
+    ],
+    "note": "Calibrated against the Mazzer ZM micron dial in the same table. Turns resolved at 6 positions per rotation. Dropped: conflicting reading at 4.75; conflicting reading at 7; conflicting reading at 8; conflicting reading at 9; conflicting reading at 10; conflicting reading at 11."
+  },
+  {
+    "id": "eureka-mignon-brew-pro",
+    "brand": "Eureka",
+    "model": "Mignon Brew Pro",
+    "type": "electric",
+    "burr": "conical",
+    "scale": {
+      "min": 0,
+      "max": 6.75,
+      "step": 0.5,
+      "unit": "click"
+    },
+    "calibration": {
+      "kind": "anchors",
+      "points": [
+        {
+          "setting": 0,
+          "microns": 400
+        },
+        {
+          "setting": 1,
+          "microns": 425
+        },
+        {
+          "setting": 1.25,
+          "microns": 430
+        },
+        {
+          "setting": 1.75,
+          "microns": 480
+        },
+        {
+          "setting": 2.5,
+          "microns": 510
+        },
+        {
+          "setting": 3.25,
+          "microns": 548
+        },
+        {
+          "setting": 4,
+          "microns": 557
+        },
+        {
+          "setting": 4.75,
+          "microns": 625
+        },
+        {
+          "setting": 5.5,
+          "microns": 665
+        },
+        {
+          "setting": 6.5,
+          "microns": 710
+        },
+        {
+          "setting": 6.75,
+          "microns": 730
+        }
+      ]
+    },
+    "confidence": "community",
+    "sources": [
+      "https://theweldercatherine.ru/blog/articles/oborudovanie/svyashchennyy-pomol-chast-12/"
+    ],
+    "note": "Calibrated against the Mazzer ZM micron dial in the same table. Dropped: conflicting reading at 0.25; conflicting reading at 2; conflicting reading at 3; conflicting reading at 5; conflicting reading at 6; conflicting reading at 7; conflicting reading at 8; conflicting reading at 9."
+  },
+  {
+    "id": "eureka-mignon-crono",
+    "brand": "Eureka",
+    "model": "Mignon Crono",
+    "type": "electric",
+    "burr": "conical",
+    "scale": {
+      "min": 5,
+      "max": 10,
+      "step": 0.5,
+      "unit": "click"
+    },
+    "calibration": {
+      "kind": "anchors",
+      "points": [
+        {
+          "setting": 5,
+          "microns": 400
+        },
+        {
+          "setting": 5.5,
+          "microns": 430
+        },
+        {
+          "setting": 6,
+          "microns": 480
+        },
+        {
+          "setting": 6.5,
+          "microns": 510
+        },
+        {
+          "setting": 7,
+          "microns": 548
+        },
+        {
+          "setting": 8,
+          "microns": 585
+        },
+        {
+          "setting": 8.5,
+          "microns": 625
+        },
+        {
+          "setting": 9,
+          "microns": 665
+        },
+        {
+          "setting": 9.5,
+          "microns": 710
+        },
+        {
+          "setting": 10,
+          "microns": 730
+        }
+      ]
+    },
+    "confidence": "community",
+    "sources": [
+      "https://theweldercatherine.ru/blog/articles/oborudovanie/svyashchennyy-pomol-chast-12/"
+    ],
+    "note": "Calibrated against the Mazzer ZM micron dial in the same table. Dropped: turns without a known period (1 круг 4); turns without a known period (1 круг 4,5); turns without a known period (1 круг 5); turns without a known period (1 круг 5,5); turns without a known period (2 круг 0); turns without a known period (2 круг 0,5); turns without a known period (2 круг 1); turns without a known period (2 круг 1,5); turns without a known period (2 круг 2); turns without a known period (2 круг 2,5); turns without a known period (2 круг 3); turns without a known period (2 круг 3,5); turns without a known period (2 круг 4)."
+  },
+  {
+    "id": "knock-feld47",
+    "brand": "Knock",
+    "model": "Feld47",
+    "type": "manual",
+    "burr": "conical",
+    "scale": {
+      "min": 14,
+      "max": 37,
+      "step": 0.5,
+      "unit": "click",
+      "clicksPerRotation": 13
+    },
+    "calibration": {
+      "kind": "anchors",
+      "points": [
+        {
+          "setting": 14,
+          "microns": 400
+        },
+        {
+          "setting": 15,
+          "microns": 425
+        },
+        {
+          "setting": 16,
+          "microns": 440
+        },
+        {
+          "setting": 17,
+          "microns": 475
+        },
+        {
+          "setting": 17.5,
+          "microns": 480
+        },
+        {
+          "setting": 18,
+          "microns": 500
+        },
+        {
+          "setting": 18.5,
+          "microns": 510
+        },
+        {
+          "setting": 19,
+          "microns": 525
+        },
+        {
+          "setting": 20,
+          "microns": 550
+        },
+        {
+          "setting": 21,
+          "microns": 575
+        },
+        {
+          "setting": 22,
+          "microns": 600
+        },
+        {
+          "setting": 23,
+          "microns": 625
+        },
+        {
+          "setting": 24,
+          "microns": 650
+        },
+        {
+          "setting": 25,
+          "microns": 675
+        },
+        {
+          "setting": 27,
+          "microns": 700
+        },
+        {
+          "setting": 28,
+          "microns": 725
+        },
+        {
+          "setting": 29,
+          "microns": 750
+        },
+        {
+          "setting": 34.5,
+          "microns": 770
+        },
+        {
+          "setting": 36,
+          "microns": 800
+        },
+        {
+          "setting": 37,
+          "microns": 830
+        }
+      ]
+    },
+    "confidence": "community",
+    "sources": [
+      "https://theweldercatherine.ru/blog/articles/oborudovanie/svyashchennyy-pomol-chast-12/"
+    ],
+    "note": "Calibrated against the Mazzer ZM micron dial in the same table. Turns resolved at 13 positions per rotation. Dropped: conflicting reading at 21.5; conflicting reading at 23.75; conflicting reading at 27.25; conflicting reading at 29.25; conflicting reading at 32.25; conflicting reading at 33."
+  },
+  {
+    "id": "knock-feldgrind-2",
+    "brand": "Knock",
+    "model": "Feldgrind 2",
+    "type": "manual",
+    "burr": "conical",
+    "scale": {
+      "min": 1,
+      "max": 29,
+      "step": 0.5,
+      "unit": "click",
+      "clicksPerRotation": 13
+    },
+    "calibration": {
+      "kind": "anchors",
+      "points": [
+        {
+          "setting": 1,
+          "microns": 400
+        },
+        {
+          "setting": 2,
+          "microns": 425
+        },
+        {
+          "setting": 3,
+          "microns": 450
+        },
+        {
+          "setting": 6.5,
+          "microns": 480
+        },
+        {
+          "setting": 7.5,
+          "microns": 510
+        },
+        {
+          "setting": 9.5,
+          "microns": 548
+        },
+        {
+          "setting": 14,
+          "microns": 550
+        },
+        {
+          "setting": 15,
+          "microns": 575
+        },
+        {
+          "setting": 16,
+          "microns": 600
+        },
+        {
+          "setting": 23,
+          "microns": 625
+        },
+        {
+          "setting": 24,
+          "microns": 650
+        },
+        {
+          "setting": 25,
+          "microns": 675
+        },
+        {
+          "setting": 27,
+          "microns": 700
+        },
+        {
+          "setting": 28,
+          "microns": 725
+        },
+        {
+          "setting": 29,
+          "microns": 750
+        }
+      ]
+    },
+    "confidence": "community",
+    "sources": [
+      "https://theweldercatherine.ru/blog/articles/oborudovanie/svyashchennyy-pomol-chast-12/"
+    ],
+    "note": "Calibrated against the Mazzer ZM micron dial in the same table. Turns resolved at 13 positions per rotation. Dropped: conflicting reading at 4; conflicting reading at 5; conflicting reading at 6; conflicting reading at 7; conflicting reading at 8; conflicting reading at 9; conflicting reading at 10; conflicting reading at 10.5; conflicting reading at 11; conflicting reading at 12; conflicting reading at 12.9; conflicting reading at 15.5; conflicting reading at 17; conflicting reading at 18; conflicting reading at 18.1; conflicting reading at 19; conflicting reading at 20; conflicting reading at 21; conflicting reading at 22."
+  },
+  {
+    "id": "fellow-ode",
+    "brand": "Fellow",
+    "model": "Ode",
+    "type": "electric",
+    "burr": "flat",
+    "scale": {
+      "min": 1,
+      "max": 8,
+      "step": 1,
+      "unit": "click"
+    },
+    "calibration": {
+      "kind": "anchors",
+      "points": [
+        {
+          "setting": 1,
+          "microns": 489
+        },
+        {
+          "setting": 2,
+          "microns": 521
+        },
+        {
+          "setting": 3,
+          "microns": 555
+        },
+        {
+          "setting": 6,
+          "microns": 648
+        },
+        {
+          "setting": 7,
+          "microns": 700
+        },
+        {
+          "setting": 8,
+          "microns": 830
+        }
+      ]
+    },
+    "confidence": "community",
+    "sources": [
+      "https://theweldercatherine.ru/blog/articles/oborudovanie/svyashchennyy-pomol-chast-12/"
+    ],
+    "note": "Calibrated against the Mazzer ZM micron dial in the same table. Dropped: tick marks (3|-3||); tick marks (5|); tick marks (6||); conflicting reading at 4; conflicting reading at 5."
+  },
+  {
+    "id": "fellow-opus",
+    "brand": "Fellow",
+    "model": "Opus",
+    "type": "electric",
+    "burr": "flat",
+    "scale": {
+      "min": 5,
+      "max": 10,
+      "step": 0.5,
+      "unit": "click"
+    },
+    "calibration": {
+      "kind": "anchors",
+      "points": [
+        {
+          "setting": 5,
+          "microns": 420
+        },
+        {
+          "setting": 5.5,
+          "microns": 425
+        },
+        {
+          "setting": 6,
+          "microns": 450
+        },
+        {
+          "setting": 6.5,
+          "microns": 478
+        },
+        {
+          "setting": 7,
+          "microns": 507
+        },
+        {
+          "setting": 7.5,
+          "microns": 540
+        },
+        {
+          "setting": 8,
+          "microns": 573
+        },
+        {
+          "setting": 8.5,
+          "microns": 608
+        },
+        {
+          "setting": 9,
+          "microns": 643
+        },
+        {
+          "setting": 9.5,
+          "microns": 682
+        },
+        {
+          "setting": 10,
+          "microns": 703
+        }
+      ]
+    },
+    "confidence": "community",
+    "sources": [
+      "https://theweldercatherine.ru/blog/articles/oborudovanie/svyashchennyy-pomol-chast-12/"
+    ],
+    "note": "Calibrated against the Mazzer ZM micron dial in the same table."
+  },
+  {
+    "id": "fiorenzato-f4-filter",
+    "brand": "Fiorenzato",
+    "model": "F4 Filter",
+    "type": "electric",
+    "burr": "flat",
+    "scale": {
+      "min": 1,
+      "max": 48.5,
+      "step": 0.5,
+      "unit": "click"
+    },
+    "calibration": {
+      "kind": "anchors",
+      "points": [
+        {
+          "setting": 1,
+          "microns": 400
+        },
+        {
+          "setting": 3.5,
+          "microns": 430
+        },
+        {
+          "setting": 9,
+          "microns": 480
+        },
+        {
+          "setting": 12.5,
+          "microns": 510
+        },
+        {
+          "setting": 16,
+          "microns": 548
+        },
+        {
+          "setting": 19.5,
+          "microns": 585
+        },
+        {
+          "setting": 23.5,
+          "microns": 625
+        },
+        {
+          "setting": 26.5,
+          "microns": 665
+        },
+        {
+          "setting": 33,
+          "microns": 710
+        },
+        {
+          "setting": 35.5,
+          "microns": 730
+        },
+        {
+          "setting": 43.5,
+          "microns": 770
+        },
+        {
+          "setting": 48.5,
+          "microns": 800
+        }
+      ]
+    },
+    "confidence": "community",
+    "sources": [
+      "https://theweldercatherine.ru/blog/articles/oborudovanie/svyashchennyy-pomol-chast-12/"
+    ],
+    "note": "Calibrated against the Mazzer ZM micron dial in the same table. Dropped: conflicting reading at 5; conflicting reading at 10; conflicting reading at 15; conflicting reading at 20; conflicting reading at 25; conflicting reading at 30; conflicting reading at 35; conflicting reading at 40."
+  },
+  {
+    "id": "hario-coffee-grinder",
+    "brand": "Hario",
+    "model": "Coffee Grinder",
+    "type": "manual",
+    "burr": "conical",
+    "scale": {
+      "min": 5,
+      "max": 39,
+      "step": 1,
+      "unit": "click"
+    },
+    "calibration": {
+      "kind": "anchors",
+      "points": [
+        {
+          "setting": 5,
+          "microns": 400
+        },
+        {
+          "setting": 7,
+          "microns": 425
+        },
+        {
+          "setting": 9,
+          "microns": 437
+        },
+        {
+          "setting": 11,
+          "microns": 475
+        },
+        {
+          "setting": 12,
+          "microns": 480
+        },
+        {
+          "setting": 13,
+          "microns": 500
+        },
+        {
+          "setting": 15,
+          "microns": 515
+        },
+        {
+          "setting": 17,
+          "microns": 550
+        },
+        {
+          "setting": 19,
+          "microns": 575
+        },
+        {
+          "setting": 21,
+          "microns": 590
+        },
+        {
+          "setting": 23,
+          "microns": 625
+        },
+        {
+          "setting": 25,
+          "microns": 650
+        },
+        {
+          "setting": 27,
+          "microns": 668
+        },
+        {
+          "setting": 29,
+          "microns": 700
+        },
+        {
+          "setting": 30,
+          "microns": 710
+        },
+        {
+          "setting": 31,
+          "microns": 725
+        },
+        {
+          "setting": 33,
+          "microns": 730
+        },
+        {
+          "setting": 36,
+          "microns": 770
+        },
+        {
+          "setting": 39,
+          "microns": 800
+        }
+      ]
+    },
+    "confidence": "community",
+    "sources": [
+      "https://theweldercatherine.ru/blog/articles/oborudovanie/svyashchennyy-pomol-chast-12/"
+    ],
+    "note": "Calibrated against the Mazzer ZM micron dial in the same table. The source does not identify which Hario model was measured; its 5-39 range does not match the Slim or Skerton Pro. Dropped: conflicting reading at 6; conflicting reading at 18; conflicting reading at 24."
+  },
+  {
+    "id": "lagom-p64",
+    "brand": "Lagom",
+    "model": "P64",
+    "type": "electric",
+    "burr": "flat",
+    "scale": {
+      "min": 20,
+      "max": 70,
+      "step": 1,
+      "unit": "click"
+    },
+    "calibration": {
+      "kind": "anchors",
+      "points": [
+        {
+          "setting": 20,
+          "microns": 400
+        },
+        {
+          "setting": 25,
+          "microns": 408
+        },
+        {
+          "setting": 30,
+          "microns": 437
+        },
+        {
+          "setting": 35,
+          "microns": 478
+        },
+        {
+          "setting": 38,
+          "microns": 510
+        },
+        {
+          "setting": 43,
+          "microns": 548
+        },
+        {
+          "setting": 45,
+          "microns": 565
+        },
+        {
+          "setting": 50,
+          "microns": 600
+        },
+        {
+          "setting": 55,
+          "microns": 635
+        },
+        {
+          "setting": 60,
+          "microns": 673
+        },
+        {
+          "setting": 65,
+          "microns": 695
+        },
+        {
+          "setting": 70,
+          "microns": 730
+        }
+      ]
+    },
+    "confidence": "community",
+    "sources": [
+      "https://theweldercatherine.ru/blog/articles/oborudovanie/svyashchennyy-pomol-chast-12/"
+    ],
+    "note": "Calibrated against the Mazzer ZM micron dial in the same table. Dropped: conflicting reading at 40."
+  },
+  {
+    "id": "mahlkonig-ek43-turkish-dial-1-11",
+    "brand": "Mahlkönig",
+    "model": "EK43 (turkish, dial 1-11)",
+    "type": "electric",
+    "burr": "flat",
+    "scale": {
+      "min": 4,
+      "max": 11,
+      "step": 0.5,
+      "unit": "click",
+      "clicksPerRotation": 11
+    },
+    "calibration": {
+      "kind": "anchors",
+      "points": [
+        {
+          "setting": 4,
+          "microns": 400
+        },
+        {
+          "setting": 4.5,
+          "microns": 425
+        },
+        {
+          "setting": 5.5,
+          "microns": 445
+        },
+        {
+          "setting": 6,
+          "microns": 487
+        },
+        {
+          "setting": 6.5,
+          "microns": 515
+        },
+        {
+          "setting": 7,
+          "microns": 549
+        },
+        {
+          "setting": 7.5,
+          "microns": 582
+        },
+        {
+          "setting": 8,
+          "microns": 617
+        },
+        {
+          "setting": 8.5,
+          "microns": 652
+        },
+        {
+          "setting": 9,
+          "microns": 690
+        },
+        {
+          "setting": 9.5,
+          "microns": 712
+        },
+        {
+          "setting": 10,
+          "microns": 747
+        },
+        {
+          "setting": 10.5,
+          "microns": 775
+        },
+        {
+          "setting": 11,
+          "microns": 803
+        }
+      ]
+    },
+    "confidence": "community",
+    "sources": [
+      "https://theweldercatherine.ru/blog/articles/oborudovanie/svyashchennyy-pomol-chast-12/"
+    ],
+    "note": "Calibrated against the Mazzer ZM micron dial in the same table. Turns resolved at 11 positions per rotation. Dropped: conflicting reading at 5."
+  },
+  {
+    "id": "mahlkonig-ek43-icon-coffee-dial-1-16",
+    "brand": "Mahlkönig",
+    "model": "EK43 ICON (coffee, dial 1-16)",
+    "type": "electric",
+    "burr": "flat",
+    "scale": {
+      "min": 4,
+      "max": 14,
+      "step": 0.5,
+      "unit": "click"
+    },
+    "calibration": {
+      "kind": "anchors",
+      "points": [
+        {
+          "setting": 4,
+          "microns": 400
+        },
+        {
+          "setting": 5,
+          "microns": 408
+        },
+        {
+          "setting": 5.5,
+          "microns": 430
+        },
+        {
+          "setting": 6,
+          "microns": 450
+        },
+        {
+          "setting": 6.5,
+          "microns": 480
+        },
+        {
+          "setting": 7.5,
+          "microns": 510
+        },
+        {
+          "setting": 8.5,
+          "microns": 548
+        },
+        {
+          "setting": 9.5,
+          "microns": 585
+        },
+        {
+          "setting": 10.5,
+          "microns": 625
+        },
+        {
+          "setting": 11,
+          "microns": 635
+        },
+        {
+          "setting": 12,
+          "microns": 673
+        },
+        {
+          "setting": 13,
+          "microns": 695
+        },
+        {
+          "setting": 14,
+          "microns": 730
+        }
+      ]
+    },
+    "confidence": "community",
+    "sources": [
+      "https://theweldercatherine.ru/blog/articles/oborudovanie/svyashchennyy-pomol-chast-12/"
+    ],
+    "note": "Calibrated against the Mazzer ZM micron dial in the same table. Dropped: conflicting reading at 7; conflicting reading at 8; conflicting reading at 9; conflicting reading at 10; conflicting reading at 15."
+  },
+  {
+    "id": "mahlkonig-ek43-coffee-dial-1-11",
+    "brand": "Mahlkönig",
+    "model": "EK43 (coffee, dial 1-11)",
+    "type": "electric",
+    "burr": "flat",
+    "scale": {
+      "min": 3,
+      "max": 13.5,
+      "step": 0.5,
+      "unit": "click",
+      "clicksPerRotation": 11
+    },
+    "calibration": {
+      "kind": "anchors",
+      "points": [
+        {
+          "setting": 3,
+          "microns": 400
+        },
+        {
+          "setting": 4,
+          "microns": 413
+        },
+        {
+          "setting": 4.5,
+          "microns": 425
+        },
+        {
+          "setting": 5,
+          "microns": 441
+        },
+        {
+          "setting": 5.5,
+          "microns": 478
+        },
+        {
+          "setting": 6,
+          "microns": 484
+        },
+        {
+          "setting": 6.1,
+          "microns": 510
+        },
+        {
+          "setting": 6.5,
+          "microns": 525
+        },
+        {
+          "setting": 6.6,
+          "microns": 548
+        },
+        {
+          "setting": 7.25,
+          "microns": 585
+        },
+        {
+          "setting": 7.6,
+          "microns": 625
+        },
+        {
+          "setting": 8.1,
+          "microns": 665
+        },
+        {
+          "setting": 9.5,
+          "microns": 675
+        },
+        {
+          "setting": 10,
+          "microns": 710
+        },
+        {
+          "setting": 11.5,
+          "microns": 730
+        },
+        {
+          "setting": 12.5,
+          "microns": 770
+        },
+        {
+          "setting": 12.9,
+          "microns": 800
+        },
+        {
+          "setting": 13.5,
+          "microns": 830
+        }
+      ]
+    },
+    "confidence": "community",
+    "sources": [
+      "https://theweldercatherine.ru/blog/articles/oborudovanie/svyashchennyy-pomol-chast-12/"
+    ],
+    "note": "Calibrated against the Mazzer ZM micron dial in the same table. Turns resolved at 11 positions per rotation. Dropped: conflicting reading at 4.2; conflicting reading at 5.1; conflicting reading at 7; conflicting reading at 7.1; conflicting reading at 7.5; conflicting reading at 7.9; conflicting reading at 8; conflicting reading at 8.5; conflicting reading at 8.6; conflicting reading at 8.9; conflicting reading at 9; conflicting reading at 9.4; conflicting reading at 9.8; conflicting reading at 10.2; conflicting reading at 10.5; conflicting reading at 11; conflicting reading at 11.1; conflicting reading at 12; conflicting reading at 13; conflicting reading at 14; conflicting reading at 15; conflicting reading at 16."
+  },
+  {
+    "id": "mahlkonig-tanzania-dial-0-9",
+    "brand": "Mahlkönig",
+    "model": "Tanzania (dial 0-9)",
+    "type": "electric",
+    "burr": "flat",
+    "scale": {
+      "min": 4,
+      "max": 9,
+      "step": 0.5,
+      "unit": "click",
+      "clicksPerRotation": 11
+    },
+    "calibration": {
+      "kind": "anchors",
+      "points": [
+        {
+          "setting": 4,
+          "microns": 400
+        },
+        {
+          "setting": 4.5,
+          "microns": 410
+        },
+        {
+          "setting": 5,
+          "microns": 450
+        },
+        {
+          "setting": 5.5,
+          "microns": 475
+        },
+        {
+          "setting": 5.75,
+          "microns": 480
+        },
+        {
+          "setting": 6,
+          "microns": 506
+        },
+        {
+          "setting": 6.25,
+          "microns": 548
+        },
+        {
+          "setting": 6.75,
+          "microns": 585
+        },
+        {
+          "setting": 6.9,
+          "microns": 625
+        },
+        {
+          "setting": 7.2,
+          "microns": 665
+        },
+        {
+          "setting": 7.75,
+          "microns": 730
+        },
+        {
+          "setting": 8.1,
+          "microns": 770
+        },
+        {
+          "setting": 8.5,
+          "microns": 800
+        },
+        {
+          "setting": 9,
+          "microns": 830
+        }
+      ]
+    },
+    "confidence": "community",
+    "sources": [
+      "https://theweldercatherine.ru/blog/articles/oborudovanie/svyashchennyy-pomol-chast-12/"
+    ],
+    "note": "Calibrated against the Mazzer ZM micron dial in the same table. Turns resolved at 11 positions per rotation. Dropped: conflicting reading at 5.25; conflicting reading at 6.5; conflicting reading at 7; conflicting reading at 7.5; conflicting reading at 8."
+  },
+  {
+    "id": "mahlkonig-vta6s",
+    "brand": "Mahlkönig",
+    "model": "VTA6S",
+    "type": "electric",
+    "burr": "conical",
+    "scale": {
+      "min": 5.5,
+      "max": 11.5,
+      "step": 0.5,
+      "unit": "click"
+    },
+    "calibration": {
+      "kind": "anchors",
+      "points": [
+        {
+          "setting": 5.5,
+          "microns": 400
+        },
+        {
+          "setting": 6.5,
+          "microns": 430
+        },
+        {
+          "setting": 7.5,
+          "microns": 495
+        },
+        {
+          "setting": 8.5,
+          "microns": 548
+        },
+        {
+          "setting": 9.5,
+          "microns": 605
+        },
+        {
+          "setting": 10.5,
+          "microns": 665
+        },
+        {
+          "setting": 11.5,
+          "microns": 720
+        }
+      ]
+    },
+    "confidence": "community",
+    "sources": [
+      "https://theweldercatherine.ru/blog/articles/oborudovanie/svyashchennyy-pomol-chast-12/"
+    ],
+    "note": "Calibrated against the Mazzer ZM micron dial in the same table. Dropped: unparseable (≈12); unparseable (≈13)."
+  },
+  {
+    "id": "mavo-phantox-pro",
+    "brand": "Mavo",
+    "model": "Phantox Pro",
+    "type": "manual",
+    "burr": "conical",
+    "scale": {
+      "min": 4.4,
+      "max": 10,
+      "step": 0.5,
+      "unit": "click"
+    },
+    "calibration": {
+      "kind": "anchors",
+      "points": [
+        {
+          "setting": 4.4,
+          "microns": 400
+        },
+        {
+          "setting": 5.3,
+          "microns": 430
+        },
+        {
+          "setting": 6,
+          "microns": 480
+        },
+        {
+          "setting": 6.5,
+          "microns": 510
+        },
+        {
+          "setting": 7.1,
+          "microns": 548
+        },
+        {
+          "setting": 8,
+          "microns": 585
+        },
+        {
+          "setting": 8.6,
+          "microns": 625
+        },
+        {
+          "setting": 9,
+          "microns": 665
+        },
+        {
+          "setting": 9.6,
+          "microns": 710
+        },
+        {
+          "setting": 10,
+          "microns": 730
+        }
+      ]
+    },
+    "confidence": "community",
+    "sources": [
+      "https://theweldercatherine.ru/blog/articles/oborudovanie/svyashchennyy-pomol-chast-12/"
+    ],
+    "note": "Calibrated against the Mazzer ZM micron dial in the same table."
+  },
+  {
+    "id": "mavo-wizard-coffee-grinder",
+    "brand": "Mavo",
+    "model": "Wizard Coffee Grinder",
+    "type": "manual",
+    "burr": "conical",
+    "scale": {
+      "min": 18,
+      "max": 32,
+      "step": 1,
+      "unit": "click"
+    },
+    "calibration": {
+      "kind": "anchors",
+      "points": [
+        {
+          "setting": 18,
+          "microns": 400
+        },
+        {
+          "setting": 20,
+          "microns": 428
+        },
+        {
+          "setting": 21,
+          "microns": 450
+        },
+        {
+          "setting": 22,
+          "microns": 475
+        },
+        {
+          "setting": 23,
+          "microns": 487
+        },
+        {
+          "setting": 24,
+          "microns": 510
+        },
+        {
+          "setting": 25,
+          "microns": 540
+        },
+        {
+          "setting": 27,
+          "microns": 550
+        },
+        {
+          "setting": 28,
+          "microns": 585
+        },
+        {
+          "setting": 29,
+          "microns": 608
+        },
+        {
+          "setting": 30,
+          "microns": 643
+        },
+        {
+          "setting": 31,
+          "microns": 682
+        },
+        {
+          "setting": 32,
+          "microns": 703
+        }
+      ]
+    },
+    "confidence": "community",
+    "sources": [
+      "https://theweldercatherine.ru/blog/articles/oborudovanie/svyashchennyy-pomol-chast-12/"
+    ],
+    "note": "Calibrated against the Mazzer ZM micron dial in the same table."
+  },
+  {
+    "id": "mhw-3bomber-blade-r3",
+    "brand": "MHW-3BOMBER",
+    "model": "Blade R3",
+    "type": "manual",
+    "burr": "conical",
+    "scale": {
+      "min": 7,
+      "max": 22,
+      "step": 1,
+      "unit": "click"
+    },
+    "calibration": {
+      "kind": "anchors",
+      "points": [
+        {
+          "setting": 7,
+          "microns": 400
+        },
+        {
+          "setting": 8,
+          "microns": 425
+        },
+        {
+          "setting": 10,
+          "microns": 475
+        },
+        {
+          "setting": 12,
+          "microns": 525
+        },
+        {
+          "setting": 14,
+          "microns": 532
+        },
+        {
+          "setting": 15,
+          "microns": 600
+        },
+        {
+          "setting": 17,
+          "microns": 607
+        },
+        {
+          "setting": 18,
+          "microns": 642
+        },
+        {
+          "setting": 19,
+          "microns": 677
+        },
+        {
+          "setting": 20,
+          "microns": 725
+        },
+        {
+          "setting": 22,
+          "microns": 730
+        }
+      ]
+    },
+    "confidence": "community",
+    "sources": [
+      "https://theweldercatherine.ru/blog/articles/oborudovanie/svyashchennyy-pomol-chast-12/"
+    ],
+    "note": "Calibrated against the Mazzer ZM micron dial in the same table. Dropped: conflicting reading at 9; conflicting reading at 11; conflicting reading at 13; conflicting reading at 16; conflicting reading at 21."
+  },
+  {
+    "id": "mhw-3bomber-racing-m1",
+    "brand": "MHW-3BOMBER",
+    "model": "Racing M1",
+    "type": "manual",
+    "burr": "conical",
+    "scale": {
+      "min": 20,
+      "max": 36,
+      "step": 1,
+      "unit": "click"
+    },
+    "calibration": {
+      "kind": "anchors",
+      "points": [
+        {
+          "setting": 20,
+          "microns": 400
+        },
+        {
+          "setting": 23,
+          "microns": 428
+        },
+        {
+          "setting": 25,
+          "microns": 470
+        },
+        {
+          "setting": 26,
+          "microns": 475
+        },
+        {
+          "setting": 27,
+          "microns": 510
+        },
+        {
+          "setting": 29,
+          "microns": 540
+        },
+        {
+          "setting": 31,
+          "microns": 573
+        },
+        {
+          "setting": 32,
+          "microns": 625
+        },
+        {
+          "setting": 34,
+          "microns": 635
+        },
+        {
+          "setting": 35,
+          "microns": 673
+        },
+        {
+          "setting": 36,
+          "microns": 695
+        }
+      ]
+    },
+    "confidence": "community",
+    "sources": [
+      "https://theweldercatherine.ru/blog/articles/oborudovanie/svyashchennyy-pomol-chast-12/"
+    ],
+    "note": "Calibrated against the Mazzer ZM micron dial in the same table. Dropped: conflicting reading at 28."
+  },
+  {
+    "id": "mischief-electric-grinder-mini",
+    "brand": "Mischief",
+    "model": "Electric Grinder Mini",
+    "type": "electric",
+    "burr": "conical",
+    "scale": {
+      "min": 7,
+      "max": 13.5,
+      "step": 0.5,
+      "unit": "click"
+    },
+    "calibration": {
+      "kind": "anchors",
+      "points": [
+        {
+          "setting": 7,
+          "microns": 400
+        },
+        {
+          "setting": 7.5,
+          "microns": 425
+        },
+        {
+          "setting": 8,
+          "microns": 450
+        },
+        {
+          "setting": 8.5,
+          "microns": 475
+        },
+        {
+          "setting": 10,
+          "microns": 550
+        },
+        {
+          "setting": 10.5,
+          "microns": 575
+        },
+        {
+          "setting": 11,
+          "microns": 600
+        },
+        {
+          "setting": 12,
+          "microns": 650
+        },
+        {
+          "setting": 13,
+          "microns": 700
+        },
+        {
+          "setting": 13.5,
+          "microns": 725
+        }
+      ]
+    },
+    "confidence": "community",
+    "sources": [
+      "https://theweldercatherine.ru/blog/articles/oborudovanie/svyashchennyy-pomol-chast-12/"
+    ],
+    "note": "Calibrated against the Mazzer ZM micron dial in the same table. Dropped: conflicting reading at 9; conflicting reading at 9.5; conflicting reading at 11.5; conflicting reading at 12.5; conflicting reading at 14; conflicting reading at 15; conflicting reading at 16."
+  },
+  {
+    "id": "omni-cup",
+    "brand": "Omni",
+    "model": "Cup",
+    "type": "electric",
+    "burr": "flat",
+    "scale": {
+      "min": 20,
+      "max": 62.5,
+      "step": 0.5,
+      "unit": "click"
+    },
+    "calibration": {
+      "kind": "anchors",
+      "points": [
+        {
+          "setting": 20,
+          "microns": 400
+        },
+        {
+          "setting": 25,
+          "microns": 425
+        },
+        {
+          "setting": 26,
+          "microns": 430
+        },
+        {
+          "setting": 28.5,
+          "microns": 480
+        },
+        {
+          "setting": 31.5,
+          "microns": 510
+        },
+        {
+          "setting": 33.5,
+          "microns": 548
+        },
+        {
+          "setting": 37,
+          "microns": 585
+        },
+        {
+          "setting": 40.5,
+          "microns": 625
+        },
+        {
+          "setting": 42.5,
+          "microns": 665
+        },
+        {
+          "setting": 46,
+          "microns": 710
+        },
+        {
+          "setting": 48,
+          "microns": 730
+        },
+        {
+          "setting": 51.5,
+          "microns": 770
+        },
+        {
+          "setting": 56,
+          "microns": 800
+        },
+        {
+          "setting": 62.5,
+          "microns": 830
+        }
+      ]
+    },
+    "confidence": "community",
+    "sources": [
+      "https://theweldercatherine.ru/blog/articles/oborudovanie/svyashchennyy-pomol-chast-12/"
+    ],
+    "note": "Calibrated against the Mazzer ZM micron dial in the same table. Dropped: conflicting reading at 21.5; conflicting reading at 30; conflicting reading at 35; conflicting reading at 40; conflicting reading at 45; conflicting reading at 50."
+  },
+  {
+    "id": "fiorenzato-pietro",
+    "brand": "Fiorenzato",
+    "model": "Pietro",
+    "type": "electric",
+    "burr": "flat",
+    "scale": {
+      "min": 21.5,
+      "max": 42.5,
+      "step": 0.5,
+      "unit": "click"
+    },
+    "calibration": {
+      "kind": "anchors",
+      "points": [
+        {
+          "setting": 21.5,
+          "microns": 400
+        },
+        {
+          "setting": 24,
+          "microns": 430
+        },
+        {
+          "setting": 26,
+          "microns": 480
+        },
+        {
+          "setting": 28.5,
+          "microns": 510
+        },
+        {
+          "setting": 31.5,
+          "microns": 548
+        },
+        {
+          "setting": 34,
+          "microns": 585
+        },
+        {
+          "setting": 36,
+          "microns": 625
+        },
+        {
+          "setting": 38.5,
+          "microns": 665
+        },
+        {
+          "setting": 42.5,
+          "microns": 710
+        }
+      ]
+    },
+    "confidence": "community",
+    "sources": [
+      "https://theweldercatherine.ru/blog/articles/oborudovanie/svyashchennyy-pomol-chast-12/"
+    ],
+    "note": "Calibrated against the Mazzer ZM micron dial in the same table. Dropped: lettered dial (10 щелчков); lettered dial (15 щелчков); lettered dial (20 щелчков); lettered dial (23 щелчка); lettered dial (25 щелчков); lettered dial (27 щелчков); lettered dial (30 щелчков); lettered dial (33 щелчка); lettered dial (35 щелчков); lettered dial (37 щелчков); lettered dial (40 щелчков); lettered dial (45 щелчков)."
+  },
+  {
+    "id": "saint-anthony-millwright",
+    "brand": "Saint Anthony",
+    "model": "Millwright",
+    "type": "electric",
+    "burr": "conical",
+    "scale": {
+      "min": 17,
+      "max": 58,
+      "step": 0.5,
+      "unit": "click"
+    },
+    "calibration": {
+      "kind": "anchors",
+      "points": [
+        {
+          "setting": 17,
+          "microns": 400
+        },
+        {
+          "setting": 20,
+          "microns": 425
+        },
+        {
+          "setting": 22,
+          "microns": 430
+        },
+        {
+          "setting": 23,
+          "microns": 450
+        },
+        {
+          "setting": 25,
+          "microns": 478
+        },
+        {
+          "setting": 27,
+          "microns": 500
+        },
+        {
+          "setting": 28,
+          "microns": 510
+        },
+        {
+          "setting": 30,
+          "microns": 525
+        },
+        {
+          "setting": 33,
+          "microns": 550
+        },
+        {
+          "setting": 35,
+          "microns": 575
+        },
+        {
+          "setting": 37,
+          "microns": 590
+        },
+        {
+          "setting": 40,
+          "microns": 625
+        },
+        {
+          "setting": 43,
+          "microns": 650
+        },
+        {
+          "setting": 43.5,
+          "microns": 665
+        },
+        {
+          "setting": 45,
+          "microns": 675
+        },
+        {
+          "setting": 47,
+          "microns": 700
+        },
+        {
+          "setting": 48,
+          "microns": 710
+        },
+        {
+          "setting": 50,
+          "microns": 725
+        },
+        {
+          "setting": 53,
+          "microns": 730
+        },
+        {
+          "setting": 58,
+          "microns": 770
+        }
+      ]
+    },
+    "confidence": "community",
+    "sources": [
+      "https://theweldercatherine.ru/blog/articles/oborudovanie/svyashchennyy-pomol-chast-12/"
+    ],
+    "note": "Calibrated against the Mazzer ZM micron dial in the same table. Dropped: conflicting reading at 19; conflicting reading at 34."
+  },
+  {
+    "id": "timemore-chestnut-g1-plus",
+    "brand": "Timemore",
+    "model": "Chestnut G1 Plus",
+    "type": "manual",
+    "burr": "conical",
+    "scale": {
+      "min": 10,
+      "max": 27,
+      "step": 0.5,
+      "unit": "click"
+    },
+    "calibration": {
+      "kind": "anchors",
+      "points": [
+        {
+          "setting": 10,
+          "microns": 400
+        },
+        {
+          "setting": 12,
+          "microns": 425
+        },
+        {
+          "setting": 12.5,
+          "microns": 430
+        },
+        {
+          "setting": 14,
+          "microns": 468
+        },
+        {
+          "setting": 15,
+          "microns": 510
+        },
+        {
+          "setting": 16.5,
+          "microns": 548
+        },
+        {
+          "setting": 18,
+          "microns": 551
+        },
+        {
+          "setting": 19.5,
+          "microns": 625
+        },
+        {
+          "setting": 20.5,
+          "microns": 665
+        },
+        {
+          "setting": 23.5,
+          "microns": 730
+        },
+        {
+          "setting": 24.5,
+          "microns": 770
+        },
+        {
+          "setting": 27,
+          "microns": 830
+        }
+      ]
+    },
+    "confidence": "community",
+    "sources": [
+      "https://theweldercatherine.ru/blog/articles/oborudovanie/svyashchennyy-pomol-chast-12/"
+    ],
+    "note": "Calibrated against the Mazzer ZM micron dial in the same table. Dropped: conflicting reading at 11; conflicting reading at 16; conflicting reading at 20; conflicting reading at 22; conflicting reading at 24; conflicting reading at 26."
+  },
+  {
+    "id": "timemore-chestnut-x-lite",
+    "brand": "Timemore",
+    "model": "Chestnut X Lite",
+    "type": "manual",
+    "burr": "conical",
+    "scale": {
+      "min": 3,
+      "max": 18,
+      "step": 1,
+      "unit": "click"
+    },
+    "calibration": {
+      "kind": "anchors",
+      "points": [
+        {
+          "setting": 3,
+          "microns": 400
+        },
+        {
+          "setting": 6,
+          "microns": 430
+        },
+        {
+          "setting": 8,
+          "microns": 480
+        },
+        {
+          "setting": 9,
+          "microns": 490
+        },
+        {
+          "setting": 10,
+          "microns": 548
+        },
+        {
+          "setting": 12,
+          "microns": 625
+        },
+        {
+          "setting": 14,
+          "microns": 710
+        },
+        {
+          "setting": 16,
+          "microns": 770
+        },
+        {
+          "setting": 18,
+          "microns": 830
+        }
+      ]
+    },
+    "confidence": "community",
+    "sources": [
+      "https://theweldercatherine.ru/blog/articles/oborudovanie/svyashchennyy-pomol-chast-12/"
+    ],
+    "note": "Calibrated against the Mazzer ZM micron dial in the same table. Dropped: conflicting reading at 5; conflicting reading at 7; conflicting reading at 13; conflicting reading at 15; conflicting reading at 17; conflicting reading at 19; rounds onto 548 µm at setting 11."
+  },
+  {
+    "id": "timemore-grinder-go",
+    "brand": "Timemore",
+    "model": "Grinder Go",
+    "type": "electric",
+    "burr": "conical",
+    "scale": {
+      "min": 1,
+      "max": 12,
+      "step": 0.5,
+      "unit": "click"
+    },
+    "calibration": {
+      "kind": "anchors",
+      "points": [
+        {
+          "setting": 1,
+          "microns": 420
+        },
+        {
+          "setting": 2,
+          "microns": 482
+        },
+        {
+          "setting": 4,
+          "microns": 524
+        },
+        {
+          "setting": 6,
+          "microns": 525
+        },
+        {
+          "setting": 6.5,
+          "microns": 585
+        },
+        {
+          "setting": 7.5,
+          "microns": 625
+        },
+        {
+          "setting": 9,
+          "microns": 643
+        },
+        {
+          "setting": 10,
+          "microns": 682
+        },
+        {
+          "setting": 11,
+          "microns": 703
+        },
+        {
+          "setting": 12,
+          "microns": 770
+        }
+      ]
+    },
+    "confidence": "community",
+    "sources": [
+      "https://theweldercatherine.ru/blog/articles/oborudovanie/svyashchennyy-pomol-chast-12/"
+    ],
+    "note": "Calibrated against the Mazzer ZM micron dial in the same table. Dropped: conflicting reading at 3; conflicting reading at 5; conflicting reading at 7; conflicting reading at 8."
+  },
+  {
+    "id": "timemore-nano",
+    "brand": "Timemore",
+    "model": "Nano",
+    "type": "manual",
+    "burr": "conical",
+    "scale": {
+      "min": 10,
+      "max": 25,
+      "step": 0.5,
+      "unit": "click"
+    },
+    "calibration": {
+      "kind": "anchors",
+      "points": [
+        {
+          "setting": 10,
+          "microns": 400
+        },
+        {
+          "setting": 12,
+          "microns": 425
+        },
+        {
+          "setting": 12.5,
+          "microns": 430
+        },
+        {
+          "setting": 14,
+          "microns": 450
+        },
+        {
+          "setting": 14.5,
+          "microns": 480
+        },
+        {
+          "setting": 15.5,
+          "microns": 510
+        },
+        {
+          "setting": 17,
+          "microns": 548
+        },
+        {
+          "setting": 18,
+          "microns": 551
+        },
+        {
+          "setting": 19,
+          "microns": 625
+        },
+        {
+          "setting": 19.5,
+          "microns": 665
+        },
+        {
+          "setting": 21,
+          "microns": 710
+        },
+        {
+          "setting": 23,
+          "microns": 770
+        },
+        {
+          "setting": 25,
+          "microns": 830
+        }
+      ]
+    },
+    "confidence": "community",
+    "sources": [
+      "https://theweldercatherine.ru/blog/articles/oborudovanie/svyashchennyy-pomol-chast-12/"
+    ],
+    "note": "Calibrated against the Mazzer ZM micron dial in the same table. Dropped: conflicting reading at 10.5; conflicting reading at 16; conflicting reading at 20; conflicting reading at 22; conflicting reading at 24."
+  },
+  {
+    "id": "timemore-sculptor-064",
+    "brand": "Timemore",
+    "model": "Sculptor 064",
+    "type": "electric",
+    "burr": "flat",
+    "scale": {
+      "min": 2.5,
+      "max": 16,
+      "step": 0.5,
+      "unit": "click"
+    },
+    "calibration": {
+      "kind": "anchors",
+      "points": [
+        {
+          "setting": 2.5,
+          "microns": 400
+        },
+        {
+          "setting": 4,
+          "microns": 430
+        },
+        {
+          "setting": 6,
+          "microns": 480
+        },
+        {
+          "setting": 8.5,
+          "microns": 510
+        },
+        {
+          "setting": 10,
+          "microns": 548
+        },
+        {
+          "setting": 11,
+          "microns": 585
+        },
+        {
+          "setting": 13,
+          "microns": 625
+        },
+        {
+          "setting": 14,
+          "microns": 665
+        },
+        {
+          "setting": 15,
+          "microns": 710
+        },
+        {
+          "setting": 16,
+          "microns": 730
+        }
+      ]
+    },
+    "confidence": "community",
+    "sources": [
+      "https://theweldercatherine.ru/blog/articles/oborudovanie/svyashchennyy-pomol-chast-12/"
+    ],
+    "note": "Calibrated against the Mazzer ZM micron dial in the same table."
+  },
+  {
+    "id": "timemore-slim",
+    "brand": "Timemore",
+    "model": "Slim",
+    "type": "manual",
+    "burr": "conical",
+    "scale": {
+      "min": 9,
+      "max": 20,
+      "step": 1,
+      "unit": "click"
+    },
+    "calibration": {
+      "kind": "anchors",
+      "points": [
+        {
+          "setting": 9,
+          "microns": 400
+        },
+        {
+          "setting": 10,
+          "microns": 425
+        },
+        {
+          "setting": 11,
+          "microns": 450
+        },
+        {
+          "setting": 12,
+          "microns": 475
+        },
+        {
+          "setting": 13,
+          "microns": 500
+        },
+        {
+          "setting": 14,
+          "microns": 525
+        },
+        {
+          "setting": 15,
+          "microns": 550
+        },
+        {
+          "setting": 16,
+          "microns": 575
+        },
+        {
+          "setting": 17,
+          "microns": 600
+        },
+        {
+          "setting": 18,
+          "microns": 625
+        },
+        {
+          "setting": 19,
+          "microns": 650
+        },
+        {
+          "setting": 20,
+          "microns": 675
+        }
+      ]
+    },
+    "confidence": "community",
+    "sources": [
+      "https://theweldercatherine.ru/blog/articles/oborudovanie/svyashchennyy-pomol-chast-12/"
+    ],
+    "note": "Calibrated against the Mazzer ZM micron dial in the same table."
+  },
+  {
+    "id": "varia-hand-grinder",
+    "brand": "Varia",
+    "model": "Hand Grinder",
+    "type": "manual",
+    "burr": "conical",
+    "scale": {
+      "min": 40,
+      "max": 79,
+      "step": 1,
+      "unit": "click"
+    },
+    "calibration": {
+      "kind": "anchors",
+      "points": [
+        {
+          "setting": 40,
+          "microns": 400
+        },
+        {
+          "setting": 43,
+          "microns": 425
+        },
+        {
+          "setting": 46,
+          "microns": 437
+        },
+        {
+          "setting": 49,
+          "microns": 475
+        },
+        {
+          "setting": 52,
+          "microns": 487
+        },
+        {
+          "setting": 55,
+          "microns": 525
+        },
+        {
+          "setting": 61,
+          "microns": 557
+        },
+        {
+          "setting": 64,
+          "microns": 590
+        },
+        {
+          "setting": 67,
+          "microns": 625
+        },
+        {
+          "setting": 70,
+          "microns": 660
+        },
+        {
+          "setting": 73,
+          "microns": 675
+        },
+        {
+          "setting": 76,
+          "microns": 707
+        },
+        {
+          "setting": 79,
+          "microns": 728
+        }
+      ]
+    },
+    "confidence": "community",
+    "sources": [
+      "https://theweldercatherine.ru/blog/articles/oborudovanie/svyashchennyy-pomol-chast-12/"
+    ],
+    "note": "Calibrated against the Mazzer ZM micron dial in the same table. Dropped: conflicting reading at 58."
+  },
+  {
+    "id": "varia-vs3",
+    "brand": "Varia",
+    "model": "VS3",
+    "type": "electric",
+    "burr": "conical",
+    "scale": {
+      "min": 5,
+      "max": 13,
+      "step": 0.5,
+      "unit": "click"
+    },
+    "calibration": {
+      "kind": "anchors",
+      "points": [
+        {
+          "setting": 5,
+          "microns": 400
+        },
+        {
+          "setting": 5.5,
+          "microns": 425
+        },
+        {
+          "setting": 6.5,
+          "microns": 475
+        },
+        {
+          "setting": 7.5,
+          "microns": 525
+        },
+        {
+          "setting": 8.5,
+          "microns": 532
+        },
+        {
+          "setting": 9,
+          "microns": 565
+        },
+        {
+          "setting": 9.5,
+          "microns": 625
+        },
+        {
+          "setting": 10.5,
+          "microns": 675
+        },
+        {
+          "setting": 11.5,
+          "microns": 685
+        },
+        {
+          "setting": 12.5,
+          "microns": 710
+        },
+        {
+          "setting": 13,
+          "microns": 730
+        }
+      ]
+    },
+    "confidence": "community",
+    "sources": [
+      "https://theweldercatherine.ru/blog/articles/oborudovanie/svyashchennyy-pomol-chast-12/"
+    ],
+    "note": "Calibrated against the Mazzer ZM micron dial in the same table. Dropped: conflicting reading at 6; conflicting reading at 7; conflicting reading at 8; conflicting reading at 10; conflicting reading at 11; conflicting reading at 12."
+  },
+  {
+    "id": "wilfa-svart-nymalt",
+    "brand": "Wilfa",
+    "model": "Svart Nymalt",
+    "type": "electric",
+    "burr": "conical",
+    "scale": {
+      "min": 3.5,
+      "max": 13.75,
+      "step": 0.5,
+      "unit": "click"
+    },
+    "calibration": {
+      "kind": "anchors",
+      "points": [
+        {
+          "setting": 3.5,
+          "microns": 400
+        },
+        {
+          "setting": 5,
+          "microns": 425
+        },
+        {
+          "setting": 5.25,
+          "microns": 430
+        },
+        {
+          "setting": 6,
+          "microns": 450
+        },
+        {
+          "setting": 6.5,
+          "microns": 480
+        },
+        {
+          "setting": 7.5,
+          "microns": 510
+        },
+        {
+          "setting": 8.5,
+          "microns": 548
+        },
+        {
+          "setting": 10,
+          "microns": 550
+        },
+        {
+          "setting": 10.5,
+          "microns": 605
+        },
+        {
+          "setting": 11.25,
+          "microns": 665
+        },
+        {
+          "setting": 12.5,
+          "microns": 710
+        },
+        {
+          "setting": 12.75,
+          "microns": 730
+        },
+        {
+          "setting": 13.25,
+          "microns": 770
+        },
+        {
+          "setting": 13.75,
+          "microns": 800
+        }
+      ]
+    },
+    "confidence": "community",
+    "sources": [
+      "https://theweldercatherine.ru/blog/articles/oborudovanie/svyashchennyy-pomol-chast-12/"
+    ],
+    "note": "Calibrated against the Mazzer ZM micron dial in the same table. Dropped: conflicting reading at 4; conflicting reading at 7; conflicting reading at 8; conflicting reading at 9; conflicting reading at 11; conflicting reading at 12; conflicting reading at 13; conflicting reading at 14."
+  },
+  {
+    "id": "wilfa-svart-uniform",
+    "brand": "Wilfa",
+    "model": "Svart Uniform",
+    "type": "electric",
+    "burr": "flat",
+    "scale": {
+      "min": 12,
+      "max": 31.75,
+      "step": 0.5,
+      "unit": "click"
+    },
+    "calibration": {
+      "kind": "anchors",
+      "points": [
+        {
+          "setting": 12,
+          "microns": 400
+        },
+        {
+          "setting": 14,
+          "microns": 425
+        },
+        {
+          "setting": 14.75,
+          "microns": 430
+        },
+        {
+          "setting": 16,
+          "microns": 450
+        },
+        {
+          "setting": 17,
+          "microns": 480
+        },
+        {
+          "setting": 18.5,
+          "microns": 510
+        },
+        {
+          "setting": 20.5,
+          "microns": 548
+        },
+        {
+          "setting": 23.75,
+          "microns": 585
+        },
+        {
+          "setting": 24.25,
+          "microns": 625
+        },
+        {
+          "setting": 26.25,
+          "microns": 665
+        },
+        {
+          "setting": 28.25,
+          "microns": 710
+        },
+        {
+          "setting": 29.5,
+          "microns": 730
+        },
+        {
+          "setting": 31.75,
+          "microns": 770
+        }
+      ]
+    },
+    "confidence": "community",
+    "sources": [
+      "https://theweldercatherine.ru/blog/articles/oborudovanie/svyashchennyy-pomol-chast-12/"
+    ],
+    "note": "Calibrated against the Mazzer ZM micron dial in the same table. Dropped: conflicting reading at 12.5; conflicting reading at 18; conflicting reading at 20; conflicting reading at 22; conflicting reading at 24; conflicting reading at 26; conflicting reading at 28; conflicting reading at 30; conflicting reading at 32."
+  }
+]

@@ -17,10 +17,14 @@
     "type": "manual",
     "burr": "conical",
     "scale": { "min": 0, "max": 40, "step": 1, "unit": "click" },
-    "calibration": { "kind": "linear", "micronsPerStep": 30, "zeroOffsetMicrons": 0 },
+    "calibration": { "kind": "linear", "micronsPerStep": 39, "zeroOffsetMicrons": 0 },
     "confidence": "community",
-    "sources": ["https://www.brewcoffeehome.com/timemore-c3-review/"],
-    "note": "Timemore publishes 23 um for the C3 ESP; the plain C3 is coarser per click."
+    "sources": [
+      "https://www.brewcoffeehome.com/timemore-c3-review/",
+      "https://honestcoffeeguide.com/timemore-c3-grind-settings/",
+      "https://theweldercatherine.ru/blog/articles/oborudovanie/svyashchennyy-pomol-chast-9/"
+    ],
+    "note": "Was 30 um. Two independent sources put it near 39: a sieve run against a micron-dialled grinder, and per-brew-method tables where the C3 needs ~1.2x fewer clicks than the C2 for the same grind, which makes its step ~1.2x coarser than the C2's corroborated 33 um."
   },
   {
     "id": "timemore-c3-esp",
@@ -28,9 +32,25 @@
     "model": "Chestnut C3 ESP",
     "type": "manual",
     "burr": "conical",
-    "scale": { "min": 0, "max": 60, "step": 1, "unit": "click" },
-    "calibration": { "kind": "linear", "micronsPerStep": 23, "zeroOffsetMicrons": 0 },
+    "scale": { "min": 0, "max": 30, "step": 1, "unit": "click" },
+    "calibration": { "kind": "linear", "micronsPerStep": 29, "zeroOffsetMicrons": 51 },
     "confidence": "manufacturer",
-    "sources": ["https://www.brewcoffeehome.com/timemore-c3-review/"]
+    "sources": [
+      "https://www.timemore.cn/en/index.php?c=show&id=28",
+      "https://converter.beeancoffee.com/"
+    ],
+    "note": "Was 23 um over 0-60. Timemore's own table gives 29 um per click for the E&B burrs this model carries, and a converter that models the dial as three notches between numbers implies 9.66 um per notch — the same 29 um per numbered click. Ten clicks per rotation, three rotations end to end."
+  },
+  {
+    "id": "timemore-s3",
+    "brand": "Timemore",
+    "model": "Chestnut S3",
+    "type": "manual",
+    "burr": "conical",
+    "scale": { "min": 0, "max": 9, "step": 0.1, "unit": "mark" },
+    "calibration": { "kind": "linear", "micronsPerStep": 86.7, "zeroOffsetMicrons": 330 },
+    "confidence": "community",
+    "sources": ["https://honestcoffeeguide.com/timemore-s3-grind-settings/"],
+    "note": "Reads off an external ring marked 0-9 in 0.1 steps, not clicks from burr contact, so the scale starts at 330 um rather than zero. Step derived from the cited 330-1110 um span across that ring."
   }
 ]
