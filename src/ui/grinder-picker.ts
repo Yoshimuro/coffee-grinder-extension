@@ -33,6 +33,7 @@ export function createGrinderPicker(options: GrinderPickerOptions): GrinderPicke
   let selectedId = options.selectedId;
   let recentIds: string[] = [];
   const expanded = new Set<string>();
+  let activeIndex = -1;
 
   const root = document.createElement('div');
   root.className = 'picker';
@@ -120,6 +121,13 @@ export function createGrinderPicker(options: GrinderPickerOptions): GrinderPicke
   }
 
   function renderList(): void {
+    list.replaceChildren(...buildRows());
+    // The list was just rebuilt, so any previous highlight points at a detached
+    // node; start again from the top.
+    highlight(0);
+  }
+
+  function buildRows(): HTMLLIElement[] {
     const query = search.value.trim();
 
     if (query) {
@@ -129,11 +137,9 @@ export function createGrinderPicker(options: GrinderPickerOptions): GrinderPicke
         empty.className = 'picker__empty';
         empty.setAttribute('role', 'presentation');
         empty.textContent = 'No grinders match';
-        list.replaceChildren(empty);
-        return;
+        return [empty];
       }
-      list.replaceChildren(...matches.map((g) => optionRow(g)));
-      return;
+      return matches.map((g) => optionRow(g));
     }
 
     const rows: HTMLLIElement[] = [];
@@ -156,7 +162,37 @@ export function createGrinderPicker(options: GrinderPickerOptions): GrinderPicke
       rows.push(groupRow(brand, members));
       if (expanded.has(brand)) rows.push(...members.map((g) => optionRow(g)));
     }
-    list.replaceChildren(...rows);
+    return rows;
+  }
+
+  /** Rows the arrow keys can land on: options and group toggles, in DOM order. */
+  function navigableRows(): HTMLLIElement[] {
+    return [...list.querySelectorAll<HTMLLIElement>('li.picker__option, li.picker__group')];
+  }
+
+  function highlight(index: number): void {
+    const rows = navigableRows();
+    for (const row of rows) delete row.dataset.active;
+
+    if (rows.length === 0) {
+      activeIndex = -1;
+      search.removeAttribute('aria-activedescendant');
+      return;
+    }
+
+    activeIndex = (index + rows.length) % rows.length;
+    const row = rows[activeIndex]!;
+    row.dataset.active = 'true';
+    if (!row.id) row.id = `${field}-row-${activeIndex}`;
+    search.setAttribute('aria-activedescendant', row.id);
+    row.scrollIntoView({ block: 'nearest' });
+  }
+
+  function activateRow(): void {
+    const row = navigableRows()[activeIndex];
+    if (!row) return;
+    if (row.dataset.id) choose(row.dataset.id);
+    else row.querySelector('button')?.click();
   }
 
   function open(): void {
@@ -184,7 +220,44 @@ export function createGrinderPicker(options: GrinderPickerOptions): GrinderPicke
   }
 
   button.addEventListener('click', () => (panel.hidden ? open() : close()));
+
+  // Enter and Space already open it: a <button> fires click for both.
+  button.addEventListener('keydown', (event) => {
+    if (event.key === 'ArrowDown') {
+      event.preventDefault();
+      open();
+    }
+  });
+
   search.addEventListener('input', renderList);
+
+  // Focus stays in the search field throughout — the active row is advertised
+  // with aria-activedescendant instead, so typing is never interrupted.
+  search.addEventListener('keydown', (event) => {
+    switch (event.key) {
+      case 'ArrowDown':
+        event.preventDefault();
+        highlight(activeIndex + 1);
+        break;
+      case 'ArrowUp':
+        event.preventDefault();
+        highlight(activeIndex - 1);
+        break;
+      case 'Enter':
+        event.preventDefault();
+        activateRow();
+        break;
+      case 'Escape':
+        event.preventDefault();
+        close();
+        button.focus();
+        break;
+      case 'Tab':
+        close();
+        break;
+      default:
+    }
+  });
 
   // A click anywhere else dismisses the panel, the way a native select does.
   //

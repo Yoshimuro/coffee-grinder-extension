@@ -212,3 +212,33 @@ test('hides recents while a query is active', async ({ popup }) => {
   await popup.getByTestId('from-grinder-search').fill('timemore');
   await expect(popup.getByTestId('from-grinder-list').locator('li.picker__section')).toHaveCount(0);
 });
+
+test('selects with the keyboard alone', async ({ popup }) => {
+  await popup.getByTestId('from-grinder-button').press('Enter');
+  await popup.getByTestId('from-grinder-search').fill('c40 mk4');
+
+  await popup.keyboard.press('ArrowDown');
+  await popup.keyboard.press('Enter');
+
+  await expect(popup.getByTestId('from-grinder')).toHaveAttribute('data-value', C40);
+});
+
+test('Escape closes the panel and returns focus to the button', async ({ popup }) => {
+  const button = popup.getByTestId('from-grinder-button');
+  await button.click();
+  await expect(popup.getByTestId('from-grinder-search')).toBeVisible();
+
+  await popup.keyboard.press('Escape');
+  await expect(popup.getByTestId('from-grinder-search')).toBeHidden();
+  await expect(button).toBeFocused();
+});
+
+test('arrow keys expand a brand group', async ({ popup }) => {
+  await popup.getByTestId('from-grinder-button').click();
+  await popup.keyboard.press('ArrowDown');
+  await popup.keyboard.press('Enter');
+
+  await expect(
+    popup.getByTestId('from-grinder-list').locator('li[role="option"]'),
+  ).not.toHaveCount(0);
+});
