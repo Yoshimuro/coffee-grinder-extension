@@ -1,0 +1,13 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    // The app is React, so JSX compiles through the automatic runtime and no
+    // file has to import React just to render.
+    "jsx": "react-jsx",
+    // `vite/client` supplies the ambient declarations for the CSS side-effect
+    // imports (tokens + the self-hosted font faces); `node` is only needed by
+    // the two config files in `include`.
+    "types": ["node", "vite/client", "vitest/globals"]
+  },
+  "include": ["src", "tests", "*.config.ts"]
+}

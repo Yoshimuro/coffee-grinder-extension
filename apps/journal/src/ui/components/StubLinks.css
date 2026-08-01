@@ -1,0 +1,7 @@
+/* Scaffolding styles — removed together with StubLinks.tsx in BJ-4. */
+
+.stub-links {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}

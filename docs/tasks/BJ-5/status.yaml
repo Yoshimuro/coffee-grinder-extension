@@ -1,0 +1,9 @@
+task_id: BJ-5
+title: "Колесо вкусов: SVG, проваливание с зумом, крошки, память, интенсивность"
+profile: standard
+status: READY_FOR_DEVELOPMENT
+owner: dev-agent (opus)
+created_at: "2026-08-02T22:45:00Z"
+updated_at: "2026-08-02T22:45:00Z"
+transitions:
+  - {at: "2026-08-02T22:45:00Z", from: RESEARCH_IN_PROGRESS, to: READY_FOR_DEVELOPMENT, reason: "research = _research/component-report.md §8 (полная геометрия/анимация/память) + data-js-report §2-3; план предодобрен (BJ-1/decisions.md D-1); исполнение после BJ-3 (данные+arcPath) и интеграция после BJ-4 (экран diag)"}

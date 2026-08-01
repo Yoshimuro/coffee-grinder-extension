@@ -1,0 +1,9 @@
+task_id: BJ-4
+title: "Экраны основного цикла: полка/пачка, сетап, таймер, диагностика, журнал, настройки, конструктор девайсов"
+profile: full
+status: READY_FOR_DEVELOPMENT
+owner: workflow (components → 4 параллельные группы → интеграция)
+created_at: "2026-08-02T22:40:00Z"
+updated_at: "2026-08-02T22:40:00Z"
+transitions:
+  - {at: "2026-08-02T22:40:00Z", from: RESEARCH_IN_PROGRESS, to: READY_FOR_DEVELOPMENT, reason: "research = _research/component-report.md (полный инвентарь §2, §5-7, §9-10) + спека; план предодобрен (BJ-1/decisions.md D-1); исполнение после BJ-3"}
