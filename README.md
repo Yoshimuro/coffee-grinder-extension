@@ -6,6 +6,10 @@ A Chrome extension that answers one question: *I grind at 24 clicks on my JX-Pro
 Pick the grinder you know, dial in your setting, pick the grinder you want, and
 the extension shows the equivalent setting on it.
 
+With a catalogue this size the picker is searchable: type a few characters of a
+brand or model to narrow it, or browse by brand — groups start collapsed, and
+the grinders you reached for last sit at the top.
+
 ![Popup converting 24 clicks on a 1Zpresso JX-Pro to 10 clicks on a Comandante C40](docs/screens/01-espresso-jxpro-to-c40-light.png)
 
 ## How it works
@@ -52,26 +56,47 @@ The build reports its own size budget:
 ```
 $ npm run build:data
 
-  grinders        19
+  grinders        134
   brew methods    8
-  confidence      manufacturer=11  community=4  estimated=4
-  raw JSON        8.3 KB
-  gzipped         1.9 KB
-  per grinder     445 B raw
-  projected 1000  435.0 KB raw, 101.2 KB gzipped
+  confidence      manufacturer=11  community=120  estimated=3
+  raw JSON        86.3 KB
+  gzipped         9.5 KB
+  per grinder     660 B raw
+  projected 1000  644.4 KB raw, 71.2 KB gzipped
 ```
 
-**This is why there is no backend.** At ~100 bytes gzipped per grinder, a
-thousand-grinder catalogue is ~100 KB — smaller than a single product photo. It
+**This is why there is no backend.** At ~70 bytes gzipped per grinder, a
+thousand-grinder catalogue is ~70 KB — smaller than a single product photo. It
 ships inside the extension, so the converter works offline, needs no network
 permission, and cannot leak what you grind.
+
+The figure improves as the catalogue grows: a `linear` entry is two numbers
+regardless of how much measurement went into it, so brands that publish a step
+cost almost nothing to add.
 
 If the catalogue ever outgrows that, the escape hatch is a static JSON file on a
 CDN compared by `version`, not a server. Nothing here needs one.
 
 ### Growing the catalogue
 
-Two steps: collect the spreadsheets, then map them onto the schema.
+Every path ends at the same place — a CSV in the shape `import-csv.mjs` reads —
+so the schema, the validation and the provenance rules are shared no matter
+where the numbers came from.
+
+```
+Google Sheets ──> scrape-sheets.mjs ─────┐
+PDF tables ─────> pdf-table-to-csv.mjs ──┼──> twc-table-to-csv.mjs ──┐
+                                         │                           ├─> import-csv.mjs ─> data/grinders/*.json
+converter API ──> beeancoffee-harvest.mjs ───────────────────────────┘
+```
+
+Sources rarely publish microns. What they publish is a *correspondence* — this
+setting on grinder A matches that setting on grinder B — which only becomes a
+calibration once something in the chain carries an absolute particle size. Two
+things can supply it: a grinder whose dial is marked in microns (the Mazzer ZM
+appears in most published tables for exactly this reason), or a grinder whose
+step is published and independently confirmed. Everything below is a way of
+getting from a correspondence to a micron.
 
 #### 1. Collect (`scripts/scrape-sheets.mjs`)
 
@@ -114,7 +139,51 @@ Only reaches sheets that are already publicly readable, runs sequentially with a
 Check that the source's terms allow reuse before republishing its data; the
 per-entry `sources` field exists so attribution survives.
 
-#### 2. Map (`scripts/import-csv.mjs`)
+#### 2. Recover tables from PDFs (`scripts/pdf-table-to-csv.mjs`)
+
+Publishers migrate to PDF, and the PDF is often *newer* than the spreadsheet it
+replaced — treating it as a duplicate silently loses whatever was added since.
+
+```bash
+pdftotext -bbox-layout table.pdf table.xml     # poppler
+node scripts/pdf-table-to-csv.mjs table.xml --out data/raw/pdf
+```
+
+It reads word coordinates rather than `pdftotext -layout` text, because these
+exports wrap long headings over several lines and poppler then groups
+neighbouring cells into one block — "Niche Zero" and "Eureka Atom Pro" come back
+interleaved as `Niche Eureka Zero Atom Pro`. Only the x coordinate says which
+column a word belongs to.
+
+Pages after the first usually drop the micron column and repeat one grinder as a
+key instead; the scale is carried across through that column and the synthesised
+values are labelled as such.
+
+#### 3. Sweep a converter API (`scripts/beeancoffee-harvest.mjs`)
+
+Some services convert between grinders without ever stating a particle size. A
+micron scale is recovered by sweeping a *reference* grinder whose step is known
+and reading off what the target says.
+
+```bash
+node scripts/beeancoffee-harvest.mjs --out bc.csv
+```
+
+**The reference is the whole ballgame.** Its error is baked into every entry
+harvested through it, so it has to be a grinder whose published step is
+confirmed by an independent measurement — not merely published. The default is
+the Timemore Chestnut C2: the maker publishes 33 µm per click, and a sieve run
+against a micron-dialled grinder agrees to within 1% over 55 readings. The
+Comandante C40 was the other candidate and was rejected for sitting ~9% coarse
+against that same sieve run.
+
+Two behaviours worth knowing: such services extrapolate past the ends of a dial
+rather than clamping — ask for something finer than the grinder reaches and you
+get a negative click — and a fit is only trustworthy across the span actually
+sampled, so the emitted scale is narrowed to that span rather than claiming the
+untested ends.
+
+#### 4. Map (`scripts/import-csv.mjs`)
 
 Converts a spreadsheet into a validated data file:
 
@@ -128,12 +197,40 @@ microns_per_step, zero_offset` **or** `anchors` (`"1:300; 6:800; 11:1300"`),
 plus optional `clicks_per_rotation, confidence, aliases, note, source`.
 Rows without a usable calibration are reported and skipped, never guessed at.
 
+### Cross-checking a source
+
+A new source usually overlaps the catalogue. That overlap is free evidence, and
+`--compare` spends it: it reports, per shared grinder, the ratio between what we
+ship and what the source says.
+
+```bash
+node scripts/twc-table-to-csv.mjs data/raw/**/*.csv --compare src/generated/dataset.json
+```
+
+Read the *spread*, not just the median. Readings scattered around 1.0 are two
+measurements of the same thing. A tight cluster sitting away from 1.0 is a slope
+error — one of the two curves is simply wrong, and no amount of extra data
+points will fix it. Errors found this way so far: a step copied from the
+neighbouring model, a figure attributed to a manufacturer that its own
+documentation contradicts, and a whole brand whose readings disagree with every
+other source in both directions.
+
+Compare against the catalogue *before* importing the source, or it will be
+comparing the source with itself.
+
 ### Validation
 
 `npm run check:data` goes past JSON well-formedness. It rejects duplicate ids,
-uncited entries, scales whose step exceeds their range, and — most importantly —
-**non-monotonic calibrations**, because the converter inverts these curves and a
-non-monotonic one would make `microns → setting` ambiguous and silently wrong.
+uncited entries, scales whose step exceeds their range, anchors that do not
+cover the scale they claim, and — most importantly — **non-monotonic
+calibrations**, because the converter inverts these curves and a non-monotonic
+one would make `microns → setting` ambiguous and silently wrong.
+
+The unit suite adds invariants over the built dataset: no grinder may report
+negative microns, or top out past ~2500 µm, or offer only a handful of
+positions. These are the checks that catch a bad import, and they earn their
+keep — an extrapolated fit that read −126 µm at zero, and another reaching
+3288 µm, both looked entirely reasonable in the source CSV.
 
 ## Development
 
@@ -170,10 +267,28 @@ Two things make the E2E suite work that are worth knowing before touching it:
 src/core/      pure conversion + dataset access, no DOM, no chrome APIs
 src/ui/        popup markup, styles, controller, prefs
 src/generated/ built dataset (checked in; CI verifies it matches data/)
-data/          hand-maintained source data, one file per brand
-scripts/       dataset build, CSV import, screenshot rendering
+data/grinders/ reviewable source data, one file per brand or per source
+data/raw/      scraped material, gitignored; provenance lives in each entry
+scripts/       dataset build, ingestion, screenshot rendering
 tests/         unit (Vitest) and e2e (Playwright)
 ```
+
+Ingestion scripts, in the order data flows through them:
+
+```
+scrape-sheets.mjs        collect Google Sheets linked from a blog series
+pdf-table-to-csv.mjs     recover a table from a PDF via word coordinates
+twc-table-to-csv.mjs     grinder-per-column tables -> import shape; --compare
+beeancoffee-harvest.mjs  sweep a converter API against a known reference
+import-csv.mjs           validated CSV -> data/grinders/*.json
+build-dataset.mjs        data/ -> src/generated/dataset.json, with the checks
+```
+
+`data/raw/` is deliberately not committed. Nothing downstream reads it at build
+time — it is the working material an import was derived from, and re-running one
+means re-fetching, which is the honest behaviour anyway since the sources
+change. What has to survive is the attribution, and that lives in each entry's
+`sources`.
 
 `src/core` has no dependency on `chrome.*` or the DOM, so the conversion logic is
 testable in plain Node and reusable outside the extension.

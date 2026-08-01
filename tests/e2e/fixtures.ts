@@ -78,20 +78,30 @@ export const test = base.extend<ExtensionFixtures>({
 export const expect = test.expect;
 
 /**
- * Pick a grinder by id through the real widget: open, type, click.
+ * Query that reaches a grinder in the picker.
  *
- * The query is derived from the id, which is a slug of brand and model, so its
- * words are exactly what `searchGrinders` matches against. If an id ever stops
- * matching its own name the click fails loudly rather than selecting the wrong
- * grinder.
+ * Derived from the shipped name rather than from the id: a slug joins words the
+ * name keeps apart, so "fellow-ode-gen2" searched as typed matches nothing —
+ * the catalogue says "Ode Gen 2".
  */
+function queryFor(id: string): string {
+  const dataset = JSON.parse(
+    readFileSync(join(EXTENSION_PATH, '..', 'src/generated/dataset.json'), 'utf8'),
+  ) as { grinders: Array<{ id: string; brand: string; model: string }> };
+
+  const grinder = dataset.grinders.find((g) => g.id === id);
+  if (!grinder) throw new Error(`no grinder with id "${id}" in the built dataset`);
+  return `${grinder.brand} ${grinder.model}`;
+}
+
+/** Pick a grinder by id through the real widget: open, type, click. */
 export async function selectGrinder(
   popup: Page,
   field: 'from-grinder' | 'to-grinder',
   id: string,
 ): Promise<void> {
   await popup.getByTestId(`${field}-button`).click();
-  await popup.getByTestId(`${field}-search`).fill(id.replace(/-/g, ' '));
+  await popup.getByTestId(`${field}-search`).fill(queryFor(id));
   await popup.getByTestId(`${field}-list`).locator(`li[data-id="${id}"]`).click();
   await expect(popup.getByTestId(field)).toHaveAttribute('data-value', id);
 }

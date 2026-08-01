@@ -18,6 +18,9 @@ const EXT = join(ROOT, 'dist');
 const OUT = join(ROOT, 'docs', 'screens');
 
 const manifest = JSON.parse(readFileSync(join(EXT, 'manifest.json'), 'utf8'));
+const { grinders: catalogue } = JSON.parse(
+  readFileSync(join(ROOT, 'src', 'generated', 'dataset.json'), 'utf8'),
+);
 const digest = createHash('sha256').update(Buffer.from(manifest.key, 'base64')).digest();
 const id = [...digest.subarray(0, 16)]
   .flatMap((b) => [b >> 4, b & 0x0f])
@@ -50,14 +53,18 @@ for (const scheme of ['light', 'dark']) {
     await page.goto(`chrome-extension://${id}/popup.html`);
     await page.waitForSelector('body[data-ready="true"]');
 
-    // The picker is a custom widget, not a <select>: open it, type enough of the
-    // id (a slug of brand and model) to narrow the list, then click the row.
+    // The picker is a custom widget, not a <select>: open it, type the name to
+    // narrow the list, then click the row. The name comes from the dataset
+    // because a slug joins words the name keeps apart — "fellow-ode-gen2"
+    // typed as-is matches nothing against "Ode Gen 2".
     for (const [field, id] of [
       ['from-grinder', state.from],
       ['to-grinder', state.to],
     ]) {
+      const grinder = catalogue.find((g) => g.id === id);
+      if (!grinder) throw new Error(`no grinder with id "${id}" in the built dataset`);
       await page.getByTestId(`${field}-button`).click();
-      await page.getByTestId(`${field}-search`).fill(id.replace(/-/g, ' '));
+      await page.getByTestId(`${field}-search`).fill(`${grinder.brand} ${grinder.model}`);
       await page.getByTestId(`${field}-list`).locator(`li[data-id="${id}"]`).click();
     }
     await page.getByTestId('from-setting').fill(String(state.setting));
