@@ -9,7 +9,8 @@
 - S-3 (G2 заваривание, opus). brew/timer/rateLater. Поля/шаги/зажимы — component-report §10.11 дословно; stagesFor/timer/makeEntry из BJ-3; grindHint из domain/convert; инлайн «+ ЗЕРНО»/«+ ДЕВАЙС» через nav-стек с возвратом.
 - S-4 (G3 оценка/журнал, opus). diag (шкалы, мини-колесо на arcPath+wheel data, теги, голос-интерфейс `platform/speech.ts` с web-фолбэком «недоступно → просто клавиатура»), log (фильтры §10.7, сравнение-режим), detail (ПОВТОРИТЬ), compare (§9, null-safe для cup).
 - S-5 (G4 девайсы/настройки, sonnet). devices/device (devSvg порт §7 с толщинами по README — D-2), more (CRUD молок §10.8 с «УДАЛИТЬ? ДА/✕», перенос convTo при удалении выбранной), spec.
-- S-6 (Integration, opus). Сшивка: nav-переходы между группами (bean→brew, brew→timer→rateLater→diag→home, detail→brew ПОВТОРИТЬ, log→compare), удаление заглушек BJ-2, Playwright-смоук полного цикла (AC-2), фикс до зелёного.
+- S-5b (G5 конвертер, opus). conv: пикер по 134, диапазон+полоса, калибровка, ВЗЯТЬ В ЗАВАРИВАНИЕ.
+- S-6 (Integration, opus). Сшивка: **home-вайринг** (карточка pending, лента 5 последних через entry-format-хелперы), nav-переходы между группами (bean→brew, brew→timer→rateLater→diag→home, detail→brew ПОВТОРИТЬ, log→compare, conv→brew), удаление заглушек BJ-2, Playwright-смоук полного цикла (AC-2), фикс до зелёного.
 - S-7 (Пиксельное ревью). Скриншоты 7 экранов приложения (Playwright, 393×852) против offline.html; исправление грубых расхождений; протокол в review_notes.md.
 
 ## Проверка целиком

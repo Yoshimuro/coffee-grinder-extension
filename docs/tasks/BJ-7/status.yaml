@@ -1,0 +1,9 @@
+task_id: BJ-7
+title: "APK-сборка, эмуляторный прогон, пиксельная сверка, QA-чеклист для устройства"
+profile: standard
+status: READY_FOR_DEVELOPMENT
+owner: main-session + агенты
+created_at: "2026-08-02T23:35:00Z"
+updated_at: "2026-08-02T23:35:00Z"
+transitions:
+  - {at: "2026-08-02T23:35:00Z", from: RESEARCH_IN_PROGRESS, to: READY_FOR_DEVELOPMENT, reason: "DoD из CLAUDE_CODE_TASK; Android Studio в окружении (память environment-android-studio); план предодобрен (BJ-1/decisions.md D-1)"}

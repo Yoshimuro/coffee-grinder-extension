@@ -1,0 +1,9 @@
+task_id: BJ-6
+title: "Capacitor: камера, файлы, уведомления, keep-awake, голос, экспорт/импорт, QR, PWA"
+profile: full
+status: READY_FOR_DEVELOPMENT
+owner: dev-agent (opus)
+created_at: "2026-08-02T23:30:00Z"
+updated_at: "2026-08-02T23:30:00Z"
+transitions:
+  - {at: "2026-08-02T23:30:00Z", from: RESEARCH_IN_PROGRESS, to: READY_FOR_DEVELOPMENT, reason: "research = CLAUDE_CODE_TASK (стек/хранение) + platform-интерфейсы BJ-4; контракты №2-3 определяются здесь (contracts.md); план предодобрен (BJ-1/decisions.md D-1)"}
