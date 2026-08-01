@@ -1,0 +1,9 @@
+task_id: BJ-1
+title: "Монорепо-рефакторинг: packages/core + apps/extension + apps/journal"
+profile: standard
+status: READY_FOR_DEVELOPMENT
+owner: dev-agent (opus)
+created_at: "2026-08-02T21:30:00Z"
+updated_at: "2026-08-02T21:30:00Z"
+transitions:
+  - {at: "2026-08-02T21:30:00Z", from: RESEARCH_IN_PROGRESS, to: READY_FOR_DEVELOPMENT, reason: "research выполнен в рамках воркфлоу изучения (отчёт read:extension); план предодобрен пользователем, цитата в decisions.md D-1"}

@@ -1,0 +1,13 @@
+task_id: BJ-N
+title: ""
+profile: standard   # light | standard | full — эскалация только вверх
+status: RESEARCH_IN_PROGRESS
+# RESEARCH_IN_PROGRESS | BLOCKED_BY_QUESTIONS | READY_FOR_DEVELOPMENT |
+# DEVELOPMENT_IN_PROGRESS | BLOCKED_BY_RESEARCH | READY_FOR_REVIEW |
+# REVIEW_IN_PROGRESS | REVIEW_FAILED | REVIEW_PASSED | READY_FOR_TESTING |
+# TESTING_IN_PROGRESS | TESTING_READY | DONE (только пользователь)
+owner: ""
+created_at: ""
+updated_at: ""
+transitions: []
+#  - {at: "", from: "", to: "", reason: ""}
