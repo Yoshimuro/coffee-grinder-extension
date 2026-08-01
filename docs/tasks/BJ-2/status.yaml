@@ -1,0 +1,9 @@
+task_id: BJ-2
+title: "Каркас apps/journal: Vite+React+TS, Dexie v1, токены, нав-стек, пустые экраны"
+profile: standard
+status: READY_FOR_DEVELOPMENT
+owner: dev-agent (opus)
+created_at: "2026-08-02T21:50:00Z"
+updated_at: "2026-08-02T21:50:00Z"
+transitions:
+  - {at: "2026-08-02T21:50:00Z", from: RESEARCH_IN_PROGRESS, to: READY_FOR_DEVELOPMENT, reason: "research = спека §5-6 + _research/component-report.md; план предодобрен (BJ-1/decisions.md D-1)"}

@@ -1,0 +1,9 @@
+task_id: BJ-3
+title: "Порт ядра домена: data.js → TS, stagesFor, таймер, калибровка + юнит-тесты"
+profile: standard
+status: READY_FOR_DEVELOPMENT
+owner: dev-agent (opus)
+created_at: "2026-08-02T21:55:00Z"
+updated_at: "2026-08-02T21:55:00Z"
+transitions:
+  - {at: "2026-08-02T21:55:00Z", from: RESEARCH_IN_PROGRESS, to: READY_FOR_DEVELOPMENT, reason: "research = _research/data-js-report.md + component-report.md (детальный инвентарь формул/веток); план предодобрен (BJ-1/decisions.md D-1)"}
