@@ -27,6 +27,15 @@ export interface GrinderPicker {
   setRecents(ids: string[]): void;
 }
 
+/**
+ * How many recents the panel offers.
+ *
+ * Fewer than the history holds, deliberately: this field's current selection is
+ * dropped from its own shortcut list, and the surplus is what backfills the gap
+ * so three are still offered.
+ */
+const RECENTS_SHOWN = 3;
+
 export function createGrinderPicker(options: GrinderPickerOptions): GrinderPicker {
   const { mount, grinders, label, onSelect } = options;
   const field = mount.dataset.testid ?? 'grinder';
@@ -149,7 +158,8 @@ export function createGrinderPicker(options: GrinderPickerOptions): GrinderPicke
     const recents = recentIds
       .filter((id) => id !== selectedId)
       .map((id) => grinders.find((g) => g.id === id))
-      .filter((g): g is Grinder => g !== undefined);
+      .filter((g): g is Grinder => g !== undefined)
+      .slice(0, RECENTS_SHOWN);
 
     if (recents.length > 0) {
       rows.push(sectionRow('Recent'));

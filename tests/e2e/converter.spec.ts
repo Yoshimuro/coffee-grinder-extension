@@ -242,3 +242,14 @@ test('arrow keys expand a brand group', async ({ popup }) => {
     popup.getByTestId('from-grinder-list').locator('li[role="option"]'),
   ).not.toHaveCount(0);
 });
+
+test('shows at most three recents', async ({ popup }) => {
+  for (const id of [TIMEMORE_C2, HARIO, RED_CLIX, C40, JX_PRO]) {
+    await selectGrinder(popup, 'from-grinder', id);
+  }
+
+  await popup.getByTestId('from-grinder-button').click();
+  await expect(
+    popup.getByTestId('from-grinder-list').locator('li[data-recent="true"]'),
+  ).toHaveCount(3);
+});
