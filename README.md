@@ -234,6 +234,38 @@ positions. These are the checks that catch a bad import, and they earn their
 keep — an extrapolated fit that read −126 µm at zero, and another reaching
 3288 µm, both looked entirely reasonable in the source CSV.
 
+## Brew Journal for Android
+
+Install the latest signed build straight from the phone:
+
+**[⬇ brew-journal.apk](https://github.com/yoshimuro/coffee-grinder-extension/releases/download/android-latest/brew-journal.apk)** — or browse
+[all releases](https://github.com/yoshimuro/coffee-grinder-extension/releases).
+
+Open the downloaded file and allow installation from this source when Android
+asks; there is no Play Store listing. Later builds install over earlier ones
+without an uninstall, because every APK published here is signed with the same
+key.
+
+That key lives in the repo at `apps/journal/android/keystore/sideload.jks`
+(password `sideload`) and is deliberately public. It exists to keep the
+signature stable across sideloaded builds — it is not a publishing identity, and
+anything destined for the Play Store needs a private keystore instead, supplied
+through `ANDROID_KEYSTORE_PATH`, `ANDROID_KEYSTORE_PASSWORD`, `ANDROID_KEY_ALIAS`
+and `ANDROID_KEY_PASSWORD`.
+
+`.github/workflows/release-apk.yml` builds the APK. A push to `main` (or to a
+`claude/**` branch) refreshes the rolling `android-latest` release the link above
+points at; pushing a `v*` tag publishes a permanent release for that version,
+with `versionName` taken from the tag and `versionCode` from the run number.
+
+Building one locally, with the Android SDK installed:
+
+```bash
+npm run build:journal
+cd apps/journal && npx cap sync android
+cd android && ./gradlew assembleRelease   # -> app/build/outputs/apk/release/
+```
+
 ## Development
 
 The repo is an npm-workspaces monorepo. Every command below is run from the

@@ -1,0 +1,143 @@
+name: Release APK
+
+# Builds the signed *release* APK of Brew Journal and publishes it as a GitHub
+# Release asset, so it can be downloaded (and installed) straight from a phone
+# without a GitHub login — unlike workflow artifacts, which are zipped and
+# require one.
+#
+# Two flavours of release come out of here:
+#   * tag `v*`      -> a permanent release for that version
+#   * anything else -> the rolling `android-latest` release, overwritten in place
+#                      so this URL always serves the newest build:
+#                      /releases/download/android-latest/brew-journal.apk
+
+on:
+  push:
+    # `claude/**` is in here on purpose: work lands on those branches before it
+    # reaches main, and the rolling release is the preview channel for it.
+    branches: [main, 'claude/**']
+    tags: ['v*']
+    paths:
+      - 'apps/journal/**'
+      - 'packages/**'
+      - '.github/workflows/release-apk.yml'
+  workflow_dispatch:
+
+concurrency:
+  group: release-apk-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      # AGP 8.2 targets JDK 17; the runner's newer default JDK is not a
+      # configuration Gradle 8.2 has been validated against.
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - run: npm ci
+
+      # The runner ships an Android SDK, but which platform/build-tools versions
+      # are preinstalled drifts with the image. Pin what compileSdk 34 needs.
+      - name: Ensure Android SDK packages
+        run: |
+          sdkmanager="${ANDROID_HOME}/cmdline-tools/latest/bin/sdkmanager"
+          yes | "$sdkmanager" --licenses > /dev/null 2>&1 || true
+          "$sdkmanager" 'platforms;android-34' 'build-tools;34.0.0' > /dev/null
+
+      - name: Resolve version
+        id: version
+        run: |
+          if [ "${GITHUB_REF_TYPE}" = "tag" ]; then
+            name="${GITHUB_REF_NAME#v}"
+            tag="${GITHUB_REF_NAME}"
+            title="Brew Journal ${GITHUB_REF_NAME}"
+            latest=false
+          else
+            name="0.1.0-build.${GITHUB_RUN_NUMBER}"
+            tag="android-latest"
+            title="Brew Journal — latest build"
+            latest=true
+          fi
+          # versionCode must only ever climb, and run numbers do exactly that.
+          {
+            echo "name=${name}"
+            echo "code=${GITHUB_RUN_NUMBER}"
+            echo "tag=${tag}"
+            echo "title=${title}"
+            echo "rolling=${latest}"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Build web bundle
+        run: npm run build:journal
+
+      - name: Sync Capacitor
+        run: npx cap sync android
+        working-directory: apps/journal
+
+      - name: Assemble release APK
+        run: ./gradlew --no-daemon assembleRelease
+        working-directory: apps/journal/android
+        env:
+          ANDROID_VERSION_NAME: ${{ steps.version.outputs.name }}
+          ANDROID_VERSION_CODE: ${{ steps.version.outputs.code }}
+
+      # A fixed asset name keeps the download URL stable across builds; the
+      # version lives inside the APK manifest and in the release notes.
+      - name: Stage APK
+        run: |
+          mkdir -p dist
+          cp apps/journal/android/app/build/outputs/apk/release/app-release.apk \
+             dist/brew-journal.apk
+          ls -l dist/brew-journal.apk
+
+      - name: Upload APK artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: brew-journal-apk
+          path: dist/brew-journal.apk
+          retention-days: 30
+
+      # The rolling release is deleted and recreated rather than edited: `gh
+      # release upload --clobber` alone would leave stale notes pointing at an
+      # older build.
+      - name: Refresh rolling release
+        if: steps.version.outputs.rolling == 'true'
+        run: gh release delete "${{ steps.version.outputs.tag }}" --yes --cleanup-tag || true
+        env:
+          GH_TOKEN: ${{ github.token }}
+
+      - name: Publish release
+        run: |
+          gh release create "${{ steps.version.outputs.tag }}" \
+            dist/brew-journal.apk \
+            --target "${GITHUB_SHA}" \
+            --title "${{ steps.version.outputs.title }}" \
+            --notes "$(cat <<'EOF'
+          Signed release build of Brew Journal (Android).
+
+          **Install:** download `brew-journal.apk` below, open it on the phone and
+          allow installation from this source when Android asks. Updates install
+          over the previous APK — every build here is signed with the same key.
+
+          - version: `${{ steps.version.outputs.name }}` (versionCode `${{ steps.version.outputs.code }}`)
+          - commit: ${{ github.sha }}
+          EOF
+          )"
+        env:
+          GH_TOKEN: ${{ github.token }}
