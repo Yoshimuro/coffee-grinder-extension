@@ -7,11 +7,12 @@
  * пишут конвертер («ВЗЯТЬ В ЗАВАРИВАНИЕ») и деталь записи («ПОВТОРИТЬ»).
  *
  * Два выхода вниз равноправны по смыслу, но не по весу: «СТАРТ» уводит в таймер
- * (инверсная кнопка), «ЗАПИСАТЬ БЕЗ ТАЙМЕРА» пишет ту же запись из плановых
- * стадий (рамка). Обе списывают остаток пачки — одной транзакцией в репозитории.
+ * (инверсная кнопка), «ЗАПИСАТЬ БЕЗ ТАЙМЕРА» открывает панель, где заваривание
+ * вписывается как есть (рамка). Обе списывают остаток пачки — одной транзакцией
+ * в репозитории.
  */
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 import { useNav } from '../../app/nav.js';
 import { isoDate } from '../../data/freshness.js';
@@ -22,7 +23,7 @@ import { saveEntryWithDecrement } from '../../db/repo/entries.js';
 import { useOwnGrinders } from '../../db/repo/grinders.js';
 import { useLang, useSettings } from '../../db/repo/settings.js';
 import type { BeanRecord, DeviceRecord } from '../../db/schema.js';
-import { stagesFor } from '../../domain/stages.js';
+import { plannedTotal, stagesFor } from '../../domain/stages.js';
 import { logManual, useTimer } from '../../domain/timer.js';
 import { Chip, EmptyState, InverseButton, ScreenHeader, Stepper, Tag } from '../components/index.js';
 import { DevSvg } from './devices/DevSvg.js';
@@ -30,6 +31,7 @@ import { useBrewSetup } from './brewing/brew-store.js';
 import {
   DOSE_RANGE,
   GRIND_RANGE,
+  MANUAL_TIME_RANGE,
   POURS_RANGE,
   TEMP_RANGE,
   VALVE_RANGE,
@@ -42,6 +44,8 @@ import {
   grindHint,
   grindSpan,
   isHybrid,
+  manualTimeLabel,
+  plannedLine,
   ratioLine,
   showDevice,
   showDose,
@@ -92,12 +96,34 @@ export function Brew() {
     go('timer');
   };
 
-  const manual = async () => {
+  /*
+   * «ЗАПИСАТЬ БЕЗ ТАЙМЕРА» больше не пишет запись по тапу.
+   *
+   * Раньше тап сразу сохранял заваривание, подставляя ему плановые стадии и их
+   * сумму, — то есть числа, которых никто не засекал, — и уводил на оценку.
+   * Человек нажимал «вписать как есть» и обнаруживал, что вписывать уже нечего:
+   * приложение всё придумало за него. Теперь тап открывает панель, где он
+   * называет единственный известный ему факт — сколько это шло, — и только
+   * «СОХРАНИТЬ» пишет запись.
+   */
+  const [manualOpen, setManualOpen] = useState(false);
+  const [manualTotal, setManualTotal] = useState(0);
+
+  const planned = bean ? plannedTotal(stagesFor(brewPlan(setup, bean, device))) : 0;
+
+  const saveManual = async () => {
     if (!bean) return;
-    const { entry } = logManual({ setup: brewSetup(setup, bean, device), bean, now: new Date() });
+    const { entry } = logManual({
+      setup: brewSetup(setup, bean, device),
+      bean,
+      total: manualTotal,
+      now: new Date(),
+    });
     // На полке лежит несписанная пачка — её и передаём: списывает транзакция.
     // Копия из `logManual` уже списана и вычла бы дозу второй раз.
     await saveEntryWithDecrement(entry, bean);
+    setManualOpen(false);
+    setManualTotal(0);
     go('rateLater');
   };
 
@@ -266,12 +292,60 @@ export function Brew() {
         <button
           type="button"
           className="bj-brew__manual"
+          data-testid="brew-manual"
           disabled={!bean}
-          onClick={() => void manual()}
+          aria-expanded={manualOpen}
+          onClick={() => setManualOpen(!manualOpen)}
         >
           <span className="bj-brew__manual-label">{t.brew_manual}</span>
           <span className="bj-brew__manual-hint">{t.brew_manual_hint}</span>
         </button>
+
+        {manualOpen ? (
+          <div className="bj-brew__log" data-testid="brew-manual-panel">
+            <div className="bj-brew__log-q">{t.brew_manual_q}</div>
+
+            <Stepper
+              {...MANUAL_TIME_RANGE}
+              label={t.log_time}
+              value={manualTotal}
+              format={(v) => manualTimeLabel(v, lang)}
+              onChange={setManualTotal}
+            />
+
+            {/* Плановое время — предложение, а не подстановка: тап по нему
+                виден, автоматическая запись того же числа — нет. */}
+            <button
+              type="button"
+              className="bj-brew__log-plan"
+              data-testid="brew-manual-plan"
+              onClick={() => setManualTotal(planned)}
+            >
+              {plannedLine(planned, lang)}
+            </button>
+
+            <div className="bj-brew__log-note">{t.brew_manual_stages}</div>
+
+            <div className="bj-brew__log-actions">
+              <InverseButton
+                size="sm"
+                className="bj-brew__log-save"
+                testId="brew-manual-save"
+                onClick={() => void saveManual()}
+              >
+                {t.bean_save}
+              </InverseButton>
+              <button
+                type="button"
+                className="bj-brew__log-close"
+                aria-label={t.back}
+                onClick={() => setManualOpen(false)}
+              >
+                ✕
+              </button>
+            </div>
+          </div>
+        ) : null}
       </div>
     </section>
   );

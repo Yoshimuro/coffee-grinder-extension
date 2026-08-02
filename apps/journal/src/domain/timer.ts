@@ -27,7 +27,7 @@ import type {
   EntryRecord,
   Stage,
 } from '../db/schema.js';
-import { type BrewPlan, plannedTotal, stagesFor } from './stages.js';
+import type { BrewPlan } from './stages.js';
 
 /* ── Состояние ───────────────────────────────────────────────────────────── */
 
@@ -227,14 +227,21 @@ export function decrementBean(bean: BeanRecord, dose: number): BeanRecord {
 }
 
 /**
- * «ЗАПИСАТЬ БЕЗ ТАЙМЕРА» (`DC:1032`): та же запись, но из плановых стадий и
- * суммы плановых длительностей.
+ * «ЗАПИСАТЬ БЕЗ ТАЙМЕРА»: та же запись, но **без стадий**.
+ *
+ * Прототип (`DC:1032`) клал сюда плановые стадии и сумму их длительностей, и мы
+ * это повторяли. Это была ложь: `stages` — поле фактических длительностей (см.
+ * тип `Stage`), а никакого факта у заваривания мимо таймера нет. Запись
+ * получала «смачивание 45 с, пролив 40 с, дренаж 50 с» и общее время 3:35,
+ * которых никто не засекал, — и они же потом ехали в ленту, в деталь и в
+ * сравнение как измеренные.
+ *
+ * Теперь стадий у такой записи нет вовсе, а `total` приходит от человека:
+ * столько, сколько он засёк, или ноль — «не засекал». Ноль ниже по течению
+ * показывается прочерком, а не «0:00» (`entrySub`, `paramsOf`, `compareRows`).
  */
-export function logManual(
-  input: Omit<MakeEntryInput, 'stages' | 'total'>,
-): MakeEntryResult {
-  const stages = stagesFor(input.setup);
-  return makeEntry({ ...input, stages, total: plannedTotal(stages) });
+export function logManual(input: Omit<MakeEntryInput, 'stages'>): MakeEntryResult {
+  return makeEntry({ ...input, stages: [] });
 }
 
 /* ── Стор ────────────────────────────────────────────────────────────────── */

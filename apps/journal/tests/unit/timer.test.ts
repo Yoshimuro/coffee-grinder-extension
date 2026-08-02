@@ -350,13 +350,29 @@ describe('makeEntry', () => {
 });
 
 describe('logManual', () => {
-  it('пишет плановые стадии и сумму плановых длительностей', () => {
-    const { entry } = logManual({ setup, bean: beans, now: NOW });
-    const planned = stagesFor(setup);
-    expect(entry.stages).toEqual(planned);
-    expect(entry.total).toBe(plannedTotal(planned));
-    expect(entry.total).toBe(175);
+  /*
+   * Ключевое отличие от прототипа (и баг, который чинится): плановые стадии в
+   * запись не подставляются. `stages` — поле фактических длительностей, а у
+   * заваривания мимо таймера фактов нет: подставленное «смачивание 45 с» ехало
+   * бы дальше в ленту и в сравнение как измеренное.
+   */
+  it('не выдумывает стадии', () => {
+    const { entry } = logManual({ setup, bean: beans, total: 0, now: NOW });
+    expect(entry.stages).toEqual([]);
     expect(entry.status).toBe('pending');
+  });
+
+  it('берёт время у человека, а не из плана', () => {
+    const planned = plannedTotal(stagesFor(setup));
+    expect(planned).toBe(175);
+
+    expect(logManual({ setup, bean: beans, total: 0, now: NOW }).entry.total).toBe(0);
+    expect(logManual({ setup, bean: beans, total: 210, now: NOW }).entry.total).toBe(210);
+  });
+
+  it('списывает пачку так же, как заваривание по таймеру', () => {
+    const { bean } = logManual({ setup, bean: beans, total: 0, now: NOW });
+    expect(bean.left).toBe((beans.left ?? 0) - setup.dose);
   });
 });
 

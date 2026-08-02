@@ -57,7 +57,8 @@ function paramsOf(entry: EntryRecord, lang: Lang): Param[] {
   out.push({ label: t.brew_dose, value: `${entry.dose} ${t.grams}` });
   out.push({ label: t.brew_water, value: `${entry.water} ${t.grams}` });
   out.push({ label: t.temp_short, value: `${entry.temp}${t.deg}` });
-  out.push({ label: t.log_time, value: fmtT(entry.total) });
+  // Времени может не быть вовсе: запись без таймера, время не засекали.
+  if (entry.total > 0) out.push({ label: t.log_time, value: fmtT(entry.total) });
   out.push({ label: t.log_mode, value: modeName(entry.mode, lang) });
   if (entry.valveAt !== undefined) out.push({ label: t.brew_valve, value: fmtT(entry.valveAt) });
   return out;

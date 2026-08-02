@@ -157,6 +157,58 @@
   color: var(--faint);
 }
 
+/* ── Панель записи без таймера ───────────────────────────────────────────── */
+/*
+ * Раскрывается под кнопкой, а не уезжает отдельным экраном: вписываемое здесь —
+ * часть того же сетапа, и терять его из виду, чтобы назвать одно число, незачем.
+ * Раскладка повторяет панель калибровки на конвертере — это та же фигура
+ * «вопрос, поле, подсказка, сохранить».
+ */
+.bj-brew__log {
+  margin-top: 8px;
+  padding: 12px;
+  border: 1px solid var(--line-5);
+}
+
+.bj-brew__log-q {
+  margin-bottom: 8px;
+  color: var(--text-secondary);
+  font-size: var(--fs-body-min);
+}
+
+.bj-brew__log-plan {
+  width: 100%;
+  min-height: 32px;
+  margin-top: 4px;
+  color: var(--dim);
+  font-size: var(--fs-tech);
+  text-align: center;
+  border: 1px solid var(--line-3);
+}
+
+.bj-brew__log-note {
+  margin-top: 8px;
+  color: var(--faint);
+  font-size: var(--fs-tech);
+}
+
+.bj-brew__log-actions {
+  display: flex;
+  gap: 8px;
+  align-items: stretch;
+  margin-top: 12px;
+}
+
+.bj-brew__log-save {
+  flex: 1;
+}
+
+.bj-brew__log-close {
+  width: var(--touch);
+  color: var(--dim);
+  border: 1px solid var(--line-4);
+}
+
 /* ── Таймер ──────────────────────────────────────────────────────────────── */
 
 /* Экран не скроллится: всё должно быть видно, не отрывая рук от чайника. */

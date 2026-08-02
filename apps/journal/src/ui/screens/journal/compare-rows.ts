@@ -135,7 +135,8 @@ function tempLabel(entry: EntryRecord, lang: Lang): string | null {
 
 function timeLabel(entry: EntryRecord): string | null {
   const v = recipe(entry, entry.total);
-  return v === null ? null : fmtT(v);
+  // Ноль — «не засекал» у записи без таймера: в колонке это прочерк, а не 0:00.
+  return v === null || v === 0 ? null : fmtT(v);
 }
 
 function valveLabel(entry: EntryRecord): string | null {
