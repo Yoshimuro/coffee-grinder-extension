@@ -28,7 +28,15 @@ import { useNav } from '../../app/nav.js';
 import { STR } from '../../data/strings.js';
 import { useDevices } from '../../db/repo/devices.js';
 import { deleteGrinder, newGrinderId, putGrinder, useOwnGrinders } from '../../db/repo/grinders.js';
-import { putSetting, setTheme, useLang, useTheme } from '../../db/repo/settings.js';
+import {
+  putSetting,
+  resetHints,
+  setHintsOn,
+  setTheme,
+  useHintsOn,
+  useLang,
+  useTheme,
+} from '../../db/repo/settings.js';
 import type { Lang, ThemePref } from '../../db/schema.js';
 import { EXPORT_FILE, ImportError, importExport, packExport } from '../../db/transfer.js';
 import { files, pickFile } from '../../platform/files.js';
@@ -66,6 +74,7 @@ export function More() {
   const go = useNav((s) => s.go);
   const lang = useLang();
   const theme = useTheme();
+  const hintsOn = useHintsOn();
   const t = STR[lang];
 
   const grinders = useOwnGrinders();
@@ -135,7 +144,7 @@ export function More() {
       </header>
 
       <div className="screen__body">
-        <Section label={t.set_grinders}>
+        <Section label={t.set_grinders} testId="set-grinders">
           {list.map((grinder) => (
             <div key={grinder.id} className="bj-set__grinder" data-testid="grinder-row">
               <div className="bj-set__grinder-name">{grinder.name}</div>
@@ -252,6 +261,38 @@ export function More() {
               ))}
             </span>
           }
+        />
+
+        {/* Подсказки стоят рядом с языком и темой по тому же признаку: это
+            настройка оформления, которую человек трогает один раз. Сброс —
+            отдельной строкой, потому что это действие, а не выбор: проскочивший
+            подсказку тапом иначе не может её вернуть. */}
+        <Row
+          label={t.set_hints}
+          sub={t.set_hints_hint}
+          right={
+            <span className="bj-set__chips">
+              <Chip
+                label={t.set_hints_on}
+                active={hintsOn}
+                testId="set-hints-on"
+                onClick={() => void setHintsOn(true)}
+              />
+              <Chip
+                label={t.set_hints_off}
+                active={!hintsOn}
+                testId="set-hints-off"
+                onClick={() => void setHintsOn(false)}
+              />
+            </span>
+          }
+        />
+
+        <Row
+          label={t.set_hints_reset}
+          right="↻"
+          testId="set-hints-reset"
+          onClick={() => void resetHints()}
         />
 
         <Row label={t.set_spec} right="→" onClick={() => go('spec')} />

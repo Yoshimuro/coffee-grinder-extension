@@ -418,6 +418,78 @@ const RU = {
   cal_fr: 'ПТ',
   cal_sa: 'СБ',
   cal_su: 'ВС',
+
+  /* ── Добавлено в BJ-10 (подсказки первого входа) ───────────────────────────
+     Реестр зон — `data/hints.ts`, тексты — здесь: подсказка это интерфейс, и
+     английская версия обязана быть с первого дня, а не «когда-нибудь».
+
+     Тон прежний, на «ты», как и остальной текст приложения. Одно предложение;
+     второе — только там, где оно снимает прямой вопрос («а если девайса нет?»).
+     Про фазы свежести здесь молчим намеренно: возраст и фаза подписаны на самой
+     карточке, и подсказка повторяла бы экран. */
+
+  /** Дальше по цепочке. Отдельно от `t_next`: там кнопка таймера. */
+  hint_next: 'ДАЛЬШЕ',
+  /** Последний шаг цепочки. */
+  hint_done: 'ПОНЯТНО',
+  /** Выключить подсказки совсем. Вернуть — строкой в настройках. */
+  hint_close: 'СКРЫТЬ ПОДСКАЗКИ',
+
+  hint_home_brew: 'Заваривание начинается здесь. Нужна хотя бы одна пачка на полке.',
+  hint_home_conv: 'Конвертер помола: настройка чужой кофемолки — в деления твоей.',
+  hint_home_taste: 'Кофе выпит не дома — оцени чашку без рецепта.',
+  hint_home_pending: 'Заваривание записано и ждёт оценки. Вернуться к нему можно в любой момент.',
+
+  hint_shelf_add: 'Обязательны дата обжарки и название. Снимок делается здесь же.',
+  hint_add_form: 'Форма решает, что спросит сетап: у молотого нет помола, у дрип-пакета — и дозы.',
+  hint_add_photo: 'Первый снимок — лицо пачки. Второй обычно шов с датой.',
+  hint_add_roast: 'Точки ставятся сами. Рядом календарь, если дату видно, а число — нет.',
+  hint_bean_brews: 'Здесь заваривания именно этой пачки.',
+
+  hint_brew_fields: 'Набор полей зависит от пачки: часть параметров уже задал производитель.',
+  hint_brew_device:
+    'Без девайса заваривание считается проливом в конусе. Свой собирается из признаков.',
+  hint_brew_grind: 'Диапазон приехал с конвертера, помол встал в центр.',
+  hint_brew_outputs:
+    'СТАРТ ведёт в таймер по стадиям. Ниже — записать заваривание, которое уже случилось.',
+  hint_rate_later: 'Запись уже сохранена. Напоминание придёт через семь минут — один раз.',
+
+  hint_diag_scales: 'Четыре шкалы 0–10. Тап по ячейке ставит значение.',
+  hint_diag_wheel: 'Колесо вкусов — 102 дескриптора в трёх уровнях.',
+  hint_diag_note:
+    'Заметку можно надиктовать. Найденные вкусы предложатся тегами, но сами не проставятся.',
+  hint_wheel_nav: 'Тап по сектору — вглубь, тап по центру — на уровень выше.',
+  hint_wheel_here: 'Останавливаться можно на любом уровне: «фруктовое» — тоже ответ.',
+  hint_wheel_tag: 'Тап по тегу меняет интенсивность, ✕ снимает.',
+  hint_wheel_memory: 'Точка — вкус, который ты уже называл раньше.',
+
+  hint_conv_from: 'Каталог из 134 кофемолок. Поиск понимает бренд, модель и сокращения.',
+  hint_conv_band:
+    'Ответ прижат к делениям, которые у твоей кофемолки есть. Полоса — погрешность данных.',
+  hint_conv_cal:
+    'Назови настройку, на которой было вкусно, — приложение подставит помол лучшей заварки.',
+  hint_conv_use: 'Диапазон уедет в сетап: помол встанет в центр.',
+
+  hint_log_filters: 'Фильтры: сначала пачки с полки, затем способы заваривания.',
+  hint_log_compare: 'Отметь две записи — приложение поставит их рядом и подсветит отличия.',
+  hint_detail_repeat: 'Все параметры записи вернутся в сетап.',
+  hint_detail_stages: 'Стадии фактические, вместе с паузами. Точка — отметка без длительности.',
+  hint_detail_qr: 'В коде рецепт, а не история: помол, доза, вода, температура, плановые стадии.',
+  hint_compare_diff: 'Подсвечено то, что различается. Совпадения приглушены.',
+
+  hint_more_grinders: 'Своя кофемолка нужна конвертеру: имя и цена деления в микронах.',
+  hint_more_transfer: 'Экспорт — вся база одним архивом со снимками. Импорт заменяет её целиком.',
+  hint_devices_new: 'Каталога марок нет: девайс описывается признаками, влияющими на заваривание.',
+  hint_device_presets: 'Заготовка заполняет все шесть групп — дальше правь как обычно.',
+  hint_device_flow: 'Поток решает, какие стадии сгенерирует таймер.',
+
+  /* Строка настроек. Выключатель и сброс стоят рядом: человек, проскочивший
+     подсказку тапом, иначе не может её вернуть. */
+  set_hints: 'ПОДСКАЗКИ',
+  set_hints_hint: 'по одной при первом входе на экран',
+  set_hints_on: 'ВКЛ',
+  set_hints_off: 'ВЫКЛ',
+  set_hints_reset: 'ПОКАЗАТЬ ЗАНОВО',
 } as const;
 
 /** Ключ строки. Значения выведены из русской таблицы; счёт держит тест. */
@@ -722,6 +794,65 @@ const EN: Readonly<Record<StrKey, string>> = {
   cal_fr: 'FR',
   cal_sa: 'SA',
   cal_su: 'SU',
+
+  hint_next: 'NEXT',
+  hint_done: 'GOT IT',
+  hint_close: 'HIDE HINTS',
+
+  hint_home_brew: 'Brewing starts here. You need at least one bag on the shelf.',
+  hint_home_conv: 'Grind converter: a setting on another grinder, in units of yours.',
+  hint_home_taste: 'Coffee you drank elsewhere: rate the cup without a recipe.',
+  hint_home_pending: 'The brew is saved and waiting to be rated. Come back to it whenever.',
+
+  hint_shelf_add: 'Roast date and name are required. The photo is taken in the same form.',
+  hint_add_form:
+    'The form decides what the setup asks: ground has no grind, a drip bag has no dose either.',
+  hint_add_photo: 'The first shot is the face of the bag. The second is usually the seam with the date.',
+  hint_add_roast:
+    'The dots are inserted for you. The calendar is there when you can read the date but not the day.',
+  hint_bean_brews: 'Brews made with this bag only.',
+
+  hint_brew_fields: 'The fields depend on the bag: the producer already set some of them.',
+  hint_brew_device: 'With no device the brew counts as a cone pour-over. Yours is built from traits.',
+  hint_brew_grind: 'The range came from the converter; the grind sits at its centre.',
+  hint_brew_outputs: 'START runs the staged timer. Below: log a brew that already happened.',
+  hint_rate_later: 'The entry is already saved. One reminder arrives in seven minutes.',
+
+  hint_diag_scales: 'Four scales, 0–10. Tap a cell to set the value.',
+  hint_diag_wheel: 'The flavour wheel: 102 descriptors across three levels.',
+  hint_diag_note: 'You can dictate the note. Flavours found in it are offered as tags, never added for you.',
+  hint_wheel_nav: 'Tap a sector to go deeper, tap the centre to go back up.',
+  hint_wheel_here: 'Stop at any level: «fruity» is an answer too.',
+  hint_wheel_tag: 'Tap a tag to change its intensity, ✕ removes it.',
+  hint_wheel_memory: 'A dot marks a flavour you have named before.',
+
+  hint_conv_from: 'A catalogue of 134 grinders. Search knows brands, models and shorthands.',
+  hint_conv_band:
+    'The answer is snapped to detents your grinder actually has. The band shows the uncertainty of the data.',
+  hint_conv_cal: 'Name the setting that tasted good; the app fills in the grind from your best brew.',
+  hint_conv_use: 'The range goes to the setup; the grind lands on its centre.',
+
+  hint_log_filters: 'Filters: bags from the shelf first, brewing methods after.',
+  hint_log_compare: 'Mark two entries; the app puts them side by side and highlights what differs.',
+  hint_detail_repeat: 'Every parameter of this entry goes back into the setup.',
+  hint_detail_stages:
+    'The stages are what actually happened, pauses included. A dot is a marker with no duration.',
+  hint_detail_qr:
+    'The code holds a recipe, not a history: grind, dose, water, temperature, planned stages.',
+  hint_compare_diff: 'What differs is highlighted. What matches is dimmed.',
+
+  hint_more_grinders: 'The converter needs your own grinder: a name and microns per step.',
+  hint_more_transfer:
+    'Export is the whole database in one archive with photos. Import replaces it entirely.',
+  hint_devices_new: 'No brand catalogue: a device is described by the traits that affect the brew.',
+  hint_device_presets: 'A preset fills all six groups; edit from there as usual.',
+  hint_device_flow: 'Flow decides which stages the timer will generate.',
+
+  set_hints: 'HINTS',
+  set_hints_hint: 'one at a time, on your first visit to a screen',
+  set_hints_on: 'ON',
+  set_hints_off: 'OFF',
+  set_hints_reset: 'SHOW AGAIN',
 };
 
 /** Таблицы строк по языкам. Заморожены — правка в рантайме исключена. */

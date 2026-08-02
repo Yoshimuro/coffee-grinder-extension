@@ -27,6 +27,7 @@ import { Shelf } from './screens/Shelf.js';
 import { Spec } from './screens/Spec.js';
 import { Timer } from './screens/Timer.js';
 import { Wheel } from './screens/Wheel.js';
+import { HintLayer } from './hints/HintLayer.js';
 import { useThemeAttribute } from './theme.js';
 
 const VIEWS: Record<Screen, ComponentType> = {
@@ -63,6 +64,9 @@ export function App() {
       <View />
       {/* Табы только на корневых экранах — иначе вложенность не читается. */}
       {isTab(screen) ? <TabBar /> : null}
+      {/* Подсказки первого входа. Поверх всего и на всех экранах разом: слой
+          сам решает, есть ли что показывать здесь и сейчас. */}
+      <HintLayer />
     </div>
   );
 }

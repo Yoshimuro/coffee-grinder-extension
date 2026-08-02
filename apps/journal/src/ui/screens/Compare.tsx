@@ -60,7 +60,7 @@ export function Compare() {
         <div className="jr-cmp__col">{compareHeading('b', entryB, lang)}</div>
       </div>
 
-      <div className="jr__body jr-cmp__body">
+      <div className="jr__body jr-cmp__body" data-hint="compare-rows">
         {rows.map((row) => (
           <div className="jr-cmp__row" key={row.label}>
             <div className="jr-cmp__label">{row.label}</div>

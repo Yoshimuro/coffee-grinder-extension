@@ -232,6 +232,20 @@ export interface SettingsValues {
   convVal: number;
   /** Recently used grinder ids, most recent first. */
   recents: string[];
+  /**
+   * Id уже показанных подсказок первого входа (BJ-10).
+   *
+   * Ключ, а не таблица: `settings` — key/value, и новая строка в ней не трогает
+   * ни версию схемы, ни индексы. Реестр id — `data/hints.ts`, он append-only:
+   * переименованный id вернул бы подсказку всем, кто её уже закрыл.
+   */
+  hints: string[];
+  /**
+   * Показывать ли подсказки вообще. `false` ставит кнопка «СКРЫТЬ ПОДСКАЗКИ» на
+   * самой подсказке — на случай, когда человек всё знает или мы показали то,
+   * что уже показывали.
+   */
+  hintsOn: boolean;
 }
 
 export type SettingKey = keyof SettingsValues;

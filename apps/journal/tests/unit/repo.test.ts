@@ -278,7 +278,23 @@ describe('настройки', () => {
       convTo: null,
       convVal: DEFAULT_CONV_VAL,
       recents: [],
+      hints: [],
+      hintsOn: true,
     });
+  });
+
+  /* Составные дефолты обязаны копироваться: общий на все вызовы массив рано или
+     поздно кто-нибудь дополнит на месте, и «показанные подсказки» протекут в
+     чистую базу. */
+  it('отдаёт свои копии составных дефолтов, а не общие', async () => {
+    const db = freshDb();
+    const first = await readSettings(db);
+    first.hints.push('h-home-brew');
+    first.recents.push('x');
+
+    const second = await readSettings(db);
+    expect(second.hints).toEqual([]);
+    expect(second.recents).toEqual([]);
   });
 
   it('складывает записанное поверх дефолтов', async () => {

@@ -98,7 +98,7 @@ export function Log() {
         }
       />
 
-      <div className="jr-log__filters">
+      <div className="jr-log__filters" data-hint="log-filters">
         <ChipRow scroll>
           {chips.map((f) => {
             const key = filterKey(f);

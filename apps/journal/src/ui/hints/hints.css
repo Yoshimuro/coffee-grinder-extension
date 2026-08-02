@@ -1,0 +1,103 @@
+/*
+ * Подсказки первого входа.
+ *
+ * Затемнение рисуется не отдельной подложкой, а тенью самого выреза: одна
+ * `box-shadow` с огромным разбросом закрашивает всё, кроме зоны, — и никакие
+ * четыре прямоугольника вокруг неё не разъедутся на дробных координатах.
+ *
+ * Плёнка поверх экрана ловит тапы целиком: тап где угодно — следующий шаг, и
+ * ни один из них не проваливается в интерфейс под ней. Поэтому же
+ * `touch-action: none` — под подсказкой ничего не прокручивается.
+ */
+
+.bj-hint {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  touch-action: none;
+
+  /* Затемнение — своё, а не токен: это не цвет интерфейса, а плёнка поверх
+     него, и на светлой теме она обязана остаться тёмной, иначе вырез перестаёт
+     читаться как вырез. Разная плотность — потому что на светлом фоне та же
+     плотность выглядит грязью. */
+  --hint-scrim: rgb(0 0 0 / 78%);
+}
+
+:root[data-theme='light'] .bj-hint {
+  --hint-scrim: rgb(12 12 12 / 55%);
+}
+
+.bj-hint__hole {
+  position: absolute;
+  box-shadow: 0 0 0 9999px var(--hint-scrim);
+  outline: 1px solid var(--line-5);
+  pointer-events: none;
+}
+
+.bj-hint__card {
+  position: absolute;
+  left: var(--pad-screen);
+  right: var(--pad-screen);
+  padding: 16px;
+  background: var(--bg);
+  border: 1px solid var(--line-5);
+}
+
+.bj-hint__text {
+  margin: 0;
+  font-size: var(--fs-body);
+  line-height: 1.45;
+  color: var(--text);
+}
+
+.bj-hint__foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 12px;
+  /* Пустой счётчик у одиночной подсказки не должен схлопывать высоту строки. */
+  min-height: 24px;
+}
+
+.bj-hint__count {
+  font-size: var(--fs-micro);
+  letter-spacing: var(--ls-micro);
+  color: var(--faint);
+}
+
+.bj-hint__next {
+  min-height: 40px;
+  padding: 0 20px;
+  font: inherit;
+  font-size: var(--fs-micro);
+  font-weight: var(--fw-medium);
+  letter-spacing: var(--ls-micro);
+  color: var(--inverse-text);
+  background: var(--inverse-bg);
+  border: 0;
+  cursor: pointer;
+}
+
+/*
+ * Полосой во всю ширину и с непрозрачным фоном — потому что под ней стоит
+ * нижняя панель приложения. Прозрачная кнопка легла бы прямо на подписи табов:
+ * читаются оба слоя, а нажимается только верхний.
+ */
+.bj-hint__hide {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  min-height: calc(var(--touch) + var(--safe-bottom));
+  padding: 0 var(--pad-screen) var(--safe-bottom);
+  /* Не наследуем выравнивание кнопок приложения: строка одна и стоит по центру. */
+  text-align: center;
+  font: inherit;
+  font-size: var(--fs-micro);
+  letter-spacing: var(--ls-micro);
+  color: var(--dim);
+  background: var(--bg);
+  border: 0;
+  border-top: 1px solid var(--line-3);
+  cursor: pointer;
+}

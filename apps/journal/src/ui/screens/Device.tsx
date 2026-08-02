@@ -68,7 +68,7 @@ export function Device() {
         {/* Заготовки: только для нового девайса — правку чужой формы они бы
             молча затёрли (D-3). */}
         {editing === null ? (
-          <div className="bj-dev__presets">
+          <div className="bj-dev__presets" data-hint="device-presets">
             <ChipRow>
               {KNOWN_DEVICES.map((preset) => (
                 <Chip key={preset.id} label={preset.name} onClick={() => applyPreset(preset)} />
@@ -91,7 +91,9 @@ export function Device() {
         </div>
 
         {TRAIT_KEYS.map((key) => (
-          <div key={key} className="bj-dev__field">
+          // Подсказка объясняет только «поток» — остальные пять групп говорят
+          // сами за себя, и подсвечивать их подряд было бы туром по форме.
+          <div key={key} className="bj-dev__field" {...(key === 'flow' ? { 'data-hint': 'device-flow' } : {})}>
             <div className="micro">{groupLabel(key, lang)}</div>
             <ChipRow>
               {Object.keys(TRAITS[key].opts).map((option) => (
