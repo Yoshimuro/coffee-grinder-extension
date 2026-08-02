@@ -1,7 +1,7 @@
 import { afterEach, describe, expect, it } from 'vitest';
 
 import { BrewJournalDB, getSetting, putSetting } from '../../src/db/schema.js';
-import { findSeedGrinder, seed, toOwnGrinder } from '../../src/db/seed.js';
+import { seed } from '../../src/db/seed.js';
 
 /** A throwaway database per test, so one test's rows never colour another's. */
 let open: BrewJournalDB[] = [];
@@ -95,49 +95,20 @@ describe('schema v1', () => {
 });
 
 describe('seed', () => {
-  it('resolves the Timemore Chestnut S3 from the core catalogue', () => {
-    const grinder = findSeedGrinder();
-    expect(grinder).toBeDefined();
-    expect(grinder?.brand).toBe('Timemore');
-    expect(grinder?.model).toBe('Chestnut S3');
-    // The exact id D-2 names does not exist; the search resolves to this one.
-    expect(grinder?.id).toBe('timemore-s3');
-  });
-
-  it('refuses to flatten an anchors calibration rather than invent a step', () => {
-    expect(
-      toOwnGrinder({
-        id: 'x',
-        brand: 'X',
-        model: 'Y',
-        type: 'electric',
-        burr: 'flat',
-        scale: { min: 1, max: 40, step: 1, unit: 'click' },
-        calibration: { kind: 'anchors', points: [{ setting: 1, microns: 300 }] },
-        confidence: 'community',
-        sources: [],
-      }),
-    ).toBeUndefined();
-  });
-
-  it('writes lang ru and exactly one own grinder on first run', async () => {
+  it('writes the settings and nothing else on first run', async () => {
     const db = freshDb();
     expect(await seed(db)).toBe(true);
 
     expect(await getSetting('lang', db)).toBe('ru');
     expect(await getSetting('seeded', db)).toBe(true);
     expect(await getSetting('calib', db)).toEqual({ offset: 0, src: null });
+  });
 
-    const grinders = await db.grinders.toArray();
-    expect(grinders).toHaveLength(1);
-    expect(grinders[0]).toMatchObject({
-      id: 'timemore-s3',
-      datasetId: 'timemore-s3',
-      name: 'Timemore Chestnut S3',
-      micronsPerStep: 86.7,
-      zeroOffsetMicrons: 330,
-      scale: { min: 0, max: 9, step: 0.1, unit: 'mark' },
-    });
+  it('seeds no grinder: a stranger’s grinder is not the user’s', async () => {
+    const db = freshDb();
+    await seed(db);
+
+    expect(await db.grinders.count()).toBe(0);
   });
 
   it('seeds nothing into the shelf or the log', async () => {
@@ -165,7 +136,7 @@ describe('seed', () => {
     expect(await seed(db)).toBe(false);
 
     expect(await getSetting('lang', db)).toBe('en');
-    expect(await db.grinders.count()).toBe(2);
+    expect(await db.grinders.count()).toBe(1);
   });
 
   it('survives a reopen: a second launch adds nothing', async () => {
@@ -179,7 +150,7 @@ describe('seed', () => {
     const second = new BrewJournalDB(name);
     open.push(second);
     expect(await seed(second)).toBe(false);
-    expect(await second.grinders.count()).toBe(1);
+    expect(await second.grinders.count()).toBe(0);
     // 4 → 5 в BJ-9: к языку, калибровке, недавним и флагу сида добавилась тема.
     expect(await second.settings.count()).toBe(5);
   });

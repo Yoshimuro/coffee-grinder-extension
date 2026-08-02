@@ -219,6 +219,8 @@ const RU = {
   conv_none: 'ничего не найдено',
   /** Подпись у «КУДА»: список берётся из настроек, чужих молок там нет. */
   conv_to_hint: 'своя · из настроек',
+  /** Своих кофемолок нет — пересчитывать не во что. Тап уводит в настройки. */
+  conv_to_empty: 'Своей кофемолки нет. Добавить в настройках',
   /** Источник калибровки, когда настройку ввели руками. */
   conv_manual: 'вручную',
   /** Шкала журнала в подсказке калибровки. */
@@ -692,6 +694,7 @@ const EN: Readonly<Record<StrKey, string>> = {
   conv_recent: 'RECENT',
   conv_none: 'no grinders match',
   conv_to_hint: 'yours · from settings',
+  conv_to_empty: 'No grinder of your own yet. Add one in settings',
   conv_manual: 'manual',
   conv_cal_balance: 'balance',
   conv_cal_at: 'at',

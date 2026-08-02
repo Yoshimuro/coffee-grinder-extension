@@ -174,8 +174,8 @@ test.describe('цикл заваривания', () => {
     await page.getByRole('button', { name: 'ЕЩЁ' }).click();
     await expect(screen(page, 'more')).toBeVisible();
 
-    // Как и на полке: считаем только после ответа живого запроса. Первый
-    // запуск сеет ровно одну кофемолку, так что список пустым не бывает.
+    // Как и на полке: считаем только после ответа живого запроса. Демо-сид
+    // кладёт одну кофемолку, так что здесь список пустым не бывает.
     await expect(page.getByTestId('grinder-row').first()).toBeVisible();
     const grindersBefore = await page.getByTestId('grinder-row').count();
 
@@ -196,15 +196,24 @@ test.describe('цикл заваривания', () => {
     await expect(page.getByText('Смоук C40')).toHaveCount(0);
   });
 
-  test('последнюю кофемолку удалить нельзя', async ({ page }) => {
+  test('последнюю кофемолку можно удалить — конвертер зовёт добавить свою', async ({ page }) => {
     await openApp(page);
 
     await page.getByRole('button', { name: 'ЕЩЁ' }).click();
     await expect(screen(page, 'more')).toBeVisible();
 
-    // Первый запуск сеет ровно одну молку — кнопки удаления у неё нет вовсе:
-    // пустой список сломал бы и конвертер, и сетап.
+    // Демо-сид кладёт ровно одну молку — и она удаляется, как любая другая:
+    // своей кофемолки у человека может просто не быть.
     await expect(page.getByTestId('grinder-row')).toHaveCount(1);
-    await expect(page.getByTestId('grinder-delete')).toHaveCount(0);
+    await page.getByTestId('grinder-delete').click();
+    await page.getByTestId('grinder-delete-yes').click();
+    await expect(page.getByTestId('grinder-row')).toHaveCount(0);
+
+    // Конвертер на пустой полке молок не молчит и не врёт числами.
+    await page.getByRole('button', { name: 'ГЛАВНЫЙ' }).click();
+    await page.getByTestId('home-conv').click();
+    await expect(screen(page, 'conv')).toBeVisible();
+    await expect(page.getByText('Своей кофемолки нет', { exact: false })).toBeVisible();
+    await expect(page.getByTestId('conv-use')).toHaveCount(0);
   });
 });

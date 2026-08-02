@@ -46,7 +46,6 @@ import {
   STEP_RANGE,
   TRANSFER_IDLE,
   type TransferState,
-  canDelete,
   grinderMeta,
   makeGrinder,
   transferNote,
@@ -172,17 +171,17 @@ export function More() {
               ) : (
                 <>
                   <span className="bj-set__meta">{grinderMeta(grinder, lang)}</span>
-                  {canDelete(list.length) ? (
-                    <button
-                      type="button"
-                      className="bj-set__del"
-                      data-testid="grinder-delete"
-                      aria-label={t.a11y_remove}
-                      onClick={() => setConfirming(grinder.id)}
-                    >
-                      ×
-                    </button>
-                  ) : null}
+                  {/* Удаляется любая, включая последнюю: пустая полка молок —
+                      нормальное состояние, с него же начинается первый запуск. */}
+                  <button
+                    type="button"
+                    className="bj-set__del"
+                    data-testid="grinder-delete"
+                    aria-label={t.a11y_remove}
+                    onClick={() => setConfirming(grinder.id)}
+                  >
+                    ×
+                  </button>
                 </>
               )}
             </div>

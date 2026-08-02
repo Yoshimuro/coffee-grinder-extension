@@ -43,17 +43,6 @@ export function grinderMeta(grinder: GrinderRecord, lang: Lang): string {
   return `${unitOf(grinder.scale, lang)} · ${grinder.micronsPerStep} ${STR[lang].um}`;
 }
 
-/**
- * Можно ли удалить эту кофемолку.
- *
- * Последняя не удаляется: пустой список — это сломанный конвертер и сломанный
- * сетап. Репозиторий откажет и сам (`deleteGrinder` → `'last'`), но кнопку,
- * которая заведомо ничего не сделает, показывать не нужно.
- */
-export function canDelete(count: number): boolean {
-  return count > 1;
-}
-
 /* ── Обмен базой (BJ-6) ──────────────────────────────────────────────────── */
 
 /** Какая из двух операций сейчас говорит. */

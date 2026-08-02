@@ -18,6 +18,7 @@ import { useEntries } from '../../db/repo/entries.js';
 import { useOwnGrinders } from '../../db/repo/grinders.js';
 import { pushRecent, putSetting, useLang, useSettings } from '../../db/repo/settings.js';
 import { calibrationFrom, hasCalibration, resetCalibration, suggestCalibration } from '../../domain/calibration.js';
+import { EmptyState } from '../components/EmptyState.js';
 import { InverseButton } from '../components/InverseButton.js';
 import { ScreenHeader } from '../components/ScreenHeader.js';
 import { Stepper } from '../components/Stepper.js';
@@ -141,7 +142,11 @@ export function Conv() {
           <span className="conv-label__hint">{t.conv_to_hint}</span>
         </div>
 
-        {to === undefined ? null : cycleable ? (
+        {/* Своих молок нет — экран не молчит, а зовёт добавить: пересчитывать
+            не во что, и это единственное, что здесь можно сделать. */}
+        {to === undefined ? (
+          <EmptyState text={t.conv_to_empty} onClick={() => go('more')} />
+        ) : cycleable ? (
           <button type="button" className="conv-to" onClick={cycleTo}>
             <span>{to.name}</span>
             <span className="conv-to__caret">›</span>

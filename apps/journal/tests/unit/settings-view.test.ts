@@ -9,7 +9,6 @@ import {
   NEW_GRINDER_ZERO,
   STEP_RANGE,
   TRANSFER_IDLE,
-  canDelete,
   grinderMeta,
   makeGrinder,
   transferNote,
@@ -50,23 +49,11 @@ describe('grinderMeta', () => {
   });
 });
 
-describe('canDelete', () => {
-  it('запрещает удалять последнюю кофемолку', () => {
-    expect(canDelete(0)).toBe(false);
-    expect(canDelete(1)).toBe(false);
-    expect(canDelete(2)).toBe(true);
-  });
-});
-
 describe('удаление через репозиторий', () => {
-  it('отказывает на последней и уводит выбор конвертера с удалённой', async () => {
+  it('уводит выбор конвертера с удалённой и опустошает список до конца', async () => {
     const db = new BrewJournalDB(`settings-view-${String(Date.now())}`);
     try {
       await putGrinder(makeGrinder('g1', 'C40', 8.7), db);
-
-      // Последнюю не отдаём — иначе конвертеру некуда пересчитывать.
-      expect(await deleteGrinder('g1', db)).toBe('last');
-
       await putGrinder(makeGrinder('g2', 'S3', 9.5), db);
       await putSetting('convTo', 'g2', db);
 
@@ -74,6 +61,11 @@ describe('удаление через репозиторий', () => {
       expect(await listGrinders(db)).toHaveLength(1);
       // Выбор переехал на выжившую, а не повис на несуществующей.
       expect(await getSetting('convTo', db)).toBe('g1');
+
+      // И последняя тоже удаляется: конвертер покажет приглашение, а не числа.
+      expect(await deleteGrinder('g1', db)).toBe('ok');
+      expect(await listGrinders(db)).toHaveLength(0);
+      expect(await getSetting('convTo', db)).toBeNull();
     } finally {
       await db.delete();
     }

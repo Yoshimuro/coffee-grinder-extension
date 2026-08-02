@@ -240,12 +240,15 @@ describe('полка и девайсы', () => {
 });
 
 describe('свои кофемолки', () => {
-  it('не отдаёт последнюю — иначе конвертеру некуда пересчитывать', async () => {
+  it('отдаёт и последнюю: пустая полка молок — рабочее состояние', async () => {
     const db = freshDb();
     await putGrinder(grinder('g1'), db);
+    await putSetting('convTo', 'g1', db);
 
-    expect(await deleteGrinder('g1', db)).toBe('last');
-    expect(await listGrinders(db)).toHaveLength(1);
+    expect(await deleteGrinder('g1', db)).toBe('ok');
+    expect(await listGrinders(db)).toHaveLength(0);
+    // Выбор конвертера не повис на удалённой — пересчитывать теперь не во что.
+    expect(await getSetting('convTo', db)).toBeNull();
     expect(await deleteGrinder('нет такой', db)).toBe('missing');
   });
 

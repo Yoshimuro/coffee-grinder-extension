@@ -1,8 +1,8 @@
 /**
  * Демо-сид для разработки — `?seed=demo` (S-6).
  *
- * Продакшен сеет одну кофемолку и больше ничего (`seed.ts`, D-2): пустые экраны
- * приглашают заварить первую чашку, а не притворяются чужой историей. Но
+ * Продакшен сеет только настройки (`seed.ts`, D-2): пустые экраны приглашают
+ * заварить первую чашку, а не притворяются чужой историей. Но
  * смотреть вёрстку на пустой базе нельзя — не видно ни ленты, ни фильтров, ни
  * сравнения, — поэтому три пачки и шесть записей прототипа заезжают по явному
  * запросу в адресной строке и только в dev-сборке.
@@ -42,10 +42,12 @@ export async function seedDemo(database: BrewJournalDB = db): Promise<boolean> {
     database.beans,
     database.devices,
     database.entries,
+    database.grinders,
     async () => {
       await database.beans.bulkPut(data.beans);
       await database.devices.bulkPut(data.devices);
       await database.entries.bulkPut(data.entries);
+      await database.grinders.bulkPut(data.grinders);
     },
   );
 

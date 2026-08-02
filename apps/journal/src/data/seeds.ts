@@ -1,10 +1,10 @@
 /**
  * Демо-данные прототипа (`data.js:115-142`) — только для разработки.
  *
- * Первый запуск продакшена сеет одну кофемолку и больше ничего (`db/seed.ts`,
- * BJ-2 D-2): пустые экраны приглашают заварить первую чашку, а не притворяются
- * историей. Эти же три пачки и шесть записей нужны, чтобы гонять экраны с
- * непустой базой, поэтому они спрятаны за `import.meta.env.DEV` —
+ * Первый запуск продакшена сеет только настройки (`db/seed.ts`, BJ-2 D-2):
+ * пустые экраны приглашают заварить первую чашку, а не притворяются историей.
+ * Эти же три пачки и шесть записей нужны, чтобы гонять экраны с непустой базой,
+ * поэтому они спрятаны за `import.meta.env.DEV` —
  * {@link demoSeeds} в проде вернёт `null`, и сборщик выкинет данные из бандла.
  *
  * Формы прототипа приведены к Dexie-схеме v1: `photos` — массив (BJ-2 D-3), а
@@ -14,7 +14,13 @@
  * эти поля всегда.
  */
 
-import type { BeanRecord, DeviceRecord, Diagnostics, EntryRecord } from '../db/schema.js';
+import type {
+  BeanRecord,
+  DeviceRecord,
+  Diagnostics,
+  EntryRecord,
+  GrinderRecord,
+} from '../db/schema.js';
 
 /** Диагностика ещё не выставленной оценки. */
 export const EMPTY_DIAG: Diagnostics = { acid: 0, bitter: 0, body: 0, balance: 0 };
@@ -23,6 +29,7 @@ export interface DemoSeeds {
   beans: BeanRecord[];
   devices: DeviceRecord[];
   entries: EntryRecord[];
+  grinders: GrinderRecord[];
 }
 
 /** Собран ли бандл в режиме разработки. */
@@ -235,8 +242,35 @@ export function demoJournal(): EntryRecord[] {
   ];
 }
 
+/**
+ * Кофемолка демо-пользователя — та самая Timemore Chestnut S3, на которой стоит
+ * прототип.
+ *
+ * Продакшен своих кофемолок не сеет: чужая молка на конвертере — это честно
+ * посчитанный ответ не про ту молку. Но конвертер без своей молки показывает
+ * приглашение вместо чисел, а смотреть на демо-данных надо именно числа —
+ * поэтому одна запись живёт здесь, за `import.meta.env.DEV`.
+ */
+export function demoGrinders(): GrinderRecord[] {
+  return [
+    {
+      id: 'timemore-s3',
+      name: 'Timemore Chestnut S3',
+      datasetId: 'timemore-s3',
+      micronsPerStep: 86.7,
+      zeroOffsetMicrons: 330,
+      scale: { min: 0, max: 9, step: 0.1, unit: 'mark' },
+    },
+  ];
+}
+
 /** Демо-набор целиком — или `null`, если сборка не dev. */
 export function demoSeeds(): DemoSeeds | null {
   if (!isDevBuild()) return null;
-  return { beans: demoShelf(), devices: demoDevices(), entries: demoJournal() };
+  return {
+    beans: demoShelf(),
+    devices: demoDevices(),
+    entries: demoJournal(),
+    grinders: demoGrinders(),
+  };
 }
