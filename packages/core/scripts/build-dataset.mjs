@@ -178,7 +178,21 @@ if (errors.length > 0) {
 // ---------------------------------------------------------------------- emit
 
 // Sorted so the output is stable regardless of file order or edit history.
-grinders.sort((a, b) => a.brand.localeCompare(b.brand) || a.model.localeCompare(b.model));
+//
+// Deliberately NOT localeCompare. Collation is ICU data, and ICU ships with the
+// runtime: the same input then sorts differently on different Node versions, so
+// the committed artefact and `--check` disagree depending on who ran the build.
+// That is exactly what happened once already — `Mignon жернова 50mm Filtro Pro
+// NEW` orders one way against Cyrillic-aware collation and another against the
+// order this file was generated with, and CI went red on a checkout nobody had
+// touched. Code-unit order is the same everywhere, forever, which is the only
+// property a checked-in build artefact actually needs.
+//
+// The cost is that the picker groups by brand anyway (see `dataset.ts`), so the
+// only visible effect is where a digit- or Cyrillic-leading model lands inside
+// its own brand.
+const byCodeUnit = (a, b) => (a < b ? -1 : a > b ? 1 : 0);
+grinders.sort((a, b) => byCodeUnit(a.brand, b.brand) || byCodeUnit(a.model, b.model));
 
 const bundle = {
   version: meta.version,
