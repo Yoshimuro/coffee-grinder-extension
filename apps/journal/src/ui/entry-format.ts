@@ -97,7 +97,9 @@ export function entrySub(entry: EntryRecord, lang: Lang): string {
   if (Number.isFinite(entry.dose)) parts.push(`${entry.dose} ${t.grams}`);
   if (Number.isFinite(entry.water)) parts.push(`${entry.water} ${t.grams}`);
   if (Number.isFinite(entry.temp)) parts.push(`${entry.temp}${t.deg}`);
-  if (Number.isFinite(entry.total)) parts.push(fmtT(entry.total));
+  /* Ноль — это «не засекал» у записи без таймера, а не измеренный ноль: «0:00»
+     в ленте читалось бы как мгновенное заваривание. */
+  if (Number.isFinite(entry.total) && entry.total > 0) parts.push(fmtT(entry.total));
   return parts.join(SEP);
 }
 

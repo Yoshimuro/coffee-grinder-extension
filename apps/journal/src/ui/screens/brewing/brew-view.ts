@@ -39,6 +39,13 @@ export const TEMP_RANGE: StepperRange = { min: 70, max: 100, step: 1 };
 export const POURS_RANGE: StepperRange = { min: 1, max: 6, step: 1 };
 /** КЛАПАН: ±10 секунд, `[20, 600]` (`DC:1288`). */
 export const VALVE_RANGE: StepperRange = { min: 20, max: 600, step: 10 };
+/**
+ * ВРЕМЯ у записи без таймера: ±10 секунд, `[0, 1800]`.
+ *
+ * Ноль — полноценное значение, а не пустое поле: «не засекал» бывает чаще, чем
+ * точная минута, и запись без времени честнее записи с придуманным.
+ */
+export const MANUAL_TIME_RANGE: StepperRange = { min: 0, max: 1800, step: 10 };
 
 /* ── Что показывать ──────────────────────────────────────────────────────── */
 
@@ -146,6 +153,21 @@ export function grindSpan(
  */
 export function valveLabel(seconds: number, lang: Lang): string {
   return `${STR[lang].t_valve.toLowerCase()} ${fmtT(seconds)}`;
+}
+
+/**
+ * Значение поля времени у записи без таймера: `3:35`, а на нуле — «не засекал».
+ *
+ * Ноль показывается словами, потому что «0:00» читается как измеренный ноль, а
+ * это ровно то враньё, ради ухода от которого поле и появилось.
+ */
+export function manualTimeLabel(seconds: number, lang: Lang): string {
+  return seconds === 0 ? STR[lang].brew_manual_zero : fmtT(seconds);
+}
+
+/** Подсказка-предложение: «по плану 3:35». Тап по ней ставит это время. */
+export function plannedLine(seconds: number, lang: Lang): string {
+  return `${STR[lang].brew_manual_plan} ${fmtT(seconds)}`;
 }
 
 /** `конвертер: 3.2 — 6.0 · центр 4.6` (`grindHint`, `DC:1294`). */
