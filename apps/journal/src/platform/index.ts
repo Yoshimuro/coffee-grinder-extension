@@ -13,4 +13,5 @@ export * from './files.js';
 export * from './native.js';
 export * from './notify.js';
 export * from './photos.js';
+export * from './shell-theme.js';
 export * from './speech.js';

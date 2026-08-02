@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Палитра нативной оболочки — ТЁМНАЯ (BJ-9).
+
+  Значения — те, что стояли в `values/colors.xml` до появления второй темы, то
+  есть токены `bg` и `text` тёмной палитры из `tokens.css`, дословно (о том,
+  почему без ведущих дефисов, — в шапке `values/colors.xml`).
+  Объяснение, почему квалификатор `night` здесь означает наш выбор, а не
+  системный, — в шапке `values/colors.xml`.
+-->
+<resources>
+    <color name="colorPrimary">#0C0C0C</color>
+    <color name="colorPrimaryDark">#0C0C0C</color>
+    <color name="colorAccent">#EDEDEB</color>
+
+    <color name="bjBackground">#0C0C0C</color>
+</resources>

@@ -114,21 +114,21 @@
   text-align: center;
 }
 
-.bj-set__lang {
+.bj-set__chips {
   display: flex;
   gap: 4px;
 }
 
 /* Выбранный язык — заливка, а не рамка: рамкой на этом экране обведено всё
    подряд, и выбор в ней терялся (`DC:1283`: фон #8C8C87, текст #0C0C0C). */
-.bj-set__lang .bj-chip {
+.bj-set__chips .bj-chip {
   min-height: 32px;
   padding: 0 12px;
   font-size: var(--fs-tech);
   letter-spacing: 1px;
 }
 
-.bj-set__lang .bj-chip--on {
+.bj-set__chips .bj-chip--on {
   border-color: var(--dim);
   background: var(--dim);
   color: var(--bg);

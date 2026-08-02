@@ -177,6 +177,20 @@ export interface EntryRecord {
 
 export type Lang = 'ru' | 'en';
 
+/**
+ * Что выбрал пользователь. `system` — следовать системной настройке; хранится
+ * именно как выбор, а не как результат, иначе смена темы в ОС переставала бы
+ * до приложения доезжать.
+ */
+export type ThemePref = 'dark' | 'light' | 'system';
+
+/**
+ * Что реально применено: `system` до DOM и до нативной оболочки не доезжает,
+ * его разрешает `resolveTheme()` в `ui/theme.ts`. Отдельный тип нужен, чтобы
+ * «неразрешённое» значение нельзя было передать туда, где ждут цвет.
+ */
+export type Theme = 'dark' | 'light';
+
 /** Grind offset in steps of the user's own grinder, plus where it came from. */
 export interface Calibration {
   offset: number;
@@ -190,6 +204,16 @@ export interface Calibration {
  */
 export interface SettingsValues {
   lang: Lang;
+  /**
+   * Тема оформления (BJ-9). Умолчание `dark`: до BJ-9 темы не было вовсе, и
+   * установка, обновившаяся на новую версию, обязана выглядеть как вчера.
+   *
+   * Источник правды — эта строка. Её зеркало в `localStorage` (см.
+   * `ui/theme.ts`) и её отражение в нативной оболочке (`platform/shell-theme`)
+   * — производные: они нужны там, где до IndexedDB ещё не дошли руки, то есть
+   * до первого кадра.
+   */
+  theme: ThemePref;
   /** First-run guard. Set last, inside the seed transaction. */
   seeded: boolean;
   calib: Calibration;

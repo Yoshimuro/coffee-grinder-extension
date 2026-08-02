@@ -1,6 +1,6 @@
 {
   "name": "@coffee/journal",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "description": "Brew Journal — offline-first brewing log built on the grind conversion engine.",
   "license": "MIT",
@@ -13,6 +13,7 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "icons": "node scripts/icons.mjs",
+    "screenshot": "node scripts/screens.mjs",
     "cap:sync": "npm run build && cap sync android"
   },
   "dependencies": {

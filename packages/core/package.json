@@ -1,6 +1,6 @@
 {
   "name": "@coffee/core",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "description": "Grind conversion engine, grinder types and the compiled grinder dataset.",
   "license": "MIT",

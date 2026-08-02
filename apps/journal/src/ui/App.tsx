@@ -27,6 +27,7 @@ import { Shelf } from './screens/Shelf.js';
 import { Spec } from './screens/Spec.js';
 import { Timer } from './screens/Timer.js';
 import { Wheel } from './screens/Wheel.js';
+import { useThemeAttribute } from './theme.js';
 
 const VIEWS: Record<Screen, ComponentType> = {
   home: Home,
@@ -51,6 +52,11 @@ const VIEWS: Record<Screen, ComponentType> = {
 export function App() {
   const screen = useNav((s) => s.screen);
   const View = VIEWS[screen];
+
+  /* Здесь, а не в `main.tsx`: настройка живая, и вне React за ней пришлось бы
+     подписываться на `liveQuery` руками. `App` — единственная точка монтажа,
+     так что эффект гарантированно один. */
+  useThemeAttribute();
 
   return (
     <div className="app">

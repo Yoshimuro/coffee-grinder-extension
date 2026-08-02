@@ -14,6 +14,7 @@ import {
   type Lang,
   type SettingKey,
   type SettingsValues,
+  type ThemePref,
   db,
   getSetting,
   putSetting,
@@ -32,6 +33,7 @@ export const DEFAULT_CONV_VAL = 30;
 /** Значения до первого запуска сида. Совпадают с тем, что пишет `seed()`. */
 export const DEFAULT_SETTINGS: Readonly<SettingsValues> = Object.freeze({
   lang: 'ru',
+  theme: 'dark',
   seeded: false,
   calib: { offset: 0, src: null },
   convFrom: null,
@@ -71,6 +73,48 @@ export function useSetting<K extends SettingKey>(key: K): SettingsValues[K] {
 /** Язык интерфейса. Отдельным хуком — его дёргает почти каждый компонент. */
 export function useLang(): Lang {
   return useSetting('lang');
+}
+
+/**
+ * Ключ синхронного зеркала темы.
+ *
+ * `localStorage` — единственное хранилище, которое можно прочитать до первого
+ * кадра; IndexedDB отвечает асинхронно и всегда опаздывает. Зеркало читает
+ * инлайн-скрипт в `index.html`, а пишет — `setTheme()` ниже и восстанавливающий
+ * эффект в `ui/theme.ts` (он же чинит зеркало после импорта архива, в котором
+ * ключа `theme` не было).
+ *
+ * Значение здесь дублируется в `index.html` строкой, которую TypeScript не
+ * видит. Их расхождение ловит `tests/unit/theme.test.ts` — это единственное,
+ * что держит две копии вместе.
+ */
+export const THEME_MIRROR_KEY = 'bj-theme';
+
+/** Пишет зеркало. Приватный режим кидается на `setItem` — там просто тихо. */
+export function writeThemeMirror(pref: ThemePref): void {
+  try {
+    localStorage.setItem(THEME_MIRROR_KEY, pref);
+  } catch {
+    /* приватный режим или запрет хранилища: остаёмся на умолчании */
+  }
+}
+
+/** Выбранная тема. `system` — как есть, разрешать её дело `ui/theme.ts`. */
+export function useTheme(): ThemePref {
+  return useSetting('theme');
+}
+
+/**
+ * Меняет тему. Пишет базу и зеркало разом, чтобы они не могли разъехаться:
+ * зеркало опережает базу ровно на один холодный старт, и если обновлять его
+ * отдельно, то забытый вызов проявится как «тема откатилась после перезапуска».
+ */
+export async function setTheme(
+  pref: ThemePref,
+  database: BrewJournalDB = db,
+): Promise<void> {
+  writeThemeMirror(pref);
+  await putSetting('theme', pref, database);
 }
 
 /**

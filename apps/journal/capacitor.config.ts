@@ -23,8 +23,23 @@ const config: CapacitorConfig = {
   appName: 'Brew Journal',
   webDir: 'dist',
 
-  /* Фон окна до первого кадра WebView — тот же `--bg`, что у приложения
-     (README, палитра). Со светлым умолчанием Capacitor старт мигал бы белым. */
+  /*
+   * Фон окна до первого кадра WebView. Значение одно на сборку — Capacitor
+   * читает конфиг при синхронизации, и выбору темы оно следовать не умеет.
+   *
+   * Поэтому оно осталось тёмным: тёмная тема — умолчание приложения (BJ-9), и
+   * человеку со светлой темой этот цвет не достаётся вовсе. На Android его
+   * перекрывает `MainActivity`, красящий WebView цветом из `@color/bjBackground`
+   * сразу после `super.onCreate`, а стартовое окно закрывает
+   * `UiModeManager#setApplicationNightMode` (см. `ShellThemePlugin`).
+   *
+   * TODO(iOS): когда появится iOS-таргет, здесь нужна секция `ios` со своим
+   * `backgroundColor`, и она упрётся в ту же одноразовость. Нативную часть темы
+   * там придётся писать заново: `setStatusBarColor` на iOS не существует (полоса
+   * прозрачна поверх WebView), вместо неё — `UIStatusBarStyle` и
+   * `View controller-based status bar appearance` в `Info.plist`, а вместо
+   * `values-night/` — светлый и тёмный варианты splash-сториборда.
+   */
   backgroundColor: '#0C0C0C',
 
   android: {
