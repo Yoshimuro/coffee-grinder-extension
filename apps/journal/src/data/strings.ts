@@ -423,10 +423,15 @@ const RU = {
      Реестр зон — `data/hints.ts`, тексты — здесь: подсказка это интерфейс, и
      английская версия обязана быть с первого дня, а не «когда-нибудь».
 
-     Тон прежний, на «ты», как и остальной текст приложения. Одно предложение;
+     Тон — сухая констатация: «здесь можно оценить кофе без рецепта», и всё.
+     Ни побуждений («оцени», «назови», «отметь»), ни обещаний, ни объяснений,
+     зачем это нужно, — приложение своё, продавать его некому. Одно предложение;
      второе — только там, где оно снимает прямой вопрос («а если девайса нет?»).
-     Про фазы свежести здесь молчим намеренно: возраст и фаза подписаны на самой
-     карточке, и подсказка повторяла бы экран. */
+
+     Второе правило: подсказка не ссылается на то, о чём человек ещё не знает.
+     Полка не рассказывает про снимок пачки — про него говорит сам слот фото в
+     форме, где его видно. Про фазы свежести не говорим вовсе: возраст и фаза
+     подписаны на карточке, и подсказка повторяла бы экран. */
 
   /** Дальше по цепочке. Отдельно от `t_next`: там кнопка таймера. */
   hint_next: 'ДАЛЬШЕ',
@@ -435,53 +440,48 @@ const RU = {
   /** Выключить подсказки совсем. Вернуть — строкой в настройках. */
   hint_close: 'СКРЫТЬ ПОДСКАЗКИ',
 
-  hint_home_brew: 'Заваривание начинается здесь. Нужна хотя бы одна пачка на полке.',
-  hint_home_conv: 'Конвертер помола: настройка чужой кофемолки — в деления твоей.',
-  hint_home_taste: 'Кофе выпит не дома — оцени чашку без рецепта.',
-  hint_home_pending: 'Заваривание записано и ждёт оценки. Вернуться к нему можно в любой момент.',
+  hint_home_brew: 'Здесь начинается заваривание.',
+  hint_home_conv: 'Здесь конвертер помола: настройка одной кофемолки в делениях другой.',
+  hint_home_taste: 'Здесь можно оценить кофе без рецепта.',
+  hint_home_pending: 'Это заваривание записано, но ещё не оценено.',
 
-  hint_shelf_add: 'Обязательны дата обжарки и название. Снимок делается здесь же.',
-  hint_add_form: 'Форма решает, что спросит сетап: у молотого нет помола, у дрип-пакета — и дозы.',
-  hint_add_photo: 'Первый снимок — лицо пачки. Второй обычно шов с датой.',
-  hint_add_roast: 'Точки ставятся сами. Рядом календарь, если дату видно, а число — нет.',
-  hint_bean_brews: 'Здесь заваривания именно этой пачки.',
+  hint_shelf_add: 'Здесь заводится новая пачка.',
+  hint_add_form: 'Форма кофе. От неё зависит, какие поля будут в заваривании.',
+  hint_add_photo: 'Здесь можно снять пачку. Снимок необязателен.',
+  hint_add_roast: 'Дата обжарки. Точки подставляются сами, рядом — календарь.',
+  hint_bean_brews: 'Здесь заваривания этой пачки.',
 
-  hint_brew_fields: 'Набор полей зависит от пачки: часть параметров уже задал производитель.',
-  hint_brew_device:
-    'Без девайса заваривание считается проливом в конусе. Свой собирается из признаков.',
-  hint_brew_grind: 'Диапазон приехал с конвертера, помол встал в центр.',
-  hint_brew_outputs:
-    'СТАРТ ведёт в таймер по стадиям. Ниже — записать заваривание, которое уже случилось.',
-  hint_rate_later: 'Запись уже сохранена. Напоминание придёт через семь минут — один раз.',
+  hint_brew_fields: 'Поля зависят от выбранной пачки: часть значений задана производителем.',
+  hint_brew_device: 'Без девайса заваривание считается проливом в конусе.',
+  hint_brew_grind: 'Диапазон из конвертера, помол стоит в его центре.',
+  hint_brew_outputs: 'СТАРТ — заваривание по таймеру. Ниже записывается уже прошедшее.',
+  hint_rate_later: 'Запись сохранена. Через семь минут придёт напоминание об оценке.',
 
-  hint_diag_scales: 'Четыре шкалы 0–10. Тап по ячейке ставит значение.',
-  hint_diag_wheel: 'Колесо вкусов — 102 дескриптора в трёх уровнях.',
-  hint_diag_note:
-    'Заметку можно надиктовать. Найденные вкусы предложатся тегами, но сами не проставятся.',
-  hint_wheel_nav: 'Тап по сектору — вглубь, тап по центру — на уровень выше.',
-  hint_wheel_here: 'Останавливаться можно на любом уровне: «фруктовое» — тоже ответ.',
-  hint_wheel_tag: 'Тап по тегу меняет интенсивность, ✕ снимает.',
-  hint_wheel_memory: 'Точка — вкус, который ты уже называл раньше.',
+  hint_diag_scales: 'Четыре шкалы от 0 до 10. Значение ставится тапом по ячейке.',
+  hint_diag_wheel: 'Здесь колесо вкусов: 102 дескриптора в трёх уровнях.',
+  hint_diag_note: 'Заметку можно надиктовать. Распознанные вкусы предлагаются тегами.',
+  hint_wheel_nav: 'Тап по сектору — вглубь, тап по центру — наверх.',
+  hint_wheel_here: 'Можно остановиться на любом уровне: категория записывается так же.',
+  hint_wheel_tag: 'Тап по тегу меняет интенсивность, ✕ убирает его.',
+  hint_wheel_memory: 'Точка — вкус, отмеченный в прошлых записях.',
 
-  hint_conv_from: 'Каталог из 134 кофемолок. Поиск понимает бренд, модель и сокращения.',
-  hint_conv_band:
-    'Ответ прижат к делениям, которые у твоей кофемолки есть. Полоса — погрешность данных.',
-  hint_conv_cal:
-    'Назови настройку, на которой было вкусно, — приложение подставит помол лучшей заварки.',
-  hint_conv_use: 'Диапазон уедет в сетап: помол встанет в центр.',
+  hint_conv_from: 'Каталог из 134 кофемолок. Поиск ищет по бренду, модели и сокращениям.',
+  hint_conv_band: 'Ответ прижат к делениям своей кофемолки. Полоса — погрешность данных.',
+  hint_conv_cal: 'Калибровка сдвигает диапазон по настройке, которая дала хороший результат.',
+  hint_conv_use: 'Диапазон уходит в заваривание, помол встаёт в его центр.',
 
-  hint_log_filters: 'Фильтры: сначала пачки с полки, затем способы заваривания.',
-  hint_log_compare: 'Отметь две записи — приложение поставит их рядом и подсветит отличия.',
-  hint_detail_repeat: 'Все параметры записи вернутся в сетап.',
-  hint_detail_stages: 'Стадии фактические, вместе с паузами. Точка — отметка без длительности.',
-  hint_detail_qr: 'В коде рецепт, а не история: помол, доза, вода, температура, плановые стадии.',
-  hint_compare_diff: 'Подсвечено то, что различается. Совпадения приглушены.',
+  hint_log_filters: 'Фильтры: пачки с полки, затем способы заваривания.',
+  hint_log_compare: 'Здесь сравниваются две записи, отличия подсвечиваются.',
+  hint_detail_repeat: 'Параметры записи возвращаются в заваривание.',
+  hint_detail_stages: 'Стадии фактические, с паузами. Точка — отметка без длительности.',
+  hint_detail_qr: 'В коде рецепт: помол, доза, вода, температура, стадии.',
+  hint_compare_diff: 'Подсвечено то, что различается, совпадения приглушены.',
 
-  hint_more_grinders: 'Своя кофемолка нужна конвертеру: имя и цена деления в микронах.',
-  hint_more_transfer: 'Экспорт — вся база одним архивом со снимками. Импорт заменяет её целиком.',
-  hint_devices_new: 'Каталога марок нет: девайс описывается признаками, влияющими на заваривание.',
-  hint_device_presets: 'Заготовка заполняет все шесть групп — дальше правь как обычно.',
-  hint_device_flow: 'Поток решает, какие стадии сгенерирует таймер.',
+  hint_more_grinders: 'Свои кофемолки: имя и цена деления в микронах. Их использует конвертер.',
+  hint_more_transfer: 'Экспорт — вся база одним архивом. Импорт заменяет её целиком.',
+  hint_devices_new: 'Девайс описывается признаками, каталога марок нет.',
+  hint_device_presets: 'Заготовки заполняют все шесть групп признаков.',
+  hint_device_flow: 'Поток определяет, какие стадии сгенерирует таймер.',
 
   /* Строка настроек. Выключатель и сброс стоят рядом: человек, проскочивший
      подсказку тапом, иначе не может её вернуть. */
@@ -813,54 +813,50 @@ const EN: Readonly<Record<StrKey, string>> = {
   hint_done: 'GOT IT',
   hint_close: 'HIDE HINTS',
 
-  hint_home_brew: 'Brewing starts here. You need at least one bag on the shelf.',
-  hint_home_conv: 'Grind converter: a setting on another grinder, in units of yours.',
-  hint_home_taste: 'Coffee you drank elsewhere: rate the cup without a recipe.',
-  hint_home_pending: 'The brew is saved and waiting to be rated. Come back to it whenever.',
+  hint_home_brew: 'Brewing starts here.',
+  hint_home_conv: 'The grind converter: a setting on one grinder in the units of another.',
+  hint_home_taste: 'Coffee can be rated here without a recipe.',
+  hint_home_pending: 'This brew is logged but not rated yet.',
 
-  hint_shelf_add: 'Roast date and name are required. The photo is taken in the same form.',
-  hint_add_form:
-    'The form decides what the setup asks: ground has no grind, a drip bag has no dose either.',
-  hint_add_photo: 'The first shot is the face of the bag. The second is usually the seam with the date.',
-  hint_add_roast:
-    'The dots are inserted for you. The calendar is there when you can read the date but not the day.',
-  hint_bean_brews: 'Brews made with this bag only.',
+  hint_shelf_add: 'A new bag is added here.',
+  hint_add_form: 'The coffee form. It decides which fields the brew has.',
+  hint_add_photo: 'The bag can be photographed here. The photo is optional.',
+  hint_add_roast: 'Roast date. The dots are inserted automatically, the calendar is next to it.',
+  hint_bean_brews: 'Brews made with this bag.',
 
-  hint_brew_fields: 'The fields depend on the bag: the producer already set some of them.',
-  hint_brew_device: 'With no device the brew counts as a cone pour-over. Yours is built from traits.',
-  hint_brew_grind: 'The range came from the converter; the grind sits at its centre.',
-  hint_brew_outputs: 'START runs the staged timer. Below: log a brew that already happened.',
-  hint_rate_later: 'The entry is already saved. One reminder arrives in seven minutes.',
+  hint_brew_fields: 'The fields depend on the bag: some values are set by the producer.',
+  hint_brew_device: 'With no device the brew counts as a cone pour-over.',
+  hint_brew_grind: 'The range comes from the converter, the grind sits at its centre.',
+  hint_brew_outputs: 'START is the staged timer. Below it a brew that already happened is logged.',
+  hint_rate_later: 'The entry is saved. A rating reminder arrives in seven minutes.',
 
-  hint_diag_scales: 'Four scales, 0–10. Tap a cell to set the value.',
+  hint_diag_scales: 'Four scales from 0 to 10. A tap on a cell sets the value.',
   hint_diag_wheel: 'The flavour wheel: 102 descriptors across three levels.',
-  hint_diag_note: 'You can dictate the note. Flavours found in it are offered as tags, never added for you.',
-  hint_wheel_nav: 'Tap a sector to go deeper, tap the centre to go back up.',
-  hint_wheel_here: 'Stop at any level: «fruity» is an answer too.',
-  hint_wheel_tag: 'Tap a tag to change its intensity, ✕ removes it.',
-  hint_wheel_memory: 'A dot marks a flavour you have named before.',
+  hint_diag_note: 'The note can be dictated. Recognised flavours are offered as tags.',
+  hint_wheel_nav: 'A tap on a sector goes deeper, a tap on the centre goes up.',
+  hint_wheel_here: 'Any level works: a category is recorded the same way.',
+  hint_wheel_tag: 'A tap on a tag changes its intensity, ✕ removes it.',
+  hint_wheel_memory: 'A dot marks a flavour from earlier entries.',
 
-  hint_conv_from: 'A catalogue of 134 grinders. Search knows brands, models and shorthands.',
+  hint_conv_from: 'A catalogue of 134 grinders. Search covers brands, models and shorthands.',
   hint_conv_band:
-    'The answer is snapped to detents your grinder actually has. The band shows the uncertainty of the data.',
-  hint_conv_cal: 'Name the setting that tasted good; the app fills in the grind from your best brew.',
-  hint_conv_use: 'The range goes to the setup; the grind lands on its centre.',
+    'The answer is snapped to the detents of your own grinder. The band is the uncertainty of the data.',
+  hint_conv_cal: 'Calibration shifts the range by a setting that gave a good result.',
+  hint_conv_use: 'The range goes to the brew, the grind lands at its centre.',
 
-  hint_log_filters: 'Filters: bags from the shelf first, brewing methods after.',
-  hint_log_compare: 'Mark two entries; the app puts them side by side and highlights what differs.',
-  hint_detail_repeat: 'Every parameter of this entry goes back into the setup.',
+  hint_log_filters: 'Filters: bags from the shelf, then brewing methods.',
+  hint_log_compare: 'Two entries are compared here, differences are highlighted.',
+  hint_detail_repeat: 'The parameters of this entry go back into the brew.',
   hint_detail_stages:
-    'The stages are what actually happened, pauses included. A dot is a marker with no duration.',
-  hint_detail_qr:
-    'The code holds a recipe, not a history: grind, dose, water, temperature, planned stages.',
-  hint_compare_diff: 'What differs is highlighted. What matches is dimmed.',
+    'The stages are the actual ones, pauses included. A dot is a marker with no duration.',
+  hint_detail_qr: 'The code holds the recipe: grind, dose, water, temperature, stages.',
+  hint_compare_diff: 'What differs is highlighted, what matches is dimmed.',
 
-  hint_more_grinders: 'The converter needs your own grinder: a name and microns per step.',
-  hint_more_transfer:
-    'Export is the whole database in one archive with photos. Import replaces it entirely.',
-  hint_devices_new: 'No brand catalogue: a device is described by the traits that affect the brew.',
-  hint_device_presets: 'A preset fills all six groups; edit from there as usual.',
-  hint_device_flow: 'Flow decides which stages the timer will generate.',
+  hint_more_grinders: 'Your own grinders: a name and microns per step. The converter uses them.',
+  hint_more_transfer: 'Export is the whole database in one archive. Import replaces it entirely.',
+  hint_devices_new: 'A device is described by traits, there is no brand catalogue.',
+  hint_device_presets: 'Presets fill all six trait groups.',
+  hint_device_flow: 'Flow decides which stages the timer generates.',
 
   set_hints: 'HINTS',
   set_hints_hint: 'one at a time, on your first visit to a screen',
