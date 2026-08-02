@@ -71,7 +71,7 @@ export function Shelf() {
         ))}
 
         {/* Полка пуста — приглашение, а не извинение (README, тон). */}
-        {beans !== undefined && beans.length === 0 ? <EmptyState text={t.home_empty} /> : null}
+        {beans !== undefined && beans.length === 0 ? <EmptyState text={t.shelf_empty} /> : null}
 
         <div className="bj-shelf__add">
           <button

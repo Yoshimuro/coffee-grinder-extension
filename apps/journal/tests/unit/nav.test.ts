@@ -1,6 +1,14 @@
 import { beforeEach, describe, expect, it } from 'vitest';
 
-import { SCREENS, TABS, isTab, useNav } from '../../src/app/nav.js';
+import {
+  SCREENS,
+  TABS,
+  backAction,
+  handleHardwareBack,
+  isTab,
+  useNav,
+} from '../../src/app/nav.js';
+import { TAB_LABEL_KEYS, tabLabel } from '../../src/ui/screenMeta.js';
 
 function reset() {
   useNav.setState({ screen: 'home', stack: [] });
@@ -74,5 +82,72 @@ describe('nav store', () => {
     for (const screen of SCREENS) {
       expect(isTab(screen)).toBe((TABS as readonly string[]).includes(screen));
     }
+  });
+});
+
+/*
+ * Эмуляторный QA (BJ-7, баг 1): интерфейс переключался на EN, а нижняя панель
+ * оставалась русской — подписи были захардкожены мимо таблицы строк.
+ */
+describe('подписи табов', () => {
+  it('берутся из таблицы строк и меняются вместе с языком', () => {
+    expect(TABS.map((tab) => tabLabel(tab, 'ru'))).toEqual([
+      'ГЛАВНЫЙ',
+      'ПОЛКА',
+      'ЖУРНАЛ',
+      'ЕЩЁ',
+    ]);
+    expect(TABS.map((tab) => tabLabel(tab, 'en'))).toEqual(['HOME', 'SHELF', 'LOG', 'MORE']);
+  });
+
+  it('у каждого таба свой ключ, и все они из группы nav_*', () => {
+    for (const tab of TABS) {
+      expect(TAB_LABEL_KEYS[tab]).toBe(`nav_${tab}`);
+      expect(tabLabel(tab, 'ru')).not.toBe(tabLabel(tab, 'en'));
+    }
+  });
+});
+
+/*
+ * Эмуляторный QA (BJ-7, баг 2): системная «назад» закрывала приложение с любого
+ * вложенного экрана. Решение — чистая функция от экрана и глубины стека.
+ */
+describe('backAction', () => {
+  beforeEach(reset);
+
+  it('возвращает назад, пока стек не пуст', () => {
+    expect(backAction('detail', 1)).toBe('back');
+    expect(backAction('timer', 3)).toBe('back');
+    expect(backAction('home', 1)).toBe('back');
+  });
+
+  it('возвращает назад с вложенного экрана даже с пустым стеком', () => {
+    for (const screen of SCREENS) {
+      if (isTab(screen)) continue;
+      expect(backAction(screen, 0), screen).toBe('back');
+    }
+  });
+
+  it('сворачивает только с корневого таба без истории', () => {
+    for (const tab of TABS) {
+      expect(backAction(tab, 0), tab).toBe('minimize');
+    }
+  });
+
+  it('handleHardwareBack() отматывает навигацию и сообщает, что справился', () => {
+    useNav.getState().go('log');
+    useNav.getState().go('detail');
+
+    expect(handleHardwareBack()).toBe(true);
+    expect(useNav.getState()).toMatchObject({ screen: 'log', stack: ['home'] });
+
+    expect(handleHardwareBack()).toBe(true);
+    expect(useNav.getState()).toMatchObject({ screen: 'home', stack: [] });
+  });
+
+  it('handleHardwareBack() с корня отдаёт false и не трогает экран', () => {
+    useNav.setState({ screen: 'shelf', stack: [] });
+    expect(handleHardwareBack()).toBe(false);
+    expect(useNav.getState()).toMatchObject({ screen: 'shelf', stack: [] });
   });
 });

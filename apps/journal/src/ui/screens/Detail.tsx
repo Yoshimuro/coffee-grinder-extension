@@ -80,7 +80,7 @@ export function Detail() {
       <div className="jr" data-screen="detail">
         <ScreenHeader title={t.log_title} />
         <div className="jr__body">
-          <EmptyState text={t.home_empty} />
+          <EmptyState text={t.log_not_found} />
         </div>
       </div>
     );

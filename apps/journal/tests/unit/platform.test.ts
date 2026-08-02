@@ -14,7 +14,7 @@ import { createWebSpeech, localeOf } from '../../src/platform/speech.js';
 import { bind, isNative } from '../../src/platform/native.js';
 
 describe('напоминание об оценке (D-4)', () => {
-  it('ставится через пятнадцать минут после «ПОЗЖЕ»', () => {
+  it('ставится через семь минут после «ПОЗЖЕ»', () => {
     expect(RATING_DELAY_MIN).toBe(7);
 
     const from = new Date('2026-07-30T09:00:00.000Z');

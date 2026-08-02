@@ -9,9 +9,16 @@
  *
  * The full RU/EN string table lands in BJ-3 (`data/strings/*`); this map is
  * deliberately not it.
+ *
+ * Подписи табов — исключение: они с самого начала лежат в общей таблице
+ * (`nav_*`), поэтому здесь только соответствие «таб → ключ» и функция, которая
+ * достаёт строку на текущем языке. Хардкод по-русски стоил QA-7 (эмуляторный
+ * прогон BJ-7: интерфейс переключался на EN, нижняя панель — нет).
  */
 
 import type { Screen, Tab } from '../app/nav.js';
+import { STR, type StrKey } from '../data/strings.js';
+import type { Lang } from '../db/schema.js';
 
 export const SCREEN_TITLES: Record<Screen, string> = {
   home: 'ГЛАВНЫЙ',
@@ -33,9 +40,15 @@ export const SCREEN_TITLES: Record<Screen, string> = {
   spec: 'СПЕЦИФИКАЦИЯ',
 };
 
-export const TAB_LABELS: Record<Tab, string> = {
-  home: 'ГЛАВНЫЙ',
-  shelf: 'ПОЛКА',
-  log: 'ЖУРНАЛ',
-  more: 'ЕЩЁ',
+/** Ключ подписи для каждого таба. Строки живут в `STR`, а не здесь. */
+export const TAB_LABEL_KEYS: Record<Tab, StrKey> = {
+  home: 'nav_home',
+  shelf: 'nav_shelf',
+  log: 'nav_log',
+  more: 'nav_more',
 };
+
+/** Подпись таба на текущем языке. */
+export function tabLabel(tab: Tab, lang: Lang): string {
+  return STR[lang][TAB_LABEL_KEYS[tab]];
+}

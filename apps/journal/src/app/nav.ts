@@ -84,3 +84,34 @@ export function previousScreen(): Screen | null {
   const { stack } = useNav.getState();
   return stack[stack.length - 1] ?? null;
 }
+
+/* ── Системная «назад» ────────────────────────────────────────────────────── */
+
+/** Что делать по аппаратной кнопке «назад». */
+export type BackAction = 'back' | 'minimize';
+
+/**
+ * Решение для системной «назад» — чистая функция от состояния навигации.
+ *
+ * Пока есть куда возвращаться (непустой стек) или мы стоим на вложенном экране
+ * (деталь, конструктор, колесо — таб-баром такой экран не закрыт), «назад»
+ * означает `back()`. С корневого таба с пустым стеком уходить внутри
+ * приложения некуда — тогда сворачиваемся.
+ */
+export function backAction(screen: Screen, stackDepth: number): BackAction {
+  return stackDepth > 0 || !isTab(screen) ? 'back' : 'minimize';
+}
+
+/**
+ * Обработчик системной «назад». `true` — приложение справилось само,
+ * `false` — обрабатывать нечего, платформенный слой сворачивает окно.
+ *
+ * Живёт здесь, а не в `platform/`: это правило навигации, и платформенному
+ * слою про экраны знать незачем (он получает готовый ответ да/нет).
+ */
+export function handleHardwareBack(): boolean {
+  const { screen, stack, back } = useNav.getState();
+  if (backAction(screen, stack.length) === 'minimize') return false;
+  back();
+  return true;
+}

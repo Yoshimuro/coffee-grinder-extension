@@ -27,8 +27,10 @@ import { createRoot } from 'react-dom/client';
 // equal specificity rather than losing to whatever landed last.
 import './ui/tokens.css';
 
+import { handleHardwareBack } from './app/nav.js';
 import { seedDemo, wantsDemo } from './db/demo-seed.js';
 import { seed } from './db/seed.js';
+import { startBackButton } from './platform/back.js';
 import { registerServiceWorker } from './pwa/register.js';
 import { App } from './ui/App.js';
 
@@ -64,3 +66,9 @@ createRoot(host).render(
  * условия и их причины — в `pwa/register.ts`.
  */
 registerServiceWorker();
+
+/*
+ * Системная «назад» на телефоне — во внутреннюю навигацию, а не в лаунчер.
+ * В вебе вызов ничего не делает и ничего не грузит (`platform/back.ts`).
+ */
+startBackButton(handleHardwareBack);

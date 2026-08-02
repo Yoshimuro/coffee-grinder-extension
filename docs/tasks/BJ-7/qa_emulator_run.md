@@ -355,3 +355,93 @@ $SDK/platform-tools/adb shell cmd connectivity airplane-mode enable
 npm init -y && npm i jsqr pngjs
 node decode.js docs/tasks/BJ-7/emulator-qa/46-entry-detail-top.png
 ```
+
+---
+
+# Баг-фикс после эмуляторного QA (2026-08-02)
+
+Починены ровно те пять пунктов, что нашёл прогон выше: три бага, одно
+расхождение в комментарии и одно наблюдение про разрешение микрофона. Схема
+Dexie не тронута, тон строк прежний.
+
+## Баг 1 · Нижняя навигация не переводилась
+
+Подписи табов больше не хардкодятся: `TAB_LABELS` убран, вместо него
+`TAB_LABEL_KEYS` (таб → ключ `nav_*`) и `tabLabel(tab, lang)`, а `TabBar` берёт
+язык из `useLang()`, как остальные экраны. Переводы были на месте с BJ-3 — их
+просто никто не читал.
+
+- `apps/journal/src/ui/screenMeta.ts` — `TAB_LABEL_KEYS` + `tabLabel()`, `TAB_LABELS` удалён
+- `apps/journal/src/ui/components/TabBar.tsx` — `useLang()` вместо константы
+- `apps/journal/tests/unit/nav.test.ts` — подписи на обоих языках, ключи из группы `nav_*`
+
+## Баг 2 · Системная «Назад» закрывала приложение
+
+Добавлен `@capacitor/app@6.0.3` (пин, как у остальных плагинов; peer —
+`@capacitor/core@^6`). Решение принимает навигация: `backAction(screen, depth)`
+— чистая функция, `back` пока стек непуст или экран не корневой таб, иначе
+`minimize`. Платформенный слой знает только «обработали / не обработали»:
+`startBackButton()` молча выходит в вебе и подтягивает адаптер `import()`-ом
+под `isNative()`, как прочие адаптеры, — плагин в браузерный бандл не попадает
+(отдельный чанк `back.capacitor` в сборке).
+
+Сворачиваем через `App.minimizeApp()`, а не `exitApp()`: процесс остаётся жив,
+незаконченное заваривание не приходится поднимать из базы.
+
+- `apps/journal/src/app/nav.ts` — `backAction()` и `handleHardwareBack()`
+- `apps/journal/src/platform/back.ts` — подписка, нативная и безмолвная в вебе
+- `apps/journal/src/platform/back.capacitor.ts` — слушатель `backButton` + `minimizeApp()`
+- `apps/journal/src/platform/index.ts`, `apps/journal/src/main.tsx` — экспорт и вызов на старте
+- `apps/journal/package.json` — зависимость
+- `apps/journal/tests/unit/nav.test.ts` — таблица решений и оба исхода `handleHardwareBack()`
+
+`npx cap sync android` прошёл: плагинов для Android теперь 7, `@capacitor/app@6.0.3`
+в списке. Gradle не запускался — APK пересобирает оркестратор.
+
+## Баг 3 · Пустые состояния говорили про журнал
+
+Три места делили `home_empty`. Теперь у каждого своя строка в обеих таблицах:
+
+- `shelf_empty` — «Полка пуста. Снять первую пачку» / «Shelf is empty. Shoot the first bag»
+- `bean_no_brews` — «Заварок с этой пачкой пока нет» / «No brews with this bag yet»
+- `log_not_found` — «Запись не найдена» / «Entry not found»
+
+`home_empty` остался там, где он про журнал и есть, — на главном и в журнале.
+
+- `apps/journal/src/data/strings.ts` — три ключа в `RU` и `EN`
+- `apps/journal/src/ui/screens/Shelf.tsx:74`, `Bean.tsx:118`, `Detail.tsx:83` — подставлены
+- `apps/journal/tests/unit/strings.test.ts` — счёт ключей 232 → 235
+
+## Наблюдение · «15 минут» против `RATING_DELAY_MIN = 7`
+
+Комментарий в `RateLater.tsx` теперь ссылается на константу, а не на число, —
+разъехаться им больше нечем. В чеклисте шаг QA-4 просит подождать «~7 минут
+(`RATING_DELAY_MIN`)»; других упоминаний пятнадцати минут там нет. Заодно
+переименован тест, называвшийся «пятнадцать минут» и проверявший семь.
+
+- `apps/journal/src/ui/screens/RateLater.tsx` — комментарий
+- `docs/tasks/BJ-7/qa_checklist_ru.md` — шаг QA-4
+- `apps/journal/tests/unit/platform.test.ts` — название теста
+
+## Наблюдение · Микрофон спрашивали на входе в экран оценки
+
+Причина — `available()` в `speech.capacitor.ts`: он не только проверял движок,
+но и вызывал `requestPermissions()`, а `Diag` зовёт `available()` на
+монтировании. Разрешение переехало в `listen()`, то есть под нажатие «ГОЛОСОМ»
+(и до старта записи — диалог поверх идущей записи был бы не лучше).
+
+`available()` остался определением возможностей и ничего не показывает:
+`SpeechRecognition.available()` (в Android-плагине это
+`SpeechRecognizer.isRecognitionAvailable()`, без диалогов) плюс
+`checkPermissions()`, который лишь читает уже известное состояние. Кнопка
+скрывается только при явном отказе — гадать про `isNative()` не понадобилось.
+
+- `apps/journal/src/platform/speech.capacitor.ts` — `allowed()` в `listen()`, `available()` без запроса
+
+## Проверки
+
+- `tsc --noEmit` — чисто
+- `vitest run` — 34 файла, 480 тестов (+7 новых), зелено
+- `npm run build` + `npx cap sync android` — прошли, `dist` в `android/app/src/main/assets/public` обновлён
+- `npm run test:e2e:journal` — 6/6 зелено (первый прогон на холодном `vite dev` дал одно флаки-падение
+  на клике «СОХРАНИТЬ»: экран успел смениться под кликом; два последующих прогона чистые)

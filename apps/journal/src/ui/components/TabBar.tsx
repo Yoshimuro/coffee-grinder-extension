@@ -5,11 +5,13 @@
  */
 
 import { TABS, useNav } from '../../app/nav.js';
-import { TAB_LABELS } from '../screenMeta.js';
+import { useLang } from '../../db/repo/settings.js';
+import { tabLabel } from '../screenMeta.js';
 
 export function TabBar() {
   const screen = useNav((s) => s.screen);
   const setTab = useNav((s) => s.setTab);
+  const lang = useLang();
 
   return (
     <nav className="tabs">
@@ -21,7 +23,7 @@ export function TabBar() {
           aria-current={tab === screen ? 'page' : undefined}
           onClick={() => setTab(tab)}
         >
-          {TAB_LABELS[tab]}
+          {tabLabel(tab, lang)}
         </button>
       ))}
     </nav>

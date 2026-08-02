@@ -8,6 +8,13 @@
  * кнопку «ГОЛОСОМ», и человек печатает — ровно та деградация, которую требует
  * README: молча, без баннеров и без объяснений.
  *
+ * `available()` при этом ничего не спрашивает у человека: только наличие движка
+ * и уже известное состояние разрешения (`checkPermissions` системного диалога
+ * не показывает). Разрешение просится в `listen()` — то есть после нажатия
+ * «ГОЛОСОМ». Так же поступают уведомления: спрашивать на входе в экран — просить
+ * аванс ни за что (`notify.capacitor.ts`). Эмуляторный прогон BJ-7 поймал
+ * обратное: диалог микрофона выскакивал при открытии оценки.
+ *
  * `popup: false` и `partialResults: false`: системное окно поверх тёмного
  * экрана выглядит чужеродно, а частичные результаты интерфейсу не нужны — он
  * ждёт одну готовую реплику и дописывает её в заметку.
@@ -22,20 +29,29 @@ import { type SpeechInput, localeOf } from './speech.js';
 const MAX_RESULTS = 1;
 
 export function createCapacitorSpeech(): SpeechInput {
+  /**
+   * Разрешение на микрофон. Спрашивается один раз — в момент нажатия
+   * «ГОЛОСОМ», до старта записи: системный диалог поверх уже начатой записи был
+   * бы худшим моментом из возможных.
+   */
+  const allowed = async (): Promise<boolean> => {
+    const current = await SpeechRecognition.checkPermissions();
+    if (current.speechRecognition === 'granted') return true;
+    if (current.speechRecognition === 'denied') return false;
+    const asked = await SpeechRecognition.requestPermissions();
+    return asked.speechRecognition === 'granted';
+  };
+
   return {
     async available(): Promise<boolean> {
       try {
+        // Только определение возможностей: есть ли движок и не отказано ли уже.
+        // Ни одного вызова, показывающего системный диалог.
         const { available } = await SpeechRecognition.available();
         if (!available) return false;
 
-        // Разрешение спрашивается здесь, а не при первом «ГОЛОСОМ»: системный
-        // диалог поверх начатой записи — худший момент из возможных.
         const { speechRecognition } = await SpeechRecognition.checkPermissions();
-        if (speechRecognition === 'granted') return true;
-        if (speechRecognition === 'denied') return false;
-
-        const asked = await SpeechRecognition.requestPermissions();
-        return asked.speechRecognition === 'granted';
+        return speechRecognition !== 'denied';
       } catch {
         return false;
       }
@@ -43,6 +59,8 @@ export function createCapacitorSpeech(): SpeechInput {
 
     async listen(lang: Lang = 'ru'): Promise<string | null> {
       try {
+        if (!(await allowed())) return null;
+
         const { matches } = await SpeechRecognition.start({
           language: localeOf(lang),
           maxResults: MAX_RESULTS,

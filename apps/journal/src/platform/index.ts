@@ -8,6 +8,7 @@
  */
 
 export * from './awake.js';
+export * from './back.js';
 export * from './files.js';
 export * from './native.js';
 export * from './notify.js';

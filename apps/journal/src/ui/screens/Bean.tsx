@@ -115,7 +115,7 @@ export function Bean() {
             </button>
           ))}
           {entries !== undefined && entries.length === 0 ? (
-            <EmptyState text={t.home_empty} />
+            <EmptyState text={t.bean_no_brews} />
           ) : null}
         </Section>
 
