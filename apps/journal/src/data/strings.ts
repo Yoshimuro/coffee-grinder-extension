@@ -347,7 +347,7 @@ const RU = {
   set_del_q: 'УДАЛИТЬ?',
   set_del_yes: 'ДА',
   /** Версия в подвале. Не перевод — номер, но в JSX хардкодов не держим. */
-  set_ver: 'v0.1',
+  set_ver: 'v0.2',
 
   /* ── Добавлено в BJ-6 (обмен базой и QR) ───────────────────────────────────
      Экспорт и импорт до этой задачи были строками без обработчиков (D-7), а QR
@@ -682,7 +682,7 @@ const EN: Readonly<Record<StrKey, string>> = {
   set_g_step: 'STEP, µm',
   set_del_q: 'DELETE?',
   set_del_yes: 'YES',
-  set_ver: 'v0.1',
+  set_ver: 'v0.2',
 
   set_export_hint: 'entries, shelf, photos — one zip',
   set_import_hint: 'zip from export · replaces the whole base',
