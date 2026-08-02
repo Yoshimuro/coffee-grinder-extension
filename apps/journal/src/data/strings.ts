@@ -1,7 +1,9 @@
 /**
  * Строки интерфейса — порт `STR`/`stageName`/`modeName` (`data.js:158-195`).
  *
- * Обе таблицы по 145 ключей и полностью параллельны. Параллельность держит
+ * Обе таблицы одинаковой длины (146 ключей из прототипа плюс добавленные в
+ * BJ-4 — они помечены блоками по группам) и полностью параллельны. Точное
+ * число зафиксировано тестом `strings.test.ts`. Параллельность держит
  * компилятор: `EN` объявлен как `Record<StrKey, string>`, где `StrKey` выведен
  * из `RU`, — забытый перевод не соберётся, лишний ключ упрётся в проверку
  * лишних свойств.
@@ -175,9 +177,171 @@ const RU = {
   spec_type: 'ТИПОГРАФИКА',
   spec_comp: 'КОМПОНЕНТЫ',
   spec_grid: 'СЕТКА',
+
+  /* ── Добавлено в BJ-4 ──────────────────────────────────────────────────────
+     Прототип держал эти куски текста прямо в методах (`entryTitle`, `entrySub`,
+     `entryMark`) — здесь они обязаны жить в таблице, иначе английская версия
+     экранов журнала останется русской. */
+  entry_cup: 'Чашка',
+  entry_cup_sub: 'дегустация · без рецепта',
+  entry_grind: 'помол',
+  /** Префикс оценки: «С 6» / «S 6». Буква от «сладость» / «sweetness». */
+  entry_mark: 'С',
+  /** Прочерк на месте удалённой пачки или девайса. */
+  entry_none: '—',
+  deg: '°',
+
+  /* Подписи для скринридера: сами кнопки несут только знак («−», «+», «×»). */
+  a11y_less: 'меньше',
+  a11y_more: 'больше',
+  a11y_remove: 'убрать',
+
+  /* ── Добавлено в BJ-4 G5 (конвертер) ───────────────────────────────────────
+     Прототип держал эти куски прямо в шаблоне и в геттерах (`dbCountLine`,
+     `toHint`, `calSuggestLine`, `calibLine`), причём часть — тернарником по
+     языку. Здесь они обязаны быть ключами: иначе английский конвертер снова
+     наполовину русский. */
+  /** Счётчик в шапке: «134 кофемолки · база». */
+  conv_db: 'кофемолки · база',
+  /** Плейсхолдер поиска. Имена брендов — одни и те же в обоих языках. */
+  conv_search: 'EK43, Comandante, Ode…',
+  conv_recent: 'НЕДАВНИЕ',
+  conv_none: 'ничего не найдено',
+  /** Подпись у «КУДА»: список берётся из настроек, чужих молок там нет. */
+  conv_to_hint: 'своя · из настроек',
+  /** Источник калибровки, когда настройку ввели руками. */
+  conv_manual: 'вручную',
+  /** Шкала журнала в подсказке калибровки. */
+  conv_cal_balance: 'баланс',
+  conv_cal_at: 'при',
+  conv_warn_clamped: 'за пределами шкалы',
+  conv_warn_estimated: 'калибровка оценочная — диапазон шире',
+
+  /* Названия делений шкалы. Прототип знал только «кликов» (`DC:979`), но в
+     каталоге ядра три вида шкал, и номерная молка кликов не щёлкает. */
+  unit_click: 'кликов',
+  unit_number: 'делений',
+  unit_mark: 'меток',
+  /** Микрон. Символ, не перевод, — но в JSX хардкодов не держим. */
+  um: 'µm',
+
+  /* ── Добавлено в BJ-4 G3 (журнал, деталь, сравнение, диагностика) ──────────
+     Прототип держал эти подписи прямо в `render()` тернарниками `ru ? … : …`
+     (`DC:1165`, `DC:1174-1188`, `DC:1305-1311`, `DC:1333-1338`) — то есть
+     английский журнал наполовину оставался русским. */
+
+  /** Подпись в сетке параметров и строка сравнения. */
+  log_time: 'ВРЕМЯ',
+  log_mode: 'РЕЖИМ',
+  /** Строка сравнения: пачка. Отдельно от `form_beans` — там форма кофе. */
+  log_bean: 'ЗЕРНО',
+  /** Строка сравнения: девайс. Отдельно от `brew_device` — там тип заваривания. */
+  log_device: 'ДЕВАЙС',
+  /** Подпись температуры в сетке параметров. Символ, не перевод. */
+  temp_short: 'T°',
+  qr_hint: 'передача — файлом или с экрана. без сети, без аккаунтов',
+
+  /* Фильтры журнала. Не `modeName`: чип называет отбор («ЧАШКИ» — множество
+     дегустаций), а не режим одной записи, и обязан влезать в ленту. */
+  log_f_perc: 'ПРОЛИВ',
+  log_f_imm: 'ИММЕРСИЯ',
+  log_f_hybrid: 'ГИБРИД',
+  log_f_drip: 'ДРИП',
+  log_f_cup: 'ЧАШКИ',
+
+  /** Указатели колонок сравнения. Латиница в обоих языках. */
+  cmp_a: 'A',
+  cmp_b: 'B',
+
+  /* Диагностика дегустации «вне журнала» (`openTaste`). */
+  diag_taste: 'дегустация',
+  diag_taste_sub: 'что в чашке — по ощущению',
+  diag_wheel_sub: 'колесо вкусов',
+  taste_name: 'ЧТО ЗА КОФЕ',
+  taste_name_ph: 'кофейня, зерно — как запомнишь',
+
+  /* ── Добавлено в BJ-4 G2 (сетап, таймер, «оценка позже») ───────────────────
+     Прототип держал этот текст тернарниками `ru ? … : …` прямо в геттерах
+     (`hyChips` `DC:1286`, `grindHint` `DC:1294`, `tWaterLine`/`tNextLine`/
+     `tBtnLabel` `DC:1201-1204`, `rlNowLabel` `DC:1304`) — английский таймер и
+     английский сетап оставались наполовину русскими. */
+
+  /** Режимы гибрида: клапан закрыт до конца, открыт всегда, открывается по времени. */
+  brew_hy_imm: 'ИММЕРСИЯ',
+  brew_hy_perc: 'ПРОЛИВ',
+  brew_hy_mid: 'СЕРЕДИНА',
+  /** Начало подсказки под помолом: «конвертер: 3.2 — 6.0 · центр 4.6». */
+  brew_conv: 'конвертер',
+  /** D-3: расчёт переживает невыбранный девайс, но сетап об этом не молчит. */
+  brew_no_device: 'девайс не выбран · считаем проливом',
+  brew_add_bean: '+ ЗЕРНО',
+  brew_add_device: '+ ДЕВАЙС',
+  /** Секунда. Момент открытия клапана — единственное поле сетапа в секундах. */
+  unit_sec: 'с',
+
+  /** Строка воды в паузе: вода не льётся, идёт стекание. */
+  t_draining: 'даём стечь',
+  /** Начало строки «дальше: ПРОЛИВ · 70 г». */
+  t_next_line: 'дальше',
+  t_last_stage: 'последняя стадия',
+  /** Номер стадии в паузе: счёт стадий стоит. */
+  t_paused_num: '· · ·',
+
+  rate_now: 'ОЦЕНИТЬ СЕЙЧАС',
+  rate_later_btn: 'ПОЗЖЕ',
+
+  /* ── Добавлено в BJ-4 S-6 (интеграция: полка, девайсы, настройки, дом) ─────
+     Группы G1 и G4 не сдали работу, их экраны собраны здесь. Строки те же, что
+     держал прототип: часть — тернарниками `ru ? … : …` в `renderVals`
+     (`DC:1213-1214`, `DC:1252`, `DC:1259`, `DC:1263-1266`, `DC:1340-1343`),
+     часть — прямо в шаблоне. */
+
+  /** Дата ждущей записи, когда она сегодняшняя (`pendingWhen`, `DC:1225`). */
+  home_today: 'сегодня',
+  /** Вход в дегустацию «вне журнала» (`tasteLabel`, `DC:1301`). */
+  home_taste: 'ОЦЕНИТЬ ЧАШКУ',
+
+  /** Счётчик полки: «3 · пачки» (`shelfCount`, `DC:1252`). */
+  shelf_packs: 'пачки',
+  /** Подпись пустого слота фото на карточке полки. */
+  shelf_ph: 'фото пачки',
+
+  /* Подписи слотов на карточке пачки (`beanSlots`, `DC:1259`). Первый снимок —
+     лицо, остальные — шов с датой обжарки. */
+  bean_ph_face: 'лицо пачки',
+  bean_ph_seam: 'шов · дата обжарки',
+  /** Слот на экране добавления (`addSlotPh`, `DC:1263`). */
+  bean_ph_new: 'снимок пачки — камера или брось файл',
+  bean_photo_hint: 'минимум два снимка: лицо · шов с датой · оборот с составом',
+  /** Количество у дрипа: считаем пакеты, а не граммы (`addAmtLabel`, `DC:1266`). */
+  bean_count: 'ШТУК В КОРОБКЕ',
+  /** Имя пачки, если его не вписали (`addSave`, `DC:1271`). */
+  bean_untitled: 'Без названия',
+
+  /* Заметка конструктора девайса — что признак делает с завариванием
+     (`matNote`/`wallNote`, `DC:1213-1214`). Ключа `wall.flat` в TRAITS нет:
+     в прототипе это мёртвая ветка, сюда не перенесена. */
+  dev_mat_ceramic: 'керамика держит тепло — прогревать дольше',
+  dev_mat_glass: 'стекло — быстрый прогрев, быстрое остывание',
+  dev_mat_plastic: 'пластик почти не крадёт тепло',
+  dev_mat_metal: 'металл — мгновенный прогрев, следи за температурой',
+  dev_wall_petal: 'лепестки уменьшают контакт бумаги — поток быстрее',
+  dev_wall_ribs: 'рёбра держат бумагу от стенки',
+  dev_wall_spiral: 'спираль ведёт поток к центру',
+  dev_wall_smooth: 'гладкая стенка — медленнее дренаж',
+  /** Имя девайса, если его не вписали (`saveDev`, `DC:1280`). */
+  dev_untitled: 'Свой девайс',
+
+  /* CRUD кофемолок в настройках (`DC:1340-1343`). */
+  set_g_add: '+ КОФЕМОЛКА',
+  set_g_step: 'ШАГ, µm',
+  set_del_q: 'УДАЛИТЬ?',
+  set_del_yes: 'ДА',
+  /** Версия в подвале. Не перевод — номер, но в JSX хардкодов не держим. */
+  set_ver: 'v0.1',
 } as const;
 
-/** Ключ строки. 145 значений, выведены из русской таблицы. */
+/** Ключ строки. Значения выведены из русской таблицы; счёт держит тест. */
 export type StrKey = keyof typeof RU;
 
 const EN: Readonly<Record<StrKey, string>> = {
@@ -342,6 +506,101 @@ const EN: Readonly<Record<StrKey, string>> = {
   spec_type: 'TYPE',
   spec_comp: 'COMPONENTS',
   spec_grid: 'GRID',
+
+  entry_cup: 'Cup',
+  entry_cup_sub: 'tasting · no recipe',
+  entry_grind: 'grind',
+  entry_mark: 'S',
+  entry_none: '—',
+  deg: '°',
+
+  a11y_less: 'less',
+  a11y_more: 'more',
+  a11y_remove: 'remove',
+
+  conv_db: 'grinders · base',
+  conv_search: 'EK43, Comandante, Ode…',
+  conv_recent: 'RECENT',
+  conv_none: 'no grinders match',
+  conv_to_hint: 'yours · from settings',
+  conv_manual: 'manual',
+  conv_cal_balance: 'balance',
+  conv_cal_at: 'at',
+  conv_warn_clamped: 'outside the dial',
+  conv_warn_estimated: 'calibration is estimated — wider band',
+
+  unit_click: 'clicks',
+  unit_number: 'numbers',
+  unit_mark: 'marks',
+  um: 'µm',
+
+  log_time: 'TIME',
+  log_mode: 'MODE',
+  log_bean: 'COFFEE',
+  log_device: 'BREWER',
+  temp_short: 'T°',
+  qr_hint: 'hand over as a file or from the screen. no network, no accounts',
+
+  log_f_perc: 'PERC',
+  log_f_imm: 'IMM',
+  log_f_hybrid: 'HYBRID',
+  log_f_drip: 'DRIP',
+  log_f_cup: 'CUPS',
+
+  cmp_a: 'A',
+  cmp_b: 'B',
+
+  diag_taste: 'tasting',
+  diag_taste_sub: 'what is in the cup — by feel',
+  diag_wheel_sub: 'flavor wheel',
+  taste_name: 'WHAT COFFEE',
+  taste_name_ph: 'café, coffee — as you will recall it',
+
+  brew_hy_imm: 'IMMERSION',
+  brew_hy_perc: 'PERC',
+  brew_hy_mid: 'MID',
+  brew_conv: 'converter',
+  brew_no_device: 'no brewer picked · counted as percolation',
+  brew_add_bean: '+ COFFEE',
+  brew_add_device: '+ BREWER',
+  unit_sec: 's',
+
+  t_draining: 'letting it drain',
+  t_next_line: 'next',
+  t_last_stage: 'last stage',
+  t_paused_num: '· · ·',
+
+  rate_now: 'RATE NOW',
+  rate_later_btn: 'LATER',
+
+  home_today: 'today',
+  home_taste: 'RATE A CUP',
+
+  shelf_packs: 'packs',
+  shelf_ph: 'pack photo',
+
+  bean_ph_face: 'front of bag',
+  bean_ph_seam: 'seam · roast date',
+  bean_ph_new: 'shoot the bag — or drop a file',
+  bean_photo_hint: 'at least two shots: front · seam with date · back label',
+  bean_count: 'BAGS IN BOX',
+  bean_untitled: 'Untitled',
+
+  dev_mat_ceramic: 'ceramic holds heat — preheat longer',
+  dev_mat_glass: 'glass — fast preheat, fast cooling',
+  dev_mat_plastic: 'plastic steals almost no heat',
+  dev_mat_metal: 'metal — instant heat, watch the temp',
+  dev_wall_petal: 'petals reduce paper contact — faster flow',
+  dev_wall_ribs: 'ribs keep paper off the wall',
+  dev_wall_spiral: 'spiral guides flow to the center',
+  dev_wall_smooth: 'smooth wall — slower drawdown',
+  dev_untitled: 'Custom brewer',
+
+  set_g_add: '+ GRINDER',
+  set_g_step: 'STEP, µm',
+  set_del_q: 'DELETE?',
+  set_del_yes: 'YES',
+  set_ver: 'v0.1',
 };
 
 /** Таблицы строк по языкам. Заморожены — правка в рантайме исключена. */

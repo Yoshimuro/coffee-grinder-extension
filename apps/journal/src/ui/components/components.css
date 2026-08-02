@@ -1,0 +1,486 @@
+/*
+ * Стили общих компонентов BJ-4.
+ *
+ * Всё, что имеет токен, берётся из `tokens.css` переменной. Голыми пикселями
+ * записана только геометрия раскладки — отступы, высоты рядов, ширины кнопок:
+ * этих величин в токенах нет, а сам `tokens.css` пишет их так же (`.screen__head
+ * { padding: 10px 16px }`). Числа — из `design_handoff_brew_journal 3`.
+ *
+ * Приём с `::after` повторяется по файлу: макет рисует чипы и мелкие кнопки
+ * ниже 48px, а тач-таргет обязан быть 48px. Прозрачный псевдоэлемент
+ * растягивает область нажатия, не трогая ни одного видимого пикселя.
+ */
+
+/* ── ScreenHeader ────────────────────────────────────────────────────────── */
+
+.bj-head {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--line-2);
+}
+
+/*
+ * `margin: 0` не косметика: заголовок — это `h1`, и браузерные поля `0.67em`
+ * сверху и снизу добавляли шапке 16–17px высоты на каждом экране приложения.
+ * Сброс возвращает шапке макетные 42px (S-7).
+ *
+ * Размер и разрядка — макетные 11.5/2.5 (`DC:1247`), а не микро-лейбл 10/2:
+ * в прототипе это заголовок экрана, а не подпись секции.
+ */
+.bj-head__title {
+  margin: 0;
+  font-size: 11.5px;
+  font-weight: var(--fw-bold);
+  letter-spacing: 2.5px;
+  color: var(--text);
+  text-transform: uppercase;
+}
+
+/*
+ * Заголовок, собранный из данных, а не из `strings.ts`: имя пачки, отметка
+ * времени записи. Капса на нём в макете нет — «Ява Золотая» остаётся именем, а
+ * не подписью, — разрядка меньше, и длинное имя обрезается многоточием.
+ */
+.bj-head__title--plain {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  letter-spacing: 2px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  text-transform: none;
+}
+
+.bj-head__right {
+  margin-left: auto;
+  font-size: var(--fs-tech);
+  letter-spacing: 1px;
+  color: var(--faint);
+  text-align: right;
+}
+
+/*
+ * «←» в шапке: видимый прямоугольник 44×40 по макету (`DC:1247`), нажимаемый —
+ * 48×48 за счёт прозрачного `::after`. Тот же приём, что у степпера и чипов;
+ * без него шапка каждого вложенного экрана была на 8px выше макетной.
+ */
+.bj-head .back {
+  position: relative;
+  width: 44px;
+  height: 40px;
+}
+
+.bj-head .back::after {
+  content: '';
+  position: absolute;
+  inset: -4px -2px;
+}
+
+/* ── Stepper ─────────────────────────────────────────────────────────────── */
+
+/*
+ * Без `text-transform: uppercase`: подписи и так приходят капсом из
+ * `strings.ts`, а единственная, где есть строчные, — «ШАГ, µm» — от подъёма
+ * регистра превращалась в «ШАГ, ΜM» (знак микро поднимается в греческую «Мю»).
+ */
+.bj-stepper__label {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: var(--fs-micro);
+  font-weight: var(--fw-medium);
+  letter-spacing: var(--ls-micro);
+  color: var(--dim);
+}
+
+.bj-stepper__row {
+  display: flex;
+  gap: 6px;
+  align-items: stretch;
+  margin-top: 9px;
+}
+
+.bj-stepper--lg .bj-stepper__row {
+  gap: 8px;
+}
+
+.bj-stepper__btn {
+  display: flex;
+  position: relative;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  min-height: var(--touch);
+  border: 1px solid var(--line-4);
+  color: var(--text-secondary);
+  font-size: 15px;
+  line-height: 1;
+}
+
+/* Ширина по макету — 42px; нажимается всё равно 48. */
+.bj-stepper__btn::after {
+  content: '';
+  position: absolute;
+  inset: 0 -3px;
+}
+
+.bj-stepper--lg .bj-stepper__btn {
+  width: 56px;
+  min-height: 52px;
+  font-size: 18px;
+}
+
+.bj-stepper--lg .bj-stepper__btn::after {
+  inset: 0;
+}
+
+.bj-stepper__btn:disabled {
+  color: var(--faint);
+  cursor: default;
+}
+
+.bj-stepper__value {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+  align-items: center;
+  justify-content: center;
+  /* Число и единица — два флекс-элемента, и пробел между ними схлопывается на
+     границе элемента; зазор задаётся явно (макет `DC:1265`). */
+  column-gap: 6px;
+  min-height: var(--touch);
+  border: 1px solid var(--line-4);
+  background: none;
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 15px;
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+  outline: none;
+}
+
+.bj-stepper--lg .bj-stepper__value {
+  min-height: 52px;
+  font-size: var(--fs-stepper-min);
+}
+
+/* Единица меряет число, а не спорит с ним: в крупном степпере она мельче и
+   тише (макет `DC:1265`). В обычном ряду сетапа «250 г» набрано одним кеглем —
+   там правило не действует. */
+.bj-stepper--lg .bj-stepper__unit {
+  font-size: var(--fs-tech);
+  color: var(--dim);
+}
+
+.bj-stepper__hint {
+  margin-top: 8px;
+  font-size: var(--fs-tech);
+  color: var(--faint);
+}
+
+/* ── InverseButton ───────────────────────────────────────────────────────── */
+
+/*
+ * 10.5px и нулевые поля — макетные (`DC:1254`). На 11px с полями 12px самая
+ * длинная подпись, «ВЗЯТЬ В ЗАВАРИВАНИЕ», ломалась на две строки; вдобавок
+ * горизонтальные поля перекашивали ряд из двух кнопок: при `flex-basis: 0`
+ * гипотетический размер флекс-элемента не может быть меньше своих полей и
+ * рамок, поэтому кнопка с полями 12px забирала на 22px больше соседней.
+ */
+.bj-inverse {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-width: 0;
+  min-height: 52px;
+  padding: 0;
+  background: var(--inverse-bg);
+  color: var(--inverse-text);
+  font-size: 10.5px;
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--ls-micro);
+  text-align: center;
+  text-transform: uppercase;
+}
+
+/*
+ * Три ступени макета, а не три произвольных размера (`DC:1258…1280`):
+ *   sm  46px/10.5/2   — вспомогательная кнопка внутри панели (тач до 48);
+ *   md  52px/10.5/2   — половина ряда, «ВЗЯТЬ В ЗАВАРИВАНИЕ», «ПОВТОРИТЬ»;
+ *   lg  54px/11/2.5   — главная кнопка экрана: ЗАВАРИТЬ, СОХРАНИТЬ, ДОБАВИТЬ;
+ *   xl  58px/13/3.5   — СТАРТ на сетапе, единственная кнопка такого веса.
+ */
+.bj-inverse--lg {
+  min-height: 54px;
+  font-size: 11px;
+  letter-spacing: 2.5px;
+}
+
+.bj-inverse--xl {
+  min-height: 58px;
+  font-size: var(--fs-body);
+  letter-spacing: 3.5px;
+}
+
+/* Рост макетных 46px добирается до тач-минимума прозрачным `::after`. */
+.bj-inverse--sm {
+  position: relative;
+  min-height: 46px;
+}
+
+.bj-inverse--sm::after {
+  content: '';
+  position: absolute;
+  inset: -1px 0;
+}
+
+.bj-inverse:disabled {
+  background: var(--line-4);
+  color: var(--dim);
+  cursor: default;
+}
+
+/* ── Tag ─────────────────────────────────────────────────────────────────── */
+
+.bj-tag {
+  display: inline-flex;
+  align-items: stretch;
+  border: 1px solid var(--line-4);
+  color: var(--text);
+  font-size: 10.5px;
+}
+
+/* Статический чип формы кофе: «ЗЕРНО», «ДРИП-ПАКЕТ». Кегль 8.5/1.5 и цвет
+   `--dim` — макетные (`DC:1258` в шапке пачки, `DC:1271` в строке сетапа);
+   на 10px/1px метка спорила по весу с именем пачки рядом. */
+.bj-tag--caps {
+  align-items: center;
+  color: var(--dim);
+  font-size: 8.5px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+}
+
+.bj-tag--caps .bj-tag__body {
+  padding: 4px 8px;
+}
+
+/* Тег дескриптора: рамка цветом вкуса, высота 38 по макету. */
+.bj-tag--desc {
+  min-height: 38px;
+}
+
+.bj-tag__body {
+  display: flex;
+  position: relative;
+  align-items: center;
+  gap: 7px;
+  padding: 0 10px;
+  color: inherit;
+  font: inherit;
+}
+
+.bj-tag--interactive .bj-tag__body::after {
+  content: '';
+  position: absolute;
+  inset: -5px 0;
+}
+
+.bj-tag__dots {
+  font-size: 9px;
+  letter-spacing: 1px;
+}
+
+.bj-tag__remove {
+  display: flex;
+  position: relative;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  border-left: 1px solid var(--line-3);
+  color: var(--faint);
+  font-size: 12px;
+}
+
+.bj-tag__remove::after {
+  content: '';
+  position: absolute;
+  inset: -5px 0 -5px -10px;
+}
+
+/* ── Chip ────────────────────────────────────────────────────────────────── */
+
+.bj-chip {
+  display: inline-flex;
+  position: relative;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  padding: 7px 10px;
+  border: 1px solid var(--line-4);
+  color: var(--dim);
+  font-size: 8.5px;
+  letter-spacing: 1.2px;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.bj-chip::after {
+  content: '';
+  position: absolute;
+  inset: -9px 0;
+}
+
+.bj-chip--on {
+  border-color: var(--text);
+  color: var(--text);
+}
+
+/* Чипы конструктора девайса и гибрида: в ряд, поровну, во всю высоту тапа. */
+.bj-chip--grow {
+  flex: 1;
+  min-height: 44px;
+  padding: 0 6px;
+  white-space: normal;
+}
+
+.bj-chip--grow::after {
+  inset: -2px 0;
+}
+
+.bj-chips {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+/* Лента фильтров: не переносится, скроллится вбок. */
+.bj-chips--scroll {
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  padding-bottom: 2px;
+  scrollbar-width: none;
+}
+
+.bj-chips--scroll::-webkit-scrollbar {
+  display: none;
+}
+
+/* ── Section / Row / Hairline ────────────────────────────────────────────── */
+
+.bj-section {
+  margin-top: 18px;
+}
+
+.bj-section:first-child {
+  margin-top: 0;
+}
+
+.bj-section__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  padding-bottom: 9px;
+  border-bottom: 1px solid var(--line-2);
+}
+
+.bj-section__label {
+  font-size: var(--fs-micro);
+  font-weight: var(--fw-medium);
+  letter-spacing: var(--ls-micro);
+  color: var(--faint);
+  text-transform: uppercase;
+}
+
+.bj-section__aside {
+  font-size: var(--fs-tech);
+  color: var(--faint);
+}
+
+.bj-row {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  width: 100%;
+  min-height: var(--touch);
+  padding: 13px 0;
+  border-bottom: 1px solid var(--line-1);
+  text-align: left;
+}
+
+.bj-row--flush {
+  border-bottom: none;
+}
+
+.bj-row__main {
+  flex: 1;
+  min-width: 0;
+}
+
+.bj-row__label {
+  font-size: var(--fs-body-min);
+  color: var(--text);
+}
+
+.bj-row__sub {
+  margin-top: 4px;
+  font-size: var(--fs-tech);
+  color: var(--dim);
+}
+
+.bj-row__right {
+  flex: none;
+  font-size: var(--fs-tech);
+  color: var(--faint);
+  text-align: right;
+}
+
+.bj-hairline {
+  height: 0;
+  border-bottom: 1px solid var(--line-1);
+}
+
+/* ── EmptyState ──────────────────────────────────────────────────────────── */
+
+.bj-empty {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 16px 0;
+  font-size: var(--fs-body-min);
+  color: var(--faint);
+  text-align: left;
+}
+
+/*
+ * Приглашение-действие: «+ ЗЕРНО», «+ ДЕВАЙС». В макете это строка, а не
+ * кнопка по центру (`DC:1271`): подпись прижата влево, как у пунктов списка,
+ * над которыми она стоит, рост 44px, кегль 9.5/1.5. Нажимается 48px — за счёт
+ * прозрачного `::after`.
+ */
+.bj-empty--action {
+  position: relative;
+  justify-content: flex-start;
+  height: 44px;
+  padding: 0 13px;
+  border: 1px dashed var(--line-4);
+  color: var(--dim);
+  font-size: var(--fs-tech);
+  letter-spacing: 1.5px;
+  text-align: left;
+  text-transform: uppercase;
+}
+
+.bj-empty--action::after {
+  content: '';
+  position: absolute;
+  inset: -2px 0;
+}

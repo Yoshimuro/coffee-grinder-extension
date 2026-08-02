@@ -1,0 +1,654 @@
+/*
+ * Экраны журнала: диагностика, лента, деталь записи, сравнение.
+ *
+ * Цвета — переменные `tokens.css`. Голыми пикселями записана только геометрия
+ * раскладки (высоты ячеек, ширины колонок, отступы) — этих величин в токенах
+ * нет, и `components.css` пишет их так же. Числа взяты из
+ * `design_handoff_brew_journal 3/Brew Journal.dc.html`.
+ *
+ * Два цвета прототипа в токены не попали, а нужны дословно:
+ *   --jr-line-5  #33332F — рамка чуть заметнее `--line-4`: карточка входа в
+ *                колесо, пунктир подсказок, рамка чекбокса сравнения;
+ *   --jr-same    #6E6E68 — совпавшее значение в сравнении (§9 требует именно
+ *                его: он тише текста, но громче `--faint`).
+ * Оба объявлены здесь, а не в `tokens.css`: тот заморожен. Кандидаты на
+ * повышение в токены — пометка для пиксельного прохода S-7.
+ */
+
+.jr {
+  --jr-line-5: #33332f;
+  --jr-same: #6e6e68;
+
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 0;
+}
+
+/* Прокручиваемое тело. Шапка и ленты фильтров остаются на месте. */
+.jr__body {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 16px var(--pad-screen) 28px;
+  -webkit-overflow-scrolling: touch;
+}
+
+/*
+ * Шапка корневого экрана (журнал — вкладка): крупнее вложенной, без «←» и без
+ * нижней черты — ленту фильтров под ней отбивает уже она сама.
+ */
+.jr--root .bj-head {
+  padding: 16px var(--pad-screen) 10px;
+  border-bottom: none;
+}
+
+.jr--root .bj-head__title {
+  font-size: 12px;
+  letter-spacing: 3px;
+}
+
+.jr__label {
+  font-size: var(--fs-tech);
+  font-weight: var(--fw-medium);
+  letter-spacing: var(--ls-micro);
+  color: var(--faint);
+  text-transform: uppercase;
+}
+
+.jr__hint {
+  margin-top: 8px;
+  font-size: var(--fs-tech);
+  color: var(--faint);
+  line-height: 1.7;
+}
+
+.jr__group {
+  margin-top: 20px;
+}
+
+/* ── Диагностика ─────────────────────────────────────────────────────────── */
+
+.jr-diag__sub {
+  font-size: var(--fs-tech);
+  color: var(--faint);
+}
+
+.jr-field {
+  margin-top: 14px;
+}
+
+.jr-field__label {
+  font-size: var(--fs-micro);
+  font-weight: var(--fw-medium);
+  letter-spacing: var(--ls-micro);
+  color: var(--dim);
+  text-transform: uppercase;
+}
+
+.jr-input,
+.jr-textarea {
+  width: 100%;
+  margin-top: 9px;
+  padding: 13px;
+  border: 1px solid var(--line-4);
+  background: none;
+  color: var(--text);
+  font-family: var(--font);
+  font-size: var(--fs-body);
+  outline: none;
+}
+
+.jr-input:focus,
+.jr-textarea:focus {
+  border-color: var(--dim);
+}
+
+.jr-input::placeholder,
+.jr-textarea::placeholder {
+  color: var(--faint);
+}
+
+/* Шкала 0…10 одиннадцатью ячейками. */
+.jr-scale {
+  margin-top: 18px;
+}
+
+.jr-scale__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.jr-scale__label {
+  font-size: var(--fs-micro);
+  font-weight: var(--fw-medium);
+  letter-spacing: var(--ls-micro);
+  color: var(--dim);
+  text-transform: uppercase;
+}
+
+.jr-scale__value {
+  font-size: var(--fs-body-min);
+  color: var(--text-secondary);
+}
+
+.jr-scale__cells {
+  display: flex;
+  gap: 3px;
+  margin-top: 9px;
+}
+
+/*
+ * Ячейка нарисована 32px, а нажимается на все 48: вертикальный вылет
+ * прозрачным псевдоэлементом — тот же приём, что у чипов в `components.css`.
+ */
+.jr-cell {
+  position: relative;
+  flex: 1;
+  height: 32px;
+  border: 1px solid var(--line-3);
+  background: var(--plane);
+}
+
+.jr-cell::after {
+  content: '';
+  position: absolute;
+  inset: -8px 0;
+}
+
+.jr-cell--on {
+  background: var(--text);
+}
+
+/* Карточка входа в колесо вкусов. */
+.jr-wheel-cta {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+  margin-top: 22px;
+  padding: 14px;
+  border: 1px solid var(--jr-line-5);
+  text-align: left;
+}
+
+.jr-mini {
+  display: block;
+  flex: none;
+}
+
+/* Колонка, а не поток: заголовок и подпись — два ряда. Оба вложенных элемента
+   инлайновые (`<span>` внутри кнопки), и без этого они склеивались в строку
+   «ДЕСКРИПТОРЫколесо вкусов», а `margin-top` на инлайне не работал (S-7). */
+.jr-wheel-cta__main {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.jr-wheel-cta__title {
+  font-size: 12.5px;
+  font-weight: var(--fw-bold);
+  letter-spacing: 1px;
+}
+
+.jr-wheel-cta__sub {
+  margin-top: 6px;
+  font-size: var(--fs-tech);
+  color: var(--dim);
+  line-height: 1.6;
+}
+
+.jr-wheel-cta__go {
+  flex: none;
+  color: var(--faint);
+}
+
+/* На записи дескрипторы только читают, поэтому тег ниже, чем в диагностике,
+   где по нему ещё и тапают: 32px против 38 (`DC:1277` против `DC:1274`). */
+[data-screen='detail'] .bj-tag--desc {
+  min-height: 32px;
+}
+
+/* Заметка и «ГОЛОСОМ». */
+.jr-note {
+  display: flex;
+  gap: 8px;
+  margin-top: 9px;
+}
+
+.jr-note .jr-textarea {
+  flex: 1;
+  min-height: 78px;
+  margin-top: 0;
+  padding: 12px;
+  font-size: var(--fs-body-min);
+  line-height: 1.6;
+  resize: none;
+}
+
+.jr-mic {
+  display: flex;
+  flex: none;
+  flex-direction: column;
+  gap: 7px;
+  align-items: center;
+  justify-content: center;
+  width: 76px;
+  border: 1px solid var(--line-4);
+}
+
+.jr-mic--live {
+  border-color: var(--text);
+}
+
+.jr-mic__dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--faint);
+}
+
+.jr-mic--live .jr-mic__dot {
+  background: var(--text);
+  animation: jr-blink 0.9s infinite;
+}
+
+.jr-mic__label {
+  font-size: 8px;
+  letter-spacing: 1.5px;
+  color: var(--dim);
+}
+
+@keyframes jr-blink {
+  50% {
+    opacity: 0.2;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .jr-mic--live .jr-mic__dot {
+    animation: none;
+  }
+}
+
+/* Предложенные дескрипторы — пунктиром: их ещё не выбрали. */
+.jr-sug {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 7px;
+}
+
+.jr-sug__chip {
+  position: relative;
+  padding: 8px 11px;
+  border: 1px dashed var(--jr-line-5);
+  color: var(--text-secondary);
+  font-size: var(--fs-micro);
+}
+
+.jr-sug__chip::after {
+  content: '';
+  position: absolute;
+  inset: -7px 0;
+}
+
+.jr-picked {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 9px;
+}
+
+.jr-save {
+  margin-top: 22px;
+}
+
+/* ── Журнал ──────────────────────────────────────────────────────────────── */
+
+.jr-log__head {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-left: auto;
+}
+
+.jr-log__brew {
+  width: auto;
+  min-height: 38px;
+  padding: 0 12px;
+  font-size: 9px;
+  letter-spacing: 1.5px;
+}
+
+.jr-log__cmp {
+  display: flex;
+  align-items: center;
+  min-height: 38px;
+  padding: 0 12px;
+  border: 1px solid var(--line-4);
+  color: var(--dim);
+  font-size: 9px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+}
+
+.jr-log__cmp--on {
+  border-color: var(--text);
+  color: var(--text);
+}
+
+.jr-log__filters {
+  flex: none;
+  padding: 2px var(--pad-screen) 10px;
+}
+
+.jr-log__pick2 {
+  flex: none;
+  padding: 0 var(--pad-screen) 8px;
+  font-size: 9px;
+  color: var(--faint);
+}
+
+.jr-log__list {
+  padding-top: 0;
+}
+
+.jr-row {
+  display: flex;
+  gap: 11px;
+  width: 100%;
+  padding: 13px 0;
+  border-bottom: 1px solid var(--line-1);
+  text-align: left;
+}
+
+.jr-row__box {
+  flex: none;
+  width: 16px;
+  height: 16px;
+  margin-top: 2px;
+  border: 1px solid var(--jr-line-5);
+}
+
+.jr-row__box--on {
+  background: var(--text);
+}
+
+/* Строка ленты — кнопка целиком, поэтому её внутренности `span`; блочность им
+   приходится задавать руками. */
+.jr-row__box,
+.jr-row__when,
+.jr-row__main,
+.jr-row__right,
+.jr-row__date,
+.jr-row__time,
+.jr-row__title,
+.jr-row__sub,
+.jr-row__mark,
+.jr-row__pending {
+  display: block;
+}
+
+.jr-row__when {
+  flex: none;
+  width: 42px;
+}
+
+.jr-row__date {
+  font-size: var(--fs-tech);
+  color: var(--faint);
+}
+
+.jr-row__time {
+  margin-top: 3px;
+  font-size: 8px;
+  color: #3f3f3b; /* тише `--faint`; в токенах ступени нет — S-7 */
+}
+
+.jr-row__main {
+  flex: 1;
+  min-width: 0;
+}
+
+.jr-row__title {
+  font-size: var(--fs-body-min);
+}
+
+.jr-row__sub {
+  margin-top: 4px;
+  font-size: 9px;
+  color: var(--dim);
+}
+
+.jr-row__desc {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+  margin-top: 5px;
+}
+
+.jr-dot {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 9px;
+  color: var(--dim);
+}
+
+.jr-dot__mark {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+}
+
+.jr-row__right {
+  flex: none;
+  text-align: right;
+}
+
+.jr-row__mark {
+  font-size: 10.5px;
+  color: var(--text-secondary);
+}
+
+.jr-row__pending {
+  margin-top: 5px;
+  padding: 3px 6px;
+  border: 1px solid var(--jr-line-5);
+  font-size: 7.5px;
+  letter-spacing: 1px;
+  color: var(--dim);
+  white-space: nowrap;
+}
+
+.jr-log__foot {
+  flex: none;
+  padding: 10px var(--pad-screen) 14px;
+  border-top: 1px solid var(--line-2);
+}
+
+/* ── Деталь записи ───────────────────────────────────────────────────────── */
+
+.jr-detail__repeat {
+  display: flex;
+  position: relative;
+  align-items: center;
+  height: 40px;
+  padding: 0 12px;
+  border: 1px solid var(--jr-line-5);
+  color: var(--text-secondary);
+  font-size: 9px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+}
+
+/* 40px в макете, 48 под пальцем. */
+.jr-detail__repeat::after {
+  content: '';
+  position: absolute;
+  inset: -4px 0;
+}
+
+.jr-detail__meta {
+  font-size: 14px;
+}
+
+/* Сетка параметров: три колонки, зазор в один пиксель — он и есть линия. */
+.jr-params {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  margin-top: 14px;
+  border: 1px solid var(--line-2);
+  background: var(--line-2);
+}
+
+.jr-param {
+  padding: 11px 10px;
+  background: var(--bg);
+}
+
+.jr-param__label {
+  font-size: 8px;
+  font-weight: var(--fw-medium);
+  letter-spacing: 1.5px;
+  color: var(--faint);
+  text-transform: uppercase;
+}
+
+.jr-param__value {
+  margin-top: 6px;
+  font-size: var(--fs-body);
+}
+
+.jr-stage {
+  display: flex;
+  gap: 12px;
+  align-items: baseline;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--line-1);
+}
+
+.jr-stage__name {
+  flex: 1;
+  font-size: var(--fs-micro);
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+}
+
+.jr-stage__water {
+  font-size: var(--fs-micro);
+  color: var(--dim);
+}
+
+.jr-stage__dur {
+  width: 44px;
+  font-size: var(--fs-micro);
+  color: var(--faint);
+  text-align: right;
+}
+
+.jr-diag-line {
+  margin-top: 8px;
+  font-size: var(--fs-body-min);
+  color: var(--text-secondary);
+}
+
+.jr-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-top: 9px;
+}
+
+.jr-note-text {
+  margin-top: 8px;
+  font-size: var(--fs-body-min);
+  color: var(--text-secondary);
+  line-height: 1.7;
+  white-space: pre-wrap;
+}
+
+/*
+ * QR рецепта. Кодировщика ещё нет (BJ-6), фейковый шум прототипа не переносится
+ * (D-7), поэтому здесь честно пустая площадка ровно того размера, который
+ * займёт настоящий код.
+ */
+.jr-qr {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  margin-top: 22px;
+}
+
+.jr-qr__slot {
+  flex: none;
+  width: 104px;
+  height: 104px;
+  border: 1px solid var(--line-2);
+  background: var(--plane);
+}
+
+.jr-qr__text {
+  max-width: 170px;
+}
+
+/* ── Сравнение ───────────────────────────────────────────────────────────── */
+
+.jr-cmp__head {
+  display: flex;
+  flex: none;
+  gap: 8px;
+  padding: 12px var(--pad-screen) 10px;
+  border-bottom: 1px solid var(--line-2);
+}
+
+.jr-cmp__body {
+  padding-top: 0;
+}
+
+.jr-cmp__col {
+  flex: 1;
+  min-width: 0;
+  font-size: var(--fs-tech);
+  letter-spacing: 1px;
+  color: var(--text-secondary);
+}
+
+.jr-cmp__row {
+  display: flex;
+  gap: 8px;
+  padding: 11px 0;
+  border-bottom: 1px solid var(--line-1);
+}
+
+.jr-cmp__label {
+  flex: none;
+  width: 86px;
+  padding-top: 2px;
+  font-size: 8.5px;
+  letter-spacing: 1.2px;
+  color: var(--faint);
+  text-transform: uppercase;
+}
+
+/* Отличие — белым и жирным, совпадение — приглушённым (§9, README:80). */
+.jr-cmp__value {
+  flex: 1;
+  min-width: 0;
+  font-size: 11.5px;
+  font-weight: var(--fw-regular);
+  color: var(--jr-same);
+  line-height: 1.6;
+}
+
+.jr-cmp__value--diff {
+  color: var(--text);
+  font-weight: var(--fw-bold);
+}

@@ -1,0 +1,362 @@
+/*
+ * Конвертер помола. Геометрия — из `Brew Journal.dc.html` (`DC:148-220`),
+ * цвета и шрифты — токенами.
+ *
+ * Три величины прототипа токена не имеют и заменены ближайшим (отмечено по
+ * месту): рамка панели #33332F, заливка полосы #6E6E68, подписи шкалы #3F3F3B.
+ */
+
+/* ── Пикер «ОТКУДА» ──────────────────────────────────────────────────────── */
+
+.conv-picker {
+  margin-top: 9px;
+}
+
+.conv-picker__button {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  min-height: var(--touch);
+  padding: 13px 14px;
+  border: 1px solid var(--line-4);
+  color: var(--text);
+  font-size: var(--fs-body-min);
+}
+
+.conv-picker__name {
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.conv-picker__caret {
+  flex: none;
+  color: var(--faint);
+  font-size: var(--fs-micro);
+}
+
+/* Панель прирастает к кнопке — верхней рамки у неё нет. */
+.conv-picker__panel {
+  border: 1px solid var(--line-4);
+  border-top: none;
+}
+
+.conv-picker__search {
+  width: 100%;
+  min-height: var(--touch);
+  padding: 12px 14px;
+  border: none;
+  border-bottom: 1px solid var(--line-2);
+  background: none;
+  color: var(--text);
+  font-family: var(--font);
+  font-size: var(--fs-body-min);
+  outline: none;
+}
+
+.conv-picker__search::placeholder {
+  color: var(--faint);
+}
+
+/* 236px — примерно пять строк: список остаётся списком, а не экраном. */
+.conv-picker__list {
+  max-height: 236px;
+  margin: 0;
+  padding: 0;
+  overflow-y: auto;
+  list-style: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+.conv-picker__row {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  min-height: var(--touch);
+  padding: 12px 14px;
+  /* Левая рамка есть всегда — прозрачная. Иначе выбор двигал бы строку. */
+  border-bottom: 1px solid var(--line-1);
+  border-left: 2px solid transparent;
+  text-align: left;
+}
+
+.conv-picker__row--on {
+  border-left-color: var(--text);
+}
+
+.conv-picker__row--in {
+  padding-left: 26px;
+}
+
+.conv-picker__row--brand {
+  color: var(--text-secondary);
+}
+
+.conv-picker__title {
+  min-width: 0;
+  overflow: hidden;
+  font-size: 11.5px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.conv-picker__meta {
+  flex: none;
+  color: var(--faint);
+  font-size: var(--fs-tech-min);
+}
+
+.conv-picker__label {
+  padding: 10px 14px 6px;
+  font-size: var(--fs-tech-min);
+  font-weight: var(--fw-medium);
+  letter-spacing: var(--ls-micro);
+  color: var(--faint);
+  text-transform: uppercase;
+}
+
+.conv-picker__empty {
+  padding: 16px 14px;
+  color: var(--faint);
+  font-size: var(--fs-body-min);
+}
+
+/*
+ * Степпер конвертера крупнее общего «lg»: 54px ростом, «−/+» 19px, значение
+ * 21px (`DC:1250`). Это единственное число на экране, которое крутят, и макет
+ * даёт ему на две ступени больше, чем помолу на сетапе.
+ */
+[data-screen='conv'] .bj-stepper--lg .bj-stepper__btn {
+  min-height: 54px;
+  font-size: var(--fs-stepper-min);
+}
+
+[data-screen='conv'] .bj-stepper--lg .bj-stepper__value {
+  min-height: 54px;
+  font-size: var(--fs-stepper);
+}
+
+/* ── Строки под пикером ──────────────────────────────────────────────────── */
+
+.conv-tech {
+  margin-top: 9px;
+  font-size: var(--fs-micro);
+  color: var(--dim);
+}
+
+.conv-warn {
+  margin-top: 6px;
+  font-size: var(--fs-tech);
+  color: var(--faint);
+}
+
+.conv-split {
+  height: 1px;
+  margin: 20px 0 18px;
+  background: var(--line-2);
+}
+
+.conv-label {
+  display: flex;
+  gap: 8px;
+  align-items: baseline;
+}
+
+.conv-label__hint {
+  color: var(--faint);
+  font-size: var(--fs-tech-min);
+}
+
+/* ── «КУДА» ──────────────────────────────────────────────────────────────── */
+
+.conv-to {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  min-height: var(--touch);
+  margin-top: 9px;
+  padding: 13px 14px;
+  border: 1px solid var(--line-4);
+  color: var(--text);
+  font-size: var(--fs-body-min);
+  text-align: left;
+}
+
+.conv-to__caret {
+  flex: none;
+  color: var(--faint);
+  font-size: 11px;
+}
+
+/* ── Результат ───────────────────────────────────────────────────────────── */
+
+.conv-result {
+  display: flex;
+  gap: 12px;
+  align-items: baseline;
+  margin-top: 22px;
+}
+
+.conv-result__value {
+  font-size: var(--fs-result);
+  font-weight: var(--fw-light);
+  line-height: 1;
+  letter-spacing: -1px;
+}
+
+.conv-result__unit {
+  font-size: 10.5px;
+  letter-spacing: var(--ls-micro);
+  color: var(--dim);
+  text-transform: uppercase;
+}
+
+/* ── Полоса-шкала ────────────────────────────────────────────────────────── */
+
+.conv-band {
+  position: relative;
+  height: 2px;
+  margin-top: 14px;
+  background: var(--line-3);
+}
+
+/* Прототип красил заливку #6E6E68 — токена такой яркости нет, взят --dim. */
+.conv-band__fill {
+  position: absolute;
+  top: -2px;
+  height: 6px;
+  background: var(--dim);
+}
+
+.conv-band__tick {
+  position: absolute;
+  top: -5px;
+  width: 2px;
+  height: 12px;
+  background: var(--text);
+}
+
+/* Подписи краёв: прототип #3F3F3B, ближайший токен --faint. */
+.conv-scale {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 6px;
+  font-size: var(--fs-tech-min);
+  color: var(--faint);
+}
+
+.conv-center {
+  margin-top: 14px;
+  font-size: var(--fs-micro);
+  color: var(--dim);
+}
+
+/* ── Строка калибровки ───────────────────────────────────────────────────── */
+
+.conv-calib {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin-top: 8px;
+}
+
+.conv-calib__line {
+  font-size: var(--fs-micro);
+  color: var(--text-secondary);
+}
+
+.conv-calib__reset {
+  position: relative;
+  min-height: 20px;
+  border-bottom: 1px solid var(--line-4);
+  color: var(--faint);
+  font-size: var(--fs-tech-min);
+  letter-spacing: 1.5px;
+}
+
+/* Ссылка ростом 20px — нажимается всё равно 48. */
+.conv-calib__reset::after {
+  content: '';
+  position: absolute;
+  inset: -14px -12px;
+}
+
+/* ── Панель калибровки ───────────────────────────────────────────────────── */
+
+.conv-cal {
+  margin-top: 18px;
+  padding: 14px;
+  border: 1px solid var(--line-4);
+}
+
+.conv-cal__q {
+  font-size: 11.5px;
+  color: var(--text);
+}
+
+.conv-cal__suggest {
+  margin-top: 6px;
+  font-size: var(--fs-tech);
+  color: var(--dim);
+}
+
+/* Степпер без лейбла всё равно несёт свой верхний отступ — гасим, чтобы
+   расстояние до подсказки задавала панель, а не компонент. */
+.conv-cal__stepper {
+  margin-top: 12px;
+}
+
+.conv-cal__stepper .bj-stepper__row {
+  margin-top: 0;
+}
+
+.conv-cal__hint {
+  margin-top: 9px;
+  font-size: var(--fs-tech-min);
+  color: var(--faint);
+}
+
+.conv-cal__actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.conv-cal__apply {
+  flex: 1;
+}
+
+.conv-cal__close {
+  flex: none;
+  width: 110px;
+  min-height: var(--touch);
+  border: 1px solid var(--line-4);
+  color: var(--dim);
+  font-size: 10.5px;
+  letter-spacing: var(--ls-micro);
+  text-align: center;
+}
+
+/* ── Нижние кнопки ───────────────────────────────────────────────────────── */
+
+.conv-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 22px;
+}
+
+.conv-actions__calibrate {
+  flex: 1;
+  min-height: 52px;
+}
+
+.conv-actions__use {
+  flex: 1;
+}

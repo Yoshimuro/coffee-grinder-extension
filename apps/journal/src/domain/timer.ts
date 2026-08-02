@@ -207,11 +207,17 @@ export function makeEntry(input: MakeEntryInput): MakeEntryResult {
   if (bean.form === 'drip' || entry.mode === 'perc') entry.pours = setup.pours;
   if (dev && dev.flow === 'hybrid' && setup.hyMode === 'mid') entry.valveAt = setup.valveAt;
 
-  return { entry, bean: decrement(bean, dose) };
+  return { entry, bean: decrementBean(bean, dose) };
 }
 
-/** Списание: дрип теряет пакетик, зерно и молотый — дозу. Зажато нулём. */
-function decrement(bean: BeanRecord, dose: number): BeanRecord {
+/**
+ * Списание: дрип теряет пакетик, зерно и молотый — дозу. Зажато нулём.
+ *
+ * Экспортируется, потому что то же списание делает `saveEntryWithDecrement`
+ * (`db/repo/entries.ts`) внутри транзакции — по свежей записи пачки из базы, а
+ * не по копии из состояния экрана. Два места, одно правило.
+ */
+export function decrementBean(bean: BeanRecord, dose: number): BeanRecord {
   if (bean.form === 'drip') {
     if (bean.leftCount === undefined) return bean;
     return { ...bean, leftCount: Math.max(0, bean.leftCount - 1) };

@@ -1,0 +1,380 @@
+/*
+ * Экраны заваривания: сетап, таймер, «оценка позже».
+ *
+ * Числа, у которых есть токен, берутся переменной. Голыми пикселями записана
+ * только геометрия раскладки — отступы, высоты рядов, мелкие кегли: этих
+ * величин в `tokens.css` нет, а сам он и `components.css` пишут их так же.
+ * Все значения — из `design_handoff_brew_journal 3` (`DC:388-470`, `DC:505-530`,
+ * `DC:532-540`).
+ */
+
+/* ── Сетап заваривания ───────────────────────────────────────────────────── */
+
+/* Микро-лейбл группы. Черты под собой, в отличие от `Section`, не несёт:
+   сетап — это столбик полей, а не список. */
+.bj-brew__group {
+  margin-top: 18px;
+}
+
+.bj-brew__group:first-child {
+  margin-top: 0;
+}
+
+.bj-brew__list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 9px;
+}
+
+/* Строка выбора: пачка и девайс различаются только внутренностями. */
+.bj-brew__pick {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  width: 100%;
+  min-height: var(--touch);
+  padding: 11px 13px;
+  border: 1px solid var(--line-3);
+  text-align: left;
+}
+
+.bj-brew__pick--on {
+  border-color: var(--text);
+}
+
+/* Колонка, а не поток: имя и тех-строка — это два ряда. Оба элемента внутри
+   инлайновые (`<span>` в кнопке), и без этого они склеивались в одну строку, а
+   `margin-top` с `text-overflow` на инлайне просто не работали (S-6). */
+.bj-brew__pick-main {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.bj-brew__pick-name {
+  max-width: 100%;
+  overflow: hidden;
+  color: var(--text-secondary);
+  font-size: var(--fs-body-min);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.bj-brew__pick--on .bj-brew__pick-name {
+  color: var(--text);
+}
+
+.bj-brew__pick-tech {
+  margin-top: 4px;
+  color: var(--dim);
+  font-size: 8.5px;
+}
+
+/* Девайс: чертёж слева, имя справа. Строка выше зерновой — в неё встаёт
+   чертёж 37px ростом (макет: 52px против 48). */
+.bj-brew__pick--dev {
+  gap: 12px;
+  min-height: 52px;
+  padding: 8px 13px;
+}
+
+/* Мини-чертёж девайса (S-6). Рамки нет: пока слот пустовал, она обозначала
+   место, а вокруг настоящего чертежа стала бы второй рамкой внутри строки. */
+.bj-brew__glyph {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 58px;
+  height: 37px;
+}
+
+.bj-brew__note {
+  margin-top: 12px;
+  color: var(--faint);
+  font-size: var(--fs-tech);
+}
+
+/* Режим гибрида: три равных чипа в ряд. */
+.bj-brew__row {
+  display: flex;
+  gap: 6px;
+  margin-top: 9px;
+}
+
+.bj-brew__hint {
+  margin-top: 8px;
+  color: var(--faint);
+  font-size: 9px;
+}
+
+/* Вес / вода / температура / проливы — попарно. */
+.bj-brew__grid {
+  display: grid;
+  margin-top: 18px;
+  gap: 14px 10px;
+  grid-template-columns: 1fr 1fr;
+}
+
+.bj-brew__start {
+  margin-top: 24px;
+}
+
+/* Вторая по важности кнопка — рамкой, а не заливкой: главная на экране одна. */
+.bj-brew__manual {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 50px;
+  margin-top: 8px;
+  padding: 4px 12px;
+  border: 1px solid var(--line-4);
+  text-align: center;
+}
+
+.bj-brew__manual:disabled {
+  cursor: default;
+}
+
+.bj-brew__manual-label {
+  color: var(--text-secondary);
+  font-size: var(--fs-micro);
+  letter-spacing: var(--ls-micro);
+}
+
+.bj-brew__manual-hint {
+  color: var(--faint);
+  font-size: 8.5px;
+}
+
+.bj-brew__manual:disabled .bj-brew__manual-label {
+  color: var(--faint);
+}
+
+/* ── Таймер ──────────────────────────────────────────────────────────────── */
+
+/* Экран не скроллится: всё должно быть видно, не отрывая рук от чайника. */
+.bj-timer {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 0;
+  padding: 0 var(--pad-screen);
+  overflow: hidden;
+}
+
+.bj-timer__head {
+  display: flex;
+  flex: none;
+  gap: 12px;
+  align-items: center;
+  padding: 10px 0;
+}
+
+/* «✕», а не «←»: выход отсюда отменяет заваривание, а не возвращает на шаг. */
+/* Тот же прямоугольник, что «←» в шапке: 44×40 видимых, 48 нажимаемых. */
+.bj-timer__cancel {
+  display: flex;
+  position: relative;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 40px;
+  border: 1px solid var(--line-4);
+  color: var(--faint);
+  font-size: 15px;
+}
+
+.bj-timer__cancel::after {
+  content: '';
+  position: absolute;
+  inset: -4px -2px;
+}
+
+.bj-timer__bean {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  color: var(--dim);
+  font-size: var(--fs-micro);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.bj-timer__awake {
+  flex: none;
+  color: var(--faint);
+  font-size: 8.5px;
+  letter-spacing: 1px;
+}
+
+.bj-timer__elapsed {
+  margin-top: 10px;
+  font-size: var(--fs-elapsed);
+  font-weight: var(--fw-light);
+  letter-spacing: -2px;
+  line-height: 1;
+  text-align: center;
+}
+
+.bj-timer__target {
+  margin-top: 2px;
+  color: var(--faint);
+  font-size: var(--fs-tech);
+  text-align: center;
+}
+
+.bj-timer__segs {
+  display: flex;
+  flex: none;
+  gap: 3px;
+  height: 6px;
+  margin-top: 26px;
+}
+
+.bj-timer__seg {
+  position: relative;
+  overflow: hidden;
+  background: var(--line-3);
+}
+
+.bj-timer__fill {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  background: var(--inverse-bg);
+}
+
+.bj-timer__stage {
+  margin-top: 36px;
+  text-align: center;
+}
+
+.bj-timer__num {
+  color: var(--faint);
+  font-size: 9px;
+  letter-spacing: var(--ls-micro);
+}
+
+.bj-timer__name {
+  margin-top: 10px;
+  font-size: var(--fs-stage);
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--ls-stage);
+}
+
+.bj-timer__water {
+  margin-top: 12px;
+  color: var(--text-secondary);
+  font-size: 14px;
+}
+
+.bj-timer__dev {
+  margin-top: 8px;
+  color: var(--faint);
+  font-size: var(--fs-micro);
+}
+
+.bj-timer__next {
+  margin-top: 22px;
+  color: var(--faint);
+  font-size: var(--fs-tech);
+  text-align: center;
+}
+
+.bj-timer__spacer {
+  flex: 1;
+}
+
+.bj-timer__pause {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 52px;
+  margin-bottom: 8px;
+  border: 1px solid var(--line-4);
+  color: var(--text-secondary);
+  font-size: 10.5px;
+  letter-spacing: 2.5px;
+}
+
+/* Главная кнопка 88px — по ней бьют, не глядя. Нижний отступ держит её выше
+   системного жеста «домой». */
+.bj-timer__main {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: var(--touch-timer);
+  margin-bottom: max(34px, var(--safe-bottom));
+  background: var(--inverse-bg);
+  color: var(--inverse-text);
+  font-size: 15px;
+  font-weight: var(--fw-bold);
+  letter-spacing: 3.5px;
+}
+
+/* ── Оценка позже ────────────────────────────────────────────────────────── */
+
+.bj-rate {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0 36px;
+  text-align: center;
+}
+
+/* Единственная точка — вместо иллюстрации. */
+.bj-rate__dot {
+  width: 6px;
+  height: 6px;
+  background: var(--inverse-bg);
+}
+
+.bj-rate__title {
+  margin-top: 18px;
+  font-size: 15px;
+  font-weight: var(--fw-bold);
+  letter-spacing: 3px;
+}
+
+.bj-rate__sub {
+  max-width: 280px;
+  margin-top: 14px;
+  color: var(--dim);
+  font-size: 11px;
+  line-height: 1.7;
+}
+
+.bj-rate__actions {
+  width: 100%;
+  max-width: 280px;
+  margin-top: 30px;
+}
+
+.bj-rate__later {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: var(--touch);
+  margin-top: 8px;
+  padding: 0 26px;
+  border: 1px solid var(--line-4);
+  color: var(--text-secondary);
+  font-size: 10.5px;
+  letter-spacing: var(--ls-micro);
+}

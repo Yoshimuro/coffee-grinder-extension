@@ -27,17 +27,28 @@ import { createRoot } from 'react-dom/client';
 // equal specificity rather than losing to whatever landed last.
 import './ui/tokens.css';
 
+import { seedDemo, wantsDemo } from './db/demo-seed.js';
 import { seed } from './db/seed.js';
 import { App } from './ui/App.js';
 
 const host = document.getElementById('root');
 if (!host) throw new Error('Не найден #root');
 
-// Rendering does not wait on the seed: nothing on screen depends on it yet, and
-// blocking the first paint on IndexedDB would be a visible stall on a cold app.
-void seed().catch((error: unknown) => {
-  console.error('Сид не выполнен', error);
-});
+/*
+ * Сид первого запуска, а следом — демо-данные, если их попросили строкой
+ * `?seed=demo` (только в dev-сборке: `demoSeeds()` в проде отдаёт `null`).
+ * Порядок важен: демо кладёт пачки и записи поверх уже готовых настроек, и
+ * обгонять базовый сид ему нечем.
+ *
+ * Рендер этого не ждёт: на первом кадре ничто не зависит от базы, а блокировать
+ * его на IndexedDB значило бы показать пустой экран на холодном старте.
+ * Живые запросы Dexie сами перерисуют экраны, когда данные приедут.
+ */
+void seed()
+  .then(() => (wantsDemo(window.location.search) ? seedDemo() : false))
+  .catch((error: unknown) => {
+    console.error('Сид не выполнен', error);
+  });
 
 createRoot(host).render(
   <StrictMode>

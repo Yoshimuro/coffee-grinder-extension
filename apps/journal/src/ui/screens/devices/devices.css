@@ -1,0 +1,177 @@
+/*
+ * Девайсы: список и конструктор.
+ *
+ * Токены — из `tokens.css`; голыми пикселями только геометрия раскладки, как в
+ * `components.css`. Числа — из `DC:335-386`.
+ *
+ * Три цвета прототипа без токена и чем заменены (кандидаты в палитру, S-7):
+ *   #D8D8D3 (линии чертежа)  → --text-secondary. Ближе по числу был бы --text
+ *   (Δ21 против Δ31), но чертёж не должен спорить с единственной инверсной
+ *   кнопкой экрана: он второй по яркости объект, а не первый.
+ *   #6E6E68 (текстура стенки) → --faint. Тише корпуса, как и в макете.
+ *   #262624 (линия стола)     → --line-4, самая заметная из линий.
+ */
+
+/* ── Чертёж ──────────────────────────────────────────────────────────────── */
+
+.bj-dev__svg {
+  display: block;
+  overflow: visible;
+  fill: none;
+  stroke-linecap: round;
+}
+
+/* Корпус — то, что читается первым. */
+.bj-dev__body {
+  stroke: var(--text-secondary);
+}
+
+/* Внутренний контур: толщина стенки материала. Тише корпуса на ступень. */
+.bj-dev__inner {
+  stroke: var(--dim);
+}
+
+/* Текстура стенки — рёбра, спираль, лепестки. */
+.bj-dev__tex {
+  stroke: var(--faint);
+}
+
+.bj-dev__filter {
+  stroke: var(--dim);
+}
+
+/* Стол — почти невидимая опора: без неё девайс висит в воздухе. */
+.bj-dev__table {
+  stroke: var(--line-4);
+}
+
+/* Список девайсов начинается почти сразу под шапкой: первая строка сама несёт
+   14px внутреннего отступа, и общие 18px делали разрыв вдвое больше макетных
+   8 (`DC:1266`). */
+[data-screen='devices'] .screen__body {
+  padding-top: 8px;
+}
+
+/* ── Список ──────────────────────────────────────────────────────────────── */
+
+/* Колонка чертежа фиксирована, чтобы имена выстроились по одной вертикали. */
+.bj-dev__new {
+  display: flex;
+  position: relative;
+  align-items: center;
+  /* Кнопка шапки ростом 40px по макету; нажимается 48 — прозрачный `::after`
+     ниже. С `min-height: 48` шапка была на 8px выше макетной (S-7). */
+  height: 40px;
+  padding: 0 12px;
+  border: 1px solid var(--line-4);
+  color: var(--text-secondary);
+  font-size: var(--fs-tech);
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.bj-dev__new::after {
+  content: '';
+  position: absolute;
+  inset: -4px 0;
+}
+
+/* ── Конструктор ─────────────────────────────────────────────────────────── */
+
+/* Кнопка сохранения в рамке цвета текста — второй по важности элемент экрана
+   после самого чертежа, поэтому рамка светлая, а заливки нет. */
+.bj-dev__save {
+  display: flex;
+  position: relative;
+  align-items: center;
+  height: 40px;
+  padding: 0 14px;
+  border: 1px solid var(--text);
+  color: var(--text);
+  font-size: var(--fs-tech);
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.bj-dev__save::after {
+  content: '';
+  position: absolute;
+  inset: -4px 0;
+}
+
+/*
+ * Чипы признаков — не фильтр и не метка, а сам выбор формы девайса, и макет
+ * даёт им отдельный размер: 38px ростом, 9.5/1.2, капс (`DC:1268`, там опции
+ * приходят уже через `toUpperCase()`). Заготовки выше под правило не попадают —
+ * это имена девайсов, а не признаки.
+ */
+.bj-dev__field .bj-chip {
+  height: 38px;
+  padding: 0 11px;
+  font-size: var(--fs-tech);
+  text-transform: uppercase;
+}
+
+.bj-dev__field .bj-chip::after {
+  inset: -5px 0;
+}
+
+.bj-dev__stage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 18px 12px 10px;
+  border: 1px solid var(--line-3);
+}
+
+.bj-dev__caption {
+  margin-top: 8px;
+  font-size: 8.5px;
+  letter-spacing: 1px;
+  color: var(--dim);
+  text-align: center;
+}
+
+.bj-dev__note {
+  margin-top: 8px;
+  font-size: var(--fs-tech-min);
+  color: var(--faint);
+  line-height: 1.6;
+}
+
+.bj-dev__presets {
+  margin-top: 16px;
+}
+
+.bj-dev__field {
+  margin-top: 16px;
+}
+
+.bj-dev__field .bj-chips {
+  margin-top: 9px;
+}
+
+.bj-dev__input {
+  width: 100%;
+  min-height: var(--touch);
+  margin-top: 9px;
+  padding: 13px;
+  border: 1px solid var(--line-4);
+  background: none;
+  color: var(--text);
+  font-family: var(--font);
+  font-size: var(--fs-body);
+  outline: none;
+}
+
+.bj-dev__input::placeholder {
+  color: var(--faint);
+}
+
+.bj-dev__hint {
+  margin-top: 16px;
+  font-size: var(--fs-tech-min);
+  color: var(--faint);
+}

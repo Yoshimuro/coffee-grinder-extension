@@ -11,7 +11,12 @@
  * прототипа не портируется (D-4).
  */
 
-import { type Grinder, convert as coreConvert, grinderById } from '@coffee/core';
+import {
+  type ConversionResult,
+  type Grinder,
+  convert as coreConvert,
+  grinderById,
+} from '@coffee/core';
 
 import type { GrinderRecord } from '../db/schema.js';
 import { applyCalib } from './calibration.js';
@@ -69,7 +74,30 @@ export function convertGrind(
   to: GrinderRecord,
   offset = 0,
 ): GrindConversion {
-  const result = coreConvert(toCoreGrinder(from), setting, toCoreGrinder(to));
+  return convertFromCatalogue(toCoreGrinder(from), setting, to, offset);
+}
+
+/**
+ * Пересчёт с записи каталога на свою кофемолку.
+ *
+ * Экран конвертера выбирает «откуда» из полного каталога ядра, а половина его
+ * записей откалибрована якорями, а не парой zero/step. Свести такую запись к
+ * `GrinderRecord` нельзя: плоского «микрон на шаг» у неё нет, и придумать его —
+ * значит показать пользователю выдуманное число. Поэтому исходная сторона идёт
+ * в ядро как есть, а во что-либо плоское уплощается только своя кофемолка,
+ * которая по схеме и так линейна.
+ */
+export function convertFromCatalogue(
+  from: Grinder,
+  setting: number,
+  to: GrinderRecord,
+  offset = 0,
+): GrindConversion {
+  return withCalib(coreConvert(from, setting, toCoreGrinder(to)), offset);
+}
+
+/** Ответ ядра плюс пользовательская калибровка. Математика остаётся в ядре. */
+function withCalib(result: ConversionResult, offset: number): GrindConversion {
   const span = applyCalib(
     { lo: result.band.low, center: result.target.snapped, hi: result.band.high },
     offset,

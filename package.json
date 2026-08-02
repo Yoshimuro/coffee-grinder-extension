@@ -23,6 +23,7 @@
     "build:journal": "npm run build:data && npm run build -w @coffee/journal",
     "dev:journal": "npm run build:data && npm run dev -w @coffee/journal",
     "test:e2e": "npm run test:e2e -w @coffee/extension",
+    "test:e2e:journal": "playwright test -c apps/journal/playwright.config.ts",
     "screenshot": "npm run screenshot -w @coffee/extension",
     "verify": "npm run check:data && npm run typecheck && npm run test && npm run build && npm run test:e2e"
   },

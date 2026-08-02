@@ -1,8 +1,70 @@
 /*
- * Home, variant C — the layout the handoff settles on (README:25).
- * Skeleton only: the real feed, the pending card and the CTA subline land in
- * BJ-4. What is fixed here is the geometry, which the design specifies exactly.
+ * Домашний экран, вариант C (README:25).
+ *
+ * Геометрия из макета: [ЗАВАРИТЬ 60px, flex:1] + [квадрат 60×60 «⇄»], ниже
+ * «ОЦЕНИТЬ ЧАШКУ» 48px во всю ширину, ниже лента. Токены — из `tokens.css`,
+ * голыми пикселями только раскладка (`DC:125-144`).
  */
+
+.home-head__title {
+  /* Имя приложения, а не название экрана: разрядка шире, как в макете. */
+  letter-spacing: 3px;
+}
+
+/* Тело дома скроллится без верхнего отступа: карточка «оценка ждёт» должна
+   стоять сразу под шапкой, иначе она читается как часть ленты. */
+.home-body {
+  padding-top: 8px;
+}
+
+/* ── Карточка «оценка ждёт» ──────────────────────────────────────────────── */
+
+.home-pending {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  padding: 12px 14px;
+  /* макет: #33332F — ступени между --line-4 и --faint в палитре нет */
+  border: 1px solid var(--line-4);
+}
+
+.home-pending__main {
+  flex: 1;
+  min-width: 0;
+}
+
+.home-pending__title {
+  font-size: 12.5px;
+}
+
+.home-pending__when {
+  margin-top: 5px;
+  font-size: var(--fs-tech);
+  color: var(--dim);
+}
+
+/* Единственная кнопка в рамке цвета текста на экране — она и есть срочное. */
+.home-pending__rate {
+  display: flex;
+  position: relative;
+  flex: none;
+  align-items: center;
+  /* Видимая высота — макетные 44px; нажимаемая — 48 через `::after` ниже. */
+  height: 44px;
+  padding: 0 16px;
+  border: 1px solid var(--text);
+  font-size: 10.5px;
+  letter-spacing: var(--ls-micro);
+  text-transform: uppercase;
+}
+
+.home-pending__rate::after {
+  content: '';
+  position: absolute;
+  inset: -2px 0;
+}
+
+/* ── Кнопки ──────────────────────────────────────────────────────────────── */
 
 .home-cta {
   display: flex;
@@ -10,28 +72,86 @@
   margin-top: 14px;
 }
 
-/* [ЗАВАРИТЬ 60px, flex:1] */
 .home-cta__brew {
+  display: flex;
   flex: 1;
+  align-items: center;
+  justify-content: center;
   height: 60px;
+  background: var(--inverse-bg);
+  color: var(--inverse-text);
+  font-size: var(--fs-body);
+  font-weight: var(--fw-bold);
+  letter-spacing: 3px;
+  text-transform: uppercase;
 }
 
-/* [квадрат 60×60 с «⇄» → конвертер] */
 .home-cta__conv {
+  display: flex;
   flex: none;
+  align-items: center;
+  justify-content: center;
   width: 60px;
   height: 60px;
+  border: 1px solid var(--line-4);
+  color: var(--text-secondary);
   font-size: 15px;
-  letter-spacing: normal;
 }
 
-/* ОЦЕНИТЬ ЧАШКУ — 48px, вся ширина */
 .home-taste {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 100%;
-  height: 48px;
+  min-height: var(--touch);
   margin-top: 8px;
+  border: 1px solid var(--line-4);
+  color: var(--text-secondary);
+  font-size: var(--fs-micro);
+  letter-spacing: var(--ls-micro);
+  text-transform: uppercase;
 }
 
-.home-feed {
-  margin-top: 20px;
+/* ── Лента ───────────────────────────────────────────────────────────────── */
+
+.home-feed__row {
+  display: flex;
+  gap: 12px;
+  width: 100%;
+  min-height: var(--touch);
+  padding: 13px 0;
+  border-bottom: 1px solid var(--line-1);
+  text-align: left;
+}
+
+/* Колонка даты фиксирована — заголовки выстраиваются по одной вертикали. */
+.home-feed__date {
+  flex: none;
+  width: 42px;
+  padding-top: 2px;
+  font-size: var(--fs-tech);
+  color: var(--faint);
+}
+
+.home-feed__main {
+  flex: 1;
+  min-width: 0;
+}
+
+.home-feed__title {
+  display: block;
+  font-size: var(--fs-body-min);
+}
+
+.home-feed__sub {
+  display: block;
+  margin-top: 4px;
+  font-size: var(--fs-tech);
+  color: var(--dim);
+}
+
+.home-feed__mark {
+  flex: none;
+  font-size: 10.5px;
+  color: var(--text-secondary);
 }

@@ -1,0 +1,204 @@
+/*
+ * Настройки и спецификация.
+ *
+ * Токены — из `tokens.css`; голыми пикселями только геометрия раскладки.
+ * Числа — из `DC:789-896`.
+ */
+
+/* ── Кофемолки ───────────────────────────────────────────────────────────── */
+
+.bj-set__grinder {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  min-height: var(--touch);
+  padding: 11px 0;
+  border-bottom: 1px solid var(--line-1);
+}
+
+.bj-set__grinder-name {
+  flex: 1;
+  min-width: 0;
+  font-size: var(--fs-body-min);
+}
+
+.bj-set__meta {
+  flex: none;
+  font-size: var(--fs-tech-min);
+  color: var(--dim);
+}
+
+/* Подтверждение удаления живёт в той же строке: вопрос стоит там же, где
+   объект, о котором он задан, — модалка тут была бы тяжелее самого действия. */
+.bj-set__ask {
+  flex: none;
+  font-size: var(--fs-tech-min);
+  letter-spacing: 1.5px;
+  color: var(--text-secondary);
+}
+
+.bj-set__yes {
+  display: flex;
+  flex: none;
+  align-items: center;
+  min-height: var(--touch);
+  padding: 0 12px;
+  border: 1px solid var(--text);
+  font-size: var(--fs-tech-min);
+  letter-spacing: 1.5px;
+}
+
+.bj-set__no,
+.bj-set__del {
+  display: flex;
+  position: relative;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  min-height: var(--touch);
+  border: 1px solid var(--line-4);
+  color: var(--faint);
+  font-size: 12px;
+}
+
+/* Ширина по макету 32–36px; нажимается 48 — приём из `components.css`. */
+.bj-set__no::after,
+.bj-set__del::after {
+  content: '';
+  position: absolute;
+  inset: 0 -6px;
+}
+
+.bj-set__del {
+  width: 32px;
+}
+
+.bj-set__form {
+  margin-top: 8px;
+  padding: 14px;
+  border: 1px solid var(--line-4);
+}
+
+.bj-set__input {
+  width: 100%;
+  min-height: var(--touch);
+  margin-top: 8px;
+  padding: 12px;
+  border: 1px solid var(--line-4);
+  background: none;
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 12.5px;
+  outline: none;
+}
+
+.bj-set__input::placeholder {
+  color: var(--faint);
+}
+
+.bj-set__form-step {
+  margin-top: 14px;
+}
+
+.bj-set__form-save {
+  margin-top: 14px;
+}
+
+/* «+ КОФЕМОЛКА» в настройках подпись держит по центру, в отличие от «+ ЗЕРНО»
+   на сетапе: там строка стоит под списком таких же строк и равняется по ним,
+   здесь — самостоятельная кнопка (`DC:1281` против `DC:1271`). */
+[data-screen='more'] .bj-empty--action {
+  justify-content: center;
+  margin-top: 10px;
+  text-align: center;
+}
+
+.bj-set__lang {
+  display: flex;
+  gap: 4px;
+}
+
+/* Выбранный язык — заливка, а не рамка: рамкой на этом экране обведено всё
+   подряд, и выбор в ней терялся (`DC:1283`: фон #8C8C87, текст #0C0C0C). */
+.bj-set__lang .bj-chip {
+  min-height: 32px;
+  padding: 0 12px;
+  font-size: var(--fs-tech);
+  letter-spacing: 1px;
+}
+
+.bj-set__lang .bj-chip--on {
+  border-color: var(--dim);
+  background: var(--dim);
+  color: var(--bg);
+}
+
+.bj-set__footer {
+  margin-top: 34px;
+  font-size: 8.5px;
+  letter-spacing: 1.5px;
+  color: var(--faint);
+  text-align: center;
+}
+
+/* ── Спецификация ────────────────────────────────────────────────────────── */
+
+.bj-spec__palette {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+  padding-top: 12px;
+}
+
+.bj-spec__swatch {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+/* Образцы фона и линий на самом фоне неразличимы — рамка их проявляет. */
+.bj-spec__chip {
+  flex: none;
+  width: 40px;
+  height: 28px;
+  border: 1px solid var(--line-3);
+}
+
+.bj-spec__token {
+  font-size: var(--fs-tech-min);
+  color: var(--faint);
+}
+
+.bj-spec__type {
+  display: flex;
+  gap: 12px;
+  align-items: baseline;
+  justify-content: space-between;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--line-1);
+}
+
+.bj-spec__comp {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding-top: 12px;
+}
+
+.bj-spec__tags {
+  display: flex;
+  gap: 6px;
+}
+
+.bj-spec__grid {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: var(--grid);
+  margin: 12px 0 8px;
+}
+
+.bj-spec__grid-cell {
+  height: 24px;
+  border: 1px solid var(--line-2);
+}

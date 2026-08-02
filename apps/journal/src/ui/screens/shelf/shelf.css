@@ -1,0 +1,309 @@
+/*
+ * Полка, карточка пачки, добавление.
+ *
+ * Всё, у чего есть токен, взято переменной из `tokens.css`. Голыми пикселями
+ * записана только геометрия раскладки — высоты слотов, отступы, ширина колонки
+ * даты: таких величин в токенах нет, и `components.css` с `tokens.css` пишут их
+ * так же. Числа — из `design_handoff_brew_journal 3` (`DC:224-333`).
+ *
+ * Без токена остались три ступени серого, которых в палитре нет: `#33332F`
+ * (рамка приглашения), `#3F3F3B` (подпись даты в списке заварок) и `#232321` —
+ * последний как раз есть, это `--line-3`. Первые два взяты ближайшими токенами
+ * и помечены по месту — либо S-7 их принимает, либо палитра дорастает.
+ */
+
+/* ── Шапка корневого экрана ──────────────────────────────────────────────── */
+
+/*
+ * Полка и настройки — корневые экраны: у них нет «←», заголовок крупнее и
+ * нижней черты нет, потому что под шапкой сразу содержимое, а не вложенность.
+ * Тот же приём журнал держит у себя локально; кандидат на проп `root` у
+ * `ScreenHeader` (отмечено в отчёте G3 и в dev_notes).
+ */
+.bj-head--root {
+  padding: 16px var(--pad-screen) 10px;
+  border-bottom: none;
+}
+
+.bj-head--root .bj-head__title {
+  font-size: 12px;
+  letter-spacing: 3px;
+}
+
+/* ── Слот фото ───────────────────────────────────────────────────────────── */
+
+.bj-slot {
+  display: flex;
+  position: relative;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  width: 100%;
+  border: 1px dashed var(--line-4);
+  color: var(--faint);
+  overflow: hidden;
+}
+
+/* Со снимком рамка перестаёт быть пунктирной: слот уже не приглашение. */
+.bj-slot--filled {
+  border-style: solid;
+  border-color: var(--line-3);
+}
+
+.bj-slot--card {
+  flex: none;
+  width: 118px;
+  height: 118px;
+}
+
+.bj-slot--full {
+  height: 300px;
+}
+
+.bj-slot--add {
+  height: 216px;
+}
+
+.bj-slot__glyph {
+  width: 26px;
+  height: 26px;
+}
+
+.bj-slot__label {
+  padding: 0 8px;
+  font-size: var(--fs-body-min);
+  color: var(--dim);
+  text-align: center;
+}
+
+.bj-slot--card .bj-slot__label {
+  font-size: var(--fs-tech);
+}
+
+.bj-slot__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ── Полка ───────────────────────────────────────────────────────────────── */
+
+.bj-shelf {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-top: 6px;
+}
+
+.bj-shelf__card {
+  display: flex;
+  gap: 12px;
+  align-items: stretch;
+  width: 100%;
+  padding: 8px;
+  border: 1px solid var(--line-3);
+}
+
+.bj-shelf__body {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+  flex-direction: column;
+  justify-content: center;
+  gap: 7px;
+  padding-right: 4px;
+}
+
+.bj-shelf__name {
+  font-size: 12.5px;
+  line-height: 1.4;
+}
+
+.bj-shelf__tech {
+  font-size: var(--fs-tech-min);
+  color: var(--dim);
+  line-height: 1.6;
+}
+
+/* Приглашение добавить: два равноправных входа в одной пунктирной рамке. */
+.bj-shelf__add {
+  display: flex;
+  gap: 8px;
+  padding: 10px;
+  /* макет: #33332F — ступени между --line-4 и --faint в палитре нет */
+  border: 1px dashed var(--line-4);
+}
+
+.bj-shelf__add-main,
+.bj-shelf__add-alt {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--touch);
+  font-size: var(--fs-tech);
+  letter-spacing: 1.5px;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.bj-shelf__add-main {
+  border: 1px solid var(--line-4);
+  color: var(--text-secondary);
+}
+
+/* Запасной путь — тише основного: тот же размер, но без рамки. */
+.bj-shelf__add-alt {
+  color: var(--faint);
+}
+
+/* ── Карточка пачки ──────────────────────────────────────────────────────── */
+
+.bj-bean {
+  padding-top: 16px;
+}
+
+.bj-bean__shots {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.bj-bean__hint {
+  padding-top: 9px;
+  font-size: var(--fs-tech-min);
+  color: var(--faint);
+}
+
+/*
+ * Три стата в ряд, разделённые не рамками, а зазором в 1px на фоне линии.
+ * Полоса идёт от края до края — единственное место, где макет выходит за поля
+ * экрана (`DC:1259`: у блока нет горизонтальных отступов, тогда как соседние
+ * получают свои 20px). Отрицательные поля возвращают ей эту ширину.
+ */
+.bj-bean__stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 1px;
+  margin-top: 16px;
+  margin-right: calc(var(--pad-screen) * -1);
+  margin-left: calc(var(--pad-screen) * -1);
+  border-top: 1px solid var(--line-2);
+  border-bottom: 1px solid var(--line-2);
+  background: var(--line-2);
+}
+
+.bj-bean__stat {
+  padding: 13px 12px;
+  background: var(--bg);
+}
+
+.bj-bean__stat-label {
+  font-size: 8.5px;
+  font-weight: var(--fw-medium);
+  letter-spacing: 1.5px;
+  color: var(--faint);
+  text-transform: uppercase;
+}
+
+.bj-bean__stat-value {
+  margin-top: 7px;
+  font-size: 14px;
+  font-variant-numeric: tabular-nums;
+}
+
+.bj-bean__note {
+  padding-top: 12px;
+  font-size: var(--fs-tech);
+  color: var(--faint);
+}
+
+.bj-bean__brew {
+  display: flex;
+  gap: 12px;
+  align-items: baseline;
+  width: 100%;
+  min-height: var(--touch);
+  padding: 12px 0;
+  border-bottom: 1px solid var(--line-1);
+}
+
+.bj-bean__brew-date {
+  flex: none;
+  width: 42px;
+  font-size: var(--fs-tech);
+  color: var(--faint);
+}
+
+.bj-bean__brew-sub {
+  flex: 1;
+  min-width: 0;
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+
+.bj-bean__brew-mark {
+  flex: none;
+  font-size: 10.5px;
+  color: var(--text-secondary);
+}
+
+.bj-bean__brew-btn {
+  margin-top: 20px;
+}
+
+/* ── Добавление пачки ────────────────────────────────────────────────────── */
+
+/* Чипы формы кофе — единственный выбор на экране, и макет даёт им кегль
+   крупнее обычного чипа: 9.5/1.5 против 8.5/1.2 (`DC:1264`). */
+[data-screen='beanAdd'] .bj-chip--grow {
+  font-size: var(--fs-tech);
+  letter-spacing: 1.5px;
+}
+
+.bj-add__shots {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.bj-add__hint {
+  margin-top: 8px;
+  font-size: var(--fs-tech-min);
+  color: var(--faint);
+}
+
+.bj-add__field {
+  margin-top: 16px;
+}
+
+.bj-add__input {
+  width: 100%;
+  min-height: var(--touch);
+  margin-top: 9px;
+  padding: 14px;
+  border: 1px solid var(--line-4);
+  background: none;
+  color: var(--text);
+  font-family: var(--font);
+  font-size: var(--fs-body);
+  font-variant-numeric: tabular-nums;
+  outline: none;
+}
+
+.bj-add__input::placeholder {
+  color: var(--faint);
+}
+
+/* «необязательно» — не капс и не разрядка: это оговорка, а не подпись поля. */
+.bj-add__optional {
+  color: var(--faint);
+  letter-spacing: 1px;
+  text-transform: none;
+}
+
+.bj-add__save {
+  margin-top: 22px;
+}

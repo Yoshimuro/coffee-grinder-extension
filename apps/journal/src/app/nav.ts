@@ -70,3 +70,17 @@ export const useNav = create<NavState>((set) => ({
 
   setTab: (tab) => set({ screen: tab, stack: [] }),
 }));
+
+/**
+ * Экран, на который вернёт `back()`. `null` — стек пуст, уходить будем на `home`.
+ *
+ * Нужен там, где возврат не просто возврат: добавление пачки и конструктор
+ * девайса, вызванные с сетапа заваривания, обязаны отдать туда созданную
+ * запись выбранной (`addSave` `DC:1271`, `saveDev` `DC:1280`). Прототип
+ * проверял ровно это — `S.stack[S.stack.length - 1] === 'brew'`, — и функция
+ * называет приём, вместо того чтобы копировать его по экранам.
+ */
+export function previousScreen(): Screen | null {
+  const { stack } = useNav.getState();
+  return stack[stack.length - 1] ?? null;
+}
