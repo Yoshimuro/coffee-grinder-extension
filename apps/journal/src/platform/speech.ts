@@ -8,14 +8,25 @@
  *
  * Web Speech API здесь намеренно не используется, хотя в Chrome он есть: он
  * отправляет звук на сервера Google, а приложение обещает «локально · офлайн ·
- * без аккаунта». Настоящее распознавание приходит в BJ-6 системным движком.
+ * без аккаунта». Настоящее распознавание живёт на телефоне
+ * (`speech.capacitor.ts`, системный движок), и там же оно молча отвечает
+ * «недоступно», если офлайн-модели в системе нет.
  */
+
+import type { Lang } from '../db/schema.js';
+import { bind } from './native.js';
 
 export interface SpeechInput {
   /** Есть ли распознавание. Спрашивать до каждого показа кнопки. */
   available(): Promise<boolean>;
-  /** Слушает одну реплику. `null` — не расслышал или отменили. */
-  listen(): Promise<string | null>;
+  /**
+   * Слушает одну реплику. `null` — не расслышал или отменили.
+   *
+   * `lang` — язык интерфейса: движок распознаёт заметно хуже, если ему не
+   * сказать, на каком языке говорят. Реализация без распознавания его
+   * игнорирует.
+   */
+  listen(lang?: Lang): Promise<string | null>;
 }
 
 /** Веб-реализация: распознавания нет. */
@@ -26,5 +37,18 @@ export function createWebSpeech(): SpeechInput {
   };
 }
 
-/** Реализация, которую видят экраны. BJ-6 переопределит её на Capacitor. */
-export const speech: SpeechInput = createWebSpeech();
+/** Код локали для системного движка. */
+export function localeOf(lang: Lang): string {
+  return lang === 'ru' ? 'ru-RU' : 'en-US';
+}
+
+/* ── Реализация, которую видят экраны ────────────────────────────────────── */
+
+const input = bind<SpeechInput>(createWebSpeech, async () =>
+  (await import('./speech.capacitor.js')).createCapacitorSpeech(),
+);
+
+export const speech: SpeechInput = {
+  available: async () => (await input()).available(),
+  listen: async (lang) => (await input()).listen(lang),
+};

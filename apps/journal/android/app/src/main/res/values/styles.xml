@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Темы оболочки. Сгенерировано `cap add android`; правки BJ-6 — только тёмные.
+
+  Три вещи отличаются от шаблона Capacitor:
+    - базовая тема тёмная (`Theme.AppCompat.NoActionBar` вместо
+      `…Light.DarkActionBar`): светлая подложка мигала белым между запуском
+      активности и первым кадром WebView;
+    - статус-бар и панель навигации залиты фоном приложения, а
+      `windowLightStatusBar=false` держит их значки светлыми — иначе на тёмном
+      фоне они невидимы;
+    - фон стартовой темы — тёмный `@drawable/splash`, перерисованный
+      `scripts/icons.mjs` (D-5).
+
+  Отступ под статус-бар делает не тема, а вёрстка: `viewport-fit=cover` в
+  index.html плюс `env(safe-area-inset-*)` в токенах.
+-->
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:windowBackground">@color/bjBackground</item>
+    </style>
+
+    <style name="AppTheme.NoActionBar" parent="Theme.AppCompat.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:background">@null</item>
+        <item name="android:windowBackground">@color/bjBackground</item>
+        <item name="android:statusBarColor">@color/bjBackground</item>
+        <item name="android:navigationBarColor">@color/bjBackground</item>
+        <item name="android:windowLightStatusBar">false</item>
+    </style>
+
+
+    <style name="AppTheme.NoActionBarLaunch" parent="Theme.SplashScreen">
+        <item name="android:background">@drawable/splash</item>
+        <item name="android:statusBarColor">@color/bjBackground</item>
+        <item name="android:navigationBarColor">@color/bjBackground</item>
+        <item name="android:windowLightStatusBar">false</item>
+    </style>
+</resources>

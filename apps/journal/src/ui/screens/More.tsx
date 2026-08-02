@@ -5,10 +5,15 @@
  * свои девайсы, язык и спецификация. Ни аккаунтов, ни синхронизации, ни тем —
  * подвал говорит об этом прямо: «локально · офлайн · без аккаунта».
  *
- * Экспорта и импорта здесь нет (D-7): настоящий файловый обмен появится с
- * установкой на телефон (BJ-6), а строка, которая только притворяется, что
- * что-то делает, хуже её отсутствия. Прототип именно так и делал — `exportTap`
- * лишь поднимал флаг (`DC:1347`), а у ИМПОРТА не было обработчика вовсе.
+ * Экспорт и импорт появились здесь только в BJ-6, когда за ними встали
+ * настоящие файлы (контракт №2): до этого строка, которая притворяется, что
+ * что-то делает, была бы хуже её отсутствия (D-7). Прототип именно так и делал —
+ * `exportTap` лишь поднимал флаг (`DC:1347`), а у ИМПОРТА не было обработчика
+ * вовсе.
+ *
+ * Импорт заменяет базу целиком и говорит об этом подписью до нажатия, а не
+ * диалогом после: файл выбирается системным окном, из которого можно уйти, и
+ * это и есть точка отказа. Отдельного «вы уверены?» поверх неё не нужно.
  */
 
 import { useState } from 'react';
@@ -19,15 +24,23 @@ import { useDevices } from '../../db/repo/devices.js';
 import { deleteGrinder, newGrinderId, putGrinder, useOwnGrinders } from '../../db/repo/grinders.js';
 import { putSetting, useLang } from '../../db/repo/settings.js';
 import type { Lang } from '../../db/schema.js';
+import { EXPORT_FILE, ImportError, importExport, packExport } from '../../db/transfer.js';
+import { files, pickFile } from '../../platform/files.js';
 import { Chip, EmptyState, InverseButton, Row, Section, Stepper } from '../components/index.js';
 import {
   DEFAULT_STEP,
   STEP_RANGE,
+  TRANSFER_IDLE,
+  type TransferState,
   canDelete,
   grinderMeta,
   makeGrinder,
+  transferNote,
 } from './settings/settings-view.js';
 import './settings/settings.css';
+
+/** Что принимает выбор файла при импорте. */
+const ZIP_ACCEPT = '.zip,application/zip';
 
 const LANGS: readonly Lang[] = ['ru', 'en'];
 
@@ -45,8 +58,42 @@ export function More() {
   const [name, setName] = useState('');
   const [step, setStep] = useState(DEFAULT_STEP);
   const [confirming, setConfirming] = useState<string | null>(null);
+  const [transfer, setTransfer] = useState<TransferState>(TRANSFER_IDLE);
 
   const list = grinders ?? [];
+  const busy = transfer.kind === 'busy';
+
+  const runExport = async () => {
+    if (busy) return;
+    setTransfer({ kind: 'busy', op: 'export' });
+    try {
+      const ok = await files.save(EXPORT_FILE, await packExport());
+      // Отказ в системном листе — не результат: строка возвращается к подсказке.
+      setTransfer(ok ? { kind: 'done', op: 'export' } : TRANSFER_IDLE);
+    } catch {
+      setTransfer({ kind: 'failed', op: 'export', code: 'zip' });
+    }
+  };
+
+  const runImport = async () => {
+    if (busy) return;
+    /* Файл выбирается ДО того, как что-то поменяется: уход из системного окна
+       обязан оставить базу нетронутой и экран молчащим. */
+    const file = await pickFile({ accept: ZIP_ACCEPT });
+    if (!file) return;
+
+    setTransfer({ kind: 'busy', op: 'import' });
+    try {
+      await importExport(file);
+      setTransfer({ kind: 'done', op: 'import' });
+    } catch (error) {
+      setTransfer({
+        kind: 'failed',
+        op: 'import',
+        code: error instanceof ImportError ? error.code : 'shape',
+      });
+    }
+  };
 
   const saveGrinder = async () => {
     await putGrinder(makeGrinder(newGrinderId(), name.trim() || t.set_grinders, step));
@@ -172,6 +219,23 @@ export function More() {
         />
 
         <Row label={t.set_spec} right="→" onClick={() => go('spec')} />
+
+        {/* Обмен базой стоит последним и без своего заголовка: это не настройка,
+            а действие, и разделять две строки лишней секцией не за чем. */}
+        <Row
+          label={t.set_export}
+          sub={transferNote(transfer, 'export', lang)}
+          right="↓"
+          testId="set-export"
+          onClick={() => void runExport()}
+        />
+        <Row
+          label={t.set_import}
+          sub={transferNote(transfer, 'import', lang)}
+          right="↑"
+          testId="set-import"
+          onClick={() => void runImport()}
+        />
 
         <div className="bj-set__footer">
           {t.set_offline} · {t.set_ver}

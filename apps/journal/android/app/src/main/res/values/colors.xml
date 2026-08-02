@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Палитра нативной оболочки (BJ-6).
+
+  Библиотека capacitor-android приносит свои colorPrimary/Dark/Accent (индиго и
+  розовый по умолчанию Material). Приложение dark-only и без акцентного цвета
+  вовсе — цвет в нём появляется только на колесе вкусов и на снимках пачек, —
+  поэтому все три переопределяются здесь фоном и цветом текста из tokens.css.
+
+  Ресурсы модуля приложения перекрывают одноимённые ресурсы библиотек, так что
+  правка живёт ровно в этом файле.
+-->
+<resources>
+    <color name="colorPrimary">#0C0C0C</color>
+    <color name="colorPrimaryDark">#0C0C0C</color>
+    <color name="colorAccent">#EDEDEB</color>
+
+    <!-- Фон приложения: --bg. Им же залиты статус-бар и панель навигации. -->
+    <color name="bjBackground">#0C0C0C</color>
+</resources>

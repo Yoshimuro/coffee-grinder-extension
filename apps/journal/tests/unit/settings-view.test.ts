@@ -3,13 +3,16 @@ import { describe, expect, it } from 'vitest';
 import { BrewJournalDB } from '../../src/db/schema.js';
 import { deleteGrinder, listGrinders, putGrinder } from '../../src/db/repo/grinders.js';
 import { getSetting, putSetting } from '../../src/db/repo/settings.js';
+import { STR } from '../../src/data/strings.js';
 import {
   DEFAULT_STEP,
   NEW_GRINDER_ZERO,
   STEP_RANGE,
+  TRANSFER_IDLE,
   canDelete,
   grinderMeta,
   makeGrinder,
+  transferNote,
 } from '../../src/ui/screens/settings/settings-view.js';
 import { seedDemo, wantsDemo } from '../../src/db/demo-seed.js';
 
@@ -74,6 +77,37 @@ describe('удаление через репозиторий', () => {
     } finally {
       await db.delete();
     }
+  });
+});
+
+describe('подписи обмена базой', () => {
+  it('покоящиеся строки показывают свою подсказку', () => {
+    expect(transferNote(TRANSFER_IDLE, 'export', 'ru')).toBe(STR.ru.set_export_hint);
+    expect(transferNote(TRANSFER_IDLE, 'import', 'en')).toBe(STR.en.set_import_hint);
+  });
+
+  it('результат видит только та строка, которая его получила', () => {
+    const done = { kind: 'done', op: 'import' } as const;
+    expect(transferNote(done, 'import', 'ru')).toBe(STR.ru.set_import_done);
+    // Под ЭКСПОРТОМ «база восстановлена» читалось бы как его результат.
+    expect(transferNote(done, 'export', 'ru')).toBe(STR.ru.set_export_hint);
+  });
+
+  it('различает чужую версию и нечитаемый файл', () => {
+    expect(transferNote({ kind: 'failed', op: 'import', code: 'version' }, 'import', 'ru')).toBe(
+      STR.ru.set_import_bad,
+    );
+    expect(transferNote({ kind: 'failed', op: 'import', code: 'zip' }, 'import', 'ru')).toBe(
+      STR.ru.set_import_broken,
+    );
+    expect(transferNote({ kind: 'failed', op: 'import', code: 'shape' }, 'import', 'ru')).toBe(
+      STR.ru.set_import_broken,
+    );
+  });
+
+  it('на время работы обе операции говорят одно и то же', () => {
+    expect(transferNote({ kind: 'busy', op: 'export' }, 'export', 'ru')).toBe(STR.ru.set_busy);
+    expect(transferNote({ kind: 'busy', op: 'import' }, 'import', 'en')).toBe(STR.en.set_busy);
   });
 });
 

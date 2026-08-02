@@ -29,6 +29,7 @@ import './ui/tokens.css';
 
 import { seedDemo, wantsDemo } from './db/demo-seed.js';
 import { seed } from './db/seed.js';
+import { registerServiceWorker } from './pwa/register.js';
 import { App } from './ui/App.js';
 
 const host = document.getElementById('root');
@@ -55,3 +56,11 @@ createRoot(host).render(
     <App />
   </StrictMode>,
 );
+
+/*
+ * Офлайн-кеш — только для установленного из браузера приложения (PWA) и только
+ * в собранной сборке. Внутри APK воркер не регистрируется вовсе: там ассеты и
+ * так лежат на устройстве, а кеш поверх них ломал бы обновление (R-3). Все
+ * условия и их причины — в `pwa/register.ts`.
+ */
+registerServiceWorker();

@@ -8,6 +8,11 @@
     <!-- Dark-only: the light system theme must never be substituted. -->
     <meta name="color-scheme" content="dark" />
     <meta name="theme-color" content="#0C0C0C" />
+    <!-- PWA: манифест и иконка домашнего экрана. Пути относительные — как и
+         весь бандл (`base: './'`), иначе установка из подкаталога сломается. -->
+    <link rel="manifest" href="manifest.webmanifest" />
+    <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png" />
+    <link rel="apple-touch-icon" href="icons/icon-192.png" />
     <title>brew journal</title>
   </head>
   <body>

@@ -29,6 +29,7 @@ import {
   stageElapsed,
   useTimer,
 } from '../../domain/timer.js';
+import { awake } from '../../platform/awake.js';
 import { useBrewSetup } from './brewing/brew-store.js';
 import { brewSetup } from './brewing/brew-view.js';
 import {
@@ -75,6 +76,18 @@ export function Timer() {
     const id = setInterval(() => setNow(Date.now()), TICK_MS);
     return () => clearInterval(id);
   }, [live]);
+
+  /* «экран не гаснет» в шапке — обещание, и держит его платформенный слой:
+     на телефоне это `FLAG_KEEP_SCREEN_ON`, в браузере — Screen Wake Lock.
+     Блокировка живёт ровно столько, сколько живёт экран таймера: она снимается
+     и по «ГОТОВО», и по «✕», и по возврату жестом — все три пути проходят через
+     размонтирование. */
+  useEffect(() => {
+    void awake.enter();
+    return () => {
+      void awake.exit();
+    };
+  }, []);
 
   const view = live ?? frozen?.timer ?? null;
   const at = live ? now : (frozen?.at ?? now);

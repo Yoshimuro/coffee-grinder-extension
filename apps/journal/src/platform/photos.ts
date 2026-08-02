@@ -2,9 +2,10 @@
  * Фото пачки — платформенный интерфейс и веб-реализация.
  *
  * Интерфейс нарочно узкий и ничего не знает ни про камеру, ни про файловую
- * систему: в BJ-6 на его место встаёт Capacitor (`Camera.getPhoto` +
- * `Filesystem.writeFile` в `Directory.Data`), и ни один экран об этом не
- * узнает. `path` — непрозрачная строка, её отдаёт реализация и она же читает.
+ * систему: на телефоне за ним стоит Capacitor (`photos.capacitor.ts` —
+ * `Camera.getPhoto` плюс `Filesystem` в `Directory.Data`), в браузере — то, что
+ * описано ниже, и ни один экран об этом не знает. `path` — непрозрачная
+ * строка, её отдаёт реализация и она же читает.
  *
  * Веб-путь (prototype-shell-report §4): скрытый `<input type="file">`, канвас
  * ужимает длинную сторону до 2048 и кодирует в WebP q0.85, миниатюра — 256 px
@@ -17,6 +18,9 @@
  * `path === thumb`, полного снимка просто не существует. Ни то, ни другое не
  * увидит экран — он работает через `load()`.
  */
+
+import { pickFile } from './files.js';
+import { bind } from './native.js';
 
 /** Ссылка на снимок ровно в том виде, в каком её хранит `PhotoRef` схемы. */
 export interface CapturedPhoto {
@@ -33,6 +37,14 @@ export interface PhotoStore {
   load(path: string): Promise<Blob | string | null>;
   /** Удаляет снимок. Несуществующий путь — не ошибка. */
   remove(path: string): Promise<void>;
+  /**
+   * Кладёт готовые байты в хранилище и отдаёт путь к ним (BJ-6).
+   *
+   * Нужен импорту базы: снимки приезжают из zip уже сжатыми, второй раз их
+   * ужимать нечем и незачем. Съёмка этим путём не пользуется — у неё свой,
+   * с даунскейлом и миниатюрой.
+   */
+  save(data: Blob, ext: string): Promise<string>;
 }
 
 /** Длинная сторона полноразмерного снимка. */
@@ -77,33 +89,9 @@ async function opfsDir(): Promise<FileSystemDirectoryHandle> {
   return root.getDirectoryHandle(OPFS_DIR, { create: true });
 }
 
-/**
- * Открывает системный выбор файла и ждёт ответа.
- *
- * `capture="environment"` на мобильном открывает камеру сразу. Отмена ловится
- * событием `cancel` (Chrome 113+, Safari 16.4+); в браузере постарше промис
- * останется висеть до следующего выбора — это не течёт, но и не разрешается,
- * поэтому вызывающему нельзя блокировать интерфейс на этом ожидании.
- */
-function pickFile(): Promise<File | null> {
-  return new Promise((resolve) => {
-    const input = document.createElement('input');
-    input.type = 'file';
-    input.accept = 'image/*';
-    input.setAttribute('capture', 'environment');
-    input.style.display = 'none';
-
-    const done = (file: File | null) => {
-      input.remove();
-      resolve(file);
-    };
-
-    input.addEventListener('change', () => done(input.files?.[0] ?? null), { once: true });
-    input.addEventListener('cancel', () => done(null), { once: true });
-
-    document.body.append(input);
-    input.click();
-  });
+/** Имя файла в OPFS: время плюс случайный хвост — столкнуться нечем. */
+function newName(ext: string): string {
+  return `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
 }
 
 async function decode(file: Blob): Promise<{ width: number; height: number; source: CanvasImageSource }> {
@@ -143,6 +131,20 @@ function draw(
   return canvas;
 }
 
+/** Блоб как data-URL — единственная форма, которую можно положить в `path`. */
+function dataUrl(blob: Blob): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onerror = () => {
+      reject(new Error('Снимок не читается'));
+    };
+    reader.onload = () => {
+      resolve(String(reader.result));
+    };
+    reader.readAsDataURL(blob);
+  });
+}
+
 function toBlob(canvas: HTMLCanvasElement): Promise<Blob> {
   return new Promise((resolve, reject) => {
     canvas.toBlob(
@@ -158,9 +160,20 @@ function toBlob(canvas: HTMLCanvasElement): Promise<Blob> {
  * Capacitor-реализация подставлялась той же формы объектом.
  */
 export function createWebPhotos(): PhotoStore {
+  /** Пишет блоб в OPFS и отдаёт путь с префиксом. */
+  const write = async (blob: Blob, ext: string): Promise<string> => {
+    const name = newName(ext);
+    const dir = await opfsDir();
+    const handle = await dir.getFileHandle(name, { create: true });
+    const writable = await handle.createWritable();
+    await writable.write(blob);
+    await writable.close();
+    return `${OPFS_PREFIX}${name}`;
+  };
+
   return {
     async capture(): Promise<CapturedPhoto | null> {
-      const file = await pickFile();
+      const file = await pickFile({ accept: 'image/*', camera: true });
       if (!file) return null;
 
       const { width, height, source } = await decode(file);
@@ -172,14 +185,14 @@ export function createWebPhotos(): PhotoStore {
       }
 
       const blob = await toBlob(draw(source, width, height, FULL_SIDE));
-      const name = `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}.webp`;
-      const dir = await opfsDir();
-      const handle = await dir.getFileHandle(name, { create: true });
-      const writable = await handle.createWritable();
-      await writable.write(blob);
-      await writable.close();
+      return { path: await write(blob, 'webp'), thumb };
+    },
 
-      return { path: `${OPFS_PREFIX}${name}`, thumb };
+    async save(data: Blob, ext: string): Promise<string> {
+      // Без OPFS положить снимок некуда: возвращаем его data-URL'ом, и он же
+      // становится «путём» — ровно та деградация, что и у `capture`.
+      if (!hasOpfs()) return dataUrl(data);
+      return write(data, ext);
     },
 
     async load(path: string): Promise<Blob | string | null> {
@@ -208,8 +221,27 @@ export function createWebPhotos(): PhotoStore {
   };
 }
 
-/** Реализация, которую видят экраны. BJ-6 переопределит её на Capacitor. */
-export const photos: PhotoStore = createWebPhotos();
+/* ── Реализация, которую видят экраны ────────────────────────────────────── */
+
+const store = bind<PhotoStore>(createWebPhotos, async () =>
+  (await import('./photos.capacitor.js')).createCapacitorPhotos(),
+);
+
+/**
+ * Фасад: тот же интерфейс, но реализация выбирается при первом обращении.
+ *
+ * Из-за `import()` нативная реализация не может приехать синхронно, поэтому
+ * объект-синглтон здесь — не она сама, а тонкая переадресация. Экраны разницы
+ * не видят: все методы интерфейса и так возвращают промисы.
+ */
+export const photos: PhotoStore = {
+  capture: async () => (await store()).capture(),
+  load: async (path) => (await store()).load(path),
+  remove: async (path) => {
+    await (await store()).remove(path);
+  },
+  save: async (data, ext) => (await store()).save(data, ext),
+};
 
 /**
  * Готовый `src` для `<img>` плюс способ его отпустить.

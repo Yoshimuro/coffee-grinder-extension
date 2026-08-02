@@ -1,9 +1,12 @@
 task_id: BJ-6
 title: "Capacitor: камера, файлы, уведомления, keep-awake, голос, экспорт/импорт, QR, PWA"
 profile: full
-status: READY_FOR_DEVELOPMENT
+status: TESTING_READY
 owner: dev-agent (opus)
 created_at: "2026-08-02T23:30:00Z"
-updated_at: "2026-08-02T23:30:00Z"
+updated_at: "2026-08-02T05:30:00Z"
 transitions:
   - {at: "2026-08-02T23:30:00Z", from: RESEARCH_IN_PROGRESS, to: READY_FOR_DEVELOPMENT, reason: "research = CLAUDE_CODE_TASK (стек/хранение) + platform-интерфейсы BJ-4; контракты №2-3 определяются здесь (contracts.md); план предодобрен (BJ-1/decisions.md D-1)"}
+  - {at: "2026-08-02T04:10:00Z", from: READY_FOR_DEVELOPMENT, to: DEVELOPMENT_IN_PROGRESS, reason: "старт S-1: зависимости Capacitor 6 (версии по peerDependencies), capacitor.config.ts, cap add android"}
+  - {at: "2026-08-02T05:30:00Z", from: DEVELOPMENT_IN_PROGRESS, to: READY_FOR_REVIEW, reason: "S-1..S-6 сданы. Контракты №2 (export-zip-v1) и №3 (QR-payload-v1) реализованы по contracts.md. AC-1 cap sync android exit 0; AC-2 web не деградировал (473 юнита, 6 e2e, фолбэки на месте); AC-3 e2e экспорт→чистый профиль→импорт со снимком; AC-4 QR настоящий, матрица проверена тестом; AC-5 внешних адресов в sw/manifest/html нет; AC-6 корневой verify зелёный. Открыт Q-1: Capacitor 6 против 8 перед BJ-7"}
+  - {at: "2026-08-03T06:35:00Z", from: READY_FOR_REVIEW, to: TESTING_READY, reason: "ревью main-session: чекпоинты агента сверены (R-3 guard закреплён тестом, порядок транзакции импорта в transfer.ts, нативный код вне главного чанка по build-выводу); Q-1 закрыт рабочим допущением D-6 (Capacitor 6, на утреннее подтверждение); отклонения приняты D-7. DONE подтвердит пользователь"}

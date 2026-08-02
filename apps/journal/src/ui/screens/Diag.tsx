@@ -21,6 +21,7 @@ import { useBean } from '../../db/repo/beans.js';
 import { findPendingEntry, useEntry } from '../../db/repo/entries.js';
 import { useDevice } from '../../db/repo/devices.js';
 import { useLang } from '../../db/repo/settings.js';
+import { notify } from '../../platform/notify.js';
 import { speech } from '../../platform/speech.js';
 import { InverseButton } from '../components/InverseButton.js';
 import { ScreenHeader } from '../components/ScreenHeader.js';
@@ -97,7 +98,7 @@ export function Diag() {
     if (listening) return;
     setListening(true);
     try {
-      const heard = await speech.listen();
+      const heard = await speech.listen(lang);
       if (heard) {
         setNote(note ? `${note} ${heard}` : heard);
         /* Распознанное только предлагается тегами — проставлять за человека
@@ -112,6 +113,9 @@ export function Diag() {
   async function save(): Promise<void> {
     closing.current = true;
     await saveRating();
+    /* Оценили раньше, чем пришло напоминание, — снимаем его. Уведомление про
+       чашку, которую уже оценили, — мусор (D-4). */
+    void notify.cancel();
     setTab('home');
   }
 

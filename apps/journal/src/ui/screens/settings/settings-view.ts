@@ -7,6 +7,7 @@
 
 import { STR } from '../../../data/strings.js';
 import type { GrinderRecord, Lang } from '../../../db/schema.js';
+import type { ImportFailure } from '../../../db/transfer.js';
 import type { StepperRange } from '../../components/index.js';
 import { unitOf } from '../conv/model.js';
 
@@ -51,4 +52,41 @@ export function grinderMeta(grinder: GrinderRecord, lang: Lang): string {
  */
 export function canDelete(count: number): boolean {
   return count > 1;
+}
+
+/* ── Обмен базой (BJ-6) ──────────────────────────────────────────────────── */
+
+/** Какая из двух операций сейчас говорит. */
+export type TransferOp = 'export' | 'import';
+
+/**
+ * Состояние обмена — одно на обе строки.
+ *
+ * Одно, а не два, потому что и экспорт, и импорт читают всю базу: запускать их
+ * одновременно нечего, и строка, которая молчит, обязана показывать подсказку,
+ * а не чужой результат.
+ */
+export type TransferState =
+  | { kind: 'idle' }
+  | { kind: 'busy'; op: TransferOp }
+  | { kind: 'done'; op: TransferOp }
+  | { kind: 'failed'; op: TransferOp; code: ImportFailure };
+
+export const TRANSFER_IDLE: TransferState = { kind: 'idle' };
+
+/**
+ * Подпись под строкой обмена.
+ *
+ * Чужая строка всегда показывает свою подсказку: «база восстановлена» под
+ * ЭКСПОРТОМ читалось бы как «экспорт восстановил базу».
+ */
+export function transferNote(state: TransferState, op: TransferOp, lang: Lang): string {
+  const t = STR[lang];
+  const hint = op === 'export' ? t.set_export_hint : t.set_import_hint;
+  if (state.kind === 'idle' || state.op !== op) return hint;
+  if (state.kind === 'busy') return t.set_busy;
+  if (state.kind === 'done') return op === 'export' ? t.set_export_done : t.set_import_done;
+  // Отказ бывает только у импорта, и человеку важно различить две его причины:
+  // «файл не тот» лечится другим файлом, «файл битый» — не лечится ничем.
+  return state.code === 'version' ? t.set_import_bad : t.set_import_broken;
 }

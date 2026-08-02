@@ -10,10 +10,10 @@
  * Схема v1 держит `diag` всегда, и у ждущей оценки он нулевой; показывать
  * «К 0 · Г 0 · Т 0 · С 0» — врать про вкус, которого никто не называл.
  *
- * QR на экране нет вовсе (D-12). Фейковый шум прототипа (`qrSvg`, `DC:1131`) не
- * переносится — картинка, которая выглядит как QR и не сканируется, хуже, чем
- * её отсутствие, — но и пустая площадка под него читалась как незагрузившееся
- * изображение. Настоящий кодировщик придёт в BJ-6, вместе с ним и блок.
+ * QR внизу — настоящий, с BJ-6. Прототип рисовал на его месте шум (`qrSvg`,
+ * `DC:1131`), BJ-4 убрал и шум, и пустую площадку под него (D-12): картинка,
+ * которая выглядит как QR и не сканируется, хуже, чем её отсутствие. Теперь за
+ * блоком стоит офлайн-кодировщик и контракт №3, и блок вернулся.
  */
 
 import { useNav } from '../../app/nav.js';
@@ -32,6 +32,8 @@ import { entryTitle } from '../entry-format.js';
 import { useBrewSetup } from './brewing/brew-store.js';
 import { diagLine } from './journal/diag-scales.js';
 import { entryStamp, stageWater } from './journal/format.js';
+import { hasRecipe, recipeText } from './journal/qr.js';
+import { QrSvg } from './journal/QrSvg.js';
 import { useJournalView } from './journal/view-store.js';
 import './journal/journal.css';
 
@@ -172,6 +174,14 @@ export function Detail() {
           <div className="jr__group">
             <div className="jr__label">{t.log_note}</div>
             <div className="jr-note-text">{entry.note}</div>
+          </div>
+        ) : null}
+
+        {hasRecipe(entry) ? (
+          <div className="jr__group jr-qr" data-testid="detail-qr">
+            <div className="jr__label">{t.qr_title}</div>
+            <QrSvg text={recipeText(entry, bean ?? null, device ?? null)} />
+            <div className="jr-qr__hint">{t.qr_hint}</div>
           </div>
         ) : null}
       </div>

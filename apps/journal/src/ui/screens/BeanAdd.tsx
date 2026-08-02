@@ -112,12 +112,14 @@ export function BeanAdd() {
               placeholder={t.bean_ph_new}
               size="full"
               label={`${t.bean_photos} ${i + 1}`}
+              testId={`bean-photo-${String(i)}`}
             />
           ))}
           <PhotoSlot
             placeholder={t.bean_ph_new}
             size="add"
             label={t.shelf_add_photo}
+            testId="bean-photo-add"
             onClick={() => void capture()}
           />
         </div>

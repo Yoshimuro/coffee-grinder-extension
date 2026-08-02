@@ -13,6 +13,7 @@
 import { useNav } from '../../app/nav.js';
 import { STR } from '../../data/strings.js';
 import { useLang } from '../../db/repo/settings.js';
+import { notify, ratingDueAt } from '../../platform/notify.js';
 import { InverseButton } from '../components/index.js';
 import './brewing/brewing.css';
 
@@ -33,6 +34,22 @@ export function RateLater() {
     go('diag');
   };
 
+  /*
+   * «ПОЗЖЕ» — единственное место, где приложение ставит уведомление (D-4).
+   * Человек только что сам сказал «вернусь позже», и напоминание через 15 минут
+   * — продолжение этой фразы, а не попытка вернуть его в приложение. Текст
+   * повторяет карточку на домашнем экране: она и есть то, к чему уведомление
+   * ведёт.
+   */
+  const later = () => {
+    void notify.schedule({
+      title: t.home_pending,
+      body: t.home_pending_sub,
+      at: ratingDueAt(),
+    });
+    setTab('home');
+  };
+
   return (
     <section className="screen bj-rate" data-screen="rateLater">
       <div className="bj-rate__dot" />
@@ -43,7 +60,7 @@ export function RateLater() {
         <InverseButton testId="rate-now" onClick={rateNow}>
           {t.rate_now}
         </InverseButton>
-        <button type="button" className="bj-rate__later" onClick={() => setTab('home')}>
+        <button type="button" className="bj-rate__later" data-testid="rate-later" onClick={later}>
           {t.rate_later_btn}
         </button>
       </div>

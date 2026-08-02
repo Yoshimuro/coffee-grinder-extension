@@ -9,3 +9,19 @@ playwright-report/
 blob-report/
 .DS_Store
 *.log
+
+# Capacitor (BJ-6). Сам проект `apps/journal/android` коммитится как исходник —
+# он сгенерирован один раз `cap add android` и с тех пор правится руками (тёмная
+# тема, иконки). Ниже — только то, что пересоздают `cap sync` и gradle:
+# собранные каталоги, локальный путь к SDK, скопированный веб-бандл и
+# конфигурация плагинов. Те же правила лежат в `android/.gitignore` от
+# генератора; здесь они продублированы, чтобы это было видно из корня.
+apps/journal/android/.gradle/
+apps/journal/android/build/
+apps/journal/android/app/build/
+apps/journal/android/local.properties
+apps/journal/android/capacitor-cordova-android-plugins/
+apps/journal/android/app/src/main/assets/public/
+apps/journal/android/app/src/main/assets/capacitor.config.json
+apps/journal/android/app/src/main/assets/capacitor.plugins.json
+apps/journal/android/app/src/main/res/xml/config.xml

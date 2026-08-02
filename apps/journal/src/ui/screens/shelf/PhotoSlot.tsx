@@ -29,6 +29,8 @@ export interface PhotoSlotProps {
   onClick?: () => void;
   /** Подпись для скринридера, когда слот кликабельный. */
   label?: string;
+  /** Метка для сквозного теста (`data-testid`) — см. `InverseButton`. */
+  testId?: string;
 }
 
 /** Значок «картинка» — тот же контур, что рисует макет в пустом слоте. */
@@ -55,6 +57,7 @@ export function PhotoSlot({
   size = 'card',
   onClick,
   label,
+  testId,
 }: PhotoSlotProps) {
   /* Миниатюра показывается сразу; полный снимок заменяет её, когда прочитается
      из OPFS. Так слот никогда не бывает пустым, пока файл грузится. */
@@ -97,9 +100,17 @@ export function PhotoSlot({
   );
 
   return onClick === undefined ? (
-    <div className={cls}>{body}</div>
+    <div className={cls} data-testid={testId}>
+      {body}
+    </div>
   ) : (
-    <button type="button" className={cls} aria-label={label ?? placeholder} onClick={onClick}>
+    <button
+      type="button"
+      className={cls}
+      data-testid={testId}
+      aria-label={label ?? placeholder}
+      onClick={onClick}
+    >
       {body}
     </button>
   );

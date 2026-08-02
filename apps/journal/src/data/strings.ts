@@ -164,7 +164,9 @@ const RU = {
   set_import: 'ИМПОРТ',
   set_lang: 'ЯЗЫК',
   set_spec: 'СПЕЦИФИКАЦИЯ',
-  set_export_done: 'база записана в файл brew-journal.json',
+  /* Имя файла — из контракта №2 (BJ-6), а не из прототипа: там выгрузка была
+     JSON'ом без фото и без обработчика. */
+  set_export_done: 'база записана в brew-journal-export.zip',
   set_offline: 'локально · офлайн · без аккаунта',
 
   note_label: 'ЗАМЕТКА',
@@ -338,6 +340,29 @@ const RU = {
   set_del_yes: 'ДА',
   /** Версия в подвале. Не перевод — номер, но в JSX хардкодов не держим. */
   set_ver: 'v0.1',
+
+  /* ── Добавлено в BJ-6 (обмен базой и QR) ───────────────────────────────────
+     Экспорт и импорт до этой задачи были строками без обработчиков (D-7), а QR
+     на детали не было вовсе (D-12): обе площадки ждали настоящих файлов и
+     настоящего кодировщика. Дождались. */
+
+  /** Подпись под «ЭКСПОРТ БАЗЫ В ФАЙЛ»: что именно уедет. */
+  set_export_hint: 'записи, полка, снимки — одним zip',
+  /** Подпись под «ИМПОРТ»: чем это кончится. Предупреждение, а не реклама. */
+  set_import_hint: 'zip из экспорта · база заменится целиком',
+  /** Импорт прошёл. */
+  set_import_done: 'база восстановлена из файла',
+  /** Версия формата чужая — импорт не начинался. */
+  set_import_bad: 'файл не от этой версии — ничего не изменилось',
+  /** Файл не разбирается: не архив, нет data.json, битый JSON. */
+  set_import_broken: 'файл не читается — ничего не изменилось',
+  /** Идёт распаковка или сборка: обе операции не мгновенные на большой полке. */
+  set_busy: 'подожди…',
+
+  /** Заголовок блока QR на детали записи. */
+  qr_title: 'РЕЦЕПТ КОДОМ',
+  /** Подпись под кодом: что с ним делать. */
+  qr_hint: 'снять камерой другого телефона',
 } as const;
 
 /** Ключ строки. Значения выведены из русской таблицы; счёт держит тест. */
@@ -492,7 +517,7 @@ const EN: Readonly<Record<StrKey, string>> = {
   set_import: 'IMPORT',
   set_lang: 'LANGUAGE',
   set_spec: 'SPEC',
-  set_export_done: 'base written to brew-journal.json',
+  set_export_done: 'base written to brew-journal-export.zip',
   set_offline: 'local · offline · no account',
 
   note_label: 'NOTE',
@@ -599,6 +624,16 @@ const EN: Readonly<Record<StrKey, string>> = {
   set_del_q: 'DELETE?',
   set_del_yes: 'YES',
   set_ver: 'v0.1',
+
+  set_export_hint: 'entries, shelf, photos — one zip',
+  set_import_hint: 'zip from export · replaces the whole base',
+  set_import_done: 'base restored from file',
+  set_import_bad: 'file is from another version — nothing changed',
+  set_import_broken: 'file cannot be read — nothing changed',
+  set_busy: 'wait…',
+
+  qr_title: 'RECIPE AS CODE',
+  qr_hint: 'shoot it with another phone',
 };
 
 /** Таблицы строк по языкам. Заморожены — правка в рантайме исключена. */
