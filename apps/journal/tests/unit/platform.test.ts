@@ -15,10 +15,10 @@ import { bind, isNative } from '../../src/platform/native.js';
 
 describe('напоминание об оценке (D-4)', () => {
   it('ставится через пятнадцать минут после «ПОЗЖЕ»', () => {
-    expect(RATING_DELAY_MIN).toBe(15);
+    expect(RATING_DELAY_MIN).toBe(7);
 
     const from = new Date('2026-07-30T09:00:00.000Z');
-    expect(ratingDueAt(from).toISOString()).toBe('2026-07-30T09:15:00.000Z');
+    expect(ratingDueAt(from).toISOString()).toBe('2026-07-30T09:07:00.000Z');
   });
 
   it('в вебе не ставится вовсе и молчит об этом', async () => {

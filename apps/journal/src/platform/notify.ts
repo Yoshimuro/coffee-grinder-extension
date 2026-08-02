@@ -18,7 +18,7 @@
 import { bind } from './native.js';
 
 /** Через сколько минут после «ПОЗЖЕ» напомнить (D-4). */
-export const RATING_DELAY_MIN = 15;
+export const RATING_DELAY_MIN = 7;
 
 /**
  * Идентификатор уведомления. Он один и тот же всегда: ждущая оценки запись в
