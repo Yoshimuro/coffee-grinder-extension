@@ -148,7 +148,11 @@ public class ShellThemePlugin extends Plugin {
            если фон когда-нибудь перестанет совпадать с `--bg`, значки всё равно
            останутся видимыми. */
         boolean lightBars = isLight(value);
-        WindowInsetsControllerCompat bars = WindowCompat.getInsetsController(window);
+        /* Двухаргументная форма — та, что есть во всех версиях androidx.core;
+           одноаргументную добавили позже, и в версии, которую тянет Capacitor 6,
+           её ещё нет. Второй аргумент — любой View окна, decor подходит. */
+        WindowInsetsControllerCompat bars =
+                WindowCompat.getInsetsController(window, window.getDecorView());
         bars.setAppearanceLightStatusBars(lightBars);
         bars.setAppearanceLightNavigationBars(lightBars);
     }
