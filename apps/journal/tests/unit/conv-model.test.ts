@@ -133,7 +133,8 @@ describe('convView — что видит пользователь', () => {
     const view = convView(base);
     expect(view.fromName).toBe('Comandante C40 MK4 Nitro Blade');
     expect(view.tech).toMatch(/^30 кликов · \d+(\.\d+)? µm$/);
-    expect(view.center).toContain('центр');
+    expect(view.center).toContain('диапазон');
+    expect(view.centerBig).toBe(String(view.span.center.toFixed(1)));
     expect(view.center).toContain('разрешение');
     expect(view.center).toContain('мкм/шаг');
     expect(view.unit).toBe('меток');
@@ -151,7 +152,7 @@ describe('convView — что видит пользователь', () => {
     const view = convView({ ...base, lang: 'en' });
     expect(view.unit).toBe('marks');
     expect(view.tech).toContain('clicks');
-    expect(view.center).toContain('center');
+    expect(view.center).toContain('range');
   });
 
   it('полоса пересчитана из того же диапазона', () => {

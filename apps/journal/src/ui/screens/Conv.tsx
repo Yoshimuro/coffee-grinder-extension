@@ -155,9 +155,7 @@ export function Conv() {
         {view === undefined ? null : (
           <>
             <div className="conv-result">
-              <div className="conv-result__value">
-                {view.lo}—{view.hi}
-              </div>
+              <div className="conv-result__value">{view.centerBig}</div>
               <div className="conv-result__unit">{view.unit}</div>
             </div>
 

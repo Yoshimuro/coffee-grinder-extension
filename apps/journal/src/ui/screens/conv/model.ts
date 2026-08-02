@@ -172,6 +172,7 @@ export interface ConvView {
   /** Границы главного результата, уже с фиксированной точностью. */
   lo: string;
   hi: string;
+  centerBig: string;
   /** Единица результата. Капс делает CSS. */
   unit: string;
   /** «центр 4.6 · 730 µm · разрешение 8.7 мкм/шаг». */
@@ -219,7 +220,8 @@ export function convView({ from, setting, to, offset, lang }: ConvInput): ConvVi
     lo: fixed(result.lo),
     hi: fixed(result.hi),
     unit: toUnit,
-    center: `${t.conv_center} ${result.center} · ${result.microns} ${t.um} · ${t.conv_resolves} ${result.resolutionMicrons} ${t.conv_permark}`,
+    centerBig: fixed(result.center),
+    center: `${t.conv_range} ${fixed(result.lo)}—${fixed(result.hi)} · ${result.microns} ${t.um} · ${t.conv_resolves} ${result.resolutionMicrons} ${t.conv_permark}`,
     span,
     band: bandGeometry(span),
     warnings,
