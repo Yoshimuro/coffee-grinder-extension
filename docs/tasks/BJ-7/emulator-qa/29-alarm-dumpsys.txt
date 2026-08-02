@@ -1,0 +1,10 @@
+# EM-5: alarm scheduled by the app after the POZHE tap (POZHE at 11:26:28.78 local)
+# dump taken 2026-08-02 11:30:23
+
+    RTC_WAKEUP #5: Alarm{a135a0f type 0 origWhen 1785659608781 whenElapsed 1053366 com.kovachar.brewjournal}
+      tag=*walarm*:com.kovachar.brewjournal/com.capacitorjs.plugins.localnotifications.TimedNotificationPublisher
+      type=RTC_WAKEUP origWhen=2026-08-02 11:33:28.781 window=+4m56s587ms repeatInterval=0 count=0 flags=0x20
+      policyWhenElapsed: requester=+3m5s956ms app_standby=-3m29s494ms device_idle=-- battery_saver=-2m2s395ms
+      whenElapsed=+3m5s956ms maxWhenElapsed=+8m2s543ms
+      operation=PendingIntent{6481a9c: PendingIntentRecord{5770ca5 com.kovachar.brewjournal broadcastIntent}}
+      idle-options=Bundle[{android.pendingIntent.backgroundActivityAllowed=2, android:broadcast.temporaryAppAllowlistReasonCode=-1, android:broadcast.temporaryAppAllowlistDuration=10000, android:broadcast.temporaryAppAllowlistReason=, android:broadcast.temporaryAppAllowlistType=1, android:broadcast.flags=8}]

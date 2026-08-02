@@ -1,0 +1,30 @@
+# EM-3h: проверка, что ЭКСПОРТ реально записал файл (шэр-лист на голом AVD некуда сохранять)
+# 2026-08-02 11:52:40
+
+## adb shell run-as com.kovachar.brewjournal ls -la cache/
+total 88
+drwxrws--x 3 u0_a207 u0_a207_cache  4096 2026-08-02 11:51 .
+drwx------ 8 u0_a207 u0_a207        4096 2026-08-02 05:34 ..
+drwx--S--- 6 u0_a207 u0_a207_cache  4096 2026-08-02 05:34 WebView
+-rw------- 1 u0_a207 u0_a207_cache 59708 2026-08-02 11:51 brew-journal-export.zip
+
+## unzip -l brew-journal-export.zip (скопирован из кеша в scratchpad, не в репозиторий)
+Archive:  /private/tmp/claude-503/-Users-User-Projects-Personal-coffee-grinder-extension/08df9889-5852-401e-99fc-894228d4f6d9/scratchpad/brew-journal-export.zip
+  Length      Date    Time    Name
+---------  ---------- -----   ----
+     5957  08-02-2026 08:51   data.json
+        0  08-02-2026 08:51   photos/
+        0  08-02-2026 08:51   photos/b1785658873268/
+    27985  08-02-2026 08:51   photos/b1785658873268/0.jpg
+    27735  08-02-2026 08:51   photos/b1785658873268/1.jpg
+---------                     -------
+    61677                     5 files
+
+## структура data.json
+  version: 1
+  exportedAt: "2026-08-02T08:51:37.172Z"
+  settings: {"lang":"ru","seeded":true,"calib":{"offset":0,"src":null},"convFrom":null,"convTo":null,"convVal":30,"recents":[]}
+  grinders: 1 items
+  devices: 1 items
+  beans: 1 items
+  entries: 2 items

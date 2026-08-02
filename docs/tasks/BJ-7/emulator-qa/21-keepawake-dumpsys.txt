@@ -1,0 +1,23 @@
+# EM-3d keep-screen-on evidence, taken while the brew timer screen was in foreground (2026-08-02 11:23:43)
+
+## dumpsys window windows | grep brewjournal (flags)
+  Window #8 Window{a8336cb u0 com.kovachar.brewjournal/com.kovachar.brewjournal.MainActivity}:
+    mDisplayId=0 rootTaskId=28 mSession=Session{7e66d90 3730:u0a10207} mClient=android.os.BinderProxy@83b9d9a
+    mOwnerUid=10207 showForAllUsers=false package=com.kovachar.brewjournal appop=NONE
+    mAttrs={(0,0)(fillxfill) sim={adjust=resize} layoutInDisplayCutoutMode=shortEdges ty=BASE_APPLICATION wanim=0x1030309
+      fl=KEEP_SCREEN_ON LAYOUT_IN_SCREEN LAYOUT_INSET_DECOR SPLIT_TOUCH HARDWARE_ACCELERATED DRAWS_SYSTEM_BAR_BACKGROUNDS
+      pfl=NO_MOVE_ANIMATION FORCE_DRAW_STATUS_BAR_BACKGROUND FIT_INSETS_CONTROLLED
+--
+  imeLayeringTarget in display# 0 Window{a8336cb u0 com.kovachar.brewjournal/com.kovachar.brewjournal.MainActivity}
+  imeInputTarget in display# 0 Window{a8336cb u0 com.kovachar.brewjournal/com.kovachar.brewjournal.MainActivity}
+  imeControlTarget in display# 0 Window{a8336cb u0 com.kovachar.brewjournal/com.kovachar.brewjournal.MainActivity}
+  Minimum task size of display#0 220  mBlurEnabled=true
+  mLastDisplayFreezeDuration=0 due to new-config
+
+## dumpsys power | Wake Locks
+Wake Locks: size=2
+  PARTIAL_WAKE_LOCK                 '*job*/com.android.vending/com.google.android.finsky.scheduler.process.backgroundimpl.PhoneskyJobServiceBackground' ACQ=-6m53s978ms LONG (uid=1000 pid=560 ws=WorkSource{10141 com.android.vending})
+  SCREEN_BRIGHT_WAKE_LOCK           'WindowManager/displayId:0' ON_AFTER_RELEASE ACQ=-37s899ms (uid=1000 pid=560 ws=WorkSource{10207 com.kovachar.brewjournal})
+
+Suspend Blockers: size=5
+  PowerManagerService.Booting: ref count=0 []

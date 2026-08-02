@@ -1,0 +1,56 @@
+# EM-4: jsQR decode of docs/tasks/BJ-7/emulator-qa/46-entry-detail-top.png
+# tooling: node + jsqr + pngjs, installed in the session scratchpad (not in the repo)
+
+image: 1080x2400
+DECODED (whole image)
+--- raw payload ---
+{"v":1,"t":"recipe","mode":"perc","grind":4.8,"dose":15,"water":260,"temp":95,"pours":3,"bean":"Test Pack","stages":[["bloom",45,45],["pour",40,70],["pour",40,70],["pour",40,75],["drain",50,0]]}
+--- parsed JSON ---
+{
+  "v": 1,
+  "t": "recipe",
+  "mode": "perc",
+  "grind": 4.8,
+  "dose": 15,
+  "water": 260,
+  "temp": 95,
+  "pours": 3,
+  "bean": "Test Pack",
+  "stages": [
+    [
+      "bloom",
+      45,
+      45
+    ],
+    [
+      "pour",
+      40,
+      70
+    ],
+    [
+      "pour",
+      40,
+      70
+    ],
+    [
+      "pour",
+      40,
+      75
+    ],
+    [
+      "drain",
+      50,
+      0
+    ]
+  ]
+}
+--- assertions ---
+v === 1            : OK
+t === 'recipe'     : OK
+mode               : "perc"
+water              : 260
+temp               : 95
+grind              : 4.8
+dose               : 15
+ratio              : (absent)
+id-like keys       : (none)
