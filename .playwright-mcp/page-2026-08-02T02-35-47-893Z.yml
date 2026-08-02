@@ -1,0 +1,53 @@
+- generic [ref=f3e395]:
+  - generic [ref=f3e396]:
+    - button "НАЗАД" [ref=f3e397] [cursor=pointer]: ←
+    - heading "ЗАВАРИВАНИЕ" [level=1] [ref=f3e398]
+    - generic [ref=f3e399]: 1:20.8
+  - generic [ref=f3e400]:
+    - generic [ref=f3e401]:
+      - generic [ref=f3e402]: КОФЕ
+      - generic [ref=f3e403]:
+        - button "Дрип · Колумбия Уила 23 дн · спад · 3 шт ДРИП-ПАКЕТ" [ref=f3e404] [cursor=pointer]:
+          - generic [ref=f3e405]:
+            - generic [ref=f3e406]: Дрип · Колумбия Уила
+            - generic [ref=f3e407]: 23 дн · спад · 3 шт
+          - generic [ref=f3e408]: ДРИП-ПАКЕТ
+        - button "Ява Золотая 6 дн · пик · 187 г ЗЕРНО" [ref=f3e411] [cursor=pointer]:
+          - generic [ref=f3e412]:
+            - generic [ref=f3e413]: Ява Золотая
+            - generic [ref=f3e414]: 6 дн · пик · 187 г
+          - generic [ref=f3e415]: ЗЕРНО
+        - button "Кения Ньери · молотый 15 дн · пик · 64 г МОЛОТЫЙ" [ref=f3e418] [cursor=pointer]:
+          - generic [ref=f3e419]:
+            - generic [ref=f3e420]: Кения Ньери · молотый
+            - generic [ref=f3e421]: 15 дн · пик · 64 г
+          - generic [ref=f3e422]: МОЛОТЫЙ
+        - button "+ ЗЕРНО" [ref=f3e425] [cursor=pointer]
+      - generic [ref=f3e426]: пакет = упаковка и воронка. девайс не выбирается
+    - generic [ref=f3e427]:
+      - generic [ref=f3e428]:
+        - generic [ref=f3e429]: ВОДА
+        - generic [ref=f3e431]:
+          - button "меньше" [ref=f3e432] [cursor=pointer]: −
+          - generic [ref=f3e433]:
+            - text: "250"
+            - generic [ref=f3e434]: г
+          - button "больше" [ref=f3e435] [cursor=pointer]: +
+      - generic [ref=f3e436]:
+        - generic [ref=f3e437]: ТЕМПЕРАТУРА
+        - generic [ref=f3e439]:
+          - button "меньше" [ref=f3e440] [cursor=pointer]: −
+          - generic [ref=f3e441]:
+            - text: "94"
+            - generic [ref=f3e442]: °C
+          - button "больше" [ref=f3e443] [cursor=pointer]: +
+      - generic [ref=f3e444]:
+        - generic [ref=f3e445]: ПРОЛИВЫ
+        - generic [ref=f3e447]:
+          - button "меньше" [ref=f3e448] [cursor=pointer]: −
+          - generic [ref=f3e449]: "3"
+          - button "больше" [ref=f3e450] [cursor=pointer]: +
+    - button "СТАРТ" [ref=f3e451] [cursor=pointer]
+    - button "ЗАПИСАТЬ БЕЗ ТАЙМЕРА рецепт уже пролит — вписать как есть" [ref=f3e452] [cursor=pointer]:
+      - generic [ref=f3e453]: ЗАПИСАТЬ БЕЗ ТАЙМЕРА
+      - generic [ref=f3e454]: рецепт уже пролит — вписать как есть

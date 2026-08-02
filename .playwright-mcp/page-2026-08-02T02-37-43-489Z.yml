@@ -1,0 +1,85 @@
+- generic [ref=f3e3]:
+  - generic [ref=f3e960]:
+    - banner [ref=f3e961]:
+      - heading "ЖУРНАЛ" [level=1] [ref=f3e962]
+      - generic [ref=f3e964]:
+        - button "ЗАВАРИТЬ" [ref=f3e965] [cursor=pointer]
+        - button "СРАВНИТЬ" [ref=f3e966] [cursor=pointer]
+    - generic [ref=f3e968]:
+      - button "ВСЁ" [pressed] [ref=f3e969] [cursor=pointer]
+      - button "Дрип" [ref=f3e970] [cursor=pointer]
+      - button "Ява Золотая" [ref=f3e971] [cursor=pointer]
+      - button "Кения Ньери" [ref=f3e972] [cursor=pointer]
+      - button "ПРОЛИВ" [ref=f3e973] [cursor=pointer]
+      - button "ИММЕРСИЯ" [ref=f3e974] [cursor=pointer]
+      - button "ГИБРИД" [ref=f3e975] [cursor=pointer]
+      - button "ДРИП" [ref=f3e976] [cursor=pointer]
+      - button "ЧАШКИ" [ref=f3e977] [cursor=pointer]
+    - generic [ref=f3e978]:
+      - button "01.08 09:12 Ява Золотая · V60 помол 4.4 · 15 г · 250 г · 94° · 2:48 ждёт оценки" [ref=f3e979] [cursor=pointer]:
+        - generic [ref=f3e980]:
+          - generic [ref=f3e981]: "01.08"
+          - generic [ref=f3e982]: 09:12
+        - generic [ref=f3e983]:
+          - generic [ref=f3e984]: Ява Золотая · V60
+          - generic [ref=f3e985]: помол 4.4 · 15 г · 250 г · 94° · 2:48
+        - generic [ref=f3e986]: ждёт оценки
+      - button "31.07 08:47 Ява Золотая · Switch помол 4.8 · 15 г · 240 г · 92° · 3:10 Какао Фундук С 6" [ref=f3e988] [cursor=pointer]:
+        - generic [ref=f3e989]:
+          - generic [ref=f3e990]: "31.07"
+          - generic [ref=f3e991]: 08:47
+        - generic [ref=f3e992]:
+          - generic [ref=f3e993]: Ява Золотая · Switch
+          - generic [ref=f3e994]: помол 4.8 · 15 г · 240 г · 92° · 3:10
+          - generic [ref=f3e995]:
+            - generic [ref=f3e996]: Какао
+            - generic [ref=f3e998]: Фундук
+        - generic [ref=f3e1000]: С 6
+      - button "30.07 09:05 Ява Золотая · V60 помол 4.6 · 15 г · 250 г · 94° · 2:50 Черника Чёрная смородина Мёд С 7" [ref=f3e1002] [cursor=pointer]:
+        - generic [ref=f3e1003]:
+          - generic [ref=f3e1004]: "30.07"
+          - generic [ref=f3e1005]: 09:05
+        - generic [ref=f3e1006]:
+          - generic [ref=f3e1007]: Ява Золотая · V60
+          - generic [ref=f3e1008]: помол 4.6 · 15 г · 250 г · 94° · 2:50
+          - generic [ref=f3e1009]:
+            - generic [ref=f3e1010]: Черника
+            - generic [ref=f3e1012]: Чёрная смородина
+            - generic [ref=f3e1014]: Мёд
+        - generic [ref=f3e1016]: С 7
+      - button "29.07 08:58 Ява Золотая · V60 помол 5 · 15 г · 250 г · 92° · 2:35 Грецкий орех Какао С 4" [ref=f3e1018] [cursor=pointer]:
+        - generic [ref=f3e1019]:
+          - generic [ref=f3e1020]: "29.07"
+          - generic [ref=f3e1021]: 08:58
+        - generic [ref=f3e1022]:
+          - generic [ref=f3e1023]: Ява Золотая · V60
+          - generic [ref=f3e1024]: помол 5 · 15 г · 250 г · 92° · 2:35
+          - generic [ref=f3e1025]:
+            - generic [ref=f3e1026]: Грецкий орех
+            - generic [ref=f3e1028]: Какао
+        - generic [ref=f3e1030]: С 4
+      - button "28.07 16:20 Дрип · Колумбия Уила · ДРИП-ПАКЕТ 12 г · 180 г · 90° · 2:30 Карамель С 6" [ref=f3e1032] [cursor=pointer]:
+        - generic [ref=f3e1033]:
+          - generic [ref=f3e1034]: "28.07"
+          - generic [ref=f3e1035]: 16:20
+        - generic [ref=f3e1036]:
+          - generic [ref=f3e1037]: Дрип · Колумбия Уила · ДРИП-ПАКЕТ
+          - generic [ref=f3e1038]: 12 г · 180 г · 90° · 2:30
+          - generic [ref=f3e1039]: Карамель
+        - generic [ref=f3e1042]: С 6
+      - button "26.07 10:30 Кения Ньери · молотый · AeroPress 14 г · 210 г · 88° · 2:00 Грейпфрут Чёрная смородина С 5" [ref=f3e1044] [cursor=pointer]:
+        - generic [ref=f3e1045]:
+          - generic [ref=f3e1046]: "26.07"
+          - generic [ref=f3e1047]: 10:30
+        - generic [ref=f3e1048]:
+          - generic [ref=f3e1049]: Кения Ньери · молотый · AeroPress
+          - generic [ref=f3e1050]: 14 г · 210 г · 88° · 2:00
+          - generic [ref=f3e1051]:
+            - generic [ref=f3e1052]: Грейпфрут
+            - generic [ref=f3e1054]: Чёрная смородина
+        - generic [ref=f3e1056]: С 5
+  - navigation [ref=f3e1058]:
+    - button "ГЛАВНЫЙ" [ref=f3e1059] [cursor=pointer]
+    - button "ПОЛКА" [ref=f3e1060] [cursor=pointer]
+    - button "ЖУРНАЛ" [ref=f3e1061] [cursor=pointer]
+    - button "ЕЩЁ" [ref=f3e1062] [cursor=pointer]

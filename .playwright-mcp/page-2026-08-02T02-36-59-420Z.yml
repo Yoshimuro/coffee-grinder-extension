@@ -1,0 +1,51 @@
+- generic [ref=f3e3]:
+  - generic [ref=f3e746]:
+    - generic [ref=f3e747]:
+      - heading "BREW JOURNAL" [level=1] [ref=f3e748]
+      - generic [ref=f3e749]: 02.08.2026
+    - generic [ref=f3e750]:
+      - generic [ref=f3e751]:
+        - generic [ref=f3e752]:
+          - generic [ref=f3e753]: Ява Золотая · V60 · 4.4
+          - generic [ref=f3e754]: 01.08 · 09:12
+        - button "ОЦЕНИТЬ" [ref=f3e755] [cursor=pointer]
+      - generic [ref=f3e756]:
+        - button "ЗАВАРИТЬ" [ref=f3e757] [cursor=pointer]
+        - button "КОНВЕРТЕР" [ref=f3e758] [cursor=pointer]: ⇄
+      - button "ОЦЕНИТЬ ЧАШКУ" [ref=f3e759] [cursor=pointer]
+      - generic [ref=f3e760]:
+        - generic [ref=f3e761]: ЖУРНАЛ
+        - button "01.08 Ява Золотая · V60 помол 4.4 · 15 г · 250 г · 94° · 2:48" [ref=f3e763] [cursor=pointer]:
+          - generic [ref=f3e764]: "01.08"
+          - generic [ref=f3e765]:
+            - generic [ref=f3e766]: Ява Золотая · V60
+            - generic [ref=f3e767]: помол 4.4 · 15 г · 250 г · 94° · 2:48
+        - button "31.07 Ява Золотая · Switch помол 4.8 · 15 г · 240 г · 92° · 3:10 С 6" [ref=f3e768] [cursor=pointer]:
+          - generic [ref=f3e769]: "31.07"
+          - generic [ref=f3e770]:
+            - generic [ref=f3e771]: Ява Золотая · Switch
+            - generic [ref=f3e772]: помол 4.8 · 15 г · 240 г · 92° · 3:10
+          - generic [ref=f3e773]: С 6
+        - button "30.07 Ява Золотая · V60 помол 4.6 · 15 г · 250 г · 94° · 2:50 С 7" [ref=f3e774] [cursor=pointer]:
+          - generic [ref=f3e775]: "30.07"
+          - generic [ref=f3e776]:
+            - generic [ref=f3e777]: Ява Золотая · V60
+            - generic [ref=f3e778]: помол 4.6 · 15 г · 250 г · 94° · 2:50
+          - generic [ref=f3e779]: С 7
+        - button "29.07 Ява Золотая · V60 помол 5 · 15 г · 250 г · 92° · 2:35 С 4" [ref=f3e780] [cursor=pointer]:
+          - generic [ref=f3e781]: "29.07"
+          - generic [ref=f3e782]:
+            - generic [ref=f3e783]: Ява Золотая · V60
+            - generic [ref=f3e784]: помол 5 · 15 г · 250 г · 92° · 2:35
+          - generic [ref=f3e785]: С 4
+        - button "28.07 Дрип · Колумбия Уила · ДРИП-ПАКЕТ 12 г · 180 г · 90° · 2:30 С 6" [ref=f3e786] [cursor=pointer]:
+          - generic [ref=f3e787]: "28.07"
+          - generic [ref=f3e788]:
+            - generic [ref=f3e789]: Дрип · Колумбия Уила · ДРИП-ПАКЕТ
+            - generic [ref=f3e790]: 12 г · 180 г · 90° · 2:30
+          - generic [ref=f3e791]: С 6
+  - navigation [ref=f3e792]:
+    - button "ГЛАВНЫЙ" [ref=f3e793] [cursor=pointer]
+    - button "ПОЛКА" [ref=f3e794] [cursor=pointer]
+    - button "ЖУРНАЛ" [ref=f3e795] [cursor=pointer]
+    - button "ЕЩЁ" [ref=f3e796] [cursor=pointer]

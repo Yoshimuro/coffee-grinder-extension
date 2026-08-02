@@ -1,0 +1,37 @@
+- generic [ref=f3e3]:
+  - generic [ref=f3e1063]:
+    - heading "НАСТРОЙКИ" [level=1] [ref=f3e1065]
+    - generic [ref=f3e1066]:
+      - generic [ref=f3e1067]:
+        - generic [ref=f3e1068]: МОИ КОФЕМОЛКИ
+        - generic [ref=f3e1070]:
+          - generic [ref=f3e1071]: Timemore Chestnut S3
+          - generic [ref=f3e1072]: меток · 86.7 µm
+        - button "+ КОФЕМОЛКА" [ref=f3e1073] [cursor=pointer]
+      - button "МОИ ДЕВАЙСЫ 0 →" [ref=f3e1074] [cursor=pointer]:
+        - generic [ref=f3e1075]: МОИ ДЕВАЙСЫ
+        - generic [ref=f3e1077]: 0 →
+      - generic [ref=f3e1078]:
+        - generic [ref=f3e1079]: ЯЗЫК
+        - generic [ref=f3e1082]:
+          - button "RU" [pressed] [ref=f3e1083] [cursor=pointer]
+          - button "EN" [ref=f3e1084] [cursor=pointer]
+      - button "СПЕЦИФИКАЦИЯ →" [ref=f3e1085] [cursor=pointer]:
+        - generic [ref=f3e1086]: СПЕЦИФИКАЦИЯ
+        - generic [ref=f3e1088]: →
+      - button "ЭКСПОРТ БАЗЫ В ФАЙЛ записи, полка, снимки — одним zip ↓" [ref=f3e1089] [cursor=pointer]:
+        - generic [ref=f3e1090]:
+          - generic [ref=f3e1091]: ЭКСПОРТ БАЗЫ В ФАЙЛ
+          - generic [ref=f3e1092]: записи, полка, снимки — одним zip
+        - generic [ref=f3e1093]: ↓
+      - button "ИМПОРТ zip из экспорта · база заменится целиком ↑" [ref=f3e1094] [cursor=pointer]:
+        - generic [ref=f3e1095]:
+          - generic [ref=f3e1096]: ИМПОРТ
+          - generic [ref=f3e1097]: zip из экспорта · база заменится целиком
+        - generic [ref=f3e1098]: ↑
+      - generic [ref=f3e1099]: локально · офлайн · без аккаунта · v0.1
+  - navigation [ref=f3e1058]:
+    - button "ГЛАВНЫЙ" [ref=f3e1059] [cursor=pointer]
+    - button "ПОЛКА" [ref=f3e1060] [cursor=pointer]
+    - button "ЖУРНАЛ" [ref=f3e1061] [cursor=pointer]
+    - button "ЕЩЁ" [active] [ref=f3e1062] [cursor=pointer]

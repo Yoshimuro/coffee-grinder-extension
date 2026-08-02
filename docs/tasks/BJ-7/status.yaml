@@ -1,9 +1,11 @@
 task_id: BJ-7
 title: "APK-сборка, эмуляторный прогон, пиксельная сверка, QA-чеклист для устройства"
 profile: standard
-status: READY_FOR_DEVELOPMENT
-owner: main-session + агенты
+status: TESTING_READY
+owner: main-session
 created_at: "2026-08-02T23:35:00Z"
-updated_at: "2026-08-02T23:35:00Z"
+updated_at: "2026-08-03T06:50:00Z"
 transitions:
-  - {at: "2026-08-02T23:35:00Z", from: RESEARCH_IN_PROGRESS, to: READY_FOR_DEVELOPMENT, reason: "DoD из CLAUDE_CODE_TASK; Android Studio в окружении (память environment-android-studio); план предодобрен (BJ-1/decisions.md D-1)"}
+  - {at: "2026-08-02T23:35:00Z", from: RESEARCH_IN_PROGRESS, to: READY_FOR_DEVELOPMENT, reason: "DoD из CLAUDE_CODE_TASK; Android Studio в окружении; план предодобрен (BJ-1/decisions.md D-1)"}
+  - {at: "2026-08-03T06:20:00Z", from: READY_FOR_DEVELOPMENT, to: DEVELOPMENT_IN_PROGRESS, reason: "S-1 Gradle assembleDebug (после фикса XML-комментария colors.xml — BUILD SUCCESSFUL, app-debug.apk 6.6 МБ); S-2 headless-эмулятор Medium_Phone: install Success, запуск, скриншот emulator-home.png — Home вариант C рендерится корректно; S-3 галерея: 18 эталонов ref/ + 12 скриншотов app/ + выборочная сверка (home, wheel-level2 — совпадение); S-4 qa_checklist_ru.md (7 ручных DoD-проверок) + MORNING.md"}
+  - {at: "2026-08-03T06:50:00Z", from: DEVELOPMENT_IN_PROGRESS, to: TESTING_READY, reason: "AC-1..AC-5 закрыты; исполнение ручной части DoD (авиарежим, камера, уведомления, QR, голос) — за пользователем по qa_checklist_ru.md. DONE подтвердит пользователь"}

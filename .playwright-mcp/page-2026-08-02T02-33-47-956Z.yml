@@ -1,0 +1,29 @@
+- generic [ref=f3e3]:
+  - generic [ref=f3e142]:
+    - generic [ref=f3e143]:
+      - heading "ПОЛКА" [level=1] [ref=f3e144]
+      - generic [ref=f3e145]: 3 · пачки
+    - generic [ref=f3e146]:
+      - button "фото пачки Дрип · Колумбия Уила ДРИП-ПАКЕТ · 23 дн · спад · 3 шт" [ref=f3e147] [cursor=pointer]:
+        - generic [ref=f3e148]: фото пачки
+        - generic [ref=f3e154]:
+          - generic [ref=f3e155]: Дрип · Колумбия Уила
+          - generic [ref=f3e156]: ДРИП-ПАКЕТ · 23 дн · спад · 3 шт
+      - button "фото пачки Ява Золотая ЗЕРНО · 6 дн · пик · 187 г" [ref=f3e157] [cursor=pointer]:
+        - generic [ref=f3e158]: фото пачки
+        - generic [ref=f3e164]:
+          - generic [ref=f3e165]: Ява Золотая
+          - generic [ref=f3e166]: ЗЕРНО · 6 дн · пик · 187 г
+      - button "фото пачки Кения Ньери · молотый МОЛОТЫЙ · 15 дн · пик · 64 г" [ref=f3e167] [cursor=pointer]:
+        - generic [ref=f3e168]: фото пачки
+        - generic [ref=f3e174]:
+          - generic [ref=f3e175]: Кения Ньери · молотый
+          - generic [ref=f3e176]: МОЛОТЫЙ · 15 дн · пик · 64 г
+      - generic [ref=f3e177]:
+        - button "СНЯТЬ ПАЧКУ" [ref=f3e178] [cursor=pointer]
+        - button "ВПИСАТЬ РУКАМИ" [ref=f3e179] [cursor=pointer]
+  - navigation [ref=f3e137]:
+    - button "ГЛАВНЫЙ" [ref=f3e138] [cursor=pointer]
+    - button "ПОЛКА" [active] [ref=f3e139] [cursor=pointer]
+    - button "ЖУРНАЛ" [ref=f3e140] [cursor=pointer]
+    - button "ЕЩЁ" [ref=f3e141] [cursor=pointer]

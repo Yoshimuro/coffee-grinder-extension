@@ -1,0 +1,83 @@
+- generic [ref=f3e506]:
+  - banner [ref=f3e507]:
+    - button "НАЗАД" [ref=f3e508] [cursor=pointer]: ←
+    - heading "ДИАГНОСТИКА" [level=1] [ref=f3e509]
+    - generic [ref=f3e510]: дегустация
+  - generic [ref=f3e511]:
+    - generic [ref=f3e512]: что в чашке — по ощущению
+    - generic [ref=f3e513]:
+      - generic [ref=f3e514]: ЧТО ЗА КОФЕ · необязательно
+      - textbox "кофейня, зерно — как запомнишь" [ref=f3e515]
+    - generic [ref=f3e516]:
+      - generic [ref=f3e517]:
+        - generic [ref=f3e518]: КИСЛОТНОСТЬ
+        - generic [ref=f3e519]: "5"
+      - generic [ref=f3e520]:
+        - button "КИСЛОТНОСТЬ 0" [ref=f3e521] [cursor=pointer]
+        - button "КИСЛОТНОСТЬ 1" [ref=f3e522] [cursor=pointer]
+        - button "КИСЛОТНОСТЬ 2" [ref=f3e523] [cursor=pointer]
+        - button "КИСЛОТНОСТЬ 3" [ref=f3e524] [cursor=pointer]
+        - button "КИСЛОТНОСТЬ 4" [ref=f3e525] [cursor=pointer]
+        - button "КИСЛОТНОСТЬ 5" [pressed] [ref=f3e526] [cursor=pointer]
+        - button "КИСЛОТНОСТЬ 6" [ref=f3e527] [cursor=pointer]
+        - button "КИСЛОТНОСТЬ 7" [ref=f3e528] [cursor=pointer]
+        - button "КИСЛОТНОСТЬ 8" [ref=f3e529] [cursor=pointer]
+        - button "КИСЛОТНОСТЬ 9" [ref=f3e530] [cursor=pointer]
+        - button "КИСЛОТНОСТЬ 10" [ref=f3e531] [cursor=pointer]
+    - generic [ref=f3e532]:
+      - generic [ref=f3e533]:
+        - generic [ref=f3e534]: ГОРЕЧЬ
+        - generic [ref=f3e535]: "5"
+      - generic [ref=f3e536]:
+        - button "ГОРЕЧЬ 0" [ref=f3e537] [cursor=pointer]
+        - button "ГОРЕЧЬ 1" [ref=f3e538] [cursor=pointer]
+        - button "ГОРЕЧЬ 2" [ref=f3e539] [cursor=pointer]
+        - button "ГОРЕЧЬ 3" [ref=f3e540] [cursor=pointer]
+        - button "ГОРЕЧЬ 4" [ref=f3e541] [cursor=pointer]
+        - button "ГОРЕЧЬ 5" [pressed] [ref=f3e542] [cursor=pointer]
+        - button "ГОРЕЧЬ 6" [ref=f3e543] [cursor=pointer]
+        - button "ГОРЕЧЬ 7" [ref=f3e544] [cursor=pointer]
+        - button "ГОРЕЧЬ 8" [ref=f3e545] [cursor=pointer]
+        - button "ГОРЕЧЬ 9" [ref=f3e546] [cursor=pointer]
+        - button "ГОРЕЧЬ 10" [ref=f3e547] [cursor=pointer]
+    - generic [ref=f3e548]:
+      - generic [ref=f3e549]:
+        - generic [ref=f3e550]: ТЕЛО
+        - generic [ref=f3e551]: "5"
+      - generic [ref=f3e552]:
+        - button "ТЕЛО 0" [ref=f3e553] [cursor=pointer]
+        - button "ТЕЛО 1" [ref=f3e554] [cursor=pointer]
+        - button "ТЕЛО 2" [ref=f3e555] [cursor=pointer]
+        - button "ТЕЛО 3" [ref=f3e556] [cursor=pointer]
+        - button "ТЕЛО 4" [ref=f3e557] [cursor=pointer]
+        - button "ТЕЛО 5" [pressed] [ref=f3e558] [cursor=pointer]
+        - button "ТЕЛО 6" [ref=f3e559] [cursor=pointer]
+        - button "ТЕЛО 7" [ref=f3e560] [cursor=pointer]
+        - button "ТЕЛО 8" [ref=f3e561] [cursor=pointer]
+        - button "ТЕЛО 9" [ref=f3e562] [cursor=pointer]
+        - button "ТЕЛО 10" [ref=f3e563] [cursor=pointer]
+    - generic [ref=f3e564]:
+      - generic [ref=f3e565]:
+        - generic [ref=f3e566]: СЛАДОСТЬ
+        - generic [ref=f3e567]: "5"
+      - generic [ref=f3e568]:
+        - button "СЛАДОСТЬ 0" [ref=f3e569] [cursor=pointer]
+        - button "СЛАДОСТЬ 1" [ref=f3e570] [cursor=pointer]
+        - button "СЛАДОСТЬ 2" [ref=f3e571] [cursor=pointer]
+        - button "СЛАДОСТЬ 3" [ref=f3e572] [cursor=pointer]
+        - button "СЛАДОСТЬ 4" [ref=f3e573] [cursor=pointer]
+        - button "СЛАДОСТЬ 5" [pressed] [ref=f3e574] [cursor=pointer]
+        - button "СЛАДОСТЬ 6" [ref=f3e575] [cursor=pointer]
+        - button "СЛАДОСТЬ 7" [ref=f3e576] [cursor=pointer]
+        - button "СЛАДОСТЬ 8" [ref=f3e577] [cursor=pointer]
+        - button "СЛАДОСТЬ 9" [ref=f3e578] [cursor=pointer]
+        - button "СЛАДОСТЬ 10" [ref=f3e579] [cursor=pointer]
+    - button "ДЕСКРИПТОРЫ колесо вкусов →" [ref=f3e580] [cursor=pointer]:
+      - generic [ref=f3e591]:
+        - generic [ref=f3e592]: ДЕСКРИПТОРЫ
+        - generic [ref=f3e593]: колесо вкусов
+      - generic [ref=f3e594]: →
+    - generic [ref=f3e595]:
+      - generic [ref=f3e596]: ЗАМЕТКА
+      - textbox "что заметил…" [ref=f3e598]
+    - button "СОХРАНИТЬ" [ref=f3e599] [cursor=pointer]

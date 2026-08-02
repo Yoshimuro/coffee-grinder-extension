@@ -15,6 +15,6 @@
     <color name="colorPrimaryDark">#0C0C0C</color>
     <color name="colorAccent">#EDEDEB</color>
 
-    <!-- Фон приложения: --bg. Им же залиты статус-бар и панель навигации. -->
+    <!-- Фон приложения: токен bg из tokens.css. Им же залиты статус-бар и панель навигации. -->
     <color name="bjBackground">#0C0C0C</color>
 </resources>
