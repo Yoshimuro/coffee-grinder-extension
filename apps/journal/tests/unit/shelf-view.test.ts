@@ -165,8 +165,8 @@ describe('карточка пачки', () => {
     expect(slotPlaceholder(4, 'ru')).toBe('шов · дата обжарки');
   });
 
-  it('держит минимум два слота и всегда один пустой в конце', () => {
-    expect(slotCount([])).toBe(2);
+  it('всегда один пустой слот в конце, минимума в два больше нет (BJ-8)', () => {
+    expect(slotCount([])).toBe(1);
     expect(slotCount(['a'])).toBe(2);
     expect(slotCount(['a', 'b'])).toBe(3);
     expect(slotCount(['a', 'b', 'c'])).toBe(4);
