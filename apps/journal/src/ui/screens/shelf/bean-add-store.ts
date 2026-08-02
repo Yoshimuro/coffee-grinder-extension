@@ -3,8 +3,9 @@
  *
  * В стор, а не в состояние экрана, по двум причинам: съёмка уводит в системный
  * пикер файлов и обратно (в BJ-6 — в камеру, где WebView могут выгрузить), а
- * входов на экран три — «СНЯТЬ ПАЧКУ», «ВПИСАТЬ РУКАМИ» и «+ ЗЕРНО» с сетапа
- * заваривания, — и каждый начинает с чистого листа, но с разной подсказкой.
+ * входов на экран два — «ДОБАВИТЬ КОФЕ» с полки и «+ ЗЕРНО» с сетапа
+ * заваривания. Первый начинает с чистого листа через `start`, второй, как и
+ * раньше, идёт мимо: на пустой полке чистить нечего.
  *
  * В базу не пишется: это черновик, а не запись. Пачка появляется на полке одним
  * `putBean` по «СОХРАНИТЬ» — брошенное добавление не оставляет следа.
@@ -22,21 +23,14 @@ export interface BeanAddState {
   amount: number;
   name: string;
   photos: PhotoRef[];
-  /**
-   * Экран открыт кнопкой «СНЯТЬ ПАЧКУ» — камеру надо позвать сразу, не заставляя
-   * тапать по слоту второй раз. Снимается после первого вызова.
-   */
-  autoCapture: boolean;
 
-  /** Новый черновик. `withCamera` — пришли со «СНЯТЬ ПАЧКУ». */
-  start: (withCamera: boolean) => void;
+  /** Новый черновик — с полки, по «ДОБАВИТЬ КОФЕ». */
+  start: () => void;
   setForm: (form: BeanForm) => void;
   setRoast: (roast: string) => void;
   setAmount: (amount: number) => void;
   setName: (name: string) => void;
   addPhoto: (photo: PhotoRef) => void;
-  /** Камера отработала — больше сама не открывается. */
-  captureDone: () => void;
 }
 
 /**
@@ -49,7 +43,6 @@ export const EMPTY_DRAFT = Object.freeze({
   roast: '',
   amount: 250,
   name: '',
-  autoCapture: false,
 });
 
 /** Количество по умолчанию при смене формы: граммы к граммам, штуки к штукам. */
@@ -61,7 +54,7 @@ export const useBeanAdd = create<BeanAddState>((set) => ({
   ...EMPTY_DRAFT,
   photos: [],
 
-  start: (withCamera) => set({ ...EMPTY_DRAFT, photos: [], autoCapture: withCamera }),
+  start: () => set({ ...EMPTY_DRAFT, photos: [] }),
 
   // Смена формы уносит и количество: 250 штук дрипа — не то, что имел в виду
   // человек, переключивший «ЗЕРНО» на «ДРИП-ПАКЕТ».
@@ -70,5 +63,4 @@ export const useBeanAdd = create<BeanAddState>((set) => ({
   setAmount: (amount) => set({ amount }),
   setName: (name) => set({ name }),
   addPhoto: (photo) => set((s) => ({ photos: [...s.photos, photo] })),
-  captureDone: () => set({ autoCapture: false }),
 }));

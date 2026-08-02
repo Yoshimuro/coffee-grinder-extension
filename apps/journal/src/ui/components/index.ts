@@ -11,6 +11,7 @@
  */
 
 export * from './Chip.js';
+export * from './DatePicker.js';
 export * from './EmptyState.js';
 export * from './Hairline.js';
 export * from './InverseButton.js';

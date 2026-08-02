@@ -126,7 +126,8 @@
   line-height: 1.6;
 }
 
-/* Приглашение добавить: два равноправных входа в одной пунктирной рамке. */
+/* Приглашение добавить: один вход в пунктирной рамке (BJ-8). Рамка осталась от
+   пары кнопок — она отделяет приглашение от карточек, а не кнопки друг от друга. */
 .bj-shelf__add {
   display: flex;
   gap: 8px;
@@ -134,27 +135,18 @@
   border: 1px dashed var(--line-5);
 }
 
-.bj-shelf__add-main,
-.bj-shelf__add-alt {
+.bj-shelf__add-main {
   display: flex;
   flex: 1;
   align-items: center;
   justify-content: center;
   min-height: var(--touch);
+  border: 1px solid var(--line-4);
+  color: var(--text-secondary);
   font-size: var(--fs-tech);
   letter-spacing: 1.5px;
   text-align: center;
   text-transform: uppercase;
-}
-
-.bj-shelf__add-main {
-  border: 1px solid var(--line-4);
-  color: var(--text-secondary);
-}
-
-/* Запасной путь — тише основного: тот же размер, но без рамки. */
-.bj-shelf__add-alt {
-  color: var(--faint);
 }
 
 /* ── Карточка пачки ──────────────────────────────────────────────────────── */
@@ -296,11 +288,43 @@
   color: var(--faint);
 }
 
-/* «необязательно» — не капс и не разрядка: это оговорка, а не подпись поля. */
-.bj-add__optional {
-  color: var(--faint);
-  letter-spacing: 1px;
-  text-transform: none;
+/*
+ * Дату набирают руками или берут из календаря, поэтому поле делит строку с
+ * кнопкой. Отступ в 9px переехал с поля на ряд: внутри ряда он сдвигал бы одно
+ * поле, оставив кнопку выше, — снаружи ряд стоит ровно там, где стояло прежнее
+ * поле, и остальная колонка не съезжает.
+ */
+.bj-add__date-row {
+  display: flex;
+  gap: 8px;
+  align-items: stretch;
+  margin-top: 9px;
+}
+
+.bj-add__date-row .bj-add__input {
+  flex: 1;
+  min-width: 0;
+  margin-top: 0;
+}
+
+/* Квадрат в палец, рамка и серый — как у степперных «−/+»: это соседняя по
+   смыслу кнопка того же ряда, и выглядеть она должна так же. */
+.bj-add__cal-btn {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: var(--touch);
+  min-height: var(--touch);
+  border: 1px solid var(--line-4);
+  background: none;
+  color: var(--text-secondary);
+}
+
+/* Размер задан здесь: у SVG без width/height высота по умолчанию — 150px. */
+.bj-add__cal-glyph {
+  width: 18px;
+  height: 18px;
 }
 
 .bj-add__save {

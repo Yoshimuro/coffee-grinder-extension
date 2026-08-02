@@ -49,8 +49,9 @@ test.describe('цикл заваривания', () => {
     await openApp(page);
 
     /* ── Пачка руками ──────────────────────────────────────────────────────
-       «ВПИСАТЬ РУКАМИ» — путь без камеры: в headless-браузере её нет, а сама
-       съёмка проверяется не здесь. */
+       Кнопка на полке одна — «ДОБАВИТЬ КОФЕ»; камера по ней не открывается,
+       снимок при желании делают отдельным фото-слотом внутри формы, так что
+       здесь до него дело не доходит и оговорка про headless-браузер не нужна. */
     await page.getByRole('button', { name: 'ПОЛКА' }).click();
     await expect(screen(page, 'shelf')).toBeVisible();
 
@@ -59,13 +60,16 @@ test.describe('цикл заваривания', () => {
        с чем угодно. */
     await expect(page.getByTestId('shelf-card').first()).toBeVisible();
     const shelfBefore = await page.getByTestId('shelf-card').count();
-    await page.getByTestId('shelf-add-manual').click();
+    await page.getByTestId('shelf-add').click();
     await expect(screen(page, 'beanAdd')).toBeVisible();
 
     // Без даты обжарки пачка не заводится — на ней держится вся свежесть.
+    // Без имени — тоже: с BJ-8 оно обязательно наравне с датой.
     await expect(page.getByTestId('bean-save')).toBeDisabled();
 
     await page.getByTestId('bean-roast').fill('27.07.2026');
+    // Дата одна, без имени, гейт всё ещё держит: обе проверки нужны обеим сразу.
+    await expect(page.getByTestId('bean-save')).toBeDisabled();
     await page.getByTestId('bean-name').fill('Тестовая Ява');
     await expect(page.getByTestId('bean-save')).toBeEnabled();
     await page.getByTestId('bean-save').click();

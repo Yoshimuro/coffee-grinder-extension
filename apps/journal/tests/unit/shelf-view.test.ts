@@ -9,6 +9,7 @@ import {
   amountUnit,
   beanGuard,
   beanStats,
+  draftReady,
   makeBean,
   shelfCountLine,
   slotCount,
@@ -47,6 +48,32 @@ describe('shelfCountLine', () => {
   it('считает пачки', () => {
     expect(shelfCountLine(3, 'ru')).toBe('3 · пачки');
     expect(shelfCountLine(0, 'en')).toBe('0 · packs');
+  });
+});
+
+describe('draftReady', () => {
+  it('валидная дата и непустое имя — черновик готов', () => {
+    expect(draftReady('27.07.2026', 'Ява')).toBe(true);
+  });
+
+  it('пустое имя держит кнопку выключенной', () => {
+    expect(draftReady('27.07.2026', '')).toBe(false);
+  });
+
+  it('имя из одних пробелов не считается именем', () => {
+    expect(draftReady('27.07.2026', '   ')).toBe(false);
+  });
+
+  it('недописанная дата держит кнопку выключенной', () => {
+    expect(draftReady('25.07.', 'Ява')).toBe(false);
+  });
+
+  it('несуществующий день не проходит, хоть и прошёл по маске', () => {
+    expect(draftReady('31.02.2026', 'Ява')).toBe(false);
+  });
+
+  it('обе беды разом — тоже не готов', () => {
+    expect(draftReady('25.07.', '   ')).toBe(false);
   });
 });
 

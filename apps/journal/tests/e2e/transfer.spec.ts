@@ -61,7 +61,7 @@ test.describe('экспорт и импорт базы', () => {
        системный диалог, который Playwright перехватывает. */
     await tab(page, 'ПОЛКА').click();
     await expect(screen(page, 'shelf')).toBeVisible();
-    await page.getByTestId('shelf-add-manual').click();
+    await page.getByTestId('shelf-add').click();
     await expect(screen(page, 'beanAdd')).toBeVisible();
 
     const chooser = page.waitForEvent('filechooser');

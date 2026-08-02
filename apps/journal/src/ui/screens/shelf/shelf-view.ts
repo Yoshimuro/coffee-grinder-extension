@@ -13,7 +13,7 @@
 import { STR } from '../../../data/strings.js';
 import type { BeanForm, BeanRecord, Lang } from '../../../db/schema.js';
 import type { StepperRange } from '../../components/index.js';
-import { ageLabel, leftLabel, longDate } from '../../bean-format.js';
+import { ageLabel, leftLabel, longDate, parseDate } from '../../bean-format.js';
 
 /** Три формы кофе в порядке чипов на экране добавления (`DC:1262`). */
 export const BEAN_FORMS: readonly BeanForm[] = ['beans', 'ground', 'drip'];
@@ -130,6 +130,16 @@ export interface NewBeanDraft {
   amount: number;
   name: string;
   photos: BeanRecord['photos'];
+}
+
+/**
+ * Гейт кнопки «СОХРАНИТЬ» экрана добавления: дата обжарки держит на себе всю
+ * свежесть пачки и обязана быть валидной, а с BJ-8 обязательным стало и
+ * имя — фолбэк на `bean_untitled` в `makeBean` ниже остаётся только для
+ * импорта чужих zip и старых записей, а не для нового ввода.
+ */
+export function draftReady(roastText: string, name: string): boolean {
+  return parseDate(roastText) !== null && name.trim() !== '';
 }
 
 /**

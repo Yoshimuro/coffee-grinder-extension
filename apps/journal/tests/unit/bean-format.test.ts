@@ -8,6 +8,7 @@ import {
   formLabel,
   leftLabel,
   longDate,
+  maskDate,
   parseDate,
   shortDate,
 } from '../../src/ui/bean-format.js';
@@ -126,5 +127,60 @@ describe('даты', () => {
     for (const iso of ['2026-01-01', '2026-12-31', '2026-08-09']) {
       expect(parseDate(longDate(iso))).toBe(iso);
     }
+  });
+});
+
+describe('maskDate', () => {
+  it('расставляет точки по мере посимвольного набора «25072026»', () => {
+    // Каждый шаг — то, что реально приходит в поле: предыдущая маска плюс
+    // символ, который человек только что нажал.
+    const keys = ['2', '5', '0', '7', '2', '0', '2', '6'];
+    const states: string[] = [];
+    let value = '';
+    for (const key of keys) {
+      value = maskDate(value + key, value);
+      states.push(value);
+    }
+
+    expect(states).toEqual([
+      '2',
+      '25.',
+      '25.0',
+      '25.07.',
+      '25.07.2',
+      '25.07.20',
+      '25.07.202',
+      '25.07.2026',
+    ]);
+  });
+
+  it('ставит точку сразу после полных двух цифр дня и месяца', () => {
+    expect(maskDate('2')).toBe('2');
+    expect(maskDate('25')).toBe('25.');
+    expect(maskDate('2507')).toBe('25.07.');
+    expect(maskDate('25072')).toBe('25.07.2');
+    expect(maskDate('25072026')).toBe('25.07.2026');
+  });
+
+  it('вставка из буфера обмена: с точками и голыми цифрами — один результат', () => {
+    expect(maskDate('27.07.2026')).toBe('27.07.2026');
+    expect(maskDate('27072026')).toBe('27.07.2026');
+  });
+
+  it('естественный backspace стирает точку вместе с цифрой под ней', () => {
+    expect(maskDate('25.07', '25.07.')).toBe('25.0');
+    expect(maskDate('25', '25.')).toBe('2');
+  });
+
+  it('отбрасывает всё нецифровое', () => {
+    expect(maskDate('25a07')).toBe('25.07.');
+  });
+
+  it('режет ввод длиннее восьми цифр', () => {
+    expect(maskDate('270720261999')).toBe('27.07.2026');
+  });
+
+  it('пустая строка остаётся пустой', () => {
+    expect(maskDate('')).toBe('');
   });
 });

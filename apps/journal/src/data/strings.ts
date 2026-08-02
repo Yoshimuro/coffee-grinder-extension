@@ -57,8 +57,10 @@ const RU = {
 
   shelf_title: 'ПОЛКА',
   shelf_add: 'ДОБАВИТЬ ПАЧКУ',
+  /** Единственная кнопка полки (BJ-8): камера сама не открывается. */
+  shelf_add_bean: 'ДОБАВИТЬ КОФЕ',
+  /** Подпись слота добавления фото в форме — не кнопка полки. */
   shelf_add_photo: 'СНЯТЬ ПАЧКУ',
-  shelf_add_manual: 'ВПИСАТЬ РУКАМИ',
   shelf_left: 'остаток',
   shelf_age: 'возраст',
   bean_photos: 'ФОТО ПАЧКИ',
@@ -313,7 +315,7 @@ const RU = {
   bean_ph_seam: 'шов · дата обжарки',
   /** Слот на экране добавления (`addSlotPh`, `DC:1263`). */
   bean_ph_new: 'снимок зерна',
-  bean_photo_hint: 'минимум два снимка: лицо · шов с датой · оборот с составом',
+  bean_photo_hint: 'хватит одного снимка — лицо пачки',
   /** Количество у дрипа: считаем пакеты, а не граммы (`addAmtLabel`, `DC:1266`). */
   bean_count: 'ШТУК В КОРОБКЕ',
   /** Имя пачки, если его не вписали (`addSave`, `DC:1271`). */
@@ -376,6 +378,40 @@ const RU = {
   bean_no_brews: 'Заварок с этой пачкой пока нет',
   /** Деталь открыли, а записи нет: удалили или база не отдала. */
   log_not_found: 'Запись не найдена',
+
+  /* ── Добавлено в BJ-8 (календарь даты обжарки) ─────────────────────────────
+     Поле даты осталось текстовым с автомаской, календарь — второй способ
+     ввода. Нативный `<input type="date">` не подошёл ещё в BJ-4: WebView
+     рисует его чужими цветами и шрифтом (см. `parseDate`), поэтому пикер
+     свой — и подписи его живут здесь. */
+
+  /* Подписи для скринридера: кнопки несут значок сетки и стрелки. */
+  cal_open: 'календарь',
+  cal_prev: 'прошлый месяц',
+  cal_next: 'следующий месяц',
+
+  /* Заголовок месяца. По ключу на месяц: имена из номера не выводятся. */
+  cal_jan: 'ЯНВАРЬ',
+  cal_feb: 'ФЕВРАЛЬ',
+  cal_mar: 'МАРТ',
+  cal_apr: 'АПРЕЛЬ',
+  cal_may: 'МАЙ',
+  cal_jun: 'ИЮНЬ',
+  cal_jul: 'ИЮЛЬ',
+  cal_aug: 'АВГУСТ',
+  cal_sep: 'СЕНТЯБРЬ',
+  cal_oct: 'ОКТЯБРЬ',
+  cal_nov: 'НОЯБРЬ',
+  cal_dec: 'ДЕКАБРЬ',
+
+  /* Шапка сетки. Неделя с понедельника в обоих языках. */
+  cal_mo: 'ПН',
+  cal_tu: 'ВТ',
+  cal_we: 'СР',
+  cal_th: 'ЧТ',
+  cal_fr: 'ПТ',
+  cal_sa: 'СБ',
+  cal_su: 'ВС',
 } as const;
 
 /** Ключ строки. Значения выведены из русской таблицы; счёт держит тест. */
@@ -423,8 +459,8 @@ const EN: Readonly<Record<StrKey, string>> = {
 
   shelf_title: 'SHELF',
   shelf_add: 'ADD BAG',
+  shelf_add_bean: 'ADD COFFEE',
   shelf_add_photo: 'SHOOT THE BAG',
-  shelf_add_manual: 'TYPE IT IN',
   shelf_left: 'left',
   shelf_age: 'age',
   bean_photos: 'BAG PHOTOS',
@@ -618,7 +654,7 @@ const EN: Readonly<Record<StrKey, string>> = {
   bean_ph_face: 'front of bag',
   bean_ph_seam: 'seam · roast date',
   bean_ph_new: 'shoot the bag — or drop a file',
-  bean_photo_hint: 'at least two shots: front · seam with date · back label',
+  bean_photo_hint: 'one shot is enough — the front of the bag',
   bean_count: 'BAGS IN BOX',
   bean_untitled: 'Untitled',
 
@@ -651,6 +687,31 @@ const EN: Readonly<Record<StrKey, string>> = {
   shelf_empty: 'Shelf is empty. Shoot the first bag',
   bean_no_brews: 'No brews with this bag yet',
   log_not_found: 'Entry not found',
+
+  cal_open: 'calendar',
+  cal_prev: 'previous month',
+  cal_next: 'next month',
+
+  cal_jan: 'JANUARY',
+  cal_feb: 'FEBRUARY',
+  cal_mar: 'MARCH',
+  cal_apr: 'APRIL',
+  cal_may: 'MAY',
+  cal_jun: 'JUNE',
+  cal_jul: 'JULY',
+  cal_aug: 'AUGUST',
+  cal_sep: 'SEPTEMBER',
+  cal_oct: 'OCTOBER',
+  cal_nov: 'NOVEMBER',
+  cal_dec: 'DECEMBER',
+
+  cal_mo: 'MO',
+  cal_tu: 'TU',
+  cal_we: 'WE',
+  cal_th: 'TH',
+  cal_fr: 'FR',
+  cal_sa: 'SA',
+  cal_su: 'SU',
 };
 
 /** Таблицы строк по языкам. Заморожены — правка в рантайме исключена. */

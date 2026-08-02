@@ -6,10 +6,11 @@
  * имя и строка «форма · возраст · фаза · остаток». Ни рейтингов, ни описаний
  * обжарщика: всё, что не участвует в решении, сюда не попадает.
  *
- * Два входа внизу равноправны по README («СНЯТЬ ПАЧКУ / ВПИСАТЬ РУКАМИ»), но
- * не по весу: снимок — обычный путь, руками — запасной, поэтому первый в рамке,
- * второй просто текстом. Оба ведут на один экран, отличается лишь то, открывать
- * ли камеру сразу.
+ * Вход внизу один — «ДОБАВИТЬ КОФЕ» (решение пользователя, BJ-8). Раньше их
+ * было два, «снять пачку» и «вписать руками», но выбор стоял до формы, когда
+ * человек ещё не знает, что снимок и поля — не альтернативы, а одно и то же
+ * добавление. Теперь кнопка ведёт на форму, а снимок делается там же тапом по
+ * слоту фото — камера сама больше не открывается.
  */
 
 import { useNav } from '../../app/nav.js';
@@ -36,8 +37,8 @@ export function Shelf() {
 
   const today = isoDate(new Date());
 
-  const add = (withCamera: boolean) => {
-    startAdd(withCamera);
+  const add = () => {
+    startAdd();
     go('beanAdd');
   };
 
@@ -74,21 +75,8 @@ export function Shelf() {
         {beans !== undefined && beans.length === 0 ? <EmptyState text={t.shelf_empty} /> : null}
 
         <div className="bj-shelf__add">
-          <button
-            type="button"
-            className="bj-shelf__add-main"
-            data-testid="shelf-add-photo"
-            onClick={() => add(true)}
-          >
-            {t.shelf_add_photo}
-          </button>
-          <button
-            type="button"
-            className="bj-shelf__add-alt"
-            data-testid="shelf-add-manual"
-            onClick={() => add(false)}
-          >
-            {t.shelf_add_manual}
+          <button type="button" className="bj-shelf__add-main" data-testid="shelf-add" onClick={add}>
+            {t.shelf_add_bean}
           </button>
         </div>
       </div>

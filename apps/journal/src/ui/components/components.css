@@ -495,3 +495,118 @@
   position: absolute;
   inset: -2px 0;
 }
+
+/* ── DatePicker ──────────────────────────────────────────────────────────── */
+
+/*
+ * Календарь раскрывается прямо в форме, поэтому у него должна быть граница:
+ * без неё сетка чисел читалась бы как часть соседнего ряда. Рамка — `--line-5`,
+ * та же, что у панели калибровки (`.conv-cal`) и у карточки входа в журнале:
+ * `tokens.css` объявляет эту ступень «рамкой панелей» (D-11).
+ *
+ * Внутри — привычная иерархия хайрлайнов: шапка месяца отбивается `--line-2`,
+ * подписи дней недели — самой тихой `--line-1`.
+ */
+.bj-cal {
+  margin-top: 10px;
+  padding: 10px 10px 8px;
+  border: 1px solid var(--line-5);
+}
+
+.bj-cal__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--line-2);
+}
+
+/* «АВГУСТ 2026» — микро-лейбл: подпись панели, а не заголовок экрана. */
+.bj-cal__title {
+  flex: 1;
+  min-width: 0;
+  font-size: var(--fs-micro);
+  font-weight: var(--fw-medium);
+  letter-spacing: var(--ls-micro);
+  color: var(--text-secondary);
+  text-align: center;
+  text-transform: uppercase;
+}
+
+/* Стрелки месяца: видимые 40×32 по плотности панели, нажимаемые 48×48 за счёт
+   прозрачного `::after` — тот же приём, что у степпера и шапки. */
+.bj-cal__nav {
+  display: flex;
+  position: relative;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 32px;
+  border: 1px solid var(--line-4);
+  color: var(--text-secondary);
+  font-size: 13px;
+  line-height: 1;
+}
+
+.bj-cal__nav::after {
+  content: '';
+  position: absolute;
+  inset: -8px -4px;
+}
+
+.bj-cal__nav:disabled {
+  border-color: var(--line-3);
+  color: var(--muted);
+  cursor: default;
+}
+
+.bj-cal__week,
+.bj-cal__grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+}
+
+/* Микро-подписи капсом с разрядкой — как метка формы на пачке (8.5/1.5). */
+.bj-cal__week {
+  padding: 9px 0;
+  border-bottom: 1px solid var(--line-1);
+  font-size: 8.5px;
+  letter-spacing: 1.5px;
+  color: var(--faint);
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.bj-cal__grid {
+  margin-top: 2px;
+}
+
+.bj-cal__day,
+.bj-cal__blank {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 40px;
+}
+
+.bj-cal__day {
+  font-size: var(--fs-body-min);
+  font-variant-numeric: tabular-nums;
+  color: var(--text-secondary);
+}
+
+/* Дни вне [min, max] остаются на своих местах: сетка месяца не должна
+   перестраиваться от границ, иначе теряется опора на день недели. */
+.bj-cal__day:disabled {
+  color: var(--muted);
+  cursor: default;
+}
+
+/* Выбранное число — рамкой и цветом текста, без заливки: в этой системе
+   светлое пятно на экране ровно одно, и это главная кнопка (`DC:1325`). */
+.bj-cal__day--on {
+  border: 1px solid var(--text);
+  color: var(--text);
+}

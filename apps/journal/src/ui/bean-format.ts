@@ -96,3 +96,43 @@ export function parseDate(raw: string): string | null {
   const parsed = new Date(`${iso}T00:00:00Z`);
   return Number.isNaN(parsed.getTime()) || parsed.getUTCDate() !== day ? null : iso;
 }
+
+/**
+ * Автомаска ввода `DD.MM.YYYY`: пользователь набирает только цифры, точки
+ * после дня и месяца встают сами (BJ-8 — просили не заставлять ставить точки
+ * руками).
+ *
+ * Чистая функция от `raw` и `prev` — тестируется так же легко, как
+ * `parseDate`, и по той же причине держит поле текстовым (см. `parseDate`
+ * выше). `prev` нужен для одного случая: обычный backspace в конце строки
+ * стирает автоматически вставленную точку, а под ней спрятана цифра — без
+ * сравнения с предыдущим значением поле «залипало» бы на границе групп и не
+ * давало стереть дату короче.
+ */
+export function maskDate(raw: string, prev = ''): string {
+  const digitsOf = (s: string) => s.replace(/\D/g, '').slice(0, 8);
+  const rawDigits = digitsOf(raw);
+  const prevDigits = digitsOf(prev);
+
+  // Строка укоротилась, а цифры не изменились — значит, стёрлась именно
+  // точка. Стираем следом и цифру под ней, иначе backspace на границе дня
+  // или месяца ничего бы не делал.
+  const digits =
+    raw.length < prev.length && rawDigits === prevDigits && rawDigits.length > 0
+      ? rawDigits.slice(0, -1)
+      : rawDigits;
+
+  return formatMaskedDate(digits);
+}
+
+/** Расставляет точки после дня и месяца по числу собранных цифр. */
+function formatMaskedDate(digits: string): string {
+  let out = digits.slice(0, 2);
+  if (digits.length >= 2) out += '.';
+  if (digits.length > 2) {
+    out += digits.slice(2, 4);
+    if (digits.length >= 4) out += '.';
+  }
+  if (digits.length > 4) out += digits.slice(4, 8);
+  return out;
+}
