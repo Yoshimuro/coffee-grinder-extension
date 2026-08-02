@@ -47,7 +47,6 @@ export function MiniWheel({ size = 64 }: MiniWheelProps) {
           key={cat.id}
           d={arcPath(CX, CY, R0, R1, TOP + (i * 2 * Math.PI) / n + GAP, TOP + ((i + 1) * 2 * Math.PI) / n - GAP)}
           fill={catColor(cat, lightnessFor(0, i, n))}
-          stroke="var(--bg)"
           strokeWidth={1}
         />
       ))}

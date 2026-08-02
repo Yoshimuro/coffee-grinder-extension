@@ -31,9 +31,18 @@ const APP = resolve(HERE, '..');
 const RES = resolve(APP, 'android/app/src/main/res');
 const PUBLIC = resolve(APP, 'public/icons');
 
-/** Палитра — `tokens.css`, дословно. */
-const BG = [0x0c, 0x0c, 0x0c, 0xff];
-const FG = [0xed, 0xed, 0xeb, 0xff];
+/**
+ * Палитра — `tokens.css`, дословно, обе темы (BJ-9).
+ *
+ * Тем две только у сплэша. Иконка лаунчера остаётся тёмной всегда и намеренно:
+ * она живёт на чужой поверхности — на рабочем столе, — и должна быть узнаваема
+ * независимо от того, что человек выбрал внутри приложения.
+ */
+const THEMES = {
+  dark: { bg: [0x0c, 0x0c, 0x0c, 0xff], fg: [0xed, 0xed, 0xeb, 0xff] },
+  light: { bg: [0xf7, 0xf7, 0xf4, 0xff], fg: [0x17, 0x17, 0x15, 0xff] },
+};
+
 const CLEAR = [0, 0, 0, 0];
 
 /* ── Глиф ────────────────────────────────────────────────────────────────── */
@@ -74,8 +83,11 @@ const CELLS = wordCells();
  * Android) или ничем (foreground адаптивной иконки, где фон рисует система).
  * `cover` — какую долю меньшей стороны занимает слово: у адаптивной иконки
  * безопасная зона составляет 66 из 108, поэтому глиф в ней заметно мельче.
+ * `theme` — какая из двух пар цветов берётся; по умолчанию тёмная, потому что
+ * тёмной остаётся вся иконочная часть.
  */
-function draw(width, height, { shape = 'square', cover = 0.46 } = {}) {
+function draw(width, height, { shape = 'square', cover = 0.46, theme = 'dark' } = {}) {
+  const { bg: BG, fg: FG } = THEMES[theme];
   const px = Buffer.alloc(width * height * 4);
   const put = (x, y, rgba) => {
     const at = (y * width + x) * 4;
@@ -184,6 +196,17 @@ const DENSITIES = [
   ['xxxhdpi', 192, 432],
 ];
 
+/**
+ * Ночной двойник каталога ресурсов.
+ *
+ * Порядок квалификаторов в имени каталога фиксирован спецификацией Android:
+ * `night` идёт перед ориентацией и плотностью, поэтому вставляется сразу после
+ * `drawable`, а не приписывается в конец.
+ */
+function nightDir(dir) {
+  return dir === 'drawable' ? 'drawable-night' : dir.replace('drawable-', 'drawable-night-');
+}
+
 /** Сплэш: размеры ровно те, что создал `cap add android`. */
 const SPLASH = [
   ['drawable', 480, 320],
@@ -215,9 +238,23 @@ for (const [density, legacy, foreground] of DENSITIES) {
   );
 }
 
+/*
+ * Сплэш рисуется дважды. Тёмный уезжает в `-night`, светлый — в безымянный
+ * каталог: так устроен сам Android, «день» безымянен.
+ *
+ * Квалификатор `night` здесь следует НЕ системной теме телефона, а выбору
+ * приложения — потому что тот выбор сообщается системе через
+ * `UiModeManager#setApplicationNightMode` (`ShellThemePlugin`). Ровно это и
+ * убирает тёмный кадр при холодном старте у человека со светлой темой.
+ * Разнимать пару «night-ресурсы + setApplicationNightMode» нельзя: сами по себе
+ * ресурсы начнут следовать телефону и разойдутся с выбором.
+ */
 for (const [dir, w, h] of SPLASH) {
   // На сплэше глиф мелкий: это не логотип во весь экран, а метка запуска.
-  written.push(emit(`${RES}/${dir}/splash.png`, w, h, { cover: 0.13 }));
+  written.push(emit(`${RES}/${dir}/splash.png`, w, h, { cover: 0.13, theme: 'light' }));
+  written.push(
+    emit(`${RES}/${nightDir(dir)}/splash.png`, w, h, { cover: 0.13, theme: 'dark' }),
+  );
 }
 
 for (const size of [192, 512]) {

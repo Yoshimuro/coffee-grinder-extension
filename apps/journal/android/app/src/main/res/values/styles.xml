@@ -1,16 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  Темы оболочки. Сгенерировано `cap add android`; правки BJ-6 — только тёмные.
+  Темы оболочки. Сгенерировано `cap add android`; правки BJ-6 и BJ-9.
 
-  Три вещи отличаются от шаблона Capacitor:
-    - базовая тема тёмная (`Theme.AppCompat.NoActionBar` вместо
-      `…Light.DarkActionBar`): светлая подложка мигала белым между запуском
-      активности и первым кадром WebView;
-    - статус-бар и панель навигации залиты фоном приложения, а
-      `windowLightStatusBar=false` держит их значки светлыми — иначе на тёмном
-      фоне они невидимы;
-    - фон стартовой темы — тёмный `@drawable/splash`, перерисованный
-      `scripts/icons.mjs` (D-5).
+  Отличия от шаблона Capacitor:
+    - базовая тема `DayNight`, а не `…Light.DarkActionBar`: цвета приходят из
+      `values/colors.xml` и `values-night/colors.xml`, а какой набор взять —
+      решает night mode, который приложение задаёт себе само
+      (`ShellThemePlugin`), а не системная настройка телефона;
+    - статус-бар и панель навигации залиты фоном приложения, а полярность их
+      значков берётся из `@bool/bjLightStatusBar`: иначе на тёмном фоне были бы
+      невидимы тёмные значки, а на светлом — светлые;
+    - фон стартовой темы — `@drawable/splash`, перерисованный `scripts/icons.mjs`
+      (D-5) и с BJ-9 существующий в двух вариантах: `drawable-port-*` светлый,
+      `drawable-night-port-*` тёмный.
+
+  До BJ-9 файл был жёстко тёмным, и причина была записана здесь же: светлая
+  подложка мигала белым между запуском активности и первым кадром WebView.
+  Теперь мигание убирает не жёсткость, а память системы: она помнит наш night
+  mode (`UiModeManager#setApplicationNightMode`, API 31+) и красит стартовое
+  окно правильным цветом ещё до запуска процесса.
 
   Отступ под статус-бар делает не тема, а вёрстка: `viewport-fit=cover` в
   index.html плюс `env(safe-area-inset-*)` в токенах.
@@ -18,21 +26,21 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.NoActionBar">
+    <style name="AppTheme" parent="Theme.AppCompat.DayNight.NoActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:windowBackground">@color/bjBackground</item>
     </style>
 
-    <style name="AppTheme.NoActionBar" parent="Theme.AppCompat.NoActionBar">
+    <style name="AppTheme.NoActionBar" parent="Theme.AppCompat.DayNight.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <item name="android:background">@null</item>
         <item name="android:windowBackground">@color/bjBackground</item>
         <item name="android:statusBarColor">@color/bjBackground</item>
         <item name="android:navigationBarColor">@color/bjBackground</item>
-        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:windowLightStatusBar">@bool/bjLightStatusBar</item>
     </style>
 
 
@@ -40,6 +48,6 @@
         <item name="android:background">@drawable/splash</item>
         <item name="android:statusBarColor">@color/bjBackground</item>
         <item name="android:navigationBarColor">@color/bjBackground</item>
-        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:windowLightStatusBar">@bool/bjLightStatusBar</item>
     </style>
 </resources>

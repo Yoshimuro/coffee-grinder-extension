@@ -271,6 +271,7 @@ describe('настройки', () => {
 
     expect(await readSettings(db)).toEqual({
       lang: 'ru',
+      theme: 'dark',
       seeded: false,
       calib: { offset: 0, src: null },
       convFrom: null,

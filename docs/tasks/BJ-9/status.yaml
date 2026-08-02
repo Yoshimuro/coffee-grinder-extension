@@ -1,0 +1,10 @@
+task_id: BJ-9
+title: "Светлая тема: три режима, нативная оболочка Android, без мигания при старте"
+profile: full
+status: TESTING_READY
+owner: dev-agent (opus)
+created_at: "2026-08-02T00:00:00Z"
+updated_at: "2026-08-02T00:00:00Z"
+transitions:
+  - {at: "2026-08-02T00:00:00Z", from: READY_FOR_DEVELOPMENT, to: DEVELOPMENT_IN_PROGRESS, reason: "решение пользователя отменяет dark-only; режимов три, дефолт dark; статус-бар за темой; PWA не ломать"}
+  - {at: "2026-08-02T00:00:00Z", from: DEVELOPMENT_IN_PROGRESS, to: TESTING_READY, reason: "S-1..S-8 сданы. AC-1/AC-2 закреплены e2e (в т.ч. проверка на domcontentloaded — доказывает отсутствие мигания); AC-3 тёмные значения хендоффа не тронуты; AC-4 typecheck+591 юнит+build+9 e2e зелёные; AC-5 литералы остались только в QR, с письменной причиной. Нативная часть НЕ собиралась: в контейнере нет Android SDK — gradlew/cap sync/устройство за следующим шагом (risks.md «Не проверено»)"}

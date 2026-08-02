@@ -19,9 +19,18 @@ export interface ChipProps {
   /** Растянуть на равную долю ряда — конструктор девайса и клапан гибрида. */
   grow?: boolean;
   disabled?: boolean;
+  /** Якорь для e2e. Подпись чипа — перевод, по ней цепляться нельзя. */
+  testId?: string;
 }
 
-export function Chip({ label, active = false, onClick, grow = false, disabled = false }: ChipProps) {
+export function Chip({
+  label,
+  active = false,
+  onClick,
+  grow = false,
+  disabled = false,
+  testId,
+}: ChipProps) {
   const cls = ['bj-chip', active ? 'bj-chip--on' : '', grow ? 'bj-chip--grow' : '']
     .filter(Boolean)
     .join(' ');
@@ -32,6 +41,7 @@ export function Chip({ label, active = false, onClick, grow = false, disabled = 
       className={cls}
       aria-pressed={active}
       disabled={disabled}
+      data-testid={testId}
       onClick={onClick}
     >
       {label}

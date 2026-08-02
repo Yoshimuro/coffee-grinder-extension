@@ -79,6 +79,7 @@ export async function seed(database: BrewJournalDB = db): Promise<boolean> {
 
       await database.settings.bulkPut([
         { key: 'lang', value: 'ru' },
+        { key: 'theme', value: 'dark' },
         { key: 'calib', value: { offset: 0, src: null } },
         { key: 'recents', value: [] },
       ]);

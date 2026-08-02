@@ -2,8 +2,14 @@
  * Настройки — то немногое, что вообще настраивается.
  *
  * Список короткий сознательно: свои кофемолки (без них не работает конвертер),
- * свои девайсы, язык и спецификация. Ни аккаунтов, ни синхронизации, ни тем —
+ * свои девайсы, язык, тема и спецификация. Ни аккаунтов, ни синхронизации —
  * подвал говорит об этом прямо: «локально · офлайн · без аккаунта».
+ *
+ * Тема появилась в BJ-9 и отменяет прежнее «ни тем» из этой шапки. Строка
+ * держится здесь по тому же признаку, что язык: это выбор оформления, который
+ * человек делает один раз и который обязан пережить перезапуск, — а не действие
+ * и не данные. Всё остальное из того списка («ни аккаунтов, ни синхронизации»)
+ * в силе.
  *
  * Экспорт и импорт появились здесь только в BJ-6, когда за ними встали
  * настоящие файлы (контракт №2): до этого строка, которая притворяется, что
@@ -22,8 +28,8 @@ import { useNav } from '../../app/nav.js';
 import { STR } from '../../data/strings.js';
 import { useDevices } from '../../db/repo/devices.js';
 import { deleteGrinder, newGrinderId, putGrinder, useOwnGrinders } from '../../db/repo/grinders.js';
-import { putSetting, useLang } from '../../db/repo/settings.js';
-import type { Lang } from '../../db/schema.js';
+import { putSetting, setTheme, useLang, useTheme } from '../../db/repo/settings.js';
+import type { Lang, ThemePref } from '../../db/schema.js';
 import { EXPORT_FILE, ImportError, importExport, packExport } from '../../db/transfer.js';
 import { files, pickFile } from '../../platform/files.js';
 import { Chip, EmptyState, InverseButton, Row, Section, Stepper } from '../components/index.js';
@@ -44,9 +50,22 @@ const ZIP_ACCEPT = '.zip,application/zip';
 
 const LANGS: readonly Lang[] = ['ru', 'en'];
 
+/* Порядок читается как шкала «как было → наоборот → пусть решает телефон», и
+   умолчание стоит первым. */
+const THEMES: readonly ThemePref[] = ['dark', 'light', 'system'];
+
+/* Через таблицу, а не через `t[`theme_${code}`]`: шаблонный ключ TypeScript не
+   проверит, и опечатка доехала бы до экрана пустым чипом. */
+const THEME_LABEL: Record<ThemePref, 'theme_dark' | 'theme_light' | 'theme_system'> = {
+  dark: 'theme_dark',
+  light: 'theme_light',
+  system: 'theme_system',
+};
+
 export function More() {
   const go = useNav((s) => s.go);
   const lang = useLang();
+  const theme = useTheme();
   const t = STR[lang];
 
   const grinders = useOwnGrinders();
@@ -205,13 +224,30 @@ export function More() {
         <Row
           label={t.set_lang}
           right={
-            <span className="bj-set__lang">
+            <span className="bj-set__chips">
               {LANGS.map((code) => (
                 <Chip
                   key={code}
                   label={code.toUpperCase()}
                   active={lang === code}
                   onClick={() => void putSetting('lang', code)}
+                />
+              ))}
+            </span>
+          }
+        />
+
+        <Row
+          label={t.set_theme}
+          right={
+            <span className="bj-set__chips">
+              {THEMES.map((code) => (
+                <Chip
+                  key={code}
+                  label={t[THEME_LABEL[code]]}
+                  active={theme === code}
+                  testId={`set-theme-${code}`}
+                  onClick={() => void setTheme(code)}
                 />
               ))}
             </span>

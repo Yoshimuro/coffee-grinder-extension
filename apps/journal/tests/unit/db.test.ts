@@ -180,6 +180,7 @@ describe('seed', () => {
     open.push(second);
     expect(await seed(second)).toBe(false);
     expect(await second.grinders.count()).toBe(1);
-    expect(await second.settings.count()).toBe(4);
+    // 4 → 5 в BJ-9: к языку, калибровке, недавним и флагу сида добавилась тема.
+    expect(await second.settings.count()).toBe(5);
   });
 });

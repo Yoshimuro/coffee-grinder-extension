@@ -165,6 +165,12 @@ const RU = {
   set_export: 'ЭКСПОРТ БАЗЫ В ФАЙЛ',
   set_import: 'ИМПОРТ',
   set_lang: 'ЯЗЫК',
+  /* Три чипа в одну строку с лейблом при 393 px помещаются впритык, поэтому
+     подписи короткие: «ТЁМНАЯ · СВЕТЛАЯ · СИСТЕМА» уже не влезало бы. */
+  set_theme: 'ТЕМА',
+  theme_dark: 'ТЁМН',
+  theme_light: 'СВЕТЛ',
+  theme_system: 'АВТО',
   set_spec: 'СПЕЦИФИКАЦИЯ',
   /* Имя файла — из контракта №2 (BJ-6), а не из прототипа: там выгрузка была
      JSON'ом без фото и без обработчика. */
@@ -565,6 +571,10 @@ const EN: Readonly<Record<StrKey, string>> = {
   set_export: 'EXPORT BASE TO FILE',
   set_import: 'IMPORT',
   set_lang: 'LANGUAGE',
+  set_theme: 'THEME',
+  theme_dark: 'DARK',
+  theme_light: 'LIGHT',
+  theme_system: 'AUTO',
   set_spec: 'SPEC',
   set_export_done: 'base written to brew-journal-export.zip',
   set_offline: 'local · offline · no account',
