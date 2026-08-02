@@ -199,12 +199,20 @@ const DENSITIES = [
 /**
  * Ночной двойник каталога ресурсов.
  *
- * Порядок квалификаторов в имени каталога фиксирован спецификацией Android:
- * `night` идёт перед ориентацией и плотностью, поэтому вставляется сразу после
- * `drawable`, а не приписывается в конец.
+ * Порядок квалификаторов в имени каталога фиксирован спецификацией Android, и
+ * `night` в нём стоит ПОСЛЕ ориентации, но ПЕРЕД плотностью:
+ * `drawable-<port|land>-<night>-<density>`. Каталог с любым другим порядком —
+ * не «менее удачный», а невалидный: `mergeResources` роняет сборку с «Invalid
+ * resource directory name», причём только на gradle, где-либо раньше это не
+ * ловится.
+ *
+ * Отсюда и вставка перед последним сегментом, а не сразу после `drawable`.
  */
 function nightDir(dir) {
-  return dir === 'drawable' ? 'drawable-night' : dir.replace('drawable-', 'drawable-night-');
+  if (dir === 'drawable') return 'drawable-night';
+  const parts = dir.split('-');
+  parts.splice(parts.length - 1, 0, 'night');
+  return parts.join('-');
 }
 
 /** Сплэш: размеры ровно те, что создал `cap add android`. */
