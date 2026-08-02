@@ -40,6 +40,8 @@ export const DEFAULT_SETTINGS: Readonly<SettingsValues> = Object.freeze({
   convTo: null,
   convVal: DEFAULT_CONV_VAL,
   recents: [],
+  hints: [],
+  hintsOn: true,
 });
 
 /** Сколько кофемолок помнит конвертер (BJ-3, «три последних, а не вся история»). */
@@ -48,7 +50,15 @@ export const RECENTS_LIMIT = 3;
 /** Все настройки одним объектом, с подставленными дефолтами. */
 export async function readSettings(database: BrewJournalDB = db): Promise<SettingsValues> {
   const rows = await database.settings.toArray();
-  const out: SettingsValues = { ...DEFAULT_SETTINGS, calib: { ...DEFAULT_SETTINGS.calib } };
+  // Составные дефолты копируются, а не переиспользуются: `DEFAULT_SETTINGS`
+  // заморожен только на верхнем уровне, и общий на все вызовы массив рано или
+  // поздно кто-нибудь дополнит на месте.
+  const out: SettingsValues = {
+    ...DEFAULT_SETTINGS,
+    calib: { ...DEFAULT_SETTINGS.calib },
+    recents: [...DEFAULT_SETTINGS.recents],
+    hints: [...DEFAULT_SETTINGS.hints],
+  };
 
   // Строка таблицы — один тип с union-значением, и связь «ключ ↔ тип значения»
   // здесь может выразить только утверждение. Оно локализовано в этих двух
@@ -115,6 +125,48 @@ export async function setTheme(
 ): Promise<void> {
   writeThemeMirror(pref);
   await putSetting('theme', pref, database);
+}
+
+/* ── Подсказки первого входа (BJ-10) ─────────────────────────────────────── */
+
+/** Показанные подсказки. До ответа базы — пустой список, а не `undefined`. */
+export function useShownHints(): string[] {
+  return useSetting('hints');
+}
+
+/** Включены ли подсказки. */
+export function useHintsOn(): boolean {
+  return useSetting('hintsOn');
+}
+
+/**
+ * Помечает подсказку показанной.
+ *
+ * Транзакцией и без дублей — по той же причине, что и `pushRecent`: список
+ * читается и пишется двумя действиями подряд, а между ними успевает пройти
+ * следующий тап по цепочке.
+ */
+export async function markHint(id: string, database: BrewJournalDB = db): Promise<string[]> {
+  return database.transaction('rw', database.settings, async () => {
+    const current = (await getSetting('hints', database)) ?? [];
+    if (current.includes(id)) return current;
+    const next = [...current, id];
+    await putSetting('hints', next, database);
+    return next;
+  });
+}
+
+/** «ПОКАЗАТЬ ЗАНОВО»: забыть показанное и включить подсказки обратно. */
+export async function resetHints(database: BrewJournalDB = db): Promise<void> {
+  await database.transaction('rw', database.settings, async () => {
+    await putSetting('hints', [], database);
+    await putSetting('hintsOn', true, database);
+  });
+}
+
+/** Выключатель: кнопка «СКРЫТЬ ПОДСКАЗКИ» и чипы в настройках. */
+export async function setHintsOn(on: boolean, database: BrewJournalDB = db): Promise<void> {
+  await putSetting('hintsOn', on, database);
 }
 
 /**

@@ -127,7 +127,7 @@ export function Wheel() {
         )}
       </div>
 
-      <div className="bj-wheel__stage">
+      <div className="bj-wheel__stage" data-hint="wheel-stage">
         {/*
           Ключ — сам путь: он меняется ровно тогда, когда меняется уровень, и
           пересозданный узел проигрывает анимацию с нуля. Классом отличаются

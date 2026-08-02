@@ -131,7 +131,7 @@ export function Detail() {
         ) : null}
 
         {entry.stages.length > 0 ? (
-          <div className="jr__group">
+          <div className="jr__group" data-hint="detail-stages">
             <div className="jr__label">{t.log_stages}</div>
             {entry.stages.map(([key, sec, water], i) => (
               <div className="jr-stage" key={`${key}-${i}`}>

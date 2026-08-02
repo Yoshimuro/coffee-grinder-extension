@@ -159,7 +159,7 @@ export function Conv() {
               <div className="conv-result__unit">{view.unit}</div>
             </div>
 
-            <div className="conv-band">
+            <div className="conv-band" data-hint="conv-band">
               <div
                 className="conv-band__fill"
                 style={{ left: `${view.band.left}%`, width: `${view.band.width}%` }}
@@ -232,12 +232,13 @@ export function Conv() {
               <button
                 type="button"
                 className="btn conv-actions__calibrate"
+                data-testid="conv-calibrate"
                 aria-expanded={calOpen}
                 onClick={toggleCal}
               >
                 {t.conv_calibrate}
               </button>
-              <InverseButton className="conv-actions__use" onClick={useInBrew}>
+              <InverseButton className="conv-actions__use" testId="conv-use" onClick={useInBrew}>
                 {t.conv_use}
               </InverseButton>
             </div>

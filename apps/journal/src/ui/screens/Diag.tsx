@@ -144,8 +144,10 @@ export function Diag() {
           </div>
         ) : null}
 
-        {SCALES.map((scale) => (
-          <div className="jr-scale" key={scale.key}>
+        {SCALES.map((scale, i) => (
+          // Якорь подсказки — на первой шкале: правило одно на все четыре, и
+          // подсвечивать надо приём, а не весь блок.
+          <div className="jr-scale" key={scale.key} {...(i === 0 ? { 'data-hint': 'diag-scales' } : {})}>
             <div className="jr-scale__head">
               <div className="jr-scale__label">{t[scale.label]}</div>
               <div className="jr-scale__value">{diag[scale.key]}</div>
@@ -182,7 +184,7 @@ export function Diag() {
 
         <div className="jr__group">
           <div className="jr-field__label">{t.note_label}</div>
-          <div className="jr-note">
+          <div className="jr-note" {...(micReady ? { 'data-hint': 'diag-note' } : {})}>
             <textarea
               className="jr-textarea"
               data-testid="diag-note"

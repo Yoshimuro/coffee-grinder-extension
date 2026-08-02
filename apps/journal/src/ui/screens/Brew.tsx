@@ -107,7 +107,7 @@ export function Brew() {
 
       <div className="screen__body">
         {/* ── Кофе ─────────────────────────────────────────────────────── */}
-        <div className="bj-brew__group">
+        <div className="bj-brew__group" data-hint="brew-beans">
           <div className="micro">{t.brew_bean}</div>
           <div className="bj-brew__list">
             {(beans ?? []).map((b) => (
@@ -132,7 +132,7 @@ export function Brew() {
 
         {/* ── Тип заваривания ──────────────────────────────────────────── */}
         {showDevice(form) ? (
-          <div className="bj-brew__group">
+          <div className="bj-brew__group" data-hint="brew-devices">
             <div className="micro">{t.brew_device}</div>
             <div className="bj-brew__list">
               {(devices ?? []).map((d) => (
@@ -198,8 +198,10 @@ export function Brew() {
         ) : null}
 
         {/* ── Помол ────────────────────────────────────────────────────── */}
+        {/* Якорь подсказки ставится только когда диапазон реально пришёл с
+            конвертера: без него объяснять нечего, и шаг ждёт своего случая. */}
         {showGrind(form) ? (
-          <div className="bj-brew__group">
+          <div className="bj-brew__group" {...(hint === undefined ? {} : { 'data-hint': 'brew-grind-hint' })}>
             <Stepper
               {...GRIND_RANGE}
               label={t.brew_grind}

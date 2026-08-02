@@ -121,7 +121,7 @@ export function BeanAdd() {
 
       <div className="screen__body">
         <div className="micro">{t.bean_form}</div>
-        <ChipRow>
+        <ChipRow testId="bean-forms">
           {BEAN_FORMS.map((form) => (
             <Chip
               key={form}
@@ -133,7 +133,7 @@ export function BeanAdd() {
           ))}
         </ChipRow>
 
-        <div className="bj-add__shots">
+        <div className="bj-add__shots" data-hint="bean-shots">
           {draft.photos.map((photo, i) => (
             <PhotoSlot
               key={photo.path}
@@ -156,7 +156,7 @@ export function BeanAdd() {
 
         <div className="bj-add__field">
           <div className="micro">{t.bean_roast}</div>
-          <div className="bj-add__date-row">
+          <div className="bj-add__date-row" data-hint="bean-roast-row">
             <input
               className="bj-add__input"
               type="text"

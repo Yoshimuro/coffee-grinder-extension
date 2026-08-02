@@ -22,11 +22,13 @@ export interface SectionProps {
   /** Правый угол заголовка: счётчик, подсказка. */
   aside?: ReactNode;
   children?: ReactNode;
+  /** Метка для сквозного теста и якорь подсказки (`data-testid`) — см. `Row`. */
+  testId?: string;
 }
 
-export function Section({ label, aside, children }: SectionProps) {
+export function Section({ label, aside, children, testId }: SectionProps) {
   return (
-    <section className="bj-section">
+    <section className="bj-section" data-testid={testId}>
       {label === undefined && aside === undefined ? null : (
         <div className="bj-section__head">
           <span className="bj-section__label">{label}</span>

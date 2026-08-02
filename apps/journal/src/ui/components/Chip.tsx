@@ -53,8 +53,14 @@ export interface ChipRowProps {
   children: ReactNode;
   /** Лента фильтров: не переносится, уезжает вбок. */
   scroll?: boolean;
+  /** Метка для сквозного теста и якорь подсказки (`data-testid`). */
+  testId?: string;
 }
 
-export function ChipRow({ children, scroll = false }: ChipRowProps) {
-  return <div className={scroll ? 'bj-chips bj-chips--scroll' : 'bj-chips'}>{children}</div>;
+export function ChipRow({ children, scroll = false, testId }: ChipRowProps) {
+  return (
+    <div className={scroll ? 'bj-chips bj-chips--scroll' : 'bj-chips'} data-testid={testId}>
+      {children}
+    </div>
+  );
 }

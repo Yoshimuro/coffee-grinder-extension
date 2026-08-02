@@ -101,7 +101,7 @@ export function Bean() {
         {/* Дозу дрипа задал производитель — сетап её не спрашивает. */}
         {bean.form === 'drip' ? <div className="bj-bean__note">{t.bean_dose_fixed}</div> : null}
 
-        <Section label={t.bean_brews}>
+        <Section label={t.bean_brews} testId="bean-brews">
           {(entries ?? []).map((entry) => (
             <button
               key={entry.id}
