@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
 import type { BeanRecord, DeviceRecord, EntryRecord, GrinderRecord } from '../../src/db/schema.js';
+import { type ConverterState, converterSpan } from '../../src/ui/screens/conv/model.js';
 import {
   BREW_DEFAULTS,
   type BrewSetupValues,
@@ -80,6 +81,15 @@ const s3: GrinderRecord = {
 };
 
 const values: BrewSetupValues = { ...BREW_DEFAULTS, bean: 'java', device: 'v60' };
+
+/* Сохранённое состояние конвертера: дефолтная кофемолка каталога, своя `s3`,
+   без калибровки. Ровно то, что читает и сам конвертер (D-9). */
+const CONV_STATE: ConverterState = {
+  calib: { offset: 0, src: null },
+  convFrom: null,
+  convTo: 's3',
+  convVal: 30,
+};
 
 /* ── Диапазоны ───────────────────────────────────────────────────────────── */
 
@@ -186,24 +196,29 @@ describe('подсказка помола', () => {
     );
   });
 
-  it('без кофемолки и без ответа конвертера подсказки нет', () => {
-    expect(grindSpan(undefined, 4.6, null)).toBeNull();
+  it('без своих кофемолок пересчитывать не во что — подсказки нет', () => {
+    expect(grindSpan([], CONV_STATE, null)).toBeNull();
     expect(grindHint(null, 'ru')).toBeUndefined();
   });
 
-  it('ответ конвертера побеждает расчёт по своей кофемолке', () => {
+  it('присланный сетапу ответ побеждает сохранённое состояние конвертера', () => {
     const span = { lo: 1, center: 2, hi: 3 };
-    expect(grindSpan(s3, 4.6, span)).toBe(span);
+    expect(grindSpan([s3], CONV_STATE, span)).toBe(span);
   });
 
-  it('без ответа конвертера считает полосу вокруг текущей настройки', () => {
-    const span = grindSpan(s3, 4.6, null);
-    expect(span).not.toBeNull();
-    // Центр — сама настройка, полоса её обнимает: это неопределённость шкалы,
-    // а не сдвиг ответа.
-    expect(span?.center).toBeCloseTo(4.6, 5);
-    expect(span?.lo).toBeLessThanOrEqual(4.6);
-    expect(span?.hi).toBeGreaterThanOrEqual(4.6);
+  /* D-9: подсказка обязана показывать ровно то, что человек только что видел на
+     конвертере, — иначе она спорит с экраном, с которого её и переписывают. */
+  it('без присланного ответа берёт сохранённое состояние конвертера целиком', () => {
+    expect(grindSpan([s3], CONV_STATE, null)).toEqual(converterSpan([s3], CONV_STATE));
+  });
+
+  it('калибровка конвертера доезжает до подсказки', () => {
+    const plain = grindSpan([s3], CONV_STATE, null);
+    const calibrated = grindSpan([s3], { ...CONV_STATE, calib: { offset: 1.5, src: null } }, null);
+
+    expect(plain).not.toBeNull();
+    expect(calibrated?.center).toBeCloseTo((plain?.center ?? 0) + 1.5, 5);
+    expect(calibrated?.lo).toBeCloseTo((plain?.lo ?? 0) + 1.5, 5);
   });
 });
 

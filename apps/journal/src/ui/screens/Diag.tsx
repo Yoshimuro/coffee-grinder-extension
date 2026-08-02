@@ -162,7 +162,12 @@ export function Diag() {
           </div>
         ))}
 
-        <button type="button" className="jr-wheel-cta" onClick={() => go('wheel')}>
+        <button
+          type="button"
+          className="jr-wheel-cta"
+          data-testid="diag-to-wheel"
+          onClick={() => go('wheel')}
+        >
           <MiniWheel />
           <span className="jr-wheel-cta__main">
             <span className="jr-wheel-cta__title">{t.log_desc}</span>

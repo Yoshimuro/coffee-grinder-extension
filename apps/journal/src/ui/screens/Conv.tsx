@@ -20,19 +20,19 @@ import { pushRecent, putSetting, useLang, useSettings } from '../../db/repo/sett
 import { calibrationFrom, hasCalibration, resetCalibration, suggestCalibration } from '../../domain/calibration.js';
 import { InverseButton } from '../components/InverseButton.js';
 import { ScreenHeader } from '../components/ScreenHeader.js';
-import { Stepper, clampValue } from '../components/Stepper.js';
+import { Stepper } from '../components/Stepper.js';
 import { useBrewSetup } from './brewing/brew-store.js';
 import { GrinderPicker } from './conv/GrinderPicker.js';
 import { rowName } from './conv/picker.js';
 import {
   calibLine,
   convView,
+  converterInputs,
   cycleOwn,
   dbCountLine,
   defaultSetting,
   rawCenter,
   resolveFrom,
-  resolveTo,
   suggestLine,
 } from './conv/model.js';
 import './conv/conv.css';
@@ -50,13 +50,10 @@ export function Conv() {
   const entries = useEntries();
   const fromConverter = useBrewSetup((s) => s.fromConverter);
 
-  const from = resolveFrom(settings.convFrom);
-  const to = resolveTo(own ?? [], settings.convTo);
-
-  /* Значение живёт в компоненте, а не в настройках: ключа под него в схеме нет,
-     а схема v1 заморожена (см. отчёт G5). Между заходами оно не переживает. */
-  const [raw, setRaw] = useState(() => defaultSetting(from.scale));
-  const setting = clampValue(raw, from.scale);
+  /* Обе кофемолки и настройка «ОТКУДА» — из сохранённых настроек (D-9): экран
+     открывается там же, где его закрыли, а сетап заваривания читает то же самое
+     и показывает под помолом ровно этот ответ. */
+  const { from, setting, to } = converterInputs(own ?? [], settings);
 
   const [calOpen, setCalOpen] = useState(false);
   const [calVal, setCalVal] = useState(0);
@@ -72,11 +69,12 @@ export function Conv() {
     [from, setting, to, settings.calib.offset, lang],
   );
 
+  /* Новая шкала — новая середина: 30 кликов Comandante на шкале 0–9 значили бы
+     максимум, а не «примерно посередине», с которого начинают. */
   const pickFrom = (id: string) => {
     void putSetting('convFrom', id);
     void pushRecent(id);
-    const next = resolveFrom(id);
-    setRaw(defaultSetting(next.scale));
+    void putSetting('convVal', defaultSetting(resolveFrom(id).scale));
   };
 
   const cycleTo = () => {
@@ -129,7 +127,7 @@ export function Conv() {
         <Stepper
           size="lg"
           value={setting}
-          onChange={setRaw}
+          onChange={(v) => void putSetting('convVal', v)}
           min={from.scale.min}
           max={from.scale.max}
           step={from.scale.step}

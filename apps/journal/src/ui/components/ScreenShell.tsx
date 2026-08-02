@@ -5,12 +5,17 @@
  * The back button appears on every screen that is not a tab root, matching the
  * handoff rule «явная кнопка ← везде где вложенность» — Android's system back
  * is wired to the same action in BJ-6, but the on-screen one is not optional.
+ *
+ * Шапку рисует `ScreenHeader` (D-10): своя разметка каркаса тянула за собой
+ * второй набор правил (`.screen__head`/`.screen__title`/`.back` в `tokens.css`)
+ * на ту же шапку, и он разъезжался с макетом. Шапка в приложении одна.
  */
 
 import type { ReactNode } from 'react';
 
-import { type Screen, isTab, useNav } from '../../app/nav.js';
+import { type Screen, isTab } from '../../app/nav.js';
 import { SCREEN_TITLES } from '../screenMeta.js';
+import { ScreenHeader } from './ScreenHeader.js';
 
 interface ScreenShellProps {
   screen: Screen;
@@ -18,19 +23,9 @@ interface ScreenShellProps {
 }
 
 export function ScreenShell({ screen, children }: ScreenShellProps) {
-  const back = useNav((s) => s.back);
-  const nested = !isTab(screen);
-
   return (
     <section className="screen" data-screen={screen}>
-      <header className="screen__head">
-        {nested ? (
-          <button type="button" className="back" onClick={back} aria-label="Назад">
-            ←
-          </button>
-        ) : null}
-        <h1 className="screen__title">{SCREEN_TITLES[screen]}</h1>
-      </header>
+      <ScreenHeader title={SCREEN_TITLES[screen]} back={!isTab(screen)} />
       <div className="screen__body">{children}</div>
     </section>
   );

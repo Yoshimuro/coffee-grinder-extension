@@ -7,6 +7,11 @@
  *   - there is no accent colour (colour appears only on the flavour wheel and
  *     in bag photos), so every token below is a grey;
  *   - corners are square. `--radius` exists only so the zero is stated once.
+ *
+ * D-11 задачи: палитра «шести цветов» описывает основу, а в самом макете
+ * ступеней серого больше. Три из них (`--line-5`, `--muted`, `--mid`) добавлены
+ * здесь именованными токенами — раньше они жили приближениями по файлам экранов
+ * и одним хексом в коде. Значения — из макета дословно, как и всё остальное.
  */
 
 :root {
@@ -14,7 +19,7 @@
      scrollbars, which would otherwise follow the system preference. */
   color-scheme: dark;
 
-  /* ── Палитра (6) ───────────────────────────────────────────────────────── */
+  /* ── Палитра (6 из README + 3 ступени макета, D-11) ────────────────────── */
   --bg: #0c0c0c; /* фон */
   --plane: #141413; /* плоскость */
 
@@ -23,8 +28,12 @@
   --line-2: #1e1e1c;
   --line-3: #232321;
   --line-4: #2a2a28;
+  /* самый заметный хайрлайн: рамки панелей и пунктир приглашений */
+  --line-5: #33332f;
 
+  --muted: #3f3f3b; /* тише `--faint`: подписи шкалы, время в ленте журнала */
   --faint: #575752; /* faint */
+  --mid: #6e6e68; /* между `--faint` и `--dim`: заливка полосы, совпавшее значение */
   --dim: #8c8c87; /* dim */
   --text-secondary: #b9b9b4; /* текст-вторичный */
   --text: #ededeb; /* текст */
@@ -103,7 +112,9 @@ body {
   font-family: var(--font);
   font-size: var(--fs-body);
   font-weight: var(--fw-regular);
-  line-height: 1.45;
+  /* 1.3 — межстрочный макета (D-10). BJ-2 поставил 1.45, и каждая строка была
+     выше на 1–2px: к низу длинного экрана набегало 4–6px сдвига. */
+  line-height: 1.3;
   /* README: обязательно на всех цифрах. Setting it on the root is the only way
      to guarantee that without auditing every future digit. */
   font-variant-numeric: tabular-nums;
@@ -144,22 +155,9 @@ button {
   min-height: 0;
 }
 
-.screen__head {
-  display: flex;
-  flex: none;
-  align-items: center;
-  gap: 12px;
-  padding: 10px 16px;
-  border-bottom: 1px solid var(--line-2);
-}
-
-.screen__title {
-  font-size: var(--fs-micro);
-  font-weight: var(--fw-medium);
-  letter-spacing: var(--ls-micro);
-  color: var(--dim);
-  text-transform: uppercase;
-}
+/* Шапка и «←» жили здесь с BJ-2 и разъезжались с макетом (10px/ls2 против
+   11.5/2.5, 48×48 против 44×40). Оба набора сведены в один — `.bj-head` из
+   `components.css`, единственную живую шапку приложения (D-10). */
 
 .screen__body {
   flex: 1;
@@ -167,19 +165,6 @@ button {
   overflow-y: auto;
   padding: 18px var(--pad-screen) 28px;
   -webkit-overflow-scrolling: touch;
-}
-
-/* «←» — явная кнопка назад везде, где есть вложенность (README, «Поведение»). */
-.back {
-  display: flex;
-  flex: none;
-  align-items: center;
-  justify-content: center;
-  width: var(--touch);
-  height: var(--touch);
-  border: 1px solid var(--line-4);
-  color: var(--text-secondary);
-  font-size: 15px;
 }
 
 /* ── Нижняя навигация ────────────────────────────────────────────────────── */

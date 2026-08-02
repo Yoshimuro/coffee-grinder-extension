@@ -2,8 +2,9 @@
  * Конвертер помола. Геометрия — из `Brew Journal.dc.html` (`DC:148-220`),
  * цвета и шрифты — токенами.
  *
- * Три величины прототипа токена не имеют и заменены ближайшим (отмечено по
- * месту): рамка панели #33332F, заливка полосы #6E6E68, подписи шкалы #3F3F3B.
+ * Три величины прототипа, у которых токена не было, получили его в `tokens.css`
+ * (D-11): рамка панели — `--line-5` (#33332F), заливка полосы — `--mid`
+ * (#6E6E68), подписи шкалы — `--muted` (#3F3F3B).
  */
 
 /* ── Пикер «ОТКУДА» ──────────────────────────────────────────────────────── */
@@ -38,7 +39,8 @@
   font-size: var(--fs-micro);
 }
 
-/* Панель прирастает к кнопке — верхней рамки у неё нет. */
+/* Панель прирастает к кнопке — верхней рамки у неё нет, а рамка совпадает с
+   кнопкой: иначе шов между ними читался бы как две разные плоскости. */
 .conv-picker__panel {
   border: 1px solid var(--line-4);
   border-top: none;
@@ -227,12 +229,11 @@
   background: var(--line-3);
 }
 
-/* Прототип красил заливку #6E6E68 — токена такой яркости нет, взят --dim. */
 .conv-band__fill {
   position: absolute;
   top: -2px;
   height: 6px;
-  background: var(--dim);
+  background: var(--mid);
 }
 
 .conv-band__tick {
@@ -243,13 +244,13 @@
   background: var(--text);
 }
 
-/* Подписи краёв: прототип #3F3F3B, ближайший токен --faint. */
+/* Подписи краёв — самый тихий серый макета. */
 .conv-scale {
   display: flex;
   justify-content: space-between;
   margin-top: 6px;
   font-size: var(--fs-tech-min);
-  color: var(--faint);
+  color: var(--muted);
 }
 
 .conv-center {
@@ -293,7 +294,7 @@
 .conv-cal {
   margin-top: 18px;
   padding: 14px;
-  border: 1px solid var(--line-4);
+  border: 1px solid var(--line-5);
 }
 
 .conv-cal__q {

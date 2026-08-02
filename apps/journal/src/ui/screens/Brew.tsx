@@ -60,7 +60,7 @@ export function Brew() {
   const beans = useBeans();
   const devices = useDevices();
   const grinders = useOwnGrinders();
-  const { convTo } = useSettings();
+  const settings = useSettings();
 
   const setup = useBrewSetup();
   const { setBean, setDevice, setHyMode, setField } = setup;
@@ -82,10 +82,9 @@ export function Brew() {
   const dose = effectiveDose(bean, setup.dose);
   const today = isoDate(new Date());
 
-  /* Подсказка под помолом — ответ конвертера, если сетап пришёл оттуда, иначе
-     полоса вокруг текущей настройки на своей же кофемолке. */
-  const ownGrinder = grinders?.find((g) => g.id === convTo) ?? grinders?.[0];
-  const hint = grindHint(grindSpan(ownGrinder, setup.grind, setup.span), lang);
+  /* Подсказка под помолом — ответ конвертера: присланный кнопкой «ВЗЯТЬ В
+     ЗАВАРИВАНИЕ» или посчитанный из его же сохранённого состояния (D-9). */
+  const hint = grindHint(grindSpan(grinders ?? [], settings, setup.span), lang);
 
   const start = () => {
     if (!bean) return;

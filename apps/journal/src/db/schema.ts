@@ -196,6 +196,16 @@ export interface SettingsValues {
   /** Grinder ids last used on the converter. */
   convFrom: string | null;
   convTo: string | null;
+  /**
+   * Настройка «ОТКУДА» на конвертере (D-9). Хранится, потому что её показывает
+   * не только конвертер: подсказка под помолом в сетапе заваривания обязана
+   * говорить то же самое, что экран конвертера, а без сохранённого значения она
+   * считала полосу по своей же кофемолке и расходилась с ним.
+   *
+   * Ключ, а не таблица: `settings` — key/value, и новая строка в ней схему
+   * (версии, таблицы, индексы) не трогает.
+   */
+  convVal: number;
   /** Recently used grinder ids, most recent first. */
   recents: string[];
 }

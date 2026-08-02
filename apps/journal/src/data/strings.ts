@@ -138,6 +138,7 @@ const RU = {
   wheel_up: 'ВВЕРХ',
   wheel_picked: 'ВЫБРАНО',
   wheel_intensity: 'интенсивность',
+  wheel_tap_tag: 'тап по тегу',
   wheel_done: 'ГОТОВО',
   wheel_hint: 'тап — внутрь. центр — наверх. остановиться можно на любом уровне',
   wheel_mem: 'уже выбирал',
@@ -163,7 +164,6 @@ const RU = {
   set_import: 'ИМПОРТ',
   set_lang: 'ЯЗЫК',
   set_spec: 'СПЕЦИФИКАЦИЯ',
-  set_qr: 'QR РЕЦЕПТА',
   set_export_done: 'база записана в файл brew-journal.json',
   set_offline: 'локально · офлайн · без аккаунта',
 
@@ -239,7 +239,6 @@ const RU = {
   log_device: 'ДЕВАЙС',
   /** Подпись температуры в сетке параметров. Символ, не перевод. */
   temp_short: 'T°',
-  qr_hint: 'передача — файлом или с экрана. без сети, без аккаунтов',
 
   /* Фильтры журнала. Не `modeName`: чип называет отбор («ЧАШКИ» — множество
      дегустаций), а не режим одной записи, и обязан влезать в ленту. */
@@ -467,6 +466,7 @@ const EN: Readonly<Record<StrKey, string>> = {
   wheel_up: 'UP',
   wheel_picked: 'PICKED',
   wheel_intensity: 'intensity',
+  wheel_tap_tag: 'tap the tag',
   wheel_done: 'DONE',
   wheel_hint: 'tap to go deeper. center goes up. any level is a valid stop',
   wheel_mem: 'picked before',
@@ -492,7 +492,6 @@ const EN: Readonly<Record<StrKey, string>> = {
   set_import: 'IMPORT',
   set_lang: 'LANGUAGE',
   set_spec: 'SPEC',
-  set_qr: 'RECIPE QR',
   set_export_done: 'base written to brew-journal.json',
   set_offline: 'local · offline · no account',
 
@@ -539,7 +538,6 @@ const EN: Readonly<Record<StrKey, string>> = {
   log_bean: 'COFFEE',
   log_device: 'BREWER',
   temp_short: 'T°',
-  qr_hint: 'hand over as a file or from the screen. no network, no accounts',
 
   log_f_perc: 'PERC',
   log_f_imm: 'IMM',

@@ -95,6 +95,19 @@ export async function findPendingEntry(
   return rows.sort(byNewest)[0];
 }
 
+/**
+ * Оценённые записи — из них колесо собирает память дескрипторов (BJ-5, §8.7).
+ *
+ * Порядок здесь не нужен: результат сворачивается в множество id. Индекс
+ * `status` уже есть (на нём стоит {@link findPendingEntry}), поэтому выборка не
+ * тянет журнал целиком.
+ */
+export async function listDoneEntries(
+  database: BrewJournalDB = db,
+): Promise<EntryRecord[]> {
+  return database.entries.where('status').equals('done').toArray();
+}
+
 /* ── Запись ──────────────────────────────────────────────────────────────── */
 
 export async function putEntry(entry: EntryRecord, database: BrewJournalDB = db): Promise<string> {
@@ -175,6 +188,18 @@ export function useEntriesForBean(beanId: string | null | undefined): EntryRecor
 /** Карточка «оценка ждёт» на главном. `undefined` — нет такой записи. */
 export function usePendingEntry(): EntryRecord | undefined {
   return useLiveQuery(() => findPendingEntry(), []);
+}
+
+/**
+ * Живой список оценённых записей — память колеса вкусов (D-3).
+ *
+ * Прототип пересобирал множество на каждой перерисовке SVG (`_mem`, `DC:1069`),
+ * потому что журнал лежал у него в состоянии приложения. Здесь журнал в Dexie,
+ * и подписка дешевле обхода: точки памяти появляются сами, как только запись
+ * сохранена, — даже если колесо в этот момент открыто.
+ */
+export function useDoneEntries(): EntryRecord[] | undefined {
+  return useLiveQuery(() => listDoneEntries(), []);
 }
 
 /* ── Прочее ──────────────────────────────────────────────────────────────── */

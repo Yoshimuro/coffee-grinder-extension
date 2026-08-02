@@ -6,19 +6,16 @@
  * нет, и `components.css` пишет их так же. Числа взяты из
  * `design_handoff_brew_journal 3/Brew Journal.dc.html`.
  *
- * Два цвета прототипа в токены не попали, а нужны дословно:
- *   --jr-line-5  #33332F — рамка чуть заметнее `--line-4`: карточка входа в
- *                колесо, пунктир подсказок, рамка чекбокса сравнения;
- *   --jr-same    #6E6E68 — совпавшее значение в сравнении (§9 требует именно
- *                его: он тише текста, но громче `--faint`).
- * Оба объявлены здесь, а не в `tokens.css`: тот заморожен. Кандидаты на
- * повышение в токены — пометка для пиксельного прохода S-7.
+ * Три серых, которые экраны журнала держали локально (`--jr-line-5`, `--jr-same`
+ * и хекс времени в ленте), стали токенами в `tokens.css` (D-11):
+ *   --line-5  #33332F — рамка чуть заметнее `--line-4`: карточка входа в
+ *             колесо, пунктир подсказок, рамка чекбокса сравнения;
+ *   --mid     #6E6E68 — совпавшее значение в сравнении (§9 требует именно его:
+ *             он тише текста, но громче `--faint`);
+ *   --muted   #3F3F3B — время под датой в ленте, тише `--faint`.
  */
 
 .jr {
-  --jr-line-5: #33332f;
-  --jr-same: #6e6e68;
-
   display: flex;
   flex: 1;
   flex-direction: column;
@@ -170,7 +167,7 @@
   width: 100%;
   margin-top: 22px;
   padding: 14px;
-  border: 1px solid var(--jr-line-5);
+  border: 1px solid var(--line-5);
   text-align: left;
 }
 
@@ -287,7 +284,7 @@
 .jr-sug__chip {
   position: relative;
   padding: 8px 11px;
-  border: 1px dashed var(--jr-line-5);
+  border: 1px dashed var(--line-5);
   color: var(--text-secondary);
   font-size: var(--fs-micro);
 }
@@ -373,7 +370,7 @@
   width: 16px;
   height: 16px;
   margin-top: 2px;
-  border: 1px solid var(--jr-line-5);
+  border: 1px solid var(--line-5);
 }
 
 .jr-row__box--on {
@@ -408,7 +405,7 @@
 .jr-row__time {
   margin-top: 3px;
   font-size: 8px;
-  color: #3f3f3b; /* тише `--faint`; в токенах ступени нет — S-7 */
+  color: var(--muted);
 }
 
 .jr-row__main {
@@ -460,7 +457,7 @@
 .jr-row__pending {
   margin-top: 5px;
   padding: 3px 6px;
-  border: 1px solid var(--jr-line-5);
+  border: 1px solid var(--line-5);
   font-size: 7.5px;
   letter-spacing: 1px;
   color: var(--dim);
@@ -481,7 +478,7 @@
   align-items: center;
   height: 40px;
   padding: 0 12px;
-  border: 1px solid var(--jr-line-5);
+  border: 1px solid var(--line-5);
   color: var(--text-secondary);
   font-size: 9px;
   letter-spacing: 1.5px;
@@ -580,24 +577,7 @@
  * (D-7), поэтому здесь честно пустая площадка ровно того размера, который
  * займёт настоящий код.
  */
-.jr-qr {
-  display: flex;
-  gap: 14px;
-  align-items: flex-start;
-  margin-top: 22px;
-}
-
-.jr-qr__slot {
-  flex: none;
-  width: 104px;
-  height: 104px;
-  border: 1px solid var(--line-2);
-  background: var(--plane);
-}
-
-.jr-qr__text {
-  max-width: 170px;
-}
+/* Блок QR на записи убран целиком до BJ-6 (D-12) — вместе с ним `.jr-qr*`. */
 
 /* ── Сравнение ───────────────────────────────────────────────────────────── */
 
@@ -644,7 +624,7 @@
   min-width: 0;
   font-size: 11.5px;
   font-weight: var(--fw-regular);
-  color: var(--jr-same);
+  color: var(--mid);
   line-height: 1.6;
 }
 

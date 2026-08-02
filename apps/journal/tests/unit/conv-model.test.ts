@@ -7,8 +7,11 @@ import type { EntryRecord, GrinderRecord } from '../../src/db/schema.js';
 import { calibrationFrom, suggestCalibration } from '../../src/domain/calibration.js';
 import {
   DEFAULT_FROM_ID,
+  type ConverterState,
   calibLine,
   convView,
+  converterInputs,
+  converterSpan,
   cycleOwn,
   dbCountLine,
   defaultSetting,
@@ -27,6 +30,14 @@ const S3: GrinderRecord = {
   micronsPerStep: 86.7,
   zeroOffsetMicrons: 330,
   scale: { min: 0, max: 9, step: 0.1, unit: 'mark' },
+};
+
+/** Чистое сохранённое состояние: обе стороны по умолчанию, без калибровки. */
+const BASE_STATE: ConverterState = {
+  calib: { offset: 0, src: null },
+  convFrom: null,
+  convTo: null,
+  convVal: 30,
 };
 
 /** Молка, заведённая руками: в каталоге её нет, значит доверие «оценка». */
@@ -324,5 +335,66 @@ describe('конвертер помнит выбор', () => {
 
     expect(resolveFrom((await getSetting('convFrom', db)) ?? null).id).toBe('1zpresso-jx-pro');
     expect(resolveTo([S3], (await getSetting('convTo', db)) ?? null)?.id).toBe('timemore-s3');
+  });
+
+  /* D-9: настройка «ОТКУДА» тоже стала ключом настроек — иначе после перезахода
+     конвертер показывал бы середину шкалы вместо того, что человек выставил. */
+  it('настройка «ОТКУДА» переживает перезаход', async () => {
+    const db = freshDb();
+    await putSetting('convVal', 22, db);
+
+    const state: ConverterState = {
+      ...BASE_STATE,
+      convVal: (await getSetting('convVal', db)) ?? 0,
+    };
+    expect(converterInputs([S3], state).setting).toBe(22);
+  });
+});
+
+describe('состояние конвертера — один источник на два экрана', () => {
+  it('разрешает сохранённые id в записи каталога и своей полки', () => {
+    const inputs = converterInputs([S3, HOMEMADE], {
+      ...BASE_STATE,
+      convFrom: '1zpresso-jx-pro',
+      convTo: 'g1',
+    });
+
+    expect(inputs.from.id).toBe('1zpresso-jx-pro');
+    expect(inputs.to?.id).toBe('g1');
+  });
+
+  it('зажимает настройку, оставшуюся от кофемолки с другой шкалой', () => {
+    // 30 кликов Comandante на шкале 0–9 — это максимум, а не «нет значения».
+    const inputs = converterInputs([S3], { ...BASE_STATE, convFrom: 'timemore-s3', convVal: 30 });
+    expect(inputs.setting).toBe(inputs.from.scale.max);
+
+    const broken = converterInputs([S3], { ...BASE_STATE, convVal: Number.NaN });
+    expect(broken.setting).toBe(defaultSetting(broken.from.scale));
+  });
+
+  it('без своих кофемолок пересчитывать не во что', () => {
+    expect(converterSpan([], BASE_STATE)).toBeNull();
+    expect(converterInputs([], BASE_STATE).to).toBeUndefined();
+  });
+
+  /* Экран собирает `convView` из тех же входов, поэтому диапазон под помолом в
+     сетапе заваривания обязан совпадать с тем, что нарисовано на конвертере. */
+  it('даёт тот же диапазон, что показывает сам конвертер', () => {
+    const state: ConverterState = { ...BASE_STATE, calib: { offset: 1.2, src: null } };
+    const { from, setting, to } = converterInputs([S3], state);
+    expect(to).toBeDefined();
+    if (to === undefined) return;
+
+    const view = convView({ from, setting, to, offset: state.calib.offset, lang: 'ru' });
+    expect(converterSpan([S3], state)).toEqual(view.span);
+  });
+
+  it('везёт калибровку с собой', () => {
+    const plain = converterSpan([S3], BASE_STATE);
+    const shifted = converterSpan([S3], { ...BASE_STATE, calib: { offset: -0.5, src: null } });
+
+    expect(plain).not.toBeNull();
+    expect(shifted?.center).toBeCloseTo((plain?.center ?? 0) - 0.5, 5);
+    expect(shifted?.hi).toBeCloseTo((plain?.hi ?? 0) - 0.5, 5);
   });
 });

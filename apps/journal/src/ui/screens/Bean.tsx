@@ -25,7 +25,7 @@ import { EmptyState, InverseButton, ScreenHeader, Section, Tag } from '../compon
 import { useJournalView } from './journal/view-store.js';
 import { PhotoSlot } from './shelf/PhotoSlot.js';
 import { useBeanView } from './shelf/bean-store.js';
-import { beanStats, slotCount, slotPlaceholder } from './shelf/shelf-view.js';
+import { beanGuard, beanStats, slotCount, slotPlaceholder } from './shelf/shelf-view.js';
 import { useBrewSetup } from './brewing/brew-store.js';
 import './shelf/shelf.css';
 
@@ -40,16 +40,13 @@ export function Bean() {
   const entries = useEntriesForBean(beanId ?? '');
   const openEntry = useJournalView((s) => s.openEntry);
 
-  /* Пачку могли удалить, пока карточка открыта. Показывать нечего — уходим
-     назад, а не рисуем экран из прочерков.
-     `useBean` отдаёт `undefined` и пока база молчит, и когда записи нет, так что
-     «нет» опознаётся по тому, отвечала ли пачка хоть раз. Ответ соседнего
-     запроса (списка заварок) для этого не годится: оба уходят в базу вместе и
-     возвращаются в произвольном порядке, а список успевал первым — карточка
-     закрывалась сама, не успев отрисоваться (S-7). */
+  /* Уходить ли назад, решает `beanGuard`: правило «пачки нет» ошибочно срабатывало
+     на гонке двух запросов, поэтому оно вынесено в чистую функцию и покрыто
+     тестом. Реф здесь — только память между кадрами. */
   const answered = useRef(false);
-  if (bean !== undefined) answered.current = true;
-  const gone = beanId === null || (answered.current && bean === undefined);
+  const guard = beanGuard(beanId, bean, answered.current);
+  answered.current = guard.answered;
+  const gone = guard.gone;
 
   useEffect(() => {
     if (gone) back();

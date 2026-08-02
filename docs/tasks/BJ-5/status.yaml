@@ -1,9 +1,12 @@
 task_id: BJ-5
 title: "Колесо вкусов: SVG, проваливание с зумом, крошки, память, интенсивность"
 profile: standard
-status: READY_FOR_DEVELOPMENT
-owner: dev-agent (opus)
+status: TESTING_READY
+owner: main-session
 created_at: "2026-08-02T22:45:00Z"
-updated_at: "2026-08-02T22:45:00Z"
+updated_at: "2026-08-03T05:30:00Z"
 transitions:
-  - {at: "2026-08-02T22:45:00Z", from: RESEARCH_IN_PROGRESS, to: READY_FOR_DEVELOPMENT, reason: "research = _research/component-report.md §8 (полная геометрия/анимация/память) + data-js-report §2-3; план предодобрен (BJ-1/decisions.md D-1); исполнение после BJ-3 (данные+arcPath) и интеграция после BJ-4 (экран diag)"}
+  - {at: "2026-08-02T22:45:00Z", from: RESEARCH_IN_PROGRESS, to: READY_FOR_DEVELOPMENT, reason: "research = _research/component-report.md §8 + data-js-report §2-3; план предодобрен (BJ-1/decisions.md D-1)"}
+  - {at: "2026-08-03T05:00:00Z", from: READY_FOR_DEVELOPMENT, to: DEVELOPMENT_IN_PROGRESS, reason: "dev-агент (opus) запущен параллельно с мини-фикс батчем BJ-4 (непересекающиеся файлы)"}
+  - {at: "2026-08-03T05:25:00Z", from: DEVELOPMENT_IN_PROGRESS, to: READY_FOR_REVIEW, reason: "27 юнит-тестов колеса + 2 e2e; сверка с эталонами 09/10 — совпадение; dev_notes.md"}
+  - {at: "2026-08-03T05:30:00Z", from: READY_FOR_REVIEW, to: TESTING_READY, reason: "ревью main-session: rate-store не менялся (контракт BJ-4 достаточен), диаг тронут одним data-testid; принятые отклонения — D-4 ниже; зачистка wheel.css на токены --line-5/--muted выполнена main-session. DONE подтвердит пользователь"}

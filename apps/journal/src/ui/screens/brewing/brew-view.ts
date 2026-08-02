@@ -18,11 +18,11 @@ import type {
   Lang,
 } from '../../../db/schema.js';
 import type { Span } from '../../../domain/calibration.js';
-import { convertGrind } from '../../../domain/convert.js';
 import { fmtT } from '../../../domain/format.js';
 import type { BrewPlan, HybridMode } from '../../../domain/stages.js';
 import type { BrewSetup } from '../../../domain/timer.js';
 import type { StepperRange } from '../../components/index.js';
+import { type ConverterState, converterSpan } from '../conv/model.js';
 import type { BrewSetupValues } from './brew-store.js';
 
 /* ── Диапазоны полей (component-report §10.11) ───────────────────────────── */
@@ -119,24 +119,22 @@ export function ratioLine(water: number, dose: number, lang: Lang): string {
  * Диапазон помола для подсказки.
  *
  * Прототип показывал здесь текущий ответ конвертера, храня его настройку
- * «откуда» в состоянии экрана (`convVal`, `DC:917`). Схема v1 такого поля не
- * знает и заморожена, поэтому источников два:
- *   - `span` из стора — настоящий ответ конвертера, если сетап пришёл оттуда;
- *   - иначе полоса доверия вокруг текущей настройки на своей же кофемолке.
+ * «откуда» в состоянии экрана (`convVal`, `DC:917`). Теперь она лежит в
+ * настройках (D-9), поэтому источник один и тот же на обоих экранах:
+ *   - `span` из стора — ответ, который человек сам отправил сюда кнопкой
+ *     «ВЗЯТЬ В ЗАВАРИВАНИЕ»: он победил бы в любом случае;
+ *   - иначе — сохранённое состояние конвертера, посчитанное `converterSpan`.
  *
- * Второй вариант — не выдумка: это ровно та неопределённость, с которой ядро
- * отвечает на любой пересчёт, просто заданная своей шкалой. Смещение калибровки
- * тут ноль: калибруется расхождение двух кофемолок, а не молка сама с собой.
+ * Раньше вторым вариантом была полоса вокруг настройки на своей же кофемолке.
+ * Числа получались честные, но не те, что показывает конвертер, и подсказка
+ * спорила с экраном, с которого её и переписывают.
  */
 export function grindSpan(
-  grinder: GrinderRecord | undefined,
-  setting: number,
+  own: readonly GrinderRecord[],
+  state: ConverterState,
   span: Span | null,
 ): Span | null {
-  if (span) return span;
-  if (!grinder) return null;
-  const c = convertGrind(grinder, setting, grinder);
-  return { lo: c.lo, center: c.center, hi: c.hi };
+  return span ?? converterSpan(own, state);
 }
 
 /**

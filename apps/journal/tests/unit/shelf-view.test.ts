@@ -7,6 +7,7 @@ import {
   amountLabel,
   amountRange,
   amountUnit,
+  beanGuard,
   beanStats,
   makeBean,
   shelfCountLine,
@@ -142,5 +143,41 @@ describe('карточка пачки', () => {
     expect(slotCount(['a'])).toBe(2);
     expect(slotCount(['a', 'b'])).toBe(3);
     expect(slotCount(['a', 'b', 'c'])).toBe(4);
+  });
+
+  /*
+   * Регрессия S-7. Карточка уходит назад, когда пачки нет, — и однажды уходила
+   * до того, как база вообще ответила: `useBean` отдаёт `undefined` и на первом
+   * кадре тоже. Здесь проигрывается сама последовательность кадров.
+   */
+  describe('сторож удалённой пачки', () => {
+    it('не закрывает карточку, пока база ещё не ответила', () => {
+      const first = beanGuard('java', undefined, false);
+      expect(first.gone).toBe(false);
+      expect(first.answered).toBe(false);
+    });
+
+    it('дожидается ответа и остаётся открытой', () => {
+      let answered = false;
+
+      // Кадр 1: запрос ушёл, ответа нет. Кадр 2: пачка приехала.
+      for (const bean of [undefined, java]) {
+        const guard = beanGuard('java', bean, answered);
+        answered = guard.answered;
+        expect(guard.gone).toBe(false);
+      }
+
+      expect(answered).toBe(true);
+    });
+
+    it('закрывает карточку, когда ответившая пачка исчезла', () => {
+      const seen = beanGuard('java', java, false);
+      expect(beanGuard('java', undefined, seen.answered).gone).toBe(true);
+    });
+
+    it('закрывает карточку, когда открывать нечего', () => {
+      expect(beanGuard(null, undefined, false).gone).toBe(true);
+      expect(beanGuard(null, java, true).gone).toBe(true);
+    });
   });
 });

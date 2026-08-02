@@ -10,7 +10,13 @@
 import { type Grinder, allGrinders, displayName, grinderById } from '@coffee/core';
 
 import { type StrKey, STR } from '../../../data/strings.js';
-import type { GrinderRecord, GrinderScale, GrinderUnit, Lang } from '../../../db/schema.js';
+import type {
+  GrinderRecord,
+  GrinderScale,
+  GrinderUnit,
+  Lang,
+  SettingsValues,
+} from '../../../db/schema.js';
 import type { Span } from '../../../domain/calibration.js';
 import { convertFromCatalogue, toCoreGrinder } from '../../../domain/convert.js';
 import { type BandGeometry, bandGeometry } from './band.js';
@@ -86,6 +92,67 @@ export function resolveTo(
   id: string | null,
 ): GrinderRecord | undefined {
   return own.find((g) => g.id === id) ?? own[0];
+}
+
+/**
+ * Настройка в границах шкалы. Сохранённое значение могло остаться от другой
+ * кофемолки — тогда оно зажимается, а не выбрасывается: человек всё равно
+ * увидит его в степпере и поправит одним тапом.
+ */
+export function clampSetting(value: number, scale: GrinderScale): number {
+  if (!Number.isFinite(value)) return defaultSetting(scale);
+  return Number(Math.min(scale.max, Math.max(scale.min, value)).toFixed(4));
+}
+
+/* ── Сохранённое состояние конвертера ────────────────────────────────────── */
+
+/**
+ * Что конвертер помнит между заходами (D-9): обе кофемолки, настройку «ОТКУДА»
+ * и калибровку. Ровно из этого он и рисует ответ.
+ */
+export type ConverterState = Pick<SettingsValues, 'calib' | 'convFrom' | 'convTo' | 'convVal'>;
+
+/** Разрешённые входы конвертера: каталожная запись, настройка, своя кофемолка. */
+export interface ConverterInputs {
+  from: Grinder;
+  setting: number;
+  /** `undefined` — своих кофемолок нет, пересчитывать не во что. */
+  to: GrinderRecord | undefined;
+}
+
+/**
+ * Сохранённые настройки → входы конвертера.
+ *
+ * Одна функция на два экрана: конвертер собирает из этого `convView`, а сетап
+ * заваривания — подсказку под помолом. Пока разрешение жило на каждом экране
+ * своё, подсказка считала полосу по своей же кофемолке и показывала не то, что
+ * человек только что видел на конвертере.
+ */
+export function converterInputs(
+  own: readonly GrinderRecord[],
+  state: ConverterState,
+): ConverterInputs {
+  const from = resolveFrom(state.convFrom);
+  return {
+    from,
+    setting: clampSetting(state.convVal, from.scale),
+    to: resolveTo(own, state.convTo),
+  };
+}
+
+/**
+ * Ответ конвертера одним диапазоном — с той же калибровкой, что на его экране.
+ * `null`, когда своих кофемолок нет.
+ */
+export function converterSpan(
+  own: readonly GrinderRecord[],
+  state: ConverterState,
+): Span | null {
+  const { from, setting, to } = converterInputs(own, state);
+  if (to === undefined) return null;
+
+  const result = convertFromCatalogue(from, setting, to, state.calib.offset);
+  return { lo: result.lo, center: result.center, hi: result.hi };
 }
 
 /** Предупреждение ядра — тех-строкой под результатом. */

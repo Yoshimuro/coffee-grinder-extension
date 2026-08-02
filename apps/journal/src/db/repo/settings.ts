@@ -21,6 +21,14 @@ import {
 
 export { getSetting, putSetting };
 
+/**
+ * Дефолт настройки «ОТКУДА» — центр шкалы стартовой кофемолки конвертера
+ * (0–60 у Comandante C40 MK4), то самое «30 кликов» с макета. Экран всё равно
+ * зажимает значение по шкале выбранной молки, так что для любой другой оно
+ * останется осмысленным.
+ */
+export const DEFAULT_CONV_VAL = 30;
+
 /** Значения до первого запуска сида. Совпадают с тем, что пишет `seed()`. */
 export const DEFAULT_SETTINGS: Readonly<SettingsValues> = Object.freeze({
   lang: 'ru',
@@ -28,6 +36,7 @@ export const DEFAULT_SETTINGS: Readonly<SettingsValues> = Object.freeze({
   calib: { offset: 0, src: null },
   convFrom: null,
   convTo: null,
+  convVal: DEFAULT_CONV_VAL,
   recents: [],
 });
 

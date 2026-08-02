@@ -1,0 +1,259 @@
+/*
+ * Колесо вкусов.
+ *
+ * Единственный экран, где есть цвет, и единственный, где есть анимация длиннее
+ * мигания точки. Всё остальное — та же серая система: цвета берутся из токенов
+ * переменными, голыми пикселями записана только геометрия раскладки. Числа —
+ * из `design_handoff_brew_journal 3/Brew Journal.dc.html` (`DC:619-648`).
+ *
+ * Три литерала, которых в токенах нет и которые нужны дословно:
+ *   #0D0D0B — подпись сектора: почти чёрный, читается на любой светлоте кольца;
+ *   var(--line-5) — пунктир кнопки «+ <имя>»
+ *             в `journal.css` (кандидат в токены, помечено в S-7);
+ *   var(--muted) — приписка про интенсивность и «пока ничего».
+ */
+
+.bj-wheel {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* «ГОТОВО» — белая рамка в шапке: выход из колеса, а не «←» вслепую. */
+.bj-wheel__done {
+  display: flex;
+  align-items: center;
+  height: 40px;
+  padding: 0 14px;
+  border: 1px solid var(--text);
+  color: var(--text);
+  font-size: var(--fs-tech);
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+}
+
+/* ── Крошки ──────────────────────────────────────────────────────────────── */
+
+.bj-wheel__crumbs {
+  display: flex;
+  flex: none;
+  flex-wrap: wrap;
+  gap: 2px;
+  align-items: center;
+  min-height: 22px;
+  padding: 2px var(--pad-screen) 0;
+}
+
+.bj-wheel__crumb {
+  font-size: 9px;
+  letter-spacing: 1.5px;
+  color: var(--faint);
+}
+
+/* Уровень, на котором стоим, — светлый; пройденные тише. */
+.bj-wheel__crumb--current {
+  color: var(--text);
+}
+
+/* Пунктир — то же, чем отмечены непринятые подсказки на диагностике: это
+   предложение, а не выбранное. */
+.bj-wheel__add {
+  margin-left: auto;
+  padding: 6px 9px;
+  border: 1px dashed var(--line-5);
+  color: var(--text-secondary);
+  font-size: 8.5px;
+  letter-spacing: 1px;
+}
+
+/* ── Само колесо ─────────────────────────────────────────────────────────── */
+
+.bj-wheel__stage {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  min-height: 0;
+  padding: 4px 0;
+}
+
+/*
+ * «Приближение» — не переход между состояниями, а перерисовка уровня: React
+ * пересоздаёт узел по смене `key`, и анимация проигрывается заново. Вглубь
+ * уровень наезжает из мелкого, наверх — из крупного, поэтому кейфреймов два.
+ */
+@keyframes whzin {
+  from {
+    transform: scale(0.72);
+    opacity: 0.25;
+  }
+
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes whzout {
+  from {
+    transform: scale(1.36);
+    opacity: 0.25;
+  }
+
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.bj-wheel__zoom {
+  animation: whzin 0.32s cubic-bezier(0.22, 0.8, 0.24, 1);
+}
+
+.bj-wheel__zoom--out {
+  animation-name: whzout;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bj-wheel__zoom {
+    animation: none;
+  }
+}
+
+.bj-wheel__svg {
+  display: block;
+  max-width: 100%;
+}
+
+.bj-wheel__sector {
+  stroke: var(--bg);
+  stroke-width: 1.5;
+  cursor: pointer;
+}
+
+/* Выбранный лист — белым контуром: обводка, а не заливка, чтобы не спорить с
+   цветом сектора. */
+.bj-wheel__sector--on {
+  stroke: #fff;
+  stroke-width: 2.5;
+}
+
+/*
+ * Сектор — SVG-путь с ролью кнопки, и браузер рисует ему свою синюю рамку по
+ * прямоугольнику габаритов: на круглом секторе она превращается в коробку
+ * поперёк колеса. Гасим её и отвечаем на клавиатуру тем же языком, что и на
+ * выбор, — светлым контуром по самой дуге.
+ */
+.bj-wheel__sector:focus,
+.bj-wheel__hub:focus {
+  outline: none;
+}
+
+.bj-wheel__sector:focus-visible {
+  stroke: var(--text-secondary);
+  stroke-width: 2.5;
+}
+
+.bj-wheel__hub:focus-visible {
+  stroke: var(--text-secondary);
+}
+
+.bj-wheel__label {
+  fill: #0d0d0b;
+  font-family: inherit;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  pointer-events: none;
+}
+
+/* Память: факт, а не счётчик — одна точка, сколько бы записей за ней ни было. */
+.bj-wheel__mem {
+  fill: #fff;
+  opacity: 0.9;
+  pointer-events: none;
+}
+
+.bj-wheel__hub {
+  fill: var(--bg);
+  stroke: var(--line-4);
+  stroke-width: 1;
+  cursor: default;
+}
+
+.bj-wheel__hub--live {
+  cursor: pointer;
+}
+
+.bj-wheel__root,
+.bj-wheel__arrow,
+.bj-wheel__level {
+  font-family: inherit;
+  pointer-events: none;
+}
+
+.bj-wheel__root {
+  fill: var(--faint);
+  font-size: 9px;
+  letter-spacing: 2px;
+}
+
+.bj-wheel__arrow {
+  fill: var(--dim);
+  font-size: 13px;
+}
+
+.bj-wheel__level {
+  fill: var(--text);
+  font-size: 8.5px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+}
+
+/* ── Подсказка и подвал ──────────────────────────────────────────────────── */
+
+.bj-wheel__hint {
+  flex: none;
+  padding: 0 30px 8px;
+  font-size: 8.5px;
+  color: var(--faint);
+  line-height: 1.6;
+  text-align: center;
+}
+
+.bj-wheel__foot {
+  flex: none;
+  min-height: 88px;
+  padding: 11px var(--pad-screen) 14px;
+  border-top: 1px solid var(--line-2);
+}
+
+.bj-wheel__foot-label {
+  font-size: 9px;
+  font-weight: var(--fw-medium);
+  letter-spacing: 2px;
+  color: var(--faint);
+}
+
+.bj-wheel__foot-note {
+  color: var(--muted);
+}
+
+/* Набор растёт вниз, но подвал за экран не уезжает: после четырёх тегов список
+   начинает прокручиваться сам. */
+.bj-wheel__picked {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  max-height: 96px;
+  margin-top: 8px;
+  overflow-y: auto;
+}
+
+.bj-wheel__empty {
+  padding: 6px 0;
+  font-size: var(--fs-micro);
+  color: var(--muted);
+}

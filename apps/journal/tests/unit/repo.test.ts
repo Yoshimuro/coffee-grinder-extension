@@ -2,6 +2,7 @@ import { afterEach, describe, expect, it } from 'vitest';
 
 import {
   ALL_ENTRIES,
+  DEFAULT_CONV_VAL,
   chipLabel,
   deleteGrinder,
   filterKey,
@@ -274,6 +275,7 @@ describe('настройки', () => {
       calib: { offset: 0, src: null },
       convFrom: null,
       convTo: null,
+      convVal: DEFAULT_CONV_VAL,
       recents: [],
     });
   });

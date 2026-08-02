@@ -66,11 +66,22 @@
  * «←» в шапке: видимый прямоугольник 44×40 по макету (`DC:1247`), нажимаемый —
  * 48×48 за счёт прозрачного `::after`. Тот же приём, что у степпера и чипов;
  * без него шапка каждого вложенного экрана была на 8px выше макетной.
+ *
+ * Рамка, цвет и центровка пришли сюда из `.back` в `tokens.css` (D-10): там
+ * оставалась вторая, BJ-2 версия той же кнопки с размером 48×48, и два набора
+ * правил на одну кнопку сведены в этот.
  */
 .bj-head .back {
+  display: flex;
   position: relative;
+  flex: none;
+  align-items: center;
+  justify-content: center;
   width: 44px;
   height: 40px;
+  border: 1px solid var(--line-4);
+  color: var(--text-secondary);
+  font-size: 15px;
 }
 
 .bj-head .back::after {
