@@ -246,17 +246,42 @@ asks; there is no Play Store listing. Later builds install over earlier ones
 without an uninstall, because every APK published here is signed with the same
 key.
 
+One install cannot be updated in place: the `apk/brew-journal-debug.apk` that
+used to sit in the tree was a debug build, signed with a per-machine throwaway
+key. Android refuses a differently signed APK over an installed one — the
+installer just says the app was not installed — so that one has to be
+uninstalled first (export the journal from **ЕЩЁ → ЭКСПОРТ БАЗЫ В ФАЙЛ** before
+doing it; uninstalling takes the local database with it). Everything published
+since is on the stable key.
+
 That key lives in the repo at `apps/journal/android/keystore/sideload.jks`
 (password `sideload`) and is deliberately public. It exists to keep the
 signature stable across sideloaded builds — it is not a publishing identity, and
 anything destined for the Play Store needs a private keystore instead, supplied
 through `ANDROID_KEYSTORE_PATH`, `ANDROID_KEYSTORE_PASSWORD`, `ANDROID_KEY_ALIAS`
-and `ANDROID_KEY_PASSWORD`.
+and `ANDROID_KEY_PASSWORD`. Debug builds are signed with the same sideload key
+and never with `~/.android/debug.keystore`, so an APK off a laptop and an APK off
+CI remain interchangeable on one phone.
+
+### Versioning
+
+`versionName` and `versionCode` both come from `apps/journal/package.json`, the
+one place the app's version is written down; `versionCode` is
+`MAJOR*10000 + MINOR*100 + PATCH` (0.2.0 → `200`). The second half of an install
+failure is a version that went backwards — Android rejects an update whose
+`versionCode` is below the installed one, and that rejection looks exactly like a
+signature clash. Deriving the number from the version instead of from a build
+counter is what keeps it monotonic: two builds of the same version share a code
+(equal codes install fine), and it only climbs when the version does. A local
+build lands on the same numbers as the CI build of the same commit.
 
 `.github/workflows/release-apk.yml` builds the APK. A push to `main` (or to a
 `claude/**` branch) refreshes the rolling `android-latest` release the link above
-points at; pushing a `v*` tag publishes a permanent release for that version,
-with `versionName` taken from the tag and `versionCode` from the run number.
+points at — so that link can serve a preview build; the release notes say which
+ref it came from. Pushing a `v*` tag publishes a permanent release for that
+version, and the tag has to match `apps/journal/package.json` or the build fails.
+All rolling builds share one concurrency group, so the newest push wins the
+asset rather than two branches racing and leaving the older APK in place.
 
 Building one locally, with the Android SDK installed:
 

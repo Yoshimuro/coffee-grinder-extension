@@ -1,15 +1,51 @@
 apply plugin: 'com.android.application'
 
-// Release signing. CI (or a local build) can point at a private keystore through
-// the env vars below; with none set we fall back to the sideload keystore checked
-// into the repo. That keystore is deliberately public — it exists so every build
-// carries the same signature, which is what lets Android install an update over a
-// previously sideloaded APK instead of demanding an uninstall first. It is NOT a
-// publishing identity: do not use it for Play Store uploads.
-def releaseStorePath = System.getenv('ANDROID_KEYSTORE_PATH') ?: "${rootDir}/keystore/sideload.jks"
-def releaseStorePass = System.getenv('ANDROID_KEYSTORE_PASSWORD') ?: 'sideload'
-def releaseKeyAlias = System.getenv('ANDROID_KEY_ALIAS') ?: 'brewjournal'
-def releaseKeyPass = System.getenv('ANDROID_KEY_PASSWORD') ?: releaseStorePass
+// An env var that is set but empty is the same as unset: CI writes these from
+// step outputs, and an output that failed to resolve arrives as "".
+def envOrNull(String name) {
+    def value = System.getenv(name)
+    return (value == null || value.trim().isEmpty()) ? null : value.trim()
+}
+
+// MAJOR*10000 + MINOR*100 + PATCH — 0.2.0 becomes 200. Any pre-release suffix is
+// dropped: `versionCode` orders installs, and only the three numbers do that.
+def versionCodeOf(String version) {
+    def parts = version.tokenize('.-').take(3)
+    if (parts.size() != 3 || !parts.every { it ==~ /\d+/ }) {
+        throw new GradleException("apps/journal/package.json has an unusable version: ${version}")
+    }
+    def numbers = parts.collect { it.toInteger() }
+    return numbers[0] * 10000 + numbers[1] * 100 + numbers[2]
+}
+
+// The sideload keystore checked into the repo. It is deliberately public and
+// carries no secrecy value; what it buys is a *stable* signature, which is the
+// only reason Android will install a newer APK over an older one instead of
+// demanding an uninstall first. Every locally built APK — debug included — is
+// signed with it, so a build off a laptop and a build off CI stay
+// interchangeable on the same phone. It is NOT a publishing identity: do not
+// use it for Play Store uploads.
+def sideloadStorePath = "${rootDir}/keystore/sideload.jks"
+
+// Release signing can point at a private keystore through the env vars below;
+// with none set it falls back to the same sideload keystore.
+def releaseStorePath = envOrNull('ANDROID_KEYSTORE_PATH') ?: sideloadStorePath
+def releaseStorePass = envOrNull('ANDROID_KEYSTORE_PASSWORD') ?: 'sideload'
+def releaseKeyAlias = envOrNull('ANDROID_KEY_ALIAS') ?: 'brewjournal'
+def releaseKeyPass = envOrNull('ANDROID_KEY_PASSWORD') ?: releaseStorePass
+
+// One source of truth for the version: apps/journal/package.json. `versionCode`
+// is derived from it rather than from a build counter, so it moves only when the
+// app version moves — it can never step backwards between two builds of the same
+// release, and a local build produces exactly the number CI produces. Android
+// rejects an update whose versionCode is lower than the installed one
+// (INSTALL_FAILED_VERSION_DOWNGRADE), and that rejection is indistinguishable
+// from a signature clash: both read as «приложение не установлено» and both are
+// only cleared by uninstalling.
+def appVersion = new groovy.json.JsonSlurper()
+        .parseText(file("${rootDir}/../package.json").text)
+        .version
+def baseVersionCode = versionCodeOf(appVersion)
 
 android {
     namespace "com.kovachar.brewjournal"
@@ -18,10 +54,11 @@ android {
         applicationId "com.kovachar.brewjournal"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        // Overridden by the release workflow so each published APK outranks the last;
-        // a plain local build keeps the baseline values.
-        versionCode System.getenv('ANDROID_VERSION_CODE') ? System.getenv('ANDROID_VERSION_CODE').toInteger() : 1
-        versionName System.getenv('ANDROID_VERSION_NAME') ?: "1.0"
+        // The release workflow passes both explicitly (a preview build gets a
+        // `-build.N` suffix in the name); with nothing set, a local build lands
+        // on the same numbers as the CI build of the same commit.
+        versionCode envOrNull('ANDROID_VERSION_CODE')?.toInteger() ?: baseVersionCode
+        versionName envOrNull('ANDROID_VERSION_NAME') ?: appVersion
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         aaptOptions {
              // Files and dirs to omit from the packaged assets dir, modified to accommodate modern web apps.
@@ -30,6 +67,15 @@ android {
         }
     }
     signingConfigs {
+        // Debug keeps its own config so that pointing ANDROID_KEYSTORE_PATH at a
+        // private keystore signs the release build with it and leaves debug on
+        // the public sideload key.
+        sideload {
+            storeFile file(sideloadStorePath)
+            storePassword 'sideload'
+            keyAlias 'brewjournal'
+            keyPassword 'sideload'
+        }
         release {
             storeFile file(releaseStorePath)
             storePassword releaseStorePass
@@ -39,6 +85,13 @@ android {
     }
 
     buildTypes {
+        // Not the auto-generated ~/.android/debug.keystore: that file is created
+        // per machine (and per CI runner), so two debug APKs from two machines
+        // will not install over each other, and neither installs over a
+        // published release.
+        debug {
+            signingConfig signingConfigs.sideload
+        }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
