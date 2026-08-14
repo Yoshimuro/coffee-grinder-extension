@@ -207,4 +207,32 @@ test.describe('цикл заваривания', () => {
     await expect(page.getByTestId('grinder-row')).toHaveCount(1);
     await expect(page.getByTestId('grinder-delete')).toHaveCount(0);
   });
+  /*
+   * Правка записи «карандашиком» (BJ-12). Юниты знают про диапазоны и патчи,
+   * но не про стык: ✎ из ленты обязан открыть запись уже в режиме правки, а
+   * «ПЕРЕОЦЕНИТЬ» — вернуться в неё же, а не на главную.
+   */
+  test('✎ из ленты → правка параметров → переоценка → возврат в запись', async ({ page }) => {
+    await openApp(page);
+
+    await page.getByTestId('home-feed-edit').first().click();
+    await expect(screen(page, 'detail')).toBeVisible();
+    // Режим правки включён сразу: ячейки уже со степперами.
+    await expect(page.getByTestId('detail-inc-water')).toBeVisible();
+
+    const water = page.locator('.jr-param').filter({ hasText: 'ВОДА' });
+    const before = await water.locator('.jr-param__value').innerText();
+    await page.getByTestId('detail-inc-water').click();
+    await expect(water.locator('.jr-param__value')).not.toHaveText(before);
+
+    /* Переоценка приходит с предзаполненной заметкой и дескрипторами записи, а
+       «СОХРАНИТЬ» возвращает назад по стеку — в ту же запись. */
+    await page.getByTestId('detail-rerate').click();
+    await expect(screen(page, 'diag')).toBeVisible();
+    await page.getByTestId('diag-save').click();
+    await expect(screen(page, 'detail')).toBeVisible();
+
+    // Правка воды пережила переоценку: оценка пишет свои поля, а не всю запись.
+    await expect(water.locator('.jr-param__value')).not.toHaveText(before);
+  });
 });

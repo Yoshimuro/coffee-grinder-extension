@@ -156,6 +156,25 @@ export function pathUp(path: WheelPath): string[] {
   return path.slice(0, -1);
 }
 
+/**
+ * Уровень узла по его id: категория, подкатегория или лист.
+ *
+ * Нужен режимам, где уровень не задан путём (КАРТА, ПОЛОТНО, СПИСОК): там
+ * тапают по любому кольцу, а панель правки должна знать, что предлагать —
+ * «добавить подкатегорию», «добавить дескриптор» или ничего.
+ *
+ * `null` — id не из этого набора: скрытый правкой узел или запись из чужого
+ * архива. Тогда добавлять внутрь нечего.
+ */
+export function nodeKindOf(id: string, ws: WheelSet = BASE_WHEEL): 'cat' | 'sub' | 'desc' | null {
+  if (descById(id, ws)) return 'desc';
+  for (const cat of ws.cats) {
+    if (cat.id === id) return 'cat';
+    for (const sub of cat.sub) if (sub.id === id) return 'sub';
+  }
+  return null;
+}
+
 /* ── Крошки и «добавить отсюда» (§8.6) ───────────────────────────────────── */
 
 export interface Crumb {

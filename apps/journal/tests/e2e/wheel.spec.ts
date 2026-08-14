@@ -28,6 +28,12 @@ function sectors(page: Page) {
 /**
  * Открывает приложение с демо-данными. База чистится: `?seed=demo` кладёт
  * оценённые записи, а на них держатся точки памяти — чужой журнал сбил бы счёт.
+ *
+ * Подсказки первого входа гасятся до захода на колесо. Иначе сценарий гонится
+ * с ними: слой поднимается через 450 мс после появления зоны и перехватывает
+ * тапы — на быстрой машине тест успевал раньше, на медленной попадал в
+ * затемнение. Сами подсказки от этого не остаются без проверки: их логика
+ * покрыта юнитами `hint-view`, а показ — сценарием цикла.
  */
 async function openApp(page: Page) {
   await page.goto('/');
@@ -41,6 +47,34 @@ async function openApp(page: Page) {
   });
 
   await page.goto('/?seed=demo');
+  await expect(screen(page, 'home')).toBeVisible();
+  await expect(page.getByTestId('home-feed-row').first()).toBeVisible();
+
+  /* Пишем настройку в обход Dexie — приложение уже загружено, и своей записи
+     оно не увидит; поэтому дальше перезагружаемся. */
+  await page.evaluate(
+    async () =>
+      new Promise<void>((resolve, reject) => {
+        const req = indexedDB.open('brew-journal');
+        req.onsuccess = () => {
+          const db = req.result;
+          const tx = db.transaction('settings', 'readwrite');
+          tx.objectStore('settings').put({ key: 'hintsOn', value: false });
+          tx.oncomplete = () => {
+            db.close();
+            resolve();
+          };
+          tx.onerror = () => {
+            reject(new Error('settings write failed'));
+          };
+        };
+        req.onerror = () => {
+          reject(new Error('db open failed'));
+        };
+      }),
+  );
+
+  await page.goto('/');
   await expect(screen(page, 'home')).toBeVisible();
   await expect(page.getByTestId('home-feed-row').first()).toBeVisible();
 }
@@ -146,5 +180,57 @@ test.describe('колесо вкусов', () => {
     await page.getByTestId('wheel-crumb-0').click();
     await expect(sectors(page)).toHaveCount(9);
     await expect(page.getByTestId('wheel-add-here')).toHaveCount(0);
+  });
+  /*
+   * Режимы (BJ-12). Геометрия карты и модель списка проверены юнитами
+   * (`map-view`), поэтому здесь только то, что чистой функцией не поймать:
+   * переключатель переживает уход с экрана, а выбор из плоского списка
+   * доезжает до диагностики тем же дескриптором.
+   */
+  test('СПИСОК: выбор из чипов и режим как настройка', async ({ page }) => {
+    await openApp(page);
+    await page.getByTestId('home-rate').click();
+    await page.getByTestId('diag-to-wheel').click();
+    await expect(screen(page, 'wheel')).toBeVisible();
+
+    await page.getByTestId('wheel-mode-list').click();
+    await expect(page.getByTestId('wheel-list')).toBeVisible();
+    // Уровней больше нет: список показывает всё сразу.
+    await expect(sectors(page)).toHaveCount(0);
+
+    await page.getByTestId('wheel-list-chip-blueberry').click();
+    await expect(page.getByTestId('wheel-list-chip-blueberry')).toHaveAttribute(
+      'aria-pressed',
+      'true',
+    );
+    // Категория — такой же ответ, как лист (README:59).
+    await page.getByTestId('wheel-list-cat-sweet').click();
+
+    await page.getByTestId('wheel-done').click();
+    await expect(screen(page, 'diag')).toContainText('Черника');
+    await expect(screen(page, 'diag')).toContainText('Сладкое');
+
+    /* Режим — настройка: вернувшись на колесо, человек видит тот же список. */
+    await page.getByTestId('diag-to-wheel').click();
+    await expect(page.getByTestId('wheel-list')).toBeVisible();
+  });
+
+  test('КАРТА: зум и выбор сектора', async ({ page }) => {
+    await openApp(page);
+    await page.getByTestId('home-rate').click();
+    await page.getByTestId('diag-to-wheel').click();
+
+    await page.getByTestId('wheel-mode-map').click();
+    const map = page.getByTestId('wheel-map');
+    await expect(map).toBeVisible();
+
+    const wide = await map.locator('svg').getAttribute('width');
+    await page.getByTestId('wheel-zoom-out').click();
+    const narrow = await map.locator('svg').getAttribute('width');
+    expect(Number(narrow)).toBeLessThan(Number(wide));
+
+    await page.getByTestId('map-arc-blueberry').click();
+    await expect(page.getByTestId('map-arc-blueberry')).toHaveAttribute('aria-pressed', 'true');
+    await expect(page.getByTestId('wheel-picked')).toContainText('Черника');
   });
 });

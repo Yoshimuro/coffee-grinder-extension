@@ -281,6 +281,7 @@ describe('настройки', () => {
       hints: [],
       hintsOn: true,
       wheelEdits: [],
+      wheelMode: 'drill',
     });
   });
 

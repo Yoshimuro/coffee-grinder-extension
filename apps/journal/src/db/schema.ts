@@ -193,6 +193,12 @@ export type ThemePref = 'dark' | 'light' | 'system';
  */
 export type Theme = 'dark' | 'light';
 
+/**
+ * Каким колесо показывается: уровнями (drill-down), картой, полотном или
+ * списком (BJ-12).
+ */
+export type WheelMode = 'drill' | 'map' | 'canvas' | 'list';
+
 /** Grind offset in steps of the user's own grinder, plus where it came from. */
 export interface Calibration {
   offset: number;
@@ -257,6 +263,15 @@ export interface SettingsValues {
    * (`transfer.ts`) без единой правки формата архива.
    */
   wheelEdits: WheelEdit[];
+  /**
+   * Режим колеса вкусов (BJ-12). Настройка, а не состояние экрана: человек
+   * выбирает, как ему удобнее смотреть на колесо, и переспрашивать его об этом
+   * на каждом заходе незачем. Умолчание `drill` — то, что было до BJ-12.
+   *
+   * Ключ, а не таблица: `settings` — key/value, и новая строка в ней не трогает
+   * ни версию схемы, ни индексы; в экспорт она попадает сама (`transfer.ts`).
+   */
+  wheelMode: WheelMode;
 }
 
 export type SettingKey = keyof SettingsValues;

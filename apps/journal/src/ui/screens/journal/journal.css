@@ -752,3 +752,11 @@
   color: var(--text);
   font-weight: var(--fw-bold);
 }
+
+/* Та же история, что у колеса: в шапке записи ✎ и ПОВТОРИТЬ — один ряд. */
+[data-screen='detail'] .bj-head__right {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  justify-content: flex-end;
+}

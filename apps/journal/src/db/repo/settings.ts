@@ -15,6 +15,7 @@ import {
   type SettingKey,
   type SettingsValues,
   type ThemePref,
+  type WheelMode,
   db,
   getSetting,
   putSetting,
@@ -43,6 +44,7 @@ export const DEFAULT_SETTINGS: Readonly<SettingsValues> = Object.freeze({
   hints: [],
   hintsOn: true,
   wheelEdits: [],
+  wheelMode: 'drill',
 });
 
 /** Сколько кофемолок помнит конвертер (BJ-3, «три последних, а не вся история»). */
@@ -85,6 +87,18 @@ export function useSetting<K extends SettingKey>(key: K): SettingsValues[K] {
 /** Язык интерфейса. Отдельным хуком — его дёргает почти каждый компонент. */
 export function useLang(): Lang {
   return useSetting('lang');
+}
+
+/** Режим колеса вкусов (BJ-12). Тот же приём, что у языка: настройка живёт. */
+export function useWheelMode(): WheelMode {
+  return useSetting('wheelMode');
+}
+
+export async function setWheelMode(
+  mode: WheelMode,
+  database: BrewJournalDB = db,
+): Promise<void> {
+  await putSetting('wheelMode', mode, database);
 }
 
 /**

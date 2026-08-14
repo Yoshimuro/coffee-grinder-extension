@@ -113,16 +113,18 @@
   }
 }
 
-.bj-wheel__zoom {
+/* Приближение кольца при смене уровня. Имя с `-in`, потому что `__zoom` ниже
+   занял ряд кнопок масштаба карты (BJ-12). */
+.bj-wheel__zoom-in {
   animation: whzin 0.32s cubic-bezier(0.22, 0.8, 0.24, 1);
 }
 
-.bj-wheel__zoom--out {
+.bj-wheel__zoom-in--out {
   animation-name: whzout;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .bj-wheel__zoom {
+  .bj-wheel__zoom-in {
     animation: none;
   }
 }
@@ -372,4 +374,292 @@
   color: var(--text-secondary);
   font-size: 8.5px;
   letter-spacing: 1px;
+}
+
+/* ── Режимы колеса (BJ-12) ───────────────────────────────────────────────── */
+
+/* Ряд чипов под шапкой. Зум карты уезжает вправо — он относится только к ней. */
+.bj-wheel__modes {
+  display: flex;
+  flex: none;
+  gap: 6px;
+  align-items: center;
+  padding: 8px var(--pad-screen) 0;
+}
+
+.bj-wheel__zoom {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  margin-left: auto;
+}
+
+.bj-wheel__zoom-btn {
+  display: flex;
+  position: relative;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border: 1px solid var(--line-4);
+  color: var(--text-secondary);
+  font-size: 13px;
+  line-height: 1;
+}
+
+/* Видимых 30, нажимаемых 48 — тот же приём, что у степпера. */
+.bj-wheel__zoom-btn::after {
+  content: '';
+  position: absolute;
+  inset: -9px;
+}
+
+.bj-wheel__zoom-btn:disabled {
+  color: var(--faint);
+  cursor: default;
+}
+
+.bj-wheel__zoom-val {
+  width: 40px;
+  color: var(--faint);
+  font-size: var(--fs-tech-min);
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+}
+
+/* ── КАРТА ───────────────────────────────────────────────────────────────── */
+
+/* Полотно прокручивается в обе стороны: колесо целиком в экран не влезает ни
+   при каком масштабе — в этом и смысл режима. */
+.bj-map {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.bj-map__svg {
+  display: block;
+}
+
+.bj-map__arc {
+  stroke: var(--bg);
+  cursor: pointer;
+}
+
+/* Выбранный узел — обводкой цвета текста, как сектор в уровнях. */
+.bj-map__arc--on {
+  stroke: var(--text);
+}
+
+.bj-map__label {
+  fill: var(--wheel-ink);
+  letter-spacing: 0.3px;
+  pointer-events: none;
+  text-transform: uppercase;
+}
+
+.bj-map__mem {
+  fill: var(--wheel-mark);
+  opacity: 0.9;
+  pointer-events: none;
+}
+
+.bj-map__hub {
+  fill: var(--bg);
+  stroke: var(--line-4);
+}
+
+.bj-map__root {
+  fill: var(--faint);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+/* ── ПОЛОТНО ─────────────────────────────────────────────────────────────── */
+
+.bj-canvas {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* Мышью — перетаскиванием (курсор `grab`), пальцем — нативным скроллом. */
+.bj-canvas__pane {
+  position: absolute;
+  inset: 0;
+  overflow: auto;
+  cursor: grab;
+  -webkit-overflow-scrolling: touch;
+}
+
+.bj-canvas__pane:active {
+  cursor: grabbing;
+}
+
+/* Мини-карта: где я на панораме. Событий не ловит — двигают саму панораму. */
+.bj-mini {
+  display: flex;
+  position: absolute;
+  right: 12px;
+  bottom: 12px;
+  align-items: center;
+  justify-content: center;
+  width: 76px;
+  height: 76px;
+  border: 1px solid var(--line-4);
+  background: var(--bg);
+  pointer-events: none;
+}
+
+.bj-mini__svg {
+  display: block;
+}
+
+.bj-mini__arc {
+  stroke: var(--bg);
+  stroke-width: 1;
+}
+
+.bj-mini__vp {
+  position: absolute;
+  top: 0;
+  left: 0;
+  border: 1px solid var(--text);
+}
+
+/* ── СПИСОК ──────────────────────────────────────────────────────────────── */
+
+.bj-list {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 2px var(--pad-screen) 14px;
+  -webkit-overflow-scrolling: touch;
+}
+
+.bj-list__cat {
+  margin-top: 14px;
+}
+
+.bj-list__head {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  width: 100%;
+  min-height: var(--touch);
+  padding-bottom: 7px;
+  border-bottom: 1px solid var(--line-2);
+  color: var(--text-secondary);
+  text-align: left;
+}
+
+.bj-list__head--on {
+  color: var(--text);
+}
+
+.bj-list__dot {
+  flex: none;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.bj-list__name {
+  font-size: var(--fs-micro);
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--ls-micro);
+  text-transform: uppercase;
+}
+
+.bj-list__count {
+  margin-left: auto;
+  color: var(--muted);
+  font-size: 8.5px;
+  font-variant-numeric: tabular-nums;
+}
+
+.bj-list__sub {
+  margin-top: 10px;
+}
+
+.bj-list__subname {
+  position: relative;
+  color: var(--faint);
+  font-size: 8.5px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+}
+
+.bj-list__subname--on {
+  color: var(--text);
+}
+
+/* Подзаголовок мелкий — тач-цель добирается прозрачным `::after`. */
+.bj-list__subname::after {
+  content: '';
+  position: absolute;
+  inset: -14px -8px;
+}
+
+.bj-list__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 7px;
+}
+
+.bj-list__chip {
+  display: flex;
+  position: relative;
+  gap: 6px;
+  align-items: center;
+  min-height: 34px;
+  padding: 7px 9px;
+  border: 1px solid var(--line-4);
+  color: var(--text-secondary);
+  font-size: var(--fs-micro);
+}
+
+.bj-list__chip--on {
+  color: var(--text);
+}
+
+.bj-list__chip::after {
+  content: '';
+  position: absolute;
+  inset: -7px 0;
+}
+
+.bj-list__chip-dot {
+  flex: none;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+}
+
+/* Точка памяти в чипе — тот же знак, что у сектора: здесь уже бывали. */
+.bj-list__chip-mem {
+  flex: none;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--wheel-mark);
+  opacity: 0.9;
+}
+
+/* Шапка колеса несёт две кнопки: без флекса они встают друг под друга —
+   `.bj-head__right` по умолчанию блочный, а кнопки внутри тоже блоки. */
+[data-screen='wheel'] .bj-head__right {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+[data-screen='wheel'] .bj-head__title {
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
