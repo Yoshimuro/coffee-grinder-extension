@@ -13,8 +13,10 @@
  * 2. **В редакторе видно не всё.** Дренаж автоматический, а отметки нулевой
  *    длительности (`РАЗМЕШАТЬ`, `ОТКРЫТЬ КЛАПАН`) не длятся — крутить в них
  *    нечего. Из плана они не исчезают: таймер получает стадии целиком.
- * 3. **Имя — только у первой строки.** Дальше идут проливы, как бы они ни
- *    назывались внутри: человек правит объём и время, а не тип стадии.
+ * 3. **Стадия называется тем, что она есть.** Смачивание — смачиванием,
+ *    настаивание — настаиванием: между проливами дрипа стоит именно оно, и
+ *    подписывать его «ПРОЛИВ» значит врать про то, что человек будет делать.
+ *    Ровно эти же имена он потом увидит на таймере — расходиться им нельзя.
  */
 
 import { STR, stageName } from '../../../data/strings.js';
@@ -63,19 +65,16 @@ export interface RecipeRow {
   readonly canRemove: boolean;
 }
 
-/**
- * Строки редактора. Первая сохраняет своё имя (СМАЧИВАНИЕ, НАСТАИВАНИЕ), все
- * следующие подписаны ПРОЛИВ.
- */
+/** Строки редактора — каждая под своим именем стадии. */
 export function recipeRows(stages: readonly Stage[], lang: Lang): RecipeRow[] {
   const t = STR[lang];
   const visible = stages
     .map((stage, index) => ({ stage, index }))
     .filter(({ stage }) => isEditableStage(stage));
 
-  return visible.map(({ stage, index }, position) => ({
+  return visible.map(({ stage, index }) => ({
     index,
-    name: position === 0 ? stageName(stage[0], lang) : t.t_pour,
+    name: stageName(stage[0], lang),
     dur: fmtT(stage[1]),
     water: stageTakesWater(stage[0]) ? `${stage[2]} ${t.grams}` : null,
     canRemove: visible.length > 1,
