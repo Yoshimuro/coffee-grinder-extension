@@ -19,21 +19,33 @@ const subs = wheel.flatMap((c) => c.sub);
 const leaves = wheel.flatMap((c) => c.sub.flatMap((s) => s.d));
 
 describe('WHEEL — реестр колеса вкусов', () => {
-  it('содержит 9 категорий, 27 подкатегорий и 102 дескриптора', () => {
+  it('содержит 9 категорий, 28 подкатегорий и 109 дескрипторов', () => {
     expect(wheel).toHaveLength(9);
-    expect(subs).toHaveLength(27);
-    expect(leaves).toHaveLength(102);
+    expect(subs).toHaveLength(28);
+    expect(leaves).toHaveLength(109);
   });
 
   it('не содержит дублей id ни на одном уровне', () => {
     expect(new Set(wheel.map((c) => c.id)).size).toBe(9);
-    expect(new Set(subs.map((s) => s.id)).size).toBe(27);
-    expect(new Set(leaves.map((d) => d[0])).size).toBe(102);
+    expect(new Set(subs.map((s) => s.id)).size).toBe(28);
+    expect(new Set(leaves.map((d) => d[0])).size).toBe(109);
   });
 
   it('хранит квирки прототипа — id append-only контракт', () => {
     const ids = new Set<string>(leaves.map((d) => d[0]));
     for (const id of ['scherry', 'dapricot', 'cocoad']) expect(ids.has(id)).toBe(true);
+  });
+
+  it('переезд whisky из wine в spirits сохранил id и категорию', () => {
+    // Записи журнала хранят голые id, а цвет категорийный — значит переезд
+    // внутри ferment для истории невидим.
+    expect(DESC.whisky).toMatchObject({ cat: 'ferment', sub: 'spirits' });
+    expect(hueOf('whisky')).toEqual({ h: 310, c: 0.12 });
+  });
+
+  it('крепкое и вино пополнены новыми дескрипторами', () => {
+    for (const id of ['brandy', 'cognac', 'rum', 'liqueur', 'portwine', 'vermouth', 'champagne'])
+      expect(descById(id), id).toMatchObject({ cat: 'ferment' });
   });
 
   it('у каждой категории есть тон и цветность, а у листьев своих нет', () => {
@@ -50,8 +62,8 @@ describe('WHEEL — реестр колеса вкусов', () => {
 });
 
 describe('DESC — плоский индекс', () => {
-  it('покрывает ровно 102 дескриптора', () => {
-    expect(Object.keys(DESC)).toHaveLength(102);
+  it('покрывает ровно 109 дескрипторов', () => {
+    expect(Object.keys(DESC)).toHaveLength(109);
   });
 
   it('несёт обратные ссылки на категорию и подкатегорию и её цвет', () => {

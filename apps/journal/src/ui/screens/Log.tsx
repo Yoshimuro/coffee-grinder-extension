@@ -20,6 +20,7 @@ import { useBeans } from '../../db/repo/beans.js';
 import { ALL_ENTRIES, type LogFilter, filterKey, useEntries } from '../../db/repo/entries.js';
 import { useDevices } from '../../db/repo/devices.js';
 import { useLang } from '../../db/repo/settings.js';
+import { useWheel } from '../../db/repo/wheel.js';
 import { Chip, ChipRow } from '../components/Chip.js';
 import { EmptyState } from '../components/EmptyState.js';
 import { InverseButton } from '../components/InverseButton.js';
@@ -32,6 +33,7 @@ import './journal/journal.css';
 
 export function Log() {
   const lang = useLang();
+  const ws = useWheel();
   const t = STR[lang];
   const go = useNav((s) => s.go);
   const openEntry = useJournalView((s) => s.openEntry);
@@ -154,8 +156,8 @@ export function Log() {
                   <span className="jr-row__desc">
                     {entry.desc.map(([id]) => (
                       <span className="jr-dot" key={id}>
-                        <span className="jr-dot__mark" style={{ background: colOf(id) }} />
-                        {nameOf(id, lang)}
+                        <span className="jr-dot__mark" style={{ background: colOf(id, undefined, ws) }} />
+                        {nameOf(id, lang, ws)}
                       </span>
                     ))}
                   </span>

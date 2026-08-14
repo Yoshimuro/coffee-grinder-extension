@@ -15,6 +15,7 @@ import { useBean } from '../../db/repo/beans.js';
 import { useEntry } from '../../db/repo/entries.js';
 import { useDevice } from '../../db/repo/devices.js';
 import { useLang } from '../../db/repo/settings.js';
+import { useWheel } from '../../db/repo/wheel.js';
 import { EmptyState } from '../components/EmptyState.js';
 import { ScreenHeader } from '../components/ScreenHeader.js';
 import { compareHeading, compareRows } from './journal/compare-rows.js';
@@ -23,6 +24,7 @@ import './journal/journal.css';
 
 export function Compare() {
   const lang = useLang();
+  const ws = useWheel();
   const t = STR[lang];
   const pair = useJournalView((s) => s.pair);
 
@@ -48,6 +50,7 @@ export function Compare() {
     { entry: entryA, bean: beanA, device: deviceA },
     { entry: entryB, bean: beanB, device: deviceB },
     lang,
+    ws,
   );
 
   return (

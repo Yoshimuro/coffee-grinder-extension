@@ -22,6 +22,7 @@ import { STR } from '../../data/strings.js';
 import { colOf, nameOf } from '../../data/wheel.js';
 import { useDoneEntries } from '../../db/repo/entries.js';
 import { useLang } from '../../db/repo/settings.js';
+import { useWheel } from '../../db/repo/wheel.js';
 import { ScreenHeader } from '../components/ScreenHeader.js';
 import { Tag } from '../components/Tag.js';
 import { useRate } from './journal/rate-store.js';
@@ -42,6 +43,7 @@ type Dir = 1 | -1;
 
 export function Wheel() {
   const lang = useLang();
+  const ws = useWheel();
   const t = STR[lang];
   const back = useNav((s) => s.back);
 
@@ -58,9 +60,9 @@ export function Wheel() {
   const done = useDoneEntries();
   const memory = useMemo(() => memorySet(done ?? []), [done]);
 
-  const items = useMemo(() => wheelItems(path, lang), [path, lang]);
+  const items = useMemo(() => wheelItems(path, lang, ws), [path, lang, ws]);
   const pickedIds = useMemo(() => new Set(picked.map(([id]) => id)), [picked]);
-  const trail = crumbs(path, lang);
+  const trail = crumbs(path, lang, ws);
   const addHere = addHereTarget(path, picked);
 
   function tap(item: WheelItem): void {
@@ -122,7 +124,7 @@ export function Wheel() {
               togglePick(addHere);
             }}
           >
-            {`+ ${nameOf(addHere, lang)}`}
+            {`+ ${nameOf(addHere, lang, ws)}`}
           </button>
         )}
       </div>
@@ -162,11 +164,11 @@ export function Wheel() {
           {picked.map(([id, intensity]) => (
             <Tag
               key={id}
-              label={nameOf(id, lang)}
+              label={nameOf(id, lang, ws)}
               caps={false}
               intensity={intensity}
-              borderColor={colOf(id, 0.8)}
-              dotColor={colOf(id)}
+              borderColor={colOf(id, 0.8, ws)}
+              dotColor={colOf(id, undefined, ws)}
               onCycle={(next) => {
                 setPickIntensity(id, next);
               }}

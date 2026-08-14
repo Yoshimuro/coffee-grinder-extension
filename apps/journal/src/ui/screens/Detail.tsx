@@ -23,6 +23,7 @@ import { useBean } from '../../db/repo/beans.js';
 import { useEntry } from '../../db/repo/entries.js';
 import { useDevice } from '../../db/repo/devices.js';
 import { useLang } from '../../db/repo/settings.js';
+import { useWheel } from '../../db/repo/wheel.js';
 import type { EntryRecord, Lang } from '../../db/schema.js';
 import { fmtT } from '../../domain/format.js';
 import { EmptyState } from '../components/EmptyState.js';
@@ -66,6 +67,7 @@ function paramsOf(entry: EntryRecord, lang: Lang): Param[] {
 
 export function Detail() {
   const lang = useLang();
+  const ws = useWheel();
   const t = STR[lang];
   const go = useNav((s) => s.go);
 
@@ -160,11 +162,11 @@ export function Detail() {
               {entry.desc.map(([id, intensity]) => (
                 <Tag
                   key={id}
-                  label={nameOf(id, lang)}
+                  label={nameOf(id, lang, ws)}
                   caps={false}
                   intensity={intensity}
-                  borderColor={colOf(id, 0.8)}
-                  dotColor={colOf(id)}
+                  borderColor={colOf(id, 0.8, ws)}
+                  dotColor={colOf(id, undefined, ws)}
                 />
               ))}
             </div>

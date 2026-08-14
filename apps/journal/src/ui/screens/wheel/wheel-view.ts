@@ -12,7 +12,13 @@
  */
 
 import { STR } from '../../../data/strings.js';
-import { DESC, WHEEL, lightnessFor, nameOf } from '../../../data/wheel.js';
+import {
+  BASE_WHEEL,
+  type WheelSet,
+  descById,
+  lightnessFor,
+  nameOf,
+} from '../../../data/wheel.js';
 import type { Descriptor, EntryRecord, Lang } from '../../../db/schema.js';
 
 /* ── Геометрия (§8.3) ────────────────────────────────────────────────────── */
@@ -103,16 +109,16 @@ export function fillOf(item: WheelItem): string {
  * путь живёт в состоянии компонента и пережить может разве что горячую
  * перезагрузку, но падать на этом колесо не должно.
  */
-export function wheelItems(path: WheelPath, lang: Lang): WheelItem[] {
-  const cat = path.length > 0 ? WHEEL.find((c) => c.id === path[0]) : undefined;
+export function wheelItems(path: WheelPath, lang: Lang, ws: WheelSet = BASE_WHEEL): WheelItem[] {
+  const cat = path.length > 0 ? ws.cats.find((c) => c.id === path[0]) : undefined;
 
   if (!cat)
-    return WHEEL.map((c, i) => ({
+    return ws.cats.map((c, i) => ({
       id: c.id,
       label: c[lang],
       h: c.h,
       c: c.c,
-      l: lightnessFor(0, i, WHEEL.length),
+      l: lightnessFor(0, i, ws.cats.length),
       leaf: false,
     }));
 
@@ -163,7 +169,7 @@ export interface Crumb {
 }
 
 /** «ВСЁ / Фруктовое / Ягоды». Тап по любой возвращает на её уровень. */
-export function crumbs(path: WheelPath, lang: Lang): Crumb[] {
+export function crumbs(path: WheelPath, lang: Lang, ws: WheelSet = BASE_WHEEL): Crumb[] {
   return [
     {
       key: 'root',
@@ -173,7 +179,7 @@ export function crumbs(path: WheelPath, lang: Lang): Crumb[] {
     },
     ...path.map((id, i) => ({
       key: id,
-      label: nameOf(id, lang),
+      label: nameOf(id, lang, ws),
       current: i === path.length - 1,
       depth: i + 1,
     })),
@@ -215,13 +221,17 @@ export function memorySet(entries: readonly EntryRecord[]): Set<string> {
  * Есть ли у сектора отметка памяти.
  *
  * Лист сверяется сам с собой. Нелистовой — «внутри есть хоть один запомненный»:
- * обратные ссылки `DESC.cat`/`DESC.sub` дают ответ без обхода дерева.
+ * обратные ссылки `desc.cat`/`desc.sub` дают ответ без обхода дерева.
  */
-export function memoryHit(mem: ReadonlySet<string>, item: WheelItem): boolean {
+export function memoryHit(
+  mem: ReadonlySet<string>,
+  item: WheelItem,
+  ws: WheelSet = BASE_WHEEL,
+): boolean {
   if (mem.has(item.id)) return true;
   if (item.leaf) return false;
   for (const id of mem) {
-    const d = (DESC as Readonly<Record<string, { cat: string; sub: string } | undefined>>)[id];
+    const d = descById(id, ws);
     if (d && (d.cat === item.id || d.sub === item.id)) return true;
   }
   return false;
