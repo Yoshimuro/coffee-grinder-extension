@@ -11,7 +11,8 @@
  * различались, а обводка цветом фона превращает зазор в шов.
  */
 
-import { WHEEL, catColor, lightnessFor } from '../../../data/wheel.js';
+import { catColor, lightnessFor } from '../../../data/wheel.js';
+import { useWheel } from '../../../db/repo/wheel.js';
 import { arcPath } from '../../../domain/geometry.js';
 import './journal.css';
 
@@ -29,7 +30,8 @@ export interface MiniWheelProps {
 }
 
 export function MiniWheel({ size = 64 }: MiniWheelProps) {
-  const n = WHEEL.length;
+  const { cats } = useWheel();
+  const n = cats.length;
 
   return (
     <svg
@@ -42,7 +44,7 @@ export function MiniWheel({ size = 64 }: MiniWheelProps) {
       aria-hidden="true"
       focusable="false"
     >
-      {WHEEL.map((cat, i) => (
+      {cats.map((cat, i) => (
         <path
           key={cat.id}
           d={arcPath(CX, CY, R0, R1, TOP + (i * 2 * Math.PI) / n + GAP, TOP + ((i + 1) * 2 * Math.PI) / n - GAP)}

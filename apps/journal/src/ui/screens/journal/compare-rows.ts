@@ -21,7 +21,7 @@
  */
 
 import { STR, modeName } from '../../../data/strings.js';
-import { nameOf } from '../../../data/wheel.js';
+import { BASE_WHEEL, type WheelSet, nameOf } from '../../../data/wheel.js';
 import type { BeanRecord, DeviceRecord, EntryRecord, Lang } from '../../../db/schema.js';
 import { fmtT } from '../../../domain/format.js';
 import { deviceLabel } from '../../entry-format.js';
@@ -76,9 +76,9 @@ function rated(entry: EntryRecord, value: number): number | null {
   return entry.status === 'done' ? value : null;
 }
 
-function descList(entry: EntryRecord, lang: Lang): string | null {
+function descList(entry: EntryRecord, lang: Lang, ws: WheelSet): string | null {
   if (entry.desc.length === 0) return null;
-  return entry.desc.map(([id]) => nameOf(id, lang)).join(', ');
+  return entry.desc.map(([id]) => nameOf(id, lang, ws)).join(', ');
 }
 
 function beanName(side: CompareSide): string | null {
@@ -90,7 +90,12 @@ function beanName(side: CompareSide): string | null {
  * выбирает (зерно, девайс, режим), затем то, что он крутит, затем то, что он
  * почувствовал.
  */
-export function compareRows(a: CompareSide, b: CompareSide, lang: Lang): CompareRow[] {
+export function compareRows(
+  a: CompareSide,
+  b: CompareSide,
+  lang: Lang,
+  ws: WheelSet = BASE_WHEEL,
+): CompareRow[] {
   const t = STR[lang];
   const ea = a.entry;
   const eb = b.entry;
@@ -118,7 +123,7 @@ export function compareRows(a: CompareSide, b: CompareSide, lang: Lang): Compare
     ...SCALES.map((s) =>
       row(t[s.label], rated(ea, ea.diag[s.key]), rated(eb, eb.diag[s.key])),
     ),
-    row(t.log_desc, descList(ea, lang), descList(eb, lang)),
+    row(t.log_desc, descList(ea, lang, ws), descList(eb, lang, ws)),
     row(t.log_note, ea.note, eb.note),
   ];
 }

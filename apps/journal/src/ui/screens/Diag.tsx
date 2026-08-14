@@ -21,6 +21,7 @@ import { useBean } from '../../db/repo/beans.js';
 import { findPendingEntry, useEntry } from '../../db/repo/entries.js';
 import { useDevice } from '../../db/repo/devices.js';
 import { useLang } from '../../db/repo/settings.js';
+import { useWheel } from '../../db/repo/wheel.js';
 import { notify } from '../../platform/notify.js';
 import { speech } from '../../platform/speech.js';
 import { InverseButton } from '../components/InverseButton.js';
@@ -35,6 +36,7 @@ import './journal/journal.css';
 
 export function Diag() {
   const lang = useLang();
+  const ws = useWheel();
   const t = STR[lang];
   const setTab = useNav((s) => s.setTab);
   const go = useNav((s) => s.go);
@@ -103,7 +105,7 @@ export function Diag() {
         setNote(note ? `${note} ${heard}` : heard);
         /* Распознанное только предлагается тегами — проставлять за человека
            то, что он не выбирал, README:53 запрещает. */
-        suggest(suggestFromText(heard, lang, picked));
+        suggest(suggestFromText(heard, lang, picked, ws));
       }
     } finally {
       setListening(false);
@@ -215,7 +217,7 @@ export function Diag() {
                     className="jr-sug__chip"
                     onClick={() => acceptSuggestion(id)}
                   >
-                    {`+ ${nameOf(id, lang)}`}
+                    {`+ ${nameOf(id, lang, ws)}`}
                   </button>
                 ))}
               </div>
@@ -230,11 +232,11 @@ export function Diag() {
               {picked.map(([id, intensity]) => (
                 <Tag
                   key={id}
-                  label={nameOf(id, lang)}
+                  label={nameOf(id, lang, ws)}
                   caps={false}
                   intensity={intensity}
-                  borderColor={colOf(id, 0.8)}
-                  dotColor={colOf(id)}
+                  borderColor={colOf(id, 0.8, ws)}
+                  dotColor={colOf(id, undefined, ws)}
                   onCycle={(next) => setPickIntensity(id, next)}
                   onRemove={() => removePick(id)}
                 />

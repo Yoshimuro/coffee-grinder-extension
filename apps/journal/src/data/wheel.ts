@@ -12,6 +12,9 @@
  *
  * Цвет живёт только на категории (`h`, `c`); подкатегории и дескрипторы его
  * наследуют — глубина различается лишь светлотой (component-report §8.1).
+ *
+ * Пользовательские правки колеса накладываются поверх этой базы отдельным
+ * слоем — см. `wheel-edits.ts` и {@link WheelSet}.
  */
 
 /** Лист колеса: `[id, ru, en]`. Порядок позиционный — ru перед en. */
@@ -345,7 +348,24 @@ export const WHEEL = [
         d: [
           ['whitewine', 'Белое вино', 'White wine'],
           ['redwine', 'Красное вино', 'Red wine'],
+          ['portwine', 'Портвейн', 'Port wine'],
+          ['vermouth', 'Вермут', 'Vermouth'],
+          ['champagne', 'Игристое вино', 'Sparkling wine'],
+        ],
+      },
+      {
+        /* `whisky` переехал сюда из `wine`: id не тронут, категория та же,
+           поэтому цвет и записи журнала не меняются — контракт append-only
+           запрещает трогать id, а не позицию внутри категории. */
+        id: 'spirits',
+        ru: 'Крепкое',
+        en: 'Spirits',
+        d: [
           ['whisky', 'Виски', 'Whisky'],
+          ['brandy', 'Бренди', 'Brandy'],
+          ['cognac', 'Коньяк', 'Cognac'],
+          ['rum', 'Ром', 'Rum'],
+          ['liqueur', 'Ликёр', 'Liqueur'],
         ],
       },
       {
@@ -415,18 +435,20 @@ export const WHEEL = [
 /** `'fruit' | 'floral' | …` — 9 значений. */
 export type CategoryId = (typeof WHEEL)[number]['id'];
 
-/** `'berry' | 'citrus' | …` — 27 значений. */
+/** `'berry' | 'citrus' | …` — 28 значений. */
 export type SubId = (typeof WHEEL)[number]['sub'][number]['id'];
 
-/** `'strawberry' | 'raspberry' | …` — 102 значения, внешний ключ журнала. */
+/** `'strawberry' | 'raspberry' | …` — 109 значений, внешний ключ журнала. */
 export type DescriptorId = (typeof WHEEL)[number]['sub'][number]['d'][number][0];
 
 export interface DescriptorInfo {
   readonly ru: string;
   readonly en: string;
-  /** Обратная ссылка — путь восстанавливается без обхода дерева. */
-  readonly cat: CategoryId;
-  readonly sub: SubId;
+  /* Обратные ссылки — путь восстанавливается без обхода дерева. Строки, а не
+     union'ы: составное колесо (база + правки, `wheel-edits.ts`) несёт id,
+     которых литеральные типы базы не знают. */
+  readonly cat: string;
+  readonly sub: string;
   /** Тон и цветность родительской категории. */
   readonly h: number;
   readonly c: number;
@@ -435,12 +457,13 @@ export interface DescriptorInfo {
 /**
  * Плоская проекция листьев колеса. В прототипе это мутация `{}` в `forEach`
  * прямо при загрузке модуля — здесь чистая функция, результат заморожен
- * (data-js-report §11).
+ * (data-js-report §11). Принимает любое дерево категорий — в том числе
+ * составное, с пользовательскими правками.
  */
 export function buildDesc(
-  wheel: typeof WHEEL,
-): Readonly<Record<DescriptorId, DescriptorInfo>> {
-  const out: Partial<Record<DescriptorId, DescriptorInfo>> = {};
+  wheel: readonly WheelCategory[],
+): Readonly<Record<string, DescriptorInfo>> {
+  const out: Record<string, DescriptorInfo> = {};
   for (const cat of wheel) {
     for (const s of cat.sub) {
       for (const [id, ru, en] of s.d) {
@@ -448,17 +471,28 @@ export function buildDesc(
       }
     }
   }
-  // Каждый лист колеса записан выше, поэтому частичная карта заполнена целиком;
-  // выразить это системе типов нечем.
-  return Object.freeze(out) as Readonly<Record<DescriptorId, DescriptorInfo>>;
+  return Object.freeze(out);
 }
 
-/** `id → {ru, en, cat, sub, h, c}` по всем 102 дескрипторам. */
+/** `id → {ru, en, cat, sub, h, c}` по всем 109 дескрипторам базы. */
 export const DESC = buildDesc(WHEEL);
 
+/**
+ * Дерево плюс его плоская проекция — то, с чем работают все функции ниже и
+ * весь UI. База (`BASE_WHEEL`) — единственный набор до появления правок;
+ * составные наборы собирает `makeWheelSet` из `wheel-edits.ts`.
+ */
+export interface WheelSet {
+  readonly cats: readonly WheelCategory[];
+  readonly desc: Readonly<Record<string, DescriptorInfo>>;
+}
+
+/** База как набор — дефолт всех параметризованных функций ниже. */
+export const BASE_WHEEL: WheelSet = Object.freeze({ cats: WHEEL, desc: DESC });
+
 /** Дескриптор по произвольной строке (например, из старой записи журнала). */
-export function descById(id: string): DescriptorInfo | undefined {
-  return (DESC as Readonly<Record<string, DescriptorInfo | undefined>>)[id];
+export function descById(id: string, ws: WheelSet = BASE_WHEEL): DescriptorInfo | undefined {
+  return (ws.desc as Readonly<Record<string, DescriptorInfo | undefined>>)[id];
 }
 
 /** Цвет категории. Альфа дописывается только когда она меньше единицы. */
@@ -469,14 +503,19 @@ export function catColor(cat: WheelCategory, l = 0.7, cMul = 1, a = 1): string {
 /**
  * Тон/цветность по id любого уровня: дескриптор → его категория, иначе поиск
  * среди категорий и подкатегорий (`DC:962`). Неизвестный id даёт серый.
+ *
+ * Составной набор перед «серым» откатывается на базу: правка могла скрыть
+ * встроенный узел, но база неизменяема и знает все встроенные id — старые
+ * записи журнала не теряют цвет.
  */
-export function hueOf(id: string): { h: number; c: number } {
-  const d = descById(id);
+export function hueOf(id: string, ws: WheelSet = BASE_WHEEL): { h: number; c: number } {
+  const d = descById(id, ws);
   if (d) return { h: d.h, c: d.c };
-  for (const c of WHEEL) {
+  for (const c of ws.cats) {
     if (c.id === id) return { h: c.h, c: c.c };
     for (const s of c.sub) if (s.id === id) return { h: c.h, c: c.c };
   }
+  if (ws !== BASE_WHEEL) return hueOf(id, BASE_WHEEL);
   return { h: 0, c: 0 };
 }
 
@@ -489,13 +528,15 @@ export function hueOf(id: string): { h: number; c: number } {
  * Нужно всем, кто рисует выбранные дескрипторы, — диагностике, детали записи,
  * сравнению (BJ-4) и колесу (BJ-5), поэтому живёт рядом с данными.
  */
-export function nameOf(id: string, lang: 'ru' | 'en'): string {
-  const d = descById(id);
+export function nameOf(id: string, lang: 'ru' | 'en', ws: WheelSet = BASE_WHEEL): string {
+  const d = descById(id, ws);
   if (d) return d[lang];
-  for (const c of WHEEL) {
+  for (const c of ws.cats) {
     if (c.id === id) return c[lang];
     for (const s of c.sub) if (s.id === id) return s[lang];
   }
+  // Как и в hueOf: скрытый правкой встроенный узел называет база.
+  if (ws !== BASE_WHEEL) return nameOf(id, lang, BASE_WHEEL);
   return id;
 }
 
@@ -503,8 +544,8 @@ export function nameOf(id: string, lang: 'ru' | 'en'): string {
  * Цвет чипа-тега (`DC:963`): светлота фиксирована 0.72, цветность приглушена
  * ×0.92 — у секторов колеса своя логика, см. {@link lightnessFor}.
  */
-export function colOf(id: string, a?: number): string {
-  const { h, c } = hueOf(id);
+export function colOf(id: string, a?: number, ws: WheelSet = BASE_WHEEL): string {
+  const { h, c } = hueOf(id, ws);
   return `oklch(0.72 ${(c * 0.92).toFixed(3)} ${h}${a ? ' / ' + a : ''})`;
 }
 

@@ -20,6 +20,7 @@ import type { KeyboardEvent } from 'react';
 import { STR } from '../../../data/strings.js';
 import { nameOf } from '../../../data/wheel.js';
 import type { Lang } from '../../../db/schema.js';
+import { useWheel } from '../../../db/repo/wheel.js';
 import { arcPath } from '../../../domain/geometry.js';
 import {
   CX,
@@ -62,6 +63,7 @@ function activates(e: KeyboardEvent): boolean {
 }
 
 export function WheelSvg({ items, path, picked, memory, lang, onTap, onUp }: WheelSvgProps) {
+  const ws = useWheel();
   const t = STR[lang];
   const n = items.length;
   const fontSize = labelFontSize(n);
@@ -81,7 +83,7 @@ export function WheelSvg({ items, path, picked, memory, lang, onTap, onUp }: Whe
         const label = polar(LABEL_R, am);
         const dot = polar(MEM_R, am);
         const on = item.leaf && picked.has(item.id);
-        const remembered = memoryHit(memory, item);
+        const remembered = memoryHit(memory, item, ws);
 
         return (
           <g key={item.id}>
@@ -156,7 +158,7 @@ export function WheelSvg({ items, path, picked, memory, lang, onTap, onUp }: Whe
             ↑
           </text>
           <text className="bj-wheel__level" x={CX} y={CY + 12} textAnchor="middle">
-            {nameOf(level, lang)}
+            {nameOf(level, lang, ws)}
           </text>
         </>
       )}

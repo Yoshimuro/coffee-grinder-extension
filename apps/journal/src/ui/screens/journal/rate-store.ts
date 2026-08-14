@@ -23,7 +23,7 @@ import { create } from 'zustand';
 
 import { type Screen, useNav } from '../../../app/nav.js';
 import { isoDate, isoTime } from '../../../data/freshness.js';
-import { DESC, nameOf } from '../../../data/wheel.js';
+import { BASE_WHEEL, type WheelSet, nameOf } from '../../../data/wheel.js';
 import { makeCupEntry, putEntry, updateEntry } from '../../../db/repo/entries.js';
 import type { Descriptor, Diagnostics, Intensity, Lang } from '../../../db/schema.js';
 import { START_INTENSITY, nextIntensity } from '../../components/Tag.js';
@@ -72,12 +72,13 @@ export function suggestFromText(
   text: string,
   lang: Lang,
   picked: readonly Descriptor[] = [],
+  ws: WheelSet = BASE_WHEEL,
 ): string[] {
   const haystack = text.toLowerCase();
   const out: string[] = [];
-  for (const id of Object.keys(DESC)) {
+  for (const id of Object.keys(ws.desc)) {
     if (isPickedIn(picked, id) || out.includes(id)) continue;
-    if (haystack.includes(nameOf(id, lang).toLowerCase())) out.push(id);
+    if (haystack.includes(nameOf(id, lang, ws).toLowerCase())) out.push(id);
   }
   return out;
 }
