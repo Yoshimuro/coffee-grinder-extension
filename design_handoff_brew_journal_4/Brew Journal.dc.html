@@ -1,0 +1,1917 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&amp;display=swap" rel="stylesheet">
+<script src="./image-slot.js"></script>
+<style>
+:root{--bg:#0c0c0c;--plane:#141413;--line-1:#191917;--line-2:#1e1e1c;--line-3:#232321;--line-4:#2a2a28;--line-5:#33332f;--muted:#3f3f3b;--faint:#575752;--mid:#6e6e68;--dim:#8c8c87;--text-secondary:#b9b9b4;--text:#ededeb;--inverse-dim:#4a4a45;--desk:#080808;--wheel-ink:#0d0d0b;--wheel-mark:#fff;color-scheme:dark}
+:root[data-theme='light']{--bg:#f7f7f4;--plane:#f0f0ec;--line-1:#ebebe7;--line-2:#e5e5e1;--line-3:#dfdfda;--line-4:#d6d6d1;--line-5:#c9c9c3;--muted:#b8b8b2;--faint:#989893;--mid:#7d7d76;--dim:#61615b;--text-secondary:#3e3e39;--text:#171715;--inverse-dim:#a9a9a3;--desk:#efefec;color-scheme:light}
+body{margin:0;background:var(--desk);font-family:'JetBrains Mono',ui-monospace,monospace}
+*{box-sizing:border-box}
+a{color:var(--text)}a:hover{color:var(--dim)}
+*{scrollbar-width:none;-ms-overflow-style:none}
+*::-webkit-scrollbar{display:none;width:0;height:0}
+textarea::placeholder,input::placeholder{color:var(--faint)}
+@keyframes whzin{from{transform:scale(.72);opacity:.25}to{transform:scale(1);opacity:1}}
+@keyframes whzout{from{transform:scale(1.36);opacity:.25}to{transform:scale(1);opacity:1}}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
+</style>
+</helmet>
+<div style="min-height:100vh;display:flex;flex-direction:column;align-items:center;gap:16px;padding:30px 16px 56px;background:var(--desk);font-family:'JetBrains Mono',ui-monospace,monospace">
+  <div style="width:393px;max-width:100%;display:flex;align-items:center;gap:10px">
+    <div style="font-size:10px;letter-spacing:2px;color:var(--faint)">BREW JOURNAL</div>
+    <div style="margin-left:auto;display:flex;gap:4px;align-items:center">
+      
+      <sc-for list="{{ ctrlLang }}" as="c" hint-placeholder-count="2">
+        <div onClick="{{ c.pick }}" style="height:26px;padding:0 8px;border:1px solid var(--line-4);display:flex;align-items:center;font-size:9.5px;letter-spacing:1px;cursor:pointer;color:{{ c.col }};background:{{ c.bg }}">{{ c.label }}</div>
+      </sc-for>
+      <div style="width:8px"></div>
+      <sc-for list="{{ ctrlTheme }}" as="c" hint-placeholder-count="3">
+        <div onClick="{{ c.pick }}" style="width:26px;height:26px;border:1px solid var(--line-4);display:flex;align-items:center;justify-content:center;font-size:10px;cursor:pointer;color:{{ c.col }};background:{{ c.bg }}">{{ c.label }}</div>
+      </sc-for>
+    </div>
+  </div>
+  <x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" width="{{ phoneW }}" height="{{ phoneH }}" dark="{{ frameDark }}" hint-size="393,852">
+    <div style="height:100%;display:flex;flex-direction:column;background:var(--bg);color:var(--text);font-family:'JetBrains Mono',ui-monospace,monospace;font-size:13px;padding-top:58px;position:relative;overflow:hidden" data-bj-root="1">
+
+      <sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
+        <div data-screen-label="Home" style="flex:1;display:flex;flex-direction:column;overflow:hidden">
+          <div style="display:flex;align-items:baseline;gap:8px;padding:16px 20px 10px">
+            <div style="font-size:12px;font-weight:700;letter-spacing:3px">{{ appTitle }}</div>
+            <div style="margin-left:auto;font-size:9.5px;color:var(--faint);letter-spacing:1px">{{ todayLine }}</div>
+          </div>
+          <div style="flex:1;overflow-y:auto;padding:0 20px 24px">
+            <sc-if value="{{ pending }}" hint-placeholder-val="{{ false }}">
+              <div data-hint="home-pending" style="border:1px solid var(--line-5);margin-top:8px;padding:12px 14px;display:flex;align-items:center;gap:12px">
+                <div style="flex:1;min-width:0">
+                  <div style="font-size:12.5px">{{ pendingTitle }}</div>
+                  <div style="font-size:9.5px;color:var(--dim);margin-top:5px">{{ pendingWhen }}</div>
+                </div>
+                <div onClick="{{ ratePending }}" style="border:1px solid var(--text);padding:0 16px;height:44px;display:flex;align-items:center;font-size:10.5px;letter-spacing:2px;cursor:pointer;flex:none">{{ t.home_rate }}</div>
+              </div>
+            </sc-if>
+            <sc-if value="{{ hvC }}" hint-placeholder-val="{{ false }}">
+              <div style="display:flex;gap:8px;margin-top:14px">
+                <div onClick="{{ openBrew }}" data-hint="home-brew" style="flex:1;background:var(--text);color:var(--bg);height:60px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;letter-spacing:3px;cursor:pointer">{{ t.home_brew }}</div>
+                <div onClick="{{ openConv }}" data-hint="home-conv" style="width:60px;border:1px solid var(--line-4);display:flex;align-items:center;justify-content:center;font-size:15px;color:var(--text-secondary);cursor:pointer">⇄</div>
+              </div>
+              <div onClick="{{ openTaste }}" data-hint="home-taste" style="margin-top:8px;border:1px solid var(--line-4);height:48px;display:flex;align-items:center;justify-content:center;font-size:10px;letter-spacing:2px;color:var(--text-secondary);cursor:pointer">{{ tasteLabel }}</div>
+              <div style="margin-top:20px">
+                <div style="font-size:10px;letter-spacing:2px;color:var(--faint);font-weight:500;padding-bottom:9px;border-bottom:1px solid var(--line-2)">{{ t.log_title }}</div>
+                <sc-for list="{{ feedRows }}" as="r" hint-placeholder-count="4">
+                  <div onClick="{{ r.open }}" style="display:flex;gap:12px;padding:13px 0;border-bottom:1px solid var(--line-1);cursor:pointer">
+                    <div style="font-size:9.5px;color:var(--faint);width:42px;flex:none;padding-top:2px">{{ r.date }}</div>
+                    <div style="flex:1;min-width:0">
+                      <div style="font-size:12px">{{ r.title }}</div>
+                      <div style="font-size:9.5px;color:var(--dim);margin-top:4px">{{ r.sub }}</div>
+                    </div>
+                    <div style="font-size:10.5px;color:var(--text-secondary);flex:none">{{ r.mark }}</div>
+                    <div onClick="{{ r.edit }}" style="align-self:center;width:28px;height:28px;border:1px solid var(--line-4);display:flex;align-items:center;justify-content:center;color:var(--text-secondary);cursor:pointer;flex:none;font-size:11px">✎</div>
+                  </div>
+                </sc-for>
+              </div>
+            </sc-if>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isConv }}" hint-placeholder-val="{{ false }}">
+        <div data-screen-label="Converter" style="flex:1;display:flex;flex-direction:column;overflow:hidden">
+          <div style="display:flex;align-items:center;gap:12px;padding:10px 16px;border-bottom:1px solid var(--line-2);flex:none">
+            <div onClick="{{ back }}" style="width:44px;height:40px;border:1px solid var(--line-4);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--text-secondary)">←</div>
+            <div style="font-size:11.5px;font-weight:700;letter-spacing:2.5px">{{ t.conv_title }}</div>
+            <div style="margin-left:auto;font-size:9px;color:var(--faint);letter-spacing:1px">{{ dbCountLine }}</div>
+          </div>
+          <div style="flex:1;overflow-y:auto;padding:18px 20px 28px">
+            <div style="font-size:10px;letter-spacing:2px;color:var(--dim);font-weight:500">{{ t.conv_from }}</div>
+            <div onClick="{{ gPickToggle }}" data-hint="conv-from" style="border:1px solid var(--line-4);padding:13px 14px;font-size:12.5px;margin-top:9px;display:flex;justify-content:space-between;align-items:center;gap:10px;cursor:pointer;min-height:48px">
+              <div style="min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ fromName }}</div>
+              <span style="color:var(--faint);font-size:10px;flex:none">▾</span>
+            </div>
+            <sc-if value="{{ gPickOpen }}" hint-placeholder-val="{{ false }}">
+              <div style="border:1px solid var(--line-5);border-top:none">
+                <input value="{{ gQueryVal }}" onChange="{{ setGQuery }}" placeholder="EK43, Comandante, Ode…" style="width:100%;background:none;border:none;border-bottom:1px solid var(--line-2);color:var(--text);padding:12px 14px;font-size:12px;outline:none;border-radius:0;font-family:inherit">
+                <div style="max-height:236px;overflow-y:auto">
+                  <sc-for list="{{ dbRows }}" as="g" hint-placeholder-count="5">
+                    <div onClick="{{ g.pick }}" style="display:flex;justify-content:space-between;gap:10px;padding:12px 14px;border-bottom:1px solid var(--line-1);cursor:pointer;border-left:2px solid {{ g.bc }}">
+                      <div style="font-size:11.5px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ g.name }}</div>
+                      <div style="font-size:9px;color:var(--faint);flex:none">{{ g.meta }}</div>
+                    </div>
+                  </sc-for>
+                </div>
+              </div>
+            </sc-if>
+            <div style="display:flex;gap:8px;margin-top:8px">
+              <div onClick="{{ convDec }}" style="width:56px;height:54px;border:1px solid var(--line-4);display:flex;align-items:center;justify-content:center;font-size:19px;color:var(--text-secondary);cursor:pointer">−</div>
+              <div style="flex:1;height:54px;border:1px solid var(--line-4);display:flex;align-items:center;justify-content:center;font-size:21px">{{ convVal }}</div>
+              <div onClick="{{ convInc }}" style="width:56px;height:54px;border:1px solid var(--line-4);display:flex;align-items:center;justify-content:center;font-size:19px;color:var(--text-secondary);cursor:pointer">+</div>
+            </div>
+            <div style="font-size:10px;color:var(--dim);margin-top:9px">{{ convTech }}</div>
+            <div style="height:1px;background:var(--line-2);margin:20px 0 18px"></div>
+            <div style="display:flex;align-items:baseline;gap:8px"><div style="font-size:10px;letter-spacing:2px;color:var(--dim);font-weight:500">{{ t.conv_to }}</div><div style="font-size:9px;color:var(--faint)">{{ toHint }}</div></div>
+            <div onClick="{{ cycleTo }}" style="border:1px solid var(--line-4);padding:13px 14px;font-size:12.5px;margin-top:9px;display:flex;justify-content:space-between;align-items:center;cursor:pointer">{{ toName }}<span style="color:var(--faint);font-size:11px">›</span></div>
+            <div style="display:flex;align-items:baseline;gap:12px;margin-top:22px">
+              <div style="font-size:46px;font-weight:300;letter-spacing:-1px;font-variant-numeric:tabular-nums">{{ rangeLo }}—{{ rangeHi }}</div>
+              <div style="font-size:10.5px;letter-spacing:2px;color:var(--dim)">{{ rangeUnit }}</div>
+            </div>
+            <div data-hint="conv-band" style="height:2px;background:var(--line-3);position:relative;margin-top:14px">
+              <div style="position:absolute;left:{{ bandL }}%;width:{{ bandW }}%;top:-2px;height:6px;background:var(--mid)"></div>
+              <div style="position:absolute;left:{{ centerPct }}%;top:-5px;width:2px;height:12px;background:var(--text)"></div>
+            </div>
+            <div style="display:flex;justify-content:space-between;font-size:9px;color:var(--muted);margin-top:6px"><div>0</div><div>{{ scaleMax }}</div></div>
+            <div style="font-size:10px;color:var(--dim);margin-top:14px">{{ centerLine }}</div>
+            <sc-if value="{{ hasCalib }}" hint-placeholder-val="{{ false }}">
+              <div style="display:flex;align-items:center;gap:10px;margin-top:8px">
+                <div style="font-size:10px;color:var(--text-secondary)">{{ calibLine }}</div>
+                <div onClick="{{ calReset }}" style="font-size:9px;letter-spacing:1.5px;color:var(--faint);cursor:pointer;border-bottom:1px solid var(--line-5)">{{ t.conv_cal_reset }}</div>
+              </div>
+            </sc-if>
+            <sc-if value="{{ calOpen }}" hint-placeholder-val="{{ false }}">
+              <div style="border:1px solid var(--line-5);margin-top:18px;padding:14px">
+                <div style="font-size:11.5px">{{ t.conv_cal_q }}</div>
+                <div style="font-size:9.5px;color:var(--dim);margin-top:6px">{{ calSuggestLine }}</div>
+                <div style="display:flex;gap:8px;margin-top:12px">
+                  <div onClick="{{ calDec }}" style="width:50px;height:48px;border:1px solid var(--line-4);display:flex;align-items:center;justify-content:center;font-size:17px;color:var(--text-secondary);cursor:pointer">−</div>
+                  <div style="flex:1;height:48px;border:1px solid var(--line-4);display:flex;align-items:center;justify-content:center;font-size:18px">{{ calVal }}</div>
+                  <div onClick="{{ calInc }}" style="width:50px;height:48px;border:1px solid var(--line-4);display:flex;align-items:center;justify-content:center;font-size:17px;color:var(--text-secondary);cursor:pointer">+</div>
+                </div>
+                <div style="font-size:9px;color:var(--faint);margin-top:9px">{{ t.conv_cal_hint }}</div>
+                <div style="display:flex;gap:8px;margin-top:12px">
+                  <div onClick="{{ calApply }}" style="flex:1;background:var(--text);color:var(--bg);height:46px;display:flex;align-items:center;justify-content:center;font-size:10.5px;letter-spacing:2px;font-weight:700;cursor:pointer">{{ t.conv_cal_apply }}</div>
+                  <div onClick="{{ toggleCal }}" style="width:110px;border:1px solid var(--line-4);height:46px;display:flex;align-items:center;justify-content:center;font-size:10.5px;letter-spacing:2px;color:var(--dim);cursor:pointer">✕</div>
+                </div>
+              </div>
+            </sc-if>
+            <div style="display:flex;gap:8px;margin-top:22px">
+              <div onClick="{{ toggleCal }}" data-hint="conv-cal" style="flex:1;border:1px solid var(--line-4);height:52px;display:flex;align-items:center;justify-content:center;font-size:10.5px;letter-spacing:2px;color:var(--text-secondary);cursor:pointer">{{ t.conv_calibrate }}</div>
+              <div onClick="{{ useInBrew }}" data-hint="conv-use" style="flex:1;background:var(--text);color:var(--bg);height:52px;display:flex;align-items:center;justify-content:center;font-size:10.5px;letter-spacing:2px;font-weight:700;cursor:pointer;text-align:center">{{ t.conv_use }}</div>
+            </div>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isShelf }}" hint-placeholder-val="{{ false }}">
+        <div data-screen-label="Shelf" style="flex:1;display:flex;flex-direction:column;overflow:hidden">
+          <div style="display:flex;align-items:center;gap:12px;padding:16px 20px 10px;flex:none">
+            <div style="font-size:12px;font-weight:700;letter-spacing:3px">{{ t.shelf_title }}</div>
+            <div style="margin-left:auto;font-size:9.5px;color:var(--faint)">{{ shelfCount }}</div>
+          </div>
+          <div style="flex:1;overflow-y:auto;padding:6px 20px 24px">
+            <div style="display:flex;flex-direction:column;gap:10px">
+              <sc-for list="{{ shelfCards }}" as="s" hint-placeholder-count="3">
+                <div onClick="{{ s.open }}" style="border:1px solid var(--line-3);padding:8px;cursor:pointer;display:flex;gap:12px;align-items:stretch">
+                  <div style="width:118px;height:118px;flex:none;position:relative"><image-slot id="{{ s.slotId }}" shape="rect" placeholder="{{ s.ph }}"></image-slot></div>
+                  <div style="flex:1;min-width:0;display:flex;flex-direction:column;justify-content:center;gap:7px;padding-right:4px">
+                    <div style="font-size:12.5px;line-height:1.4">{{ s.name }}</div>
+                    <div style="font-size:9px;color:var(--dim);line-height:1.6">{{ s.tech }}</div>
+                  </div>
+                </div>
+              </sc-for>
+              <div data-hint="shelf-add" style="border:1px dashed var(--line-5);display:flex;gap:8px;padding:10px">
+                <div onClick="{{ addPhoto }}" style="flex:1;border:1px solid var(--line-4);min-height:48px;display:flex;align-items:center;justify-content:center;font-size:9.5px;letter-spacing:1.5px;color:var(--text-secondary);cursor:pointer;text-align:center">{{ t.shelf_add_bean }}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isBean }}" hint-placeholder-val="{{ false }}">
+        <div data-screen-label="Bean" style="flex:1;display:flex;flex-direction:column;overflow:hidden">
+          <div style="display:flex;align-items:center;gap:12px;padding:10px 16px;border-bottom:1px solid var(--line-2);flex:none">
+            <div onClick="{{ back }}" style="width:44px;height:40px;border:1px solid var(--line-4);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--text-secondary)">←</div>
+            <div style="font-size:11.5px;font-weight:700;letter-spacing:2px;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ beanName }}</div>
+            <div style="border:1px solid var(--line-5);padding:5px 8px;font-size:8.5px;letter-spacing:1.5px;color:var(--dim);flex:none">{{ beanFormTag }}</div>
+          </div>
+          <div style="flex:1;overflow-y:auto;padding:16px 0 28px">
+            <div style="display:flex;flex-direction:column;gap:8px;padding:0 20px">
+              <sc-for list="{{ beanSlots }}" as="p" hint-placeholder-count="2">
+                <div style="height:300px;position:relative;border:1px solid var(--line-3)"><image-slot id="{{ p.sid }}" shape="rect" placeholder="{{ p.ph }}"></image-slot></div>
+              </sc-for>
+              <div style="height:56px;border:1px dashed var(--line-4);display:flex;align-items:center;justify-content:center;font-size:9px;letter-spacing:1.5px;color:var(--faint);cursor:pointer">+ {{ t.bean_add_photo }}</div>
+            </div>
+            <div style="font-size:9px;color:var(--faint);padding:9px 20px 0">{{ t.bean_photos_hint }}</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1px;background:var(--line-2);border-top:1px solid var(--line-2);border-bottom:1px solid var(--line-2);margin-top:16px">
+              <sc-for list="{{ beanStats }}" as="st" hint-placeholder-count="3">
+                <div style="background:var(--bg);padding:13px 12px">
+                  <div style="font-size:8.5px;letter-spacing:1.5px;color:var(--faint);font-weight:500">{{ st.label }}</div>
+                  <div style="font-size:14px;margin-top:7px;font-variant-numeric:tabular-nums">{{ st.val }}</div>
+                </div>
+              </sc-for>
+            </div>
+            <div style="padding:0 20px">
+              <sc-for list="{{ beanRows }}" as="r" hint-placeholder-count="2">
+                <div style="display:flex;justify-content:space-between;gap:12px;padding:13px 0;border-bottom:1px solid var(--line-1)">
+                  <div style="font-size:9.5px;letter-spacing:1.5px;color:var(--faint)">{{ r.label }}</div>
+                  <div style="font-size:11.5px;text-align:right">{{ r.val }}</div>
+                </div>
+              </sc-for>
+              <sc-if value="{{ beanDripNote }}" hint-placeholder-val="{{ false }}">
+                <div style="font-size:9.5px;color:var(--faint);padding:12px 0 0">{{ t.bean_dose_fixed }}</div>
+              </sc-if>
+              <div data-hint="bean-brews" style="margin-top:22px">
+                <div style="font-size:10px;letter-spacing:2px;color:var(--faint);font-weight:500;padding-bottom:9px;border-bottom:1px solid var(--line-2)">{{ t.bean_brews }}</div>
+                <sc-for list="{{ beanBrews }}" as="r" hint-placeholder-count="2">
+                  <div onClick="{{ r.open }}" style="display:flex;gap:12px;padding:12px 0;border-bottom:1px solid var(--line-1);cursor:pointer;align-items:baseline">
+                    <div style="font-size:9.5px;color:var(--faint);width:42px;flex:none">{{ r.date }}</div>
+                    <div style="flex:1;font-size:11px;color:var(--text-secondary);min-width:0">{{ r.sub }}</div>
+                    <div style="font-size:10.5px;color:var(--text-secondary);flex:none">{{ r.mark }}</div>
+                  </div>
+                </sc-for>
+              </div>
+              <div onClick="{{ brewThis }}" style="margin-top:20px;background:var(--text);color:var(--bg);height:54px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;letter-spacing:2.5px;cursor:pointer">{{ t.home_brew }}</div>
+            </div>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isBeanAdd }}" hint-placeholder-val="{{ false }}">
+        <div data-screen-label="Add pack" style="flex:1;display:flex;flex-direction:column;overflow:hidden">
+          <div style="display:flex;align-items:center;gap:12px;padding:10px 16px;border-bottom:1px solid var(--line-2);flex:none">
+            <div onClick="{{ back }}" style="width:44px;height:40px;border:1px solid var(--line-4);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--text-secondary)">←</div>
+            <div style="font-size:11.5px;font-weight:700;letter-spacing:2.5px">{{ t.shelf_add }}</div>
+          </div>
+          <div style="flex:1;overflow-y:auto;padding:16px 20px 28px">
+            <div style="font-size:10px;letter-spacing:2px;color:var(--dim);font-weight:500">{{ t.bean_form }}</div>
+            <div data-hint="bean-forms" style="display:flex;gap:6px;margin-top:9px">
+              <sc-for list="{{ addFormChips }}" as="c" hint-placeholder-count="3">
+                <div onClick="{{ c.pick }}" style="flex:1;height:44px;border:1px solid {{ c.bc }};color:{{ c.fg }};display:flex;align-items:center;justify-content:center;font-size:9.5px;letter-spacing:1.5px;cursor:pointer">{{ c.label }}</div>
+              </sc-for>
+            </div>
+            <div data-hint="bean-shots" style="height:216px;position:relative;margin-top:16px;border:1px solid var(--line-3)"><image-slot id="new-pack" shape="rect" placeholder="{{ addSlotPh }}"></image-slot></div>
+            <div style="font-size:9px;color:var(--faint);margin-top:8px">{{ addPhotoHint }}</div>
+            <div style="margin-top:18px" data-hint="bean-roast-row">
+              <div style="font-size:10px;letter-spacing:2px;color:var(--dim);font-weight:500">{{ t.bean_roast }}</div>
+              <div style="display:flex;gap:8px;align-items:stretch;margin-top:9px">
+                <input value="{{ addRoastVal }}" onChange="{{ setAddRoast }}" inputMode="numeric" placeholder="27.07.2026" style="flex:1;min-width:0;background:none;border:1px solid var(--line-4);color:var(--text);padding:14px;font-size:13px;outline:none;font-variant-numeric:tabular-nums;font-family:inherit;border-radius:0">
+                <div onClick="{{ calToggle }}" style="width:48px;border:1px solid var(--line-4);display:flex;align-items:center;justify-content:center;color:var(--text-secondary);cursor:pointer;flex:none">
+                  <svg viewBox="0 0 12 12" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1"><rect x="1" y="2.5" width="10" height="8.5"></rect><path d="M1 5H11"></path><path d="M3.5 1V3.5M8.5 1V3.5"></path><rect x="3" y="7" width="1.4" height="1.4" fill="currentColor" stroke="none"></rect><rect x="5.6" y="7" width="1.4" height="1.4" fill="currentColor" stroke="none"></rect><rect x="8.2" y="7" width="1.4" height="1.4" fill="currentColor" stroke="none"></rect></svg>
+                </div>
+              </div>
+              <sc-if value="{{ calOpenAdd }}" hint-placeholder-val="{{ false }}">
+                <div style="margin-top:10px;padding:10px 10px 8px;border:1px solid var(--line-5)">
+                  <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;padding-bottom:8px;border-bottom:1px solid var(--line-2)">
+                    <div onClick="{{ calPrev }}" style="width:40px;height:32px;border:1px solid {{ calPrevBc }};color:{{ calPrevFg }};display:flex;align-items:center;justify-content:center;font-size:13px;cursor:pointer;flex:none">←</div>
+                    <div style="flex:1;min-width:0;text-align:center;font-size:10px;font-weight:500;letter-spacing:2px;color:var(--text-secondary);text-transform:uppercase">{{ calTitle }}</div>
+                    <div onClick="{{ calNext }}" style="width:40px;height:32px;border:1px solid {{ calNextBc }};color:{{ calNextFg }};display:flex;align-items:center;justify-content:center;font-size:13px;cursor:pointer;flex:none">→</div>
+                  </div>
+                  <div style="display:grid;grid-template-columns:repeat(7,1fr);padding:9px 0;border-bottom:1px solid var(--line-1);font-size:8.5px;letter-spacing:1.5px;color:var(--faint);text-align:center;text-transform:uppercase">
+                    <sc-for list="{{ calWeek }}" as="w" hint-placeholder-count="7"><div>{{ w }}</div></sc-for>
+                  </div>
+                  <div style="display:grid;grid-template-columns:repeat(7,1fr);margin-top:2px">
+                    <sc-for list="{{ calCells }}" as="d" hint-placeholder-count="31">
+                      <div onClick="{{ d.pick }}" style="min-height:40px;display:flex;align-items:center;justify-content:center;font-size:12px;font-variant-numeric:tabular-nums;color:{{ d.fg }};border:1px solid {{ d.bc }};cursor:{{ d.cur }}">{{ d.label }}</div>
+                    </sc-for>
+                  </div>
+                </div>
+              </sc-if>
+            </div>
+            <div style="margin-top:16px">
+              <div style="font-size:10px;letter-spacing:2px;color:var(--dim);font-weight:500">{{ addAmtLabel }}</div>
+              <div style="display:flex;gap:8px;margin-top:9px">
+                <div onClick="{{ addAmtDec }}" style="width:56px;height:52px;border:1px solid var(--line-4);display:flex;align-items:center;justify-content:center;font-size:18px;color:var(--text-secondary);cursor:pointer">−</div>
+                <div style="flex:1;height:52px;border:1px solid var(--line-4);display:flex;align-items:baseline;justify-content:center;gap:6px;padding-top:14px"><span style="font-size:19px">{{ addAmtVal }}</span><span style="font-size:9.5px;color:var(--dim)">{{ addAmtUnit }}</span></div>
+                <div onClick="{{ addAmtInc }}" style="width:56px;height:52px;border:1px solid var(--line-4);display:flex;align-items:center;justify-content:center;font-size:18px;color:var(--text-secondary);cursor:pointer">+</div>
+              </div>
+            </div>
+            <div style="margin-top:16px">
+              <div style="font-size:10px;letter-spacing:2px;color:var(--dim);font-weight:500">{{ t.bean_name }}</div>
+              <input value="{{ addNameVal }}" onChange="{{ setAddName }}" placeholder="—" style="width:100%;margin-top:9px;background:none;border:1px solid var(--line-4);color:var(--text);padding:14px;font-size:13px;outline:none">
+            </div>
+            <div onClick="{{ addSave }}" style="margin-top:22px;background:{{ addSaveBg }};color:{{ addSaveFg }};height:54px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;letter-spacing:2.5px;cursor:{{ addSaveCur }}">{{ t.bean_save }}</div>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isDevices }}" hint-placeholder-val="{{ false }}">
+        <div data-screen-label="Devices" style="flex:1;display:flex;flex-direction:column;overflow:hidden">
+          <div style="display:flex;align-items:center;gap:12px;padding:10px 16px;border-bottom:1px solid var(--line-2);flex:none">
+            <div onClick="{{ back }}" style="width:44px;height:40px;border:1px solid var(--line-4);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--text-secondary)">←</div>
+            <div style="font-size:11.5px;font-weight:700;letter-spacing:2.5px">{{ t.dev_title }}</div>
+            <div onClick="{{ newDev }}" data-hint="devices-new" style="margin-left:auto;border:1px solid var(--line-5);padding:0 12px;height:40px;display:flex;align-items:center;font-size:9.5px;letter-spacing:1.5px;color:var(--text-secondary);cursor:pointer">+ {{ t.dev_new }}</div>
+          </div>
+          <div style="flex:1;overflow-y:auto;padding:8px 20px 24px">
+            <sc-for list="{{ devRows }}" as="d" hint-placeholder-count="3">
+              <div onClick="{{ d.open }}" style="display:flex;gap:14px;align-items:center;padding:14px 0;border-bottom:1px solid var(--line-1);cursor:pointer">
+                <div style="width:62px;flex:none">{{ d.svg }}</div>
+                <div style="flex:1;min-width:0">
+                  <div style="font-size:12.5px">{{ d.name }}</div>
+                  <div style="font-size:8.5px;color:var(--dim);margin-top:5px;line-height:1.6">{{ d.line }}</div>
+                </div>
+                <div style="color:var(--muted);flex:none">→</div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isDevice }}" hint-placeholder-val="{{ false }}">
+        <div data-screen-label="Constructor" style="flex:1;display:flex;flex-direction:column;overflow:hidden">
+          <div style="display:flex;align-items:center;gap:12px;padding:10px 16px;border-bottom:1px solid var(--line-2);flex:none">
+            <div onClick="{{ back }}" style="width:44px;height:40px;border:1px solid var(--line-4);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--text-secondary)">←</div>
+            <div style="font-size:11.5px;font-weight:700;letter-spacing:2.5px">{{ t.dev_edit }}</div>
+            <div onClick="{{ saveDev }}" style="margin-left:auto;border:1px solid var(--text);padding:0 14px;height:40px;display:flex;align-items:center;font-size:9.5px;letter-spacing:1.5px;cursor:pointer">{{ t.dev_save }}</div>
+          </div>
+          <div style="flex:1;overflow-y:auto;padding:16px 20px 28px">
+            <div style="border:1px solid var(--line-3);padding:18px 12px 10px;display:flex;flex-direction:column;align-items:center">
+              {{ draftSvg }}
+              <div style="font-size:8.5px;color:var(--dim);margin-top:8px;letter-spacing:1px;text-align:center">{{ draftCaption }}</div>
+            </div>
+            <div style="font-size:9px;color:var(--faint);margin-top:8px">{{ draftNote }}</div>
+            <sc-if value="{{ devIsNew }}" hint-placeholder-val="{{ false }}">
+              <div style="margin-top:16px" data-hint="device-presets">
+                <div style="font-size:10px;letter-spacing:2px;color:var(--dim);font-weight:500">{{ presetsLabel }}</div>
+                <div style="display:flex;gap:6px;margin-top:9px">
+                  <sc-for list="{{ devPresets }}" as="p" hint-placeholder-count="3">
+                    <div onClick="{{ p.pick }}" style="flex:1;height:38px;border:1px solid var(--line-4);color:var(--dim);display:flex;align-items:center;justify-content:center;font-size:9.5px;letter-spacing:1.2px;cursor:pointer">{{ p.label }}</div>
+                  </sc-for>
+                </div>
+              </div>
+            </sc-if>
+            <div style="margin-top:16px">
+              <div style="font-size:10px;letter-spacing:2px;color:var(--dim);font-weight:500">{{ t.dev_name }}</div>
+              <input value="{{ draftNameVal }}" onChange="{{ setDraftName }}" placeholder="—" style="width:100%;margin-top:9px;background:none;border:1px solid var(--line-4);color:var(--text);padding:13px;font-size:13px;outline:none">
+            </div>
+            <sc-for list="{{ traitRows }}" as="tr" hint-placeholder-count="6">
+              <div style="margin-top:16px" data-hint="trait-{{ tr.key }}">
+                <div style="font-size:10px;letter-spacing:2px;color:var(--dim);font-weight:500">{{ tr.label }}</div>
+                <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:9px">
+                  <sc-for list="{{ tr.opts }}" as="o" hint-placeholder-count="4">
+                    <div onClick="{{ o.pick }}" style="border:1px solid {{ o.bc }};color:{{ o.fg }};padding:0 11px;height:38px;display:flex;align-items:center;font-size:9.5px;letter-spacing:1.2px;cursor:pointer">{{ o.label }}</div>
+                  </sc-for>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isBrew }}" hint-placeholder-val="{{ false }}">
+        <div data-screen-label="Brew setup" style="flex:1;display:flex;flex-direction:column;overflow:hidden">
+          <div style="display:flex;align-items:center;gap:12px;padding:10px 16px;border-bottom:1px solid var(--line-2);flex:none">
+            <div onClick="{{ back }}" style="width:44px;height:40px;border:1px solid var(--line-4);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--text-secondary)">←</div>
+            <div style="font-size:11.5px;font-weight:700;letter-spacing:2.5px">{{ t.brew_title }}</div>
+            <div style="margin-left:auto;font-size:9.5px;color:var(--faint)">{{ ratioLine }}</div>
+          </div>
+          <div style="flex:1;overflow-y:auto;padding:16px 20px 28px">
+            <div style="font-size:10px;letter-spacing:2px;color:var(--dim);font-weight:500">{{ t.brew_bean }}</div>
+            <div data-hint="brew-beans" style="display:flex;flex-direction:column;gap:6px;margin-top:9px">
+              <sc-for list="{{ pickBeans }}" as="b" hint-placeholder-count="3">
+                <div onClick="{{ b.pick }}" style="border:1px solid {{ b.bc }};padding:11px 13px;display:flex;align-items:center;gap:10px;cursor:pointer;min-height:48px">
+                  <div style="flex:1;min-width:0">
+                    <div style="font-size:12px;color:{{ b.fg }}">{{ b.name }}</div>
+                    <div style="font-size:8.5px;color:var(--dim);margin-top:4px">{{ b.tech }}</div>
+                  </div>
+                  <div style="border:1px solid var(--line-4);padding:4px 7px;font-size:8px;letter-spacing:1.5px;color:var(--dim);flex:none">{{ b.tag }}</div>
+                </div>
+              </sc-for>
+              <div onClick="{{ addBeanGo }}" style="border:1px dashed var(--line-5);padding:0 13px;height:44px;display:flex;align-items:center;font-size:9.5px;letter-spacing:1.5px;color:var(--dim);cursor:pointer">{{ addBeanLabel }}</div>
+            </div>
+            <sc-if value="{{ dripNote }}" hint-placeholder-val="{{ false }}">
+              <div style="font-size:9.5px;color:var(--faint);margin-top:12px">{{ t.brew_drip_note }}</div>
+            </sc-if>
+            <sc-if value="{{ showDevice }}" hint-placeholder-val="{{ false }}">
+              <div data-hint="brew-devices" style="margin-top:18px">
+                <div style="font-size:10px;letter-spacing:2px;color:var(--dim);font-weight:500">{{ t.brew_device }}</div>
+                <div style="display:flex;flex-direction:column;gap:6px;margin-top:9px">
+                  <sc-for list="{{ pickDevs }}" as="d" hint-placeholder-count="3">
+                    <div onClick="{{ d.pick }}" style="border:1px solid {{ d.bc }};padding:8px 13px;display:flex;align-items:center;gap:12px;cursor:pointer;min-height:52px">
+                      <div style="width:56px;flex:none">{{ d.svg }}</div>
+                      <div style="flex:1;font-size:12px;color:{{ d.fg }}">{{ d.name }}</div>
+                    </div>
+                  </sc-for>
+                  <div onClick="{{ newDev }}" style="border:1px dashed var(--line-5);padding:0 13px;height:44px;display:flex;align-items:center;font-size:9.5px;letter-spacing:1.5px;color:var(--dim);cursor:pointer">{{ addDevLabel }}</div>
+                </div>
+              </div>
+            </sc-if>
+            <sc-if value="{{ isHybridSel }}" hint-placeholder-val="{{ false }}">
+              <div style="margin-top:18px">
+                <div style="font-size:10px;letter-spacing:2px;color:var(--dim);font-weight:500">{{ t.brew_valve }}</div>
+                <div style="display:flex;gap:6px;margin-top:9px">
+                  <sc-for list="{{ hyChips }}" as="c" hint-placeholder-count="3">
+                    <div onClick="{{ c.pick }}" style="flex:1;border:1px solid {{ c.bc }};color:{{ c.fg }};height:44px;display:flex;align-items:center;justify-content:center;font-size:8.5px;letter-spacing:1px;cursor:pointer;text-align:center;padding:0 6px">{{ c.label }}</div>
+                  </sc-for>
+                </div>
+                <div style="font-size:9px;color:var(--faint);margin-top:8px">{{ t.brew_valve_hint }}</div>
+                <sc-if value="{{ showValve }}" hint-placeholder-val="{{ false }}">
+                  <div style="display:flex;gap:8px;margin-top:10px;align-items:center">
+                    <div onClick="{{ valveDec }}" style="width:48px;height:46px;border:1px solid var(--line-4);display:flex;align-items:center;justify-content:center;font-size:16px;color:var(--text-secondary);cursor:pointer">−</div>
+                    <div style="flex:1;height:46px;border:1px solid var(--line-4);display:flex;align-items:center;justify-content:center;font-size:15px">{{ valveVal }}</div>
+                    <div onClick="{{ valveInc }}" style="width:48px;height:46px;border:1px solid var(--line-4);display:flex;align-items:center;justify-content:center;font-size:16px;color:var(--text-secondary);cursor:pointer">+</div>
+                  </div>
+                </sc-if>
+              </div>
+            </sc-if>
+            <sc-if value="{{ showGrind }}" hint-placeholder-val="{{ false }}">
+              <div style="margin-top:18px">
+                <div style="font-size:10px;letter-spacing:2px;color:var(--dim);font-weight:500">{{ t.brew_grind }}</div>
+                <div style="display:flex;gap:8px;margin-top:9px">
+                  <div onClick="{{ grindDec }}" style="width:56px;height:52px;border:1px solid var(--line-4);display:flex;align-items:center;justify-content:center;font-size:18px;color:var(--text-secondary);cursor:pointer">−</div>
+                  <input type="text" inputMode="decimal" value="{{ grindVal }}" onChange="{{ setGrind }}" onBlur="{{ grindBlur }}" style="flex:1;height:52px;min-width:0;background:none;border:1px solid var(--line-4);color:var(--text);text-align:center;font-size:19px;font-variant-numeric:tabular-nums;font-family:inherit;outline:none;border-radius:0">
+                  <div onClick="{{ grindInc }}" style="width:56px;height:52px;border:1px solid var(--line-4);display:flex;align-items:center;justify-content:center;font-size:18px;color:var(--text-secondary);cursor:pointer">+</div>
+                </div>
+                <div data-hint="brew-grind-hint" style="font-size:9px;color:var(--faint);margin-top:8px">{{ grindHint }}</div>
+              </div>
+            </sc-if>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px 10px;margin-top:18px">
+              <sc-if value="{{ doseVar }}" hint-placeholder-val="{{ true }}">
+                <div>
+                  <div style="font-size:10px;letter-spacing:2px;color:var(--dim);font-weight:500">{{ t.brew_dose }}</div>
+                  <div style="display:flex;gap:6px;margin-top:9px">
+                    <div onClick="{{ doseDec }}" style="width:42px;height:48px;border:1px solid var(--line-4);display:flex;align-items:center;justify-content:center;font-size:15px;color:var(--text-secondary);cursor:pointer">−</div>
+                    <div style="flex:1;height:48px;border:1px solid var(--line-4);display:flex;align-items:center;justify-content:center;font-size:15px">{{ doseVal }}</div>
+                    <div onClick="{{ doseInc }}" style="width:42px;height:48px;border:1px solid var(--line-4);display:flex;align-items:center;justify-content:center;font-size:15px;color:var(--text-secondary);cursor:pointer">+</div>
+                  </div>
+                </div>
+              </sc-if>
+              <div>
+                <div style="font-size:10px;letter-spacing:2px;color:var(--dim);font-weight:500">{{ t.brew_water }}</div>
+                <div style="display:flex;gap:6px;margin-top:9px">
+                  <div onClick="{{ waterDec }}" style="width:42px;height:48px;border:1px solid var(--line-4);display:flex;align-items:center;justify-content:center;font-size:15px;color:var(--text-secondary);cursor:pointer">−</div>
+                  <div style="flex:1;height:48px;border:1px solid var(--line-4);display:flex;align-items:center;justify-content:center;font-size:15px">{{ waterVal }}</div>
+                  <div onClick="{{ waterInc }}" style="width:42px;height:48px;border:1px solid var(--line-4);display:flex;align-items:center;justify-content:center;font-size:15px;color:var(--text-secondary);cursor:pointer">+</div>
+                </div>
+              </div>
+              <div>
+                <div style="font-size:10px;letter-spacing:2px;color:var(--dim);font-weight:500">{{ t.brew_temp }}</div>
+                <div style="display:flex;gap:6px;margin-top:9px">
+                  <div onClick="{{ tempDec }}" style="width:42px;height:48px;border:1px solid var(--line-4);display:flex;align-items:center;justify-content:center;font-size:15px;color:var(--text-secondary);cursor:pointer">−</div>
+                  <div style="flex:1;height:48px;border:1px solid var(--line-4);display:flex;align-items:center;justify-content:center;font-size:15px">{{ tempVal }}</div>
+                  <div onClick="{{ tempInc }}" style="width:42px;height:48px;border:1px solid var(--line-4);display:flex;align-items:center;justify-content:center;font-size:15px;color:var(--text-secondary);cursor:pointer">+</div>
+                </div>
+              </div>
+              <sc-if value="{{ showPours }}" hint-placeholder-val="{{ false }}">
+                <div>
+                  <div style="font-size:10px;letter-spacing:2px;color:var(--dim);font-weight:500">{{ t.brew_pours }}</div>
+                  <div style="display:flex;gap:6px;margin-top:9px">
+                    <div onClick="{{ poursDec }}" style="width:42px;height:48px;border:1px solid var(--line-4);display:flex;align-items:center;justify-content:center;font-size:15px;color:var(--text-secondary);cursor:pointer">−</div>
+                    <div style="flex:1;height:48px;border:1px solid var(--line-4);display:flex;align-items:center;justify-content:center;font-size:15px">{{ poursVal }}</div>
+                    <div onClick="{{ poursInc }}" style="width:42px;height:48px;border:1px solid var(--line-4);display:flex;align-items:center;justify-content:center;font-size:15px;color:var(--text-secondary);cursor:pointer">+</div>
+                  </div>
+                </div>
+              </sc-if>
+            </div>
+            <div style="margin-top:20px" data-hint="brew-recipe">
+              <div style="display:flex;align-items:baseline;gap:8px">
+                <div style="font-size:10px;letter-spacing:2px;color:var(--dim);font-weight:500">{{ t.rec_title }}</div>
+                <sc-if value="{{ recTouched }}" hint-placeholder-val="{{ false }}">
+                  <div onClick="{{ recReset }}" style="margin-left:auto;font-size:9px;letter-spacing:1.5px;color:var(--faint);cursor:pointer;border-bottom:1px solid var(--line-5);flex:none">{{ t.rec_auto }}</div>
+                </sc-if>
+              </div>
+              <div style="margin-top:9px;border-top:1px solid var(--line-2)">
+                <sc-for list="{{ recRows }}" as="s" hint-placeholder-count="4">
+                  <div style="display:flex;gap:6px;align-items:center;padding:6px 0;border-bottom:1px solid var(--line-1)">
+                    <div style="flex:1;min-width:0;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;font-size:10px;letter-spacing:1.5px">{{ s.name }}</div>
+                    <div style="display:flex;gap:3px;align-items:center;flex:none">
+                      <div onClick="{{ s.durDec }}" style="width:26px;height:30px;border:1px solid var(--line-4);display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--text-secondary);cursor:pointer">−</div>
+                      <div style="width:40px;text-align:center;font-size:11px;font-variant-numeric:tabular-nums">{{ s.dur }}</div>
+                      <div onClick="{{ s.durInc }}" style="width:26px;height:30px;border:1px solid var(--line-4);display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--text-secondary);cursor:pointer">+</div>
+                    </div>
+                    <sc-if value="{{ s.hasWater }}" hint-placeholder-val="{{ true }}">
+                      <div style="display:flex;gap:3px;align-items:center;flex:none">
+                        <div onClick="{{ s.watDec }}" style="width:26px;height:30px;border:1px solid var(--line-4);display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--text-secondary);cursor:pointer">−</div>
+                        <div style="width:44px;text-align:center;font-size:11px;font-variant-numeric:tabular-nums">{{ s.wat }}</div>
+                        <div onClick="{{ s.watInc }}" style="width:26px;height:30px;border:1px solid var(--line-4);display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--text-secondary);cursor:pointer">+</div>
+                      </div>
+                    </sc-if>
+                    <sc-if value="{{ s.noWater }}" hint-placeholder-val="{{ false }}">
+                      <div style="width:102px;text-align:center;font-size:10px;color:var(--muted);flex:none">—</div>
+                    </sc-if>
+                    <div onClick="{{ s.remove }}" style="width:24px;height:30px;display:flex;align-items:center;justify-content:center;color:{{ s.remC }};cursor:{{ s.remCur }};flex:none">×</div>
+                  </div>
+                </sc-for>
+              </div>
+              <div onClick="{{ recAdd }}" style="border:1px dashed var(--line-5);height:40px;display:flex;align-items:center;justify-content:center;font-size:9.5px;letter-spacing:1.5px;color:var(--dim);cursor:pointer;margin-top:8px">+ {{ t.t_pour }}</div>
+              <div style="display:flex;gap:12px;margin-top:8px;font-size:9px;color:var(--faint)">
+                <div style="font-variant-numeric:tabular-nums">{{ recTotal }}</div>
+                <sc-if value="{{ recWaterOff }}" hint-placeholder-val="{{ false }}"><div style="font-variant-numeric:tabular-nums">{{ recWaterNote }}</div></sc-if>
+              </div>
+            </div>
+            <div onClick="{{ startBrew }}" data-hint="brew-start" style="margin-top:24px;background:var(--text);color:var(--bg);height:58px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;letter-spacing:3.5px;cursor:pointer">{{ t.brew_start }}</div>
+            <div onClick="{{ logManual }}" style="margin-top:8px;border:1px solid var(--line-4);height:50px;display:flex;flex-direction:column;gap:4px;align-items:center;justify-content:center;cursor:pointer">
+              <div style="font-size:10px;letter-spacing:2px;color:var(--text-secondary)">{{ t.brew_manual }}</div>
+              <div style="font-size:8.5px;color:var(--faint)">{{ t.brew_manual_hint }}</div>
+            </div>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isTimer }}" hint-placeholder-val="{{ false }}">
+        <div data-screen-label="Timer" style="flex:1;display:flex;flex-direction:column;padding:0 20px;overflow:hidden">
+          <div style="display:flex;align-items:center;gap:12px;padding:10px 0;flex:none">
+            <div onClick="{{ tCancel }}" style="width:44px;height:40px;border:1px solid var(--line-4);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--faint)">✕</div>
+            <div style="font-size:10px;color:var(--dim);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ tBeanLine }}</div>
+            <div style="font-size:8.5px;color:var(--muted);letter-spacing:1px;flex:none">{{ t.t_awake }}</div>
+          </div>
+          <div id="bj-el" style="text-align:center;font-size:74px;font-weight:300;letter-spacing:-2px;margin-top:10px;font-variant-numeric:tabular-nums">{{ tElapsed }}</div>
+          <div style="text-align:center;font-size:9.5px;color:var(--faint);margin-top:2px">{{ tTargetLine }}</div>
+          <div id="bj-segs" style="display:flex;gap:3px;height:6px;margin-top:26px">
+            <sc-for list="{{ tSegs }}" as="s" hint-placeholder-count="4">
+              <div style="width:{{ s.w }}%;position:relative;background:var(--line-3);overflow:hidden"><div style="position:absolute;left:0;top:0;bottom:0;width:{{ s.fill }}%;background:var(--text)"></div></div>
+            </sc-for>
+          </div>
+          <div style="text-align:center;margin-top:36px">
+            <div style="font-size:9px;letter-spacing:2px;color:var(--faint)">{{ tStageNum }}</div>
+            <div style="font-size:29px;font-weight:700;letter-spacing:4px;margin-top:10px">{{ tStageName }}</div>
+            <div id="bj-left" style="font-size:14px;color:var(--text-secondary);margin-top:12px;font-variant-numeric:tabular-nums">{{ tStageEl }}</div>
+            <div style="font-size:10px;color:var(--faint);margin-top:8px;font-variant-numeric:tabular-nums">{{ tStageRec }}</div>
+          </div>
+          <div style="text-align:center;font-size:9.5px;color:var(--faint);margin-top:22px">{{ tNextLine }}</div>
+          <div style="flex:1"></div>
+          <sc-if value="{{ tPauseShow }}" hint-placeholder-val="{{ false }}">
+            <div onClick="{{ tPause }}" style="height:52px;border:1px solid var(--line-4);display:flex;align-items:center;justify-content:center;font-size:10.5px;letter-spacing:2.5px;color:var(--text-secondary);cursor:pointer;margin-bottom:8px">{{ tPauseLabel }}</div>
+          </sc-if>
+          <div onClick="{{ tAdv }}" style="height:88px;background:var(--text);color:var(--bg);display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:700;letter-spacing:3.5px;cursor:pointer;margin-bottom:34px">{{ tBtnLabel }}</div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isRateLater }}" hint-placeholder-val="{{ false }}">
+        <div data-screen-label="Rate later" style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 36px;text-align:center">
+          <div style="width:6px;height:6px;background:var(--text)"></div>
+          <div style="font-size:15px;font-weight:700;letter-spacing:3px;margin-top:18px">{{ t.rate_later_t }}</div>
+          <div style="font-size:11px;color:var(--dim);margin-top:14px;line-height:1.7;max-width:280px">{{ t.rate_later_s }}</div>
+          <div onClick="{{ rlNow }}" data-hint="rate-later" style="margin-top:30px;background:var(--text);color:var(--bg);padding:0 26px;height:52px;display:flex;align-items:center;font-size:10.5px;letter-spacing:2px;font-weight:700;cursor:pointer">{{ rlNowLabel }}</div>
+          <div onClick="{{ rlOk }}" style="margin-top:8px;border:1px solid var(--line-4);padding:0 26px;height:48px;display:flex;align-items:center;font-size:10.5px;letter-spacing:2px;color:var(--text-secondary);cursor:pointer">{{ rlLaterLabel }}</div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isDiag }}" hint-placeholder-val="{{ false }}">
+        <div data-screen-label="Diagnostics" style="flex:1;display:flex;flex-direction:column;overflow:hidden">
+          <div style="display:flex;align-items:center;gap:12px;padding:10px 16px;border-bottom:1px solid var(--line-2);flex:none">
+            <div onClick="{{ back }}" style="width:44px;height:40px;border:1px solid var(--line-4);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--text-secondary)">←</div>
+            <div style="font-size:11.5px;font-weight:700;letter-spacing:2.5px">{{ t.diag_title }}</div>
+            <div style="margin-left:auto;font-size:9.5px;color:var(--faint)">{{ diagCtx }}</div>
+          </div>
+          <div style="flex:1;overflow-y:auto;padding:16px 20px 28px">
+            <div style="font-size:9.5px;color:var(--faint)">{{ diagSubLine }}</div>
+            <sc-if value="{{ isTasting }}" hint-placeholder-val="{{ false }}">
+              <div style="margin-top:14px">
+                <div style="font-size:10px;letter-spacing:2px;color:var(--dim);font-weight:500">{{ tasteNameLabel }}</div>
+                <input value="{{ tasteNameVal }}" onChange="{{ setTasteName }}" placeholder="{{ tasteNamePh }}" style="width:100%;margin-top:9px;background:none;border:1px solid var(--line-4);color:var(--text);padding:13px;font-size:13px;outline:none;border-radius:0">
+              </div>
+            </sc-if>
+            <div data-hint="diag-scales">
+            <sc-for list="{{ diagRows }}" as="r" hint-placeholder-count="4">
+              <div style="margin-top:18px">
+                <div style="display:flex;justify-content:space-between;align-items:baseline">
+                  <div style="font-size:10px;letter-spacing:2px;color:var(--dim);font-weight:500">{{ r.label }}</div>
+                  <div style="font-size:12px;color:var(--text-secondary);font-variant-numeric:tabular-nums">{{ r.val }}</div>
+                </div>
+                <div style="display:flex;gap:3px;margin-top:9px">
+                  <sc-for list="{{ r.cells }}" as="c" hint-placeholder-count="11">
+                    <div onClick="{{ c.set }}" style="flex:1;height:32px;background:{{ c.bg }};border:1px solid var(--line-3);cursor:pointer"></div>
+                  </sc-for>
+                </div>
+              </div>
+            </sc-for>
+            </div>
+            <div onClick="{{ toWheel }}" data-hint="diag-to-wheel" style="border:1px solid var(--line-5);margin-top:22px;padding:14px;display:flex;align-items:center;gap:16px;cursor:pointer">
+              <div style="flex:none">{{ miniWheel }}</div>
+              <div style="flex:1;min-width:0">
+                <div style="font-size:12.5px;font-weight:700;letter-spacing:1px">{{ wheelCtaTitle }}</div>
+                <div style="font-size:9.5px;color:var(--dim);margin-top:6px;line-height:1.6">{{ wheelCtaSub }}</div>
+              </div>
+              <div style="color:var(--faint);flex:none">→</div>
+            </div>
+            <div data-hint="diag-note" style="margin-top:20px">
+              <div style="font-size:10px;letter-spacing:2px;color:var(--dim);font-weight:500">{{ t.note_label }}</div>
+              <div style="display:flex;gap:8px;margin-top:9px">
+                <textarea value="{{ noteVal }}" onChange="{{ setNote }}" placeholder="{{ t.note_ph }}" style="flex:1;background:none;border:1px solid var(--line-4);color:var(--text);padding:12px;font-size:12px;min-height:78px;resize:none;outline:none;line-height:1.6"></textarea>
+                <div onClick="{{ micGo }}" style="width:76px;border:1px solid {{ micBc }};display:flex;flex-direction:column;gap:7px;align-items:center;justify-content:center;cursor:pointer;flex:none">
+                  <div style="width:10px;height:10px;border-radius:50%;background:{{ micDot }};animation:{{ micAnim }}"></div>
+                  <div style="font-size:8px;letter-spacing:1.5px;color:var(--dim)">{{ t.note_mic }}</div>
+                </div>
+              </div>
+              <sc-if value="{{ hasSug }}" hint-placeholder-val="{{ false }}">
+                <div style="display:flex;gap:6px;margin-top:9px;flex-wrap:wrap;align-items:center">
+                  <div style="font-size:8.5px;color:var(--faint);letter-spacing:1px">{{ t.note_mic_hint }}</div>
+                </div>
+                <div style="display:flex;gap:6px;margin-top:7px;flex-wrap:wrap">
+                  <sc-for list="{{ sugChips }}" as="s" hint-placeholder-count="2">
+                    <div onClick="{{ s.add }}" style="border:1px dashed var(--line-5);padding:8px 11px;font-size:10px;color:var(--text-secondary);cursor:pointer">{{ s.label }}</div>
+                  </sc-for>
+                </div>
+              </sc-if>
+            </div>
+            <sc-if value="{{ hasPicked }}" hint-placeholder-val="{{ false }}">
+              <div style="margin-top:18px">
+                <div style="font-size:9.5px;letter-spacing:2px;color:var(--faint);font-weight:500">{{ t.wheel_picked }} {{ pickedCount }}</div>
+                <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:9px">
+                  <sc-for list="{{ pickedChips }}" as="p" hint-placeholder-count="2">
+                    <div style="border:1px solid {{ p.bc }};display:flex;align-items:center;height:38px">
+                      <div onClick="{{ p.cycle }}" style="display:flex;align-items:center;gap:7px;padding:0 10px;cursor:pointer">
+                        <div style="font-size:10.5px">{{ p.name }}</div>
+                        <div style="font-size:9px;color:{{ p.dotCol }};letter-spacing:1px">{{ p.dots }}</div>
+                      </div>
+                      <div onClick="{{ p.remove }}" style="width:28px;height:100%;display:flex;align-items:center;justify-content:center;color:var(--faint);cursor:pointer;border-left:1px solid var(--line-3)">×</div>
+                    </div>
+                  </sc-for>
+                </div>
+              </div>
+            </sc-if>
+            <div onClick="{{ saveDiag }}" style="margin-top:22px;background:var(--text);color:var(--bg);height:54px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;letter-spacing:2.5px;cursor:pointer">{{ t.diag_save }}</div>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isWheel }}" hint-placeholder-val="{{ false }}">
+        <div data-screen-label="Flavor wheel" style="flex:1;display:flex;flex-direction:column;overflow:hidden">
+          <div style="display:flex;align-items:center;gap:12px;padding:10px 16px;flex:none">
+            <div onClick="{{ back }}" style="width:44px;height:40px;border:1px solid var(--line-4);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--text-secondary)">←</div>
+            <div style="font-size:11.5px;font-weight:700;letter-spacing:2.5px">{{ t.wheel_title }}</div>
+            <div onClick="{{ wheelEditToggle }}" style="margin-left:auto;height:40px;padding:0 14px;border:1px solid {{ weBc }};color:{{ weFg }};display:flex;align-items:center;font-size:9.5px;letter-spacing:1.5px;cursor:pointer">{{ t.wheel_edit }}</div>
+            <div onClick="{{ wheelDone }}" style="border:1px solid var(--text);padding:0 14px;height:40px;display:flex;align-items:center;font-size:9.5px;letter-spacing:1.5px;cursor:pointer">{{ t.wheel_done }}</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:6px;padding:8px 20px 0;flex:none">
+            <sc-for list="{{ wModeChips }}" as="c" hint-placeholder-count="3">
+              <div onClick="{{ c.pick }}" style="padding:7px 10px;border:1px solid {{ c.bc }};color:{{ c.fg }};font-size:8.5px;letter-spacing:1.2px;cursor:pointer">{{ c.label }}</div>
+            </sc-for>
+            <sc-if value="{{ wIsMap }}" hint-placeholder-val="{{ false }}">
+              <div style="margin-left:auto;display:flex;gap:4px;align-items:center">
+                <div onClick="{{ mapZoomOut }}" style="width:30px;height:30px;border:1px solid var(--line-4);display:flex;align-items:center;justify-content:center;color:var(--text-secondary);cursor:pointer;font-size:13px">−</div>
+                <div style="width:40px;text-align:center;font-size:9px;color:var(--faint);font-variant-numeric:tabular-nums">{{ mapZoomPct }}</div>
+                <div onClick="{{ mapZoomIn }}" style="width:30px;height:30px;border:1px solid var(--line-4);display:flex;align-items:center;justify-content:center;color:var(--text-secondary);cursor:pointer;font-size:13px">+</div>
+              </div>
+            </sc-if>
+          </div>
+          <sc-if value="{{ wIsDrill }}" hint-placeholder-val="{{ true }}">
+          <div style="display:flex;align-items:center;gap:2px;padding:2px 20px 0;flex-wrap:wrap;min-height:22px">
+            <sc-for list="{{ crumbs }}" as="c" hint-placeholder-count="1">
+              <div onClick="{{ c.jump }}" style="font-size:9px;letter-spacing:1.5px;color:{{ c.col }};cursor:pointer">{{ c.label }}</div>
+            </sc-for>
+            <sc-if value="{{ canAddHere }}" hint-placeholder-val="{{ false }}">
+              <div onClick="{{ addHere }}" data-hint="wheel-add-here" style="margin-left:auto;border:1px dashed var(--line-5);padding:6px 9px;font-size:8.5px;letter-spacing:1px;color:var(--text-secondary);cursor:pointer">{{ addHereLabel }}</div>
+            </sc-if>
+          </div>
+          <div data-hint="wheel-stage" style="flex:1;display:flex;align-items:center;justify-content:center;min-height:0;padding:4px 0">{{ wheelEl }}</div>
+          </sc-if>
+          <sc-if value="{{ wIsMap }}" hint-placeholder-val="{{ false }}">
+            <div id="bj-map" style="flex:1;min-height:0;overflow:auto">
+              <div style="width:{{ mapW }}px;height:{{ mapW }}px">{{ mapEl }}</div>
+            </div>
+          </sc-if>
+          <sc-if value="{{ wIsList }}" hint-placeholder-val="{{ false }}">
+            <div style="flex:1;min-height:0;overflow-y:auto;padding:2px 20px 14px">
+              <sc-for list="{{ listCats }}" as="lc" hint-placeholder-count="3">
+                <div style="margin-top:14px">
+                  <div onClick="{{ lc.tap }}" style="display:flex;align-items:center;gap:8px;padding-bottom:7px;border-bottom:1px solid var(--line-2);cursor:pointer">
+                    <div style="width:8px;height:8px;border-radius:50%;background:{{ lc.color }}"></div>
+                    <div style="font-size:10px;letter-spacing:2px;font-weight:700;color:{{ lc.fg }}">{{ lc.name }}</div>
+                    <div style="margin-left:auto;font-size:8.5px;color:var(--muted);font-variant-numeric:tabular-nums">{{ lc.count }}</div>
+                  </div>
+                  <sc-for list="{{ lc.subs }}" as="ls" hint-placeholder-count="3">
+                    <div style="margin-top:10px">
+                      <div onClick="{{ ls.tap }}" style="display:inline-block;font-size:8.5px;letter-spacing:1.5px;color:{{ ls.fg }};cursor:pointer;text-transform:uppercase">{{ ls.name }}</div>
+                      <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:7px">
+                        <sc-for list="{{ ls.chips }}" as="d" hint-placeholder-count="6">
+                          <div onClick="{{ d.tap }}" style="border:1px solid {{ d.bc }};color:{{ d.fg }};padding:7px 9px;font-size:10px;cursor:pointer;display:flex;align-items:center;gap:6px"><div style="width:6px;height:6px;border-radius:50%;background:{{ d.dot }}"></div>{{ d.label }}<sc-if value="{{ d.mem }}" hint-placeholder-val="{{ false }}"><div style="width:4px;height:4px;border-radius:50%;background:var(--wheel-mark);opacity:0.9"></div></sc-if></div>
+                        </sc-for>
+                      </div>
+                    </div>
+                  </sc-for>
+                </div>
+              </sc-for>
+            </div>
+          </sc-if>
+          <sc-if value="{{ wIsCanvas }}" hint-placeholder-val="{{ false }}">
+            <div style="flex:1;min-height:0;position:relative;overflow:hidden">
+              <div id="bj-canvas" onPointerDown="{{ cnvDown }}" onPointerMove="{{ cnvMove }}" onPointerUp="{{ cnvUp }}" onPointerLeave="{{ cnvUp }}" onScroll="{{ cnvScroll }}" style="position:absolute;inset:0;overflow:auto;cursor:grab">
+                <div style="width:{{ cnvW }}px;height:{{ cnvW }}px">{{ cnvEl }}</div>
+              </div>
+              <div style="position:absolute;right:12px;bottom:12px;width:76px;height:76px;border:1px solid var(--line-4);background:var(--bg);display:flex;align-items:center;justify-content:center;pointer-events:none">
+                {{ cnvMini }}
+                <div id="bj-cnv-vp" style="position:absolute;left:0;top:0;width:24px;height:34px;border:1px solid var(--text);pointer-events:none"></div>
+              </div>
+            </div>
+          </sc-if>
+          <div style="text-align:center;font-size:8.5px;color:var(--faint);padding:0 30px 8px;line-height:1.6">{{ wheelHintLine }}</div>
+          <sc-if value="{{ wheelEditNode }}" hint-placeholder-val="{{ false }}">
+            <div style="border-top:1px solid var(--line-2);padding:11px 20px 14px;min-height:88px;flex:none">
+              <sc-if value="{{ nodeNone }}" hint-placeholder-val="{{ true }}">
+                <div style="padding:6px 0;font-size:10px;color:var(--muted)">{{ t.wheel_map_edit_hint }}</div>
+              </sc-if>
+              <sc-if value="{{ nodeSome }}" hint-placeholder-val="{{ false }}">
+                <div style="display:flex;gap:8px;align-items:center;min-height:28px">
+                  <div style="flex:none;width:7px;height:7px;border-radius:50%;background:{{ nodeDot }}"></div>
+                  <sc-if value="{{ nodeRenaming }}" hint-placeholder-val="{{ false }}">
+                    <input value="{{ weRenameVal }}" onChange="{{ setWeRename }}" autoFocus="{{ true }}" style="flex:1;min-width:0;padding:3px 6px;border:1px solid var(--line-4);background:none;color:var(--text);font-family:inherit;font-size:10px;outline:none;border-radius:0">
+                    <div onClick="{{ nodeRenameOk }}" style="padding:2px 8px;border:1px solid var(--line-5);color:var(--text);font-size:10px;letter-spacing:1px;cursor:pointer;flex:none">OK</div>
+                    <div onClick="{{ nodeCancel }}" style="padding:2px 6px;color:var(--muted);font-size:10px;cursor:pointer;flex:none">✕</div>
+                  </sc-if>
+                  <sc-if value="{{ nodeHiding }}" hint-placeholder-val="{{ false }}">
+                    <div style="flex:1;overflow:hidden;font-size:10px;letter-spacing:0.5px;white-space:nowrap;text-overflow:ellipsis">{{ nodeName }}</div>
+                    <div style="color:var(--muted);font-size:10px;flex:none">{{ t.wheel_hide_q }}</div>
+                    <div onClick="{{ nodeHideYes }}" style="padding:2px 8px;border:1px solid var(--line-5);color:var(--text);font-size:10px;letter-spacing:1px;cursor:pointer;flex:none">{{ delYes }}</div>
+                    <div onClick="{{ nodeCancel }}" style="padding:2px 6px;color:var(--muted);font-size:10px;cursor:pointer;flex:none">✕</div>
+                  </sc-if>
+                  <sc-if value="{{ nodePlain }}" hint-placeholder-val="{{ true }}">
+                    <div style="flex:1;overflow:hidden;font-size:10px;letter-spacing:0.5px;white-space:nowrap;text-overflow:ellipsis">{{ nodeName }}</div>
+                    <div onClick="{{ nodeRenameStart }}" style="flex:none;padding:2px 8px;color:var(--muted);font-size:12px;cursor:pointer">✎</div>
+                    <div onClick="{{ nodeHideStart }}" style="flex:none;padding:2px 8px;color:var(--muted);font-size:12px;cursor:pointer">×</div>
+                  </sc-if>
+                </div>
+                <sc-if value="{{ nodeCanAdd }}" hint-placeholder-val="{{ false }}">
+                  <div style="display:flex;gap:8px;margin-top:8px">
+                    <input value="{{ weAddVal }}" onChange="{{ setWeAdd }}" placeholder="{{ t.bean_name }}" style="flex:1;min-width:0;padding:3px 6px;border:1px solid var(--line-4);background:none;color:var(--text);font-family:inherit;font-size:10px;outline:none;border-radius:0">
+                    <div onClick="{{ nodeAddGo }}" style="flex:none;padding:6px 10px;border:1px dashed var(--line-5);color:var(--text-secondary);font-size:8.5px;letter-spacing:1px;cursor:pointer;display:flex;align-items:center">+ {{ t.wheel_add_inside }}</div>
+                  </div>
+                </sc-if>
+              </sc-if>
+            </div>
+          </sc-if>
+          <sc-if value="{{ wheelEditDrill }}" hint-placeholder-val="{{ false }}">
+            <div style="border-top:1px solid var(--line-2);padding:11px 20px 14px;min-height:88px;flex:none">
+              <div style="max-height:118px;margin-top:2px;overflow-y:auto">
+                <sc-for list="{{ weRows }}" as="r" hint-placeholder-count="5">
+                  <div style="display:flex;gap:8px;align-items:center;min-height:28px;border-bottom:1px solid var(--line-2)">
+                    <div style="flex:none;width:7px;height:7px;border-radius:50%;background:{{ r.dot }}"></div>
+                    <sc-if value="{{ r.renaming }}" hint-placeholder-val="{{ false }}">
+                      <input value="{{ weRenameVal }}" onChange="{{ setWeRename }}" autoFocus="{{ true }}" style="flex:1;min-width:0;padding:3px 6px;border:1px solid var(--line-4);background:none;color:var(--text);font-family:inherit;font-size:10px;outline:none;border-radius:0">
+                      <div onClick="{{ r.renameOk }}" style="padding:2px 8px;border:1px solid var(--line-5);color:var(--text);font-size:10px;letter-spacing:1px;cursor:pointer;flex:none">OK</div>
+                      <div onClick="{{ r.cancel }}" style="padding:2px 6px;color:var(--muted);font-size:10px;cursor:pointer;flex:none">✕</div>
+                    </sc-if>
+                    <sc-if value="{{ r.hiding }}" hint-placeholder-val="{{ false }}">
+                      <div style="flex:1;overflow:hidden;font-size:10px;letter-spacing:0.5px;white-space:nowrap;text-overflow:ellipsis">{{ r.label }}</div>
+                      <div style="color:var(--muted);font-size:10px;flex:none">{{ t.wheel_hide_q }}</div>
+                      <div onClick="{{ r.hideYes }}" style="padding:2px 8px;border:1px solid var(--line-5);color:var(--text);font-size:10px;letter-spacing:1px;cursor:pointer;flex:none">{{ delYes }}</div>
+                      <div onClick="{{ r.cancel }}" style="padding:2px 6px;color:var(--muted);font-size:10px;cursor:pointer;flex:none">✕</div>
+                    </sc-if>
+                    <sc-if value="{{ r.plain }}" hint-placeholder-val="{{ true }}">
+                      <div style="flex:1;overflow:hidden;font-size:10px;letter-spacing:0.5px;white-space:nowrap;text-overflow:ellipsis">{{ r.label }}</div>
+                      <div onClick="{{ r.rename }}" style="flex:none;padding:2px 8px;color:var(--muted);font-size:12px;cursor:pointer">✎</div>
+                      <div onClick="{{ r.hide }}" style="flex:none;padding:2px 8px;color:var(--muted);font-size:12px;cursor:pointer">×</div>
+                    </sc-if>
+                  </div>
+                </sc-for>
+              </div>
+              <sc-if value="{{ weCanAdd }}" hint-placeholder-val="{{ true }}">
+                <div style="display:flex;gap:8px;margin-top:8px">
+                  <input value="{{ weAddVal }}" onChange="{{ setWeAdd }}" placeholder="{{ t.bean_name }}" style="flex:1;min-width:0;padding:3px 6px;border:1px solid var(--line-4);background:none;color:var(--text);font-family:inherit;font-size:10px;outline:none;border-radius:0">
+                  <div onClick="{{ weAddGo }}" style="flex:none;padding:6px 10px;border:1px dashed var(--line-5);color:var(--text-secondary);font-size:8.5px;letter-spacing:1px;cursor:pointer;display:flex;align-items:center">+ {{ t.wheel_add }}</div>
+                </div>
+              </sc-if>
+              <sc-if value="{{ weRootNote }}" hint-placeholder-val="{{ false }}">
+                <div style="padding:6px 0;font-size:10px;color:var(--muted)">{{ t.wheel_edit_root }}</div>
+              </sc-if>
+            </div>
+          </sc-if>
+          <sc-if value="{{ wheelNotEditing }}" hint-placeholder-val="{{ true }}">
+          <div style="border-top:1px solid var(--line-2);padding:11px 20px 14px;min-height:88px;flex:none">
+            <div style="font-size:9px;letter-spacing:2px;color:var(--faint);font-weight:500">{{ t.wheel_picked }} {{ pickedCount }} <span style="color:var(--muted)">· {{ t.wheel_intensity }} — {{ tapWord }}</span></div>
+            <div data-hint="wheel-tags" style="display:flex;flex-wrap:wrap;gap:7px;margin-top:8px;max-height:96px;overflow-y:auto">
+              <sc-if value="{{ noPicked }}" hint-placeholder-val="{{ false }}"><div style="font-size:10px;color:var(--muted);padding:6px 0">{{ t.wheel_empty }}</div></sc-if>
+              <sc-for list="{{ pickedChips }}" as="p" hint-placeholder-count="0">
+                <div style="border:1px solid {{ p.bc }};display:flex;align-items:center;height:38px">
+                  <div onClick="{{ p.cycle }}" style="display:flex;align-items:center;gap:7px;padding:0 10px;cursor:pointer">
+                    <div style="font-size:10.5px">{{ p.name }}</div>
+                    <div style="font-size:9px;color:{{ p.dotCol }};letter-spacing:1px">{{ p.dots }}</div>
+                  </div>
+                  <div onClick="{{ p.remove }}" style="width:28px;height:100%;display:flex;align-items:center;justify-content:center;color:var(--faint);cursor:pointer;border-left:1px solid var(--line-3)">×</div>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+          </sc-if>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isLog }}" hint-placeholder-val="{{ false }}">
+        <div data-screen-label="Log" style="flex:1;display:flex;flex-direction:column;overflow:hidden">
+          <div style="display:flex;align-items:center;gap:12px;padding:16px 20px 10px;flex:none">
+            <div style="font-size:12px;font-weight:700;letter-spacing:3px">{{ t.log_title }}</div>
+            <div onClick="{{ openBrew }}" style="margin-left:auto;background:var(--text);color:var(--bg);padding:0 12px;height:38px;display:flex;align-items:center;font-size:9px;letter-spacing:1.5px;font-weight:700;cursor:pointer">{{ t.home_brew }}</div>
+            <div onClick="{{ toggleCmp }}" data-hint="log-compare" style="border:1px solid {{ cmpBc }};color:{{ cmpFg }};padding:0 12px;height:38px;display:flex;align-items:center;font-size:9px;letter-spacing:1.5px;cursor:pointer">{{ t.log_compare }}</div>
+          </div>
+          <div data-hint="log-filters" style="display:flex;gap:6px;padding:2px 20px 10px;overflow-x:auto;flex:none">
+            <sc-for list="{{ filterChips }}" as="f" hint-placeholder-count="4">
+              <div onClick="{{ f.pick }}" style="border:1px solid {{ f.bc }};color:{{ f.fg }};padding:7px 10px;font-size:8.5px;letter-spacing:1.2px;cursor:pointer;white-space:nowrap;flex:none">{{ f.label }}</div>
+            </sc-for>
+          </div>
+          <sc-if value="{{ cmpMode }}" hint-placeholder-val="{{ false }}">
+            <div style="font-size:9px;color:var(--faint);padding:0 20px 8px">{{ t.log_pick2 }}</div>
+          </sc-if>
+          <div style="flex:1;overflow-y:auto;padding:0 20px 20px">
+            <sc-for list="{{ logRows }}" as="r" hint-placeholder-count="6">
+              <div onClick="{{ r.tap }}" style="display:flex;gap:11px;padding:13px 0;border-bottom:1px solid var(--line-1);cursor:pointer">
+                <sc-if value="{{ cmpMode }}" hint-placeholder-val="{{ false }}">
+                  <div style="width:16px;height:16px;border:1px solid var(--line-5);background:{{ r.boxBg }};flex:none;margin-top:2px"></div>
+                </sc-if>
+                <div style="width:42px;flex:none">
+                  <div style="font-size:9.5px;color:var(--faint)">{{ r.date }}</div>
+                  <div style="font-size:8px;color:var(--muted);margin-top:3px">{{ r.time }}</div>
+                </div>
+                <div style="flex:1;min-width:0">
+                  <div style="font-size:12px">{{ r.title }}</div>
+                  <div style="font-size:9px;color:var(--dim);margin-top:4px">{{ r.sub }}</div>
+                  <div style="display:flex;gap:9px;margin-top:5px;flex-wrap:wrap">
+                    <sc-for list="{{ r.desc }}" as="d" hint-placeholder-count="0">
+                      <div style="display:flex;align-items:center;gap:4px;font-size:9px;color:var(--dim)"><div style="width:5px;height:5px;border-radius:50%;background:{{ d.color }}"></div>{{ d.name }}</div>
+                    </sc-for>
+                  </div>
+                </div>
+                <div style="flex:none;text-align:right">
+                  <div style="font-size:10.5px;color:var(--text-secondary)">{{ r.mark }}</div>
+                  <sc-if value="{{ r.pend }}" hint-placeholder-val="{{ false }}"><div style="border:1px solid var(--line-5);padding:3px 6px;font-size:7.5px;letter-spacing:1px;color:var(--dim);margin-top:5px">{{ t.log_pending }}</div></sc-if>
+                </div>
+                <div onClick="{{ r.edit }}" style="align-self:center;width:28px;height:28px;border:1px solid var(--line-4);display:flex;align-items:center;justify-content:center;color:var(--text-secondary);cursor:pointer;flex:none;font-size:11px">✎</div>
+              </div>
+            </sc-for>
+          </div>
+          <sc-if value="{{ cmpReady }}" hint-placeholder-val="{{ false }}">
+            <div style="padding:10px 20px 14px;border-top:1px solid var(--line-2);flex:none">
+              <div onClick="{{ openCompare }}" style="background:var(--text);color:var(--bg);height:52px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;letter-spacing:2.5px;cursor:pointer">{{ t.log_compare }} →</div>
+            </div>
+          </sc-if>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isDetail }}" hint-placeholder-val="{{ false }}">
+        <div data-screen-label="Brew detail" style="flex:1;display:flex;flex-direction:column;overflow:hidden">
+          <div style="display:flex;align-items:center;gap:12px;padding:10px 16px;border-bottom:1px solid var(--line-2);flex:none">
+            <div onClick="{{ back }}" style="width:44px;height:40px;border:1px solid var(--line-4);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--text-secondary)">←</div>
+            <div style="font-size:11.5px;font-weight:700;letter-spacing:2px;flex:1;min-width:0">{{ bdTitle }}</div>
+            <div onClick="{{ entryEditToggle }}" style="width:44px;height:40px;border:1px solid {{ eeBc }};color:{{ eeFg }};display:flex;align-items:center;justify-content:center;cursor:pointer;flex:none;font-size:13px">✎</div>
+            <div onClick="{{ bdRepeat }}" data-hint="detail-repeat" style="border:1px solid var(--line-5);padding:0 12px;height:40px;display:flex;align-items:center;font-size:9px;letter-spacing:1.5px;color:var(--text-secondary);cursor:pointer;flex:none">{{ t.log_repeat }}</div>
+          </div>
+          <div style="flex:1;overflow-y:auto;padding:16px 20px 28px">
+            <div style="font-size:14px">{{ bdMeta }}</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1px;background:var(--line-2);border:1px solid var(--line-2);margin-top:14px">
+              <sc-for list="{{ bdParams }}" as="p" hint-placeholder-count="6">
+                <div style="background:var(--bg);padding:11px 10px">
+                  <div style="font-size:8px;letter-spacing:1.5px;color:var(--faint);font-weight:500">{{ p.label }}</div>
+                  <div style="font-size:13px;margin-top:6px;font-variant-numeric:tabular-nums">{{ p.val }}</div>
+                  <sc-if value="{{ p.edit }}" hint-placeholder-val="{{ false }}">
+                    <div style="display:flex;gap:4px;margin-top:8px">
+                      <div onClick="{{ p.dec }}" style="flex:1;height:26px;border:1px solid var(--line-4);display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--text-secondary);cursor:pointer">−</div>
+                      <div onClick="{{ p.inc }}" style="flex:1;height:26px;border:1px solid var(--line-4);display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--text-secondary);cursor:pointer">+</div>
+                    </div>
+                  </sc-if>
+                </div>
+              </sc-for>
+            </div>
+            <div data-hint="detail-stages" style="margin-top:20px">
+              <div style="font-size:9.5px;letter-spacing:2px;color:var(--faint);font-weight:500">{{ t.log_stages }}</div>
+              <sc-for list="{{ bdStageRows }}" as="s" hint-placeholder-count="3">
+                <div style="display:flex;gap:12px;padding:10px 0;border-bottom:1px solid var(--line-1);align-items:baseline">
+                  <div style="font-size:10px;letter-spacing:1.5px;flex:1">{{ s.name }}</div>
+                  <div style="font-size:10px;color:var(--dim);font-variant-numeric:tabular-nums">{{ s.w }}</div>
+                  <div style="font-size:10px;color:var(--faint);width:44px;text-align:right;font-variant-numeric:tabular-nums">{{ s.dur }}</div>
+                </div>
+              </sc-for>
+            </div>
+            <sc-if value="{{ bdHasDiag }}" hint-placeholder-val="{{ false }}">
+              <div style="margin-top:20px">
+                <div style="font-size:9.5px;letter-spacing:2px;color:var(--faint);font-weight:500">{{ t.diag_title }}</div>
+                <div style="font-size:12px;color:var(--text-secondary);margin-top:8px;font-variant-numeric:tabular-nums">{{ bdDiagLine }}</div>
+              </div>
+            </sc-if>
+            <sc-if value="{{ bdHasDesc }}" hint-placeholder-val="{{ false }}">
+              <div style="margin-top:20px">
+                <div style="font-size:9.5px;letter-spacing:2px;color:var(--faint);font-weight:500">{{ t.log_desc }}</div>
+                <div style="display:flex;flex-wrap:wrap;gap:7px;margin-top:9px">
+                  <sc-for list="{{ bdDesc }}" as="p" hint-placeholder-count="2">
+                    <div style="border:1px solid {{ p.bc }};padding:8px 10px;display:flex;align-items:center;gap:7px">
+                      <div style="font-size:10.5px">{{ p.name }}</div>
+                      <div style="font-size:9px;color:{{ p.dotCol }};letter-spacing:1px">{{ p.dots }}</div>
+                    </div>
+                  </sc-for>
+                </div>
+              </div>
+            </sc-if>
+            <sc-if value="{{ bdNoteRead }}" hint-placeholder-val="{{ false }}">
+              <div style="margin-top:20px">
+                <div style="font-size:9.5px;letter-spacing:2px;color:var(--faint);font-weight:500">{{ t.log_note }}</div>
+                <div style="font-size:12px;color:var(--text-secondary);margin-top:8px;line-height:1.7">{{ bdNote }}</div>
+              </div>
+            </sc-if>
+            <sc-if value="{{ entryEditOn }}" hint-placeholder-val="{{ false }}">
+              <div style="margin-top:20px">
+                <div style="font-size:9.5px;letter-spacing:2px;color:var(--faint);font-weight:500">{{ t.log_note }}</div>
+                <textarea value="{{ bdNote }}" onChange="{{ bdSetNote }}" placeholder="{{ t.note_ph }}" style="width:100%;margin-top:8px;background:none;border:1px solid var(--line-4);color:var(--text);padding:12px;font-size:12px;min-height:64px;resize:none;outline:none;line-height:1.6;font-family:inherit;border-radius:0"></textarea>
+              </div>
+              <div onClick="{{ bdReRate }}" style="margin-top:14px;border:1px solid var(--line-4);height:48px;display:flex;align-items:center;justify-content:center;font-size:10px;letter-spacing:2px;color:var(--text-secondary);cursor:pointer">{{ bdReRateLabel }}</div>
+            </sc-if>
+            <div data-hint="detail-qr" style="margin-top:22px;display:flex;gap:14px;align-items:flex-start">
+              <div style="flex:none">{{ bdQr }}</div>
+              <div>
+                <div style="font-size:9.5px;letter-spacing:2px;color:var(--faint);font-weight:500">{{ t.set_qr }}</div>
+                <div style="font-size:9.5px;color:var(--faint);margin-top:8px;line-height:1.7;max-width:170px">{{ qrHint }}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isCompare }}" hint-placeholder-val="{{ false }}">
+        <div data-screen-label="Compare" style="flex:1;display:flex;flex-direction:column;overflow:hidden">
+          <div style="display:flex;align-items:center;gap:12px;padding:10px 16px;border-bottom:1px solid var(--line-2);flex:none">
+            <div onClick="{{ back }}" style="width:44px;height:40px;border:1px solid var(--line-4);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--text-secondary)">←</div>
+            <div style="font-size:11.5px;font-weight:700;letter-spacing:2.5px">{{ t.log_compare }}</div>
+            <div style="margin-left:auto;font-size:9px;color:var(--faint)">{{ t.log_diff }}</div>
+          </div>
+          <div style="display:flex;gap:8px;padding:12px 20px 10px;border-bottom:1px solid var(--line-2);flex:none">
+            <div style="width:86px;flex:none"></div>
+            <div style="flex:1;font-size:9.5px;letter-spacing:1px;color:var(--text-secondary)">{{ cmpA }}</div>
+            <div style="flex:1;font-size:9.5px;letter-spacing:1px;color:var(--text-secondary)">{{ cmpB }}</div>
+          </div>
+          <div data-hint="compare-rows" style="flex:1;overflow-y:auto;padding:0 20px 24px">
+            <sc-for list="{{ cmpRows }}" as="r" hint-placeholder-count="10">
+              <div style="display:flex;gap:8px;padding:11px 0;border-bottom:1px solid var(--line-1)">
+                <div style="width:86px;flex:none;font-size:8.5px;letter-spacing:1.2px;color:var(--faint);padding-top:2px">{{ r.label }}</div>
+                <div style="flex:1;font-size:11.5px;color:{{ r.ca }};font-weight:{{ r.wa }};font-variant-numeric:tabular-nums;line-height:1.6;min-width:0">{{ r.a }}</div>
+                <div style="flex:1;font-size:11.5px;color:{{ r.cb }};font-weight:{{ r.wb }};font-variant-numeric:tabular-nums;line-height:1.6;min-width:0">{{ r.b }}</div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isMore }}" hint-placeholder-val="{{ false }}">
+        <div data-screen-label="Settings" style="flex:1;display:flex;flex-direction:column;overflow:hidden">
+          <div style="display:flex;align-items:center;gap:12px;padding:16px 20px 10px;flex:none">
+            <div style="font-size:12px;font-weight:700;letter-spacing:3px">{{ t.set_title }}</div>
+          </div>
+          <div style="flex:1;overflow-y:auto;padding:4px 20px 24px">
+            <div data-hint="more-grinders">
+            <div style="font-size:10px;letter-spacing:2px;color:var(--faint);font-weight:500;padding:12px 0 8px;border-bottom:1px solid var(--line-2)">{{ t.set_grinders }}</div>
+            <sc-for list="{{ grinderLines }}" as="g" hint-placeholder-count="2">
+              <div style="display:flex;gap:10px;padding:11px 0;border-bottom:1px solid var(--line-1);align-items:center">
+                <div style="flex:1;font-size:12px;min-width:0">{{ g.name }}</div>
+                <sc-if value="{{ g.confirm }}" hint-placeholder-val="{{ false }}">
+                  <div style="font-size:9px;letter-spacing:1.5px;color:var(--text-secondary);flex:none">{{ delQ }}</div>
+                  <div onClick="{{ g.yes }}" style="height:36px;padding:0 12px;border:1px solid var(--text);display:flex;align-items:center;font-size:9px;letter-spacing:1.5px;cursor:pointer;flex:none">{{ delYes }}</div>
+                  <div onClick="{{ g.no }}" style="width:36px;height:36px;border:1px solid var(--line-4);display:flex;align-items:center;justify-content:center;color:var(--faint);cursor:pointer;flex:none">✕</div>
+                </sc-if>
+                <sc-if value="{{ g.confirmNot }}" hint-placeholder-val="{{ true }}">
+                  <div style="font-size:9px;color:var(--dim);flex:none">{{ g.meta }}</div>
+                </sc-if>
+                <sc-if value="{{ g.canDel }}" hint-placeholder-val="{{ false }}">
+                  <div onClick="{{ g.ask }}" style="width:32px;height:32px;border:1px solid var(--line-4);display:flex;align-items:center;justify-content:center;color:var(--faint);cursor:pointer;flex:none">×</div>
+                </sc-if>
+              </div>
+            </sc-for>
+            <div onClick="{{ toggleGAdd }}" style="border:1px dashed var(--line-5);height:44px;display:flex;align-items:center;justify-content:center;font-size:9.5px;letter-spacing:1.5px;color:var(--dim);cursor:pointer;margin-top:10px">{{ gAddLabel }}</div>
+            <sc-if value="{{ gAddOpen }}" hint-placeholder-val="{{ false }}">
+              <div style="border:1px solid var(--line-5);padding:14px;margin-top:8px">
+                <div style="font-size:10px;letter-spacing:2px;color:var(--dim);font-weight:500">{{ gNameLabel }}</div>
+                <input value="{{ gNameVal }}" onChange="{{ setGName }}" placeholder="Comandante C40" style="width:100%;margin-top:8px;background:none;border:1px solid var(--line-4);color:var(--text);padding:12px;font-size:12.5px;outline:none;border-radius:0">
+                <div style="font-size:10px;letter-spacing:2px;color:var(--dim);font-weight:500;margin-top:14px">{{ gStepLabel }}</div>
+                <div style="display:flex;gap:8px;margin-top:8px">
+                  <div onClick="{{ gStepDec }}" style="width:48px;height:46px;border:1px solid var(--line-4);display:flex;align-items:center;justify-content:center;font-size:16px;color:var(--text-secondary);cursor:pointer">−</div>
+                  <div style="flex:1;height:46px;border:1px solid var(--line-4);display:flex;align-items:center;justify-content:center;font-size:15px">{{ gStepVal }}</div>
+                  <div onClick="{{ gStepInc }}" style="width:48px;height:46px;border:1px solid var(--line-4);display:flex;align-items:center;justify-content:center;font-size:16px;color:var(--text-secondary);cursor:pointer">+</div>
+                </div>
+                <div onClick="{{ gSave }}" style="margin-top:14px;background:var(--text);color:var(--bg);height:46px;display:flex;align-items:center;justify-content:center;font-size:10.5px;letter-spacing:2px;font-weight:700;cursor:pointer">{{ gSaveLabel }}</div>
+              </div>
+            </sc-if>
+            <sc-if value="{{ hasCalib }}" hint-placeholder-val="{{ false }}">
+              <div style="font-size:9.5px;color:var(--faint);padding:10px 0 0">{{ calibLine }}</div>
+            </sc-if>
+            </div>
+            <div onClick="{{ openDevices }}" style="display:flex;justify-content:space-between;gap:10px;padding:15px 0;border-bottom:1px solid var(--line-1);align-items:center;cursor:pointer;margin-top:14px;border-top:1px solid var(--line-2)">
+              <div style="font-size:12px">{{ t.set_devices }}</div>
+              <div style="font-size:10px;color:var(--faint)">{{ devCount }} →</div>
+            </div>
+            <div style="display:flex;justify-content:space-between;gap:10px;padding:12px 0;border-bottom:1px solid var(--line-1);align-items:center">
+              <div style="font-size:12px">{{ t.set_lang }}</div>
+              <div style="display:flex;gap:6px">
+                <sc-for list="{{ langChips }}" as="c" hint-placeholder-count="2">
+                  <div onClick="{{ c.pick }}" style="padding:7px 10px;border:1px solid {{ c.bc }};color:{{ c.fg }};font-size:8.5px;letter-spacing:1.2px;cursor:pointer">{{ c.label }}</div>
+                </sc-for>
+              </div>
+            </div>
+            <div style="display:flex;justify-content:space-between;gap:10px;padding:12px 0;border-bottom:1px solid var(--line-1);align-items:center">
+              <div style="font-size:12px">{{ t.set_theme }}</div>
+              <div style="display:flex;gap:6px">
+                <sc-for list="{{ themeChips }}" as="c" hint-placeholder-count="3">
+                  <div onClick="{{ c.pick }}" style="padding:7px 10px;border:1px solid {{ c.bc }};color:{{ c.fg }};font-size:8.5px;letter-spacing:1.2px;cursor:pointer">{{ c.label }}</div>
+                </sc-for>
+              </div>
+            </div>
+            <div style="display:flex;justify-content:space-between;gap:10px;padding:12px 0;border-bottom:1px solid var(--line-1);align-items:center">
+              <div style="flex:1;min-width:0">
+                <div style="font-size:12px">{{ t.set_hints }}</div>
+                <div style="font-size:9px;color:var(--dim);margin-top:4px">{{ t.set_hints_hint }}</div>
+              </div>
+              <div style="display:flex;gap:6px;flex:none">
+                <sc-for list="{{ hintChips }}" as="c" hint-placeholder-count="2">
+                  <div onClick="{{ c.pick }}" style="padding:7px 10px;border:1px solid {{ c.bc }};color:{{ c.fg }};font-size:8.5px;letter-spacing:1.2px;cursor:pointer">{{ c.label }}</div>
+                </sc-for>
+              </div>
+            </div>
+            <div onClick="{{ hintsReset }}" style="display:flex;justify-content:space-between;gap:10px;padding:15px 0;border-bottom:1px solid var(--line-1);align-items:center;cursor:pointer">
+              <div style="font-size:12px">{{ t.set_hints_reset }}</div>
+              <div style="font-size:10px;color:var(--faint)">↻</div>
+            </div>
+            <sc-if value="{{ hasWheelEdits }}" hint-placeholder-val="{{ false }}">
+              <div style="font-size:10px;letter-spacing:2px;color:var(--faint);font-weight:500;padding:14px 0 8px;border-bottom:1px solid var(--line-2)">{{ t.wheel_title }}</div>
+              <sc-for list="{{ wheelEditRows }}" as="w" hint-placeholder-count="2">
+                <div style="display:flex;gap:10px;padding:11px 0;border-bottom:1px solid var(--line-1);align-items:center">
+                  <div style="flex:1;font-size:12px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ w.label }}</div>
+                  <div onClick="{{ w.undo }}" style="width:32px;height:32px;border:1px solid var(--line-4);display:flex;align-items:center;justify-content:center;color:var(--faint);cursor:pointer;flex:none">×</div>
+                </div>
+              </sc-for>
+              <div onClick="{{ wheelEditsReset }}" style="display:flex;justify-content:space-between;gap:10px;padding:15px 0;border-bottom:1px solid var(--line-1);align-items:center;cursor:pointer">
+                <div style="font-size:12px">{{ t.wheel_edits_reset }}</div>
+                <div style="font-size:10px;color:var(--faint)">↻</div>
+              </div>
+            </sc-if>
+            <div onClick="{{ openSpec }}" style="display:flex;justify-content:space-between;gap:10px;padding:15px 0;border-bottom:1px solid var(--line-1);align-items:center;cursor:pointer">
+              <div style="font-size:12px">{{ t.set_spec }}</div>
+              <div style="font-size:10px;color:var(--faint)">→</div>
+            </div>
+            <div onClick="{{ exportTap }}" data-hint="more-transfer" style="display:flex;justify-content:space-between;gap:10px;padding:15px 0;border-bottom:1px solid var(--line-1);align-items:center;cursor:pointer">
+              <div style="font-size:12px">{{ t.set_export }}</div>
+              <div style="font-size:10px;color:var(--faint)">↓</div>
+            </div>
+            <sc-if value="{{ exported }}" hint-placeholder-val="{{ false }}">
+              <div style="font-size:9.5px;color:var(--dim);padding:9px 0 0">{{ t.set_export_done }}</div>
+            </sc-if>
+            <div style="display:flex;justify-content:space-between;gap:10px;padding:15px 0;border-bottom:1px solid var(--line-1);align-items:center;cursor:pointer">
+              <div style="font-size:12px;color:var(--dim)">{{ t.set_import }}</div>
+              <div style="font-size:10px;color:var(--faint)">↑</div>
+            </div>
+            <div style="text-align:center;font-size:8.5px;letter-spacing:1.5px;color:var(--muted);margin-top:34px">{{ t.set_offline }} · v0.1</div>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isSpec }}" hint-placeholder-val="{{ false }}">
+        <div data-screen-label="Spec" style="flex:1;display:flex;flex-direction:column;overflow:hidden">
+          <div style="display:flex;align-items:center;gap:12px;padding:10px 16px;border-bottom:1px solid var(--line-2);flex:none">
+            <div onClick="{{ back }}" style="width:44px;height:40px;border:1px solid var(--line-4);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--text-secondary)">←</div>
+            <div style="font-size:11.5px;font-weight:700;letter-spacing:2.5px">{{ t.spec_title }}</div>
+          </div>
+          <div style="flex:1;overflow-y:auto;padding:16px 20px 28px">
+            <div style="font-size:10px;letter-spacing:2px;color:var(--faint);font-weight:500">{{ t.spec_palette }}</div>
+            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px">
+              <sc-for list="{{ specSwatches }}" as="s" hint-placeholder-count="6">
+                <div style="border:1px solid var(--line-3);padding:6px">
+                  <div style="height:40px;background:{{ s.v }};border:1px solid var(--line-3)"></div>
+                  <div style="font-size:8px;color:var(--dim);margin-top:6px">{{ s.tok }}</div>
+                  <div style="font-size:8px;color:var(--faint);margin-top:2px">{{ s.name }}</div>
+                </div>
+              </sc-for>
+            </div>
+            <div style="font-size:9px;color:var(--faint);margin-top:10px;line-height:1.7">{{ specWheelNote }}</div>
+            <div style="font-size:10px;letter-spacing:2px;color:var(--faint);font-weight:500;margin-top:24px">{{ t.spec_type }}</div>
+            <div style="border-top:1px solid var(--line-2);margin-top:9px">
+              <div style="padding:12px 0;border-bottom:1px solid var(--line-1)"><div style="font-size:10px;letter-spacing:2px;color:var(--dim);font-weight:500">MICRO LABEL · 10/2px</div></div>
+              <div style="padding:12px 0;border-bottom:1px solid var(--line-1)"><div style="font-size:13px">Body · 13px · JetBrains Mono 400</div></div>
+              <div style="padding:12px 0;border-bottom:1px solid var(--line-1)"><div style="font-size:21px">Stepper 21px</div></div>
+              <div style="padding:12px 0;border-bottom:1px solid var(--line-1)"><div style="font-size:46px;font-weight:300;letter-spacing:-1px">4.6<span style="font-size:11px;letter-spacing:2px;color:var(--dim);font-weight:400"> RESULT 46/300</span></div></div>
+            </div>
+            <div style="font-size:10px;letter-spacing:2px;color:var(--faint);font-weight:500;margin-top:24px">{{ t.spec_grid }}</div>
+            <div style="font-size:11px;color:var(--text-secondary);margin-top:9px;line-height:1.9">4 px base · 20 px margins · hit ≥ 48 px<br>1 px hairlines --line-2 / --line-4<br>tabular-nums everywhere</div>
+            <div style="font-size:10px;letter-spacing:2px;color:var(--faint);font-weight:500;margin-top:24px">{{ t.spec_comp }}</div>
+            <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;align-items:center">
+              <div style="background:var(--text);color:var(--bg);height:44px;padding:0 16px;display:flex;align-items:center;font-size:10px;font-weight:700;letter-spacing:2px">PRIMARY</div>
+              <div style="border:1px solid var(--line-4);color:var(--text-secondary);height:44px;padding:0 16px;display:flex;align-items:center;font-size:10px;letter-spacing:2px">GHOST</div>
+              <div style="border:1px solid var(--line-5);color:var(--dim);padding:7px 10px;font-size:8.5px;letter-spacing:1.2px">TAG</div>
+            </div>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ showNav }}" hint-placeholder-val="{{ true }}">
+        <div style="border-top:1px solid var(--line-2);display:flex;padding:4px 8px 30px;flex:none;background:var(--bg)">
+          <div onClick="{{ goTabHome }}" style="flex:1;padding:14px 0;text-align:center;font-size:9px;letter-spacing:2px;cursor:pointer;color:{{ tabCHome }}">{{ t.nav_home }}</div>
+          <div onClick="{{ goTabShelf }}" style="flex:1;padding:14px 0;text-align:center;font-size:9px;letter-spacing:2px;cursor:pointer;color:{{ tabCShelf }}">{{ t.nav_shelf }}</div>
+          <div onClick="{{ goTabLog }}" style="flex:1;padding:14px 0;text-align:center;font-size:9px;letter-spacing:2px;cursor:pointer;color:{{ tabCLog }}">{{ t.nav_log }}</div>
+          <div onClick="{{ goTabMore }}" style="flex:1;padding:14px 0;text-align:center;font-size:9px;letter-spacing:2px;cursor:pointer;color:{{ tabCMore }}">{{ t.nav_more }}</div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ hintShow }}" hint-placeholder-val="{{ false }}">
+        <div onClick="{{ hintNext }}" style="position:absolute;inset:0;z-index:40;overflow:hidden;cursor:pointer">
+          <div style="position:absolute;left:{{ hintX }}px;top:{{ hintY }}px;width:{{ hintW }}px;height:{{ hintH }}px;box-shadow:0 0 0 9999px {{ hintScrim }};outline:1px solid var(--line-5);pointer-events:none"></div>
+          <div style="position:absolute;left:20px;right:20px;top:{{ hintCardTop }};bottom:{{ hintCardBottom }};padding:16px;background:var(--bg);border:1px solid var(--line-5)">
+            <div style="font-size:13px;line-height:1.45;color:var(--text)">{{ hintText }}</div>
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-top:12px;min-height:24px">
+              <div style="font-size:10px;letter-spacing:2px;color:var(--faint)">{{ hintCount }}</div>
+              <div style="min-height:40px;padding:0 20px;display:flex;align-items:center;background:var(--text);color:var(--bg);font-size:10px;font-weight:500;letter-spacing:2px">{{ hintBtn }}</div>
+            </div>
+          </div>
+          <div onClick="{{ hintHide }}" style="position:absolute;left:0;right:0;bottom:0;min-height:64px;padding:0 20px 14px;display:flex;align-items:center;justify-content:center;background:var(--bg);border-top:1px solid var(--line-3);font-size:10px;letter-spacing:2px;color:var(--dim);cursor:pointer">{{ t.hint_close }}</div>
+        </div>
+      </sc-if>
+
+    </div>
+  </x-import>
+  <div style="width:393px;max-width:100%;font-size:9px;color:var(--muted);letter-spacing:.5px;line-height:1.8">{{ deskHint }}</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;: {&quot;width&quot;: 640, &quot;height&quot;: 1040}, &quot;lang&quot;: {&quot;editor&quot;: &quot;enum&quot;, &quot;options&quot;: [&quot;ru&quot;, &quot;en&quot;], &quot;default&quot;: &quot;ru&quot;, &quot;tsType&quot;: &quot;'ru'|'en'&quot;, &quot;section&quot;: &quot;Прототип&quot;}, &quot;theme&quot;: {&quot;editor&quot;: &quot;enum&quot;, &quot;options&quot;: [&quot;dark&quot;, &quot;light&quot;, &quot;system&quot;], &quot;default&quot;: &quot;dark&quot;, &quot;tsType&quot;: &quot;'dark'|'light'|'system'&quot;, &quot;section&quot;: &quot;Прототип&quot;}}">
+class Component extends DCLogic {
+  state = {
+    screen: 'home', stack: [], langO: null, hvO: null, ready: false,
+    shelf: null, journal: null, devices: null,
+    convFrom: 'c40', convTo: 's3', gPickOpen: false, gQuery: '', gDelId: null, convVal: 30, calOpen: false, calVal: 4.6, calib: 0, calibSrc: null,
+    beanId: 'java', addForm: 'beans', addRoast: '27.07.2026', addWeight: 250, addCount: 10, addName: '',
+    devId: null, draft: null,
+    brew: { bean: 'java', device: null, hyMode: 'imm', grind: 4.6, dose: 15, water: 250, temp: 94, pours: 3, valveAt: 80 },
+    grindText: null,
+    timer: null,
+    rateId: null, diag: { acid: 5, bitter: 5, body: 5, balance: 5 }, note: '', listening: false, sug: [],
+    picked: [], path: [], dir: 1,
+    logFilter: 'all', cmpMode: false, cmpSel: [], cmpPair: null, viewId: null, exported: false,
+    themeO: null, hintsOn: true, hintsSeen: {}, hintCur: null, bcalOpen: false, bcalYM: null,
+    wheelEdits: [], weOn: false, weRenaming: null, weRenameVal: '', weHiding: null, weAddVal: '',
+    recipe: null, recipeTouched: false, entryEdit: false, wheelMode: 'drill', mapZoom: 1, mapSel: null,
+  };
+  componentDidMount() {
+    let th = null; try { th = localStorage.getItem('bj-theme'); } catch (e) {}
+    if (th === 'dark' || th === 'light' || th === 'system') this.setState({ themeO: th });
+    this.applyThemeAttr();
+    if (typeof matchMedia !== 'undefined') { this._mq = matchMedia('(prefers-color-scheme: light)'); this._mqFn = () => { this.applyThemeAttr(); this.forceUpdate(); }; this._mq.addEventListener('change', this._mqFn); }
+    import('./data.js').then((D) => { this.D = D; this.setState({ shelf: D.seedShelf(), journal: D.seedJournal(), devices: D.seedDevices(), grinders: [{ id: 's3', short: 'S3', ...D.GRINDERS.s3 }], ready: true }); });
+    this.ensureIv();
+  }
+  componentDidUpdate() {
+    this.applyThemeAttr();
+    const S = this.state;
+    const p = this._prevS || {};
+    if (p.screen !== S.screen || p.ready !== S.ready || p.hintsOn !== S.hintsOn || p.hvO !== S.hvO || p.langO !== S.langO || p.wheelMode !== S.wheelMode) {
+      if (p.screen !== S.screen || p.wheelMode !== S.wheelMode) this._chain = null;
+      this.syncHints();
+    }
+    if ((p.wheelMode !== S.wheelMode || p.screen !== S.screen || p.mapZoom !== S.mapZoom) && S.screen === 'wheel' && (S.wheelMode === 'map' || S.wheelMode === 'canvas')) {
+      const id = S.wheelMode === 'map' ? 'bj-map' : 'bj-canvas';
+      setTimeout(() => { const el = document.getElementById(id); if (el) { el.scrollLeft = (el.scrollWidth - el.clientWidth) / 2; el.scrollTop = (el.scrollHeight - el.clientHeight) / 2; } }, 60);
+    }
+    this._prevS = { screen: S.screen, ready: S.ready, hintsOn: S.hintsOn, hvO: S.hvO, langO: S.langO, wheelMode: S.wheelMode, mapZoom: S.mapZoom };
+  }
+  ensureIv() {
+    if (this._iv) return;
+    this._iv = setInterval(() => {
+      const tm = this.state.timer; if (!tm || !tm.run || !this.D) return;
+      const D = this.D, st = tm.stages, cur = st[tm.idx];
+      const el = this.tEl(tm), sel = this.tSel(tm);
+      const e1 = document.getElementById('bj-el'); if (e1) e1.textContent = D.fmtT(el);
+      const e2 = document.getElementById('bj-left'); if (e2) e2.textContent = tm.paused ? '+ ' + D.fmtT(sel) : D.fmtT(sel);
+      const seg = document.getElementById('bj-segs');
+      if (seg) { const kids = seg.children; for (let i = 0; i < kids.length && i < st.length; i++) { const f = kids[i].firstElementChild; if (!f) continue; f.style.width = (i < tm.idx ? 100 : i > tm.idx ? 0 : tm.paused ? 100 : st[i][1] ? Math.min(100, sel / st[i][1] * 100) : 0) + '%'; } }
+      this.forceUpdate();
+    }, 250);
+  }
+  componentWillUnmount() { clearInterval(this._iv); this._iv = null; if (this._hintT) clearTimeout(this._hintT); if (this._mq && this._mqFn) this._mq.removeEventListener('change', this._mqFn); }
+  tEl(tm) { return (Date.now() - tm.t0) / 1000; }
+  tSel(tm) { return (Date.now() - tm.s0) / 1000; }
+  L() { return this.state.langO ?? this.props.lang ?? 'ru'; }
+  HV() { return 'c'; }
+  T() { return this.D ? this.D.STR[this.L()] : {}; }
+  ru() { return this.L() === 'ru'; }
+  fd(iso) { return iso.slice(8, 10) + '.' + iso.slice(5, 7); }
+  bean(id) { return this.state.shelf.find((s) => s.id === id); }
+  dev(id) { return this.state.devices.find((d) => d.id === id); }
+  go(s, patch) { this.setState({ stack: [...this.state.stack, this.state.screen], screen: s, ...(patch || {}) }); }
+  back() { const st = [...this.state.stack]; const s = st.pop() || 'home'; this.setState({ screen: s, stack: st, entryEdit: false }); }
+  setTab(k) { this.setState({ screen: k, stack: [], cmpMode: false, cmpSel: [] }); }
+  nameOf(id, lo) {
+    const l = lo || this.L();
+    const scan = (cats) => { for (const c of cats) { if (c.id === id) return l === 'ru' ? c.ru : c.en; for (const s of c.sub) { if (s.id === id) return l === 'ru' ? s.ru : s.en; for (const d of s.d) if (d[0] === id) return l === 'ru' ? d[1] : d[2]; } } return null; };
+    if (this.state.wheelEdits.length) { this.WS(); const n = scan(this._wsFull); if (n) return n; }
+    const D = this.D, d = D.DESC[id]; if (d) return l === 'ru' ? d.ru : d.en;
+    return scan(D.WHEEL) || id;
+  }
+  hueOf(id) {
+    const scan = (cats) => { for (const c of cats) { if (c.id === id) return { h: c.h, c: c.c }; for (const s of c.sub) { if (s.id === id) return { h: c.h, c: c.c }; for (const d of s.d) if (d[0] === id) return { h: c.h, c: c.c }; } } return null; };
+    if (this.state.wheelEdits.length) { this.WS(); const r = scan(this._wsFull); if (r) return r; }
+    const D = this.D, d = D.DESC[id]; if (d) return { h: d.h, c: d.c };
+    return scan(D.WHEEL) || { h: 0, c: 0 };
+  }
+  colOf(id, a) { const { h, c } = this.hueOf(id); return `oklch(0.72 ${(c * 0.92).toFixed(3)} ${h}${a ? ' / ' + a : ''})`; }
+  descChips(desc) { return (desc || []).map(([id]) => ({ name: this.nameOf(id), color: this.colOf(id) })); }
+  phaseL(days) { return this.T()['phase_' + this.D.phaseOf(days)]; }
+  leftStr(s) { return s.form === 'drip' ? `${s.leftCount} ${this.T().pcs}` : `${s.left} ${this.T().grams}`; }
+  beanTech(s) { const a = this.D.ageDays(s.roast); return `${a} ${this.T().days} · ${this.phaseL(a)} · ${this.leftStr(s)}`; }
+  formL(f) { const t = this.T(); return f === 'beans' ? t.form_beans : f === 'ground' ? t.form_ground : t.form_drip; }
+  devLabelOf(e) { if (e.mode === 'drip') return this.T().form_drip; const d = e.device ? this.dev(e.device) : null; return e.devName || (d ? d.name.replace('Hario ', '') : '—'); }
+  entryTitle(e) { if (e.mode === 'cup') return e.title || (this.ru() ? 'Чашка' : 'Cup'); const b = this.bean(e.bean); return `${b ? b.name : '—'} · ${this.devLabelOf(e)}`; }
+  entrySub(e) { const t = this.T(), p = []; if (e.mode === 'cup') return this.ru() ? 'дегустация · без рецепта' : 'tasting · no recipe'; if (e.grind != null) p.push(`${this.ru() ? 'помол' : 'grind'} ${e.grind}`); if (e.dose != null) p.push(`${e.dose} ${t.grams}`); if (e.water != null) p.push(`${e.water} ${t.grams}`); if (e.temp != null) p.push(`${e.temp}°`); if (e.total != null) p.push(this.D.fmtT(e.total)); return p.join(' · '); }
+  openTaste() {
+    const now = new Date();
+    const e = { id: 'j' + Date.now(), date: this.D.TODAY, time: `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`, bean: null, device: null, mode: 'cup', status: 'pending' };
+    this.setState({ journal: [e, ...this.state.journal], rateId: e.id, diag: { acid: 5, bitter: 5, body: 5, balance: 5 }, note: '', picked: [], sug: [], path: [], tasteName: '', stack: [this.state.screen], screen: 'diag' });
+  }
+  entryMark(e) { return e.diag ? (this.ru() ? 'С ' : 'S ') + e.diag.balance : ''; }
+  G(id) { const gs = this.state.grinders || []; return gs.find((g) => g.id === id) || (this.D && this.D.GRINDER_DB.find((g) => g.id === id)) || gs[0] || { name: '—', step: 1, zero: 0, dp: 0, unit: { ru: '', en: '' } }; }
+  unitOf(g) { if (!g.unit) return this.ru() ? 'кликов' : 'clicks'; return typeof g.unit === 'string' ? g.unit : g.unit[this.L()]; }
+  shortOf(g) { return g.short || g.name.split(' ')[0]; }
+  conv(fromId, toId, val, calib) {
+    const f = this.G(fromId), tg = this.G(toId), U = 12;
+    const um = f.zero + f.step * val, r = (x) => Math.max(0, Math.round(x * 10) / 10), inv = (u) => (u - tg.zero) / tg.step + calib;
+    return { um: Math.round(um), center: r(inv(um)), lo: r(inv(um - U)), hi: r(inv(um + U)) };
+  }
+  cv(raw) { return this.conv(this.state.convFrom, this.state.convTo, this.state.convVal, raw ? 0 : this.state.calib); }
+  cycleG(field) {
+    const S = this.state, gs = S.grinders, other = field === 'convFrom' ? S.convTo : S.convFrom;
+    if (gs.length < 2) return;
+    let i = gs.findIndex((g) => g.id === S[field]);
+    for (let k = 0; k < gs.length; k++) { i = (i + 1) % gs.length; if (gs[i].id !== other) break; }
+    this.setState({ [field]: gs[i].id });
+  }
+  stagesFor(b) {
+    const bean = this.bean(b.bean);
+    if (bean.form === 'drip') { const w = Math.round(b.water / b.pours / 5) * 5; const st = []; for (let i = 0; i < b.pours; i++) { st.push(['pour', 30, w]); if (i < b.pours - 1) st.push(['steep', 30, 0]); } st.push(['drain', 30, 0]); return st; }
+    const dev = this.dev(b.device) || { flow: 'perc', bottom: 'cone' }; const mode = dev.flow === 'hybrid' ? 'hy-' + b.hyMode : dev.flow;
+    if (mode === 'perc' || mode === 'hy-perc') { const n = Math.max(1, b.pours); const bl = Math.round(b.dose * 3 / 5) * 5; const rest = b.water - bl; const per = Math.round(rest / n / 5) * 5; const st = [['bloom', 45, bl]]; for (let i = 0; i < n; i++) st.push(['pour', 40, i === n - 1 ? rest - per * (n - 1) : per]); st.push(['drain', 50, 0]); return st; }
+    if (mode === 'imm') return [['steep', 120, b.water], ['stir', 0, 0], [dev.bottom === 'cyl' ? 'press' : 'drain', 30, 0]];
+    if (mode === 'hy-imm') return [['steep', 150, b.water], ['valve', 0, 0], ['drain', 60, 0]];
+    return [['steep', b.valveAt, b.water], ['valve', 0, 0], ['drain', 90, 0]];
+  }
+  recStages() { const S = this.state; return S.recipeTouched && S.recipe ? S.recipe : this.stagesFor(S.brew); }
+  touchRec(mut) { const S = this.state; const base = (S.recipeTouched && S.recipe ? S.recipe : this.stagesFor(S.brew)).map((x) => x.slice()); mut(base); this.setState({ recipe: base, recipeTouched: true }); }
+  recKindCycle(k) { const order = ['pour', 'steep', 'stir', 'drain', 'bloom']; return order[(order.indexOf(k) + 1) % order.length] || 'pour'; }
+  startBrew() { this.ensureIv(); const st = this.state.recipeTouched && this.state.recipe ? this.state.recipe.map((x) => x.slice()) : this.stagesFor(this.state.brew); this.setState({ timer: { stages: st, idx: 0, t0: Date.now(), s0: Date.now(), run: true, rec: [], paused: false }, stack: [...this.state.stack, this.state.screen], screen: 'timer' }); }
+  tPause() {
+    const t = this.state.timer; if (!t || t.paused || t.idx >= t.stages.length - 1) return;
+    const rec = [...t.rec, [t.stages[t.idx][0], Math.round(this.tSel(t)), t.stages[t.idx][2]]];
+    this.setState({ timer: { ...t, rec, paused: true, s0: Date.now() } });
+  }
+  tAdv() {
+    const t = this.state.timer; if (!t) return; const st = t.stages, dur = Math.round(this.tSel(t));
+    if (t.paused) {
+      const rec = [...t.rec, ['pause', dur, 0]];
+      let idx = t.idx + 1; if (st[idx] && st[idx][1] === 0 && idx < st.length - 1) { rec.push([st[idx][0], 0, 0]); idx++; }
+      this.setState({ timer: { ...t, rec, paused: false, idx, s0: Date.now() } }); return;
+    }
+    const rec = [...t.rec, [st[t.idx][0], dur, st[t.idx][2]]];
+    if (t.idx >= st.length - 1) { this.finishBrew(rec); return; }
+    let idx = t.idx + 1; if (st[idx] && st[idx][1] === 0 && idx < st.length - 1) { rec.push([st[idx][0], 0, 0]); idx++; }
+    this.setState({ timer: { ...t, rec, idx, s0: Date.now() } });
+  }
+  makeEntry(stages, total) {
+    const { brew } = this.state, bean = this.bean(brew.bean);
+    const dev = bean.form !== 'drip' ? this.dev(brew.device) || null : null;
+    const now = new Date();
+    const e = { id: 'j' + Date.now(), date: this.D.TODAY, time: `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`, bean: bean.id, device: dev ? dev.id : null, devName: dev ? dev.name : undefined, mode: bean.form === 'drip' ? 'drip' : (dev ? dev.flow : 'perc'), grind: bean.form === 'beans' ? brew.grind : null, dose: brew.dose, water: brew.water, temp: brew.temp, total, stages, status: 'pending' };
+    if (bean.form === 'drip' || e.mode === 'perc') e.pours = brew.pours;
+    if (dev && dev.flow === 'hybrid' && brew.hyMode === 'mid') e.valveAt = brew.valveAt;
+    const shelf = this.state.shelf.map((s) => s.id !== bean.id ? s : (s.form === 'drip' ? { ...s, leftCount: Math.max(0, s.leftCount - 1) } : { ...s, left: Math.max(0, s.left - e.dose) }));
+    this.setState({ journal: [e, ...this.state.journal], shelf, timer: null, screen: 'rateLater', stack: [] });
+  }
+  finishBrew(rec) { this.makeEntry(rec || this.state.timer.stages, Math.round(this.tEl(this.state.timer))); }
+  logManual() { const st = this.stagesFor(this.state.brew); this.makeEntry(st, st.reduce((s, x) => s + x[1], 0)); }
+  ratePending() { const p = this.state.journal.find((j) => j.status === 'pending'); if (!p) return; this.setState({ rateId: p.id, diag: { acid: 5, bitter: 5, body: 5, balance: 5 }, note: '', picked: [], sug: [], path: [], stack: [this.state.screen], screen: 'diag' }); }
+  saveDiag() {
+    const { rateId, diag, note, picked } = this.state;
+    const journal = this.state.journal.map((j) => j.id === rateId ? { ...j, ...(j.mode === 'cup' && this.state.tasteName ? { title: this.state.tasteName } : {}), diag: { ...diag }, note, desc: picked.map((p) => [p.id, p.int]), status: 'done' } : j);
+    const st2 = [...this.state.stack]; const prev = st2.pop() || 'home'; this.setState({ journal, screen: prev, stack: st2, cmpSel: [] });
+  }
+  togglePick(id) { const p = this.state.picked; this.setState({ picked: p.some((x) => x.id === id) ? p.filter((x) => x.id !== id) : [...p, { id, int: 2 }] }); }
+  pickedChipsV() {
+    return this.state.picked.map((p) => ({
+      name: this.nameOf(p.id), bc: this.colOf(p.id, 0.8), dotCol: this.colOf(p.id),
+      dots: '●'.repeat(p.int) + '○'.repeat(3 - p.int),
+      cycle: () => this.setState({ picked: this.state.picked.map((x) => x.id === p.id ? { ...x, int: x.int % 3 + 1 } : x) }),
+      remove: () => this.setState({ picked: this.state.picked.filter((x) => x.id !== p.id) }),
+    }));
+  }
+  memSet() { const m = new Set(); this.state.journal.forEach((j) => { if (j.status === 'done' && j.desc) j.desc.forEach(([id]) => m.add(id)); }); return m; }
+  parentsOf(id) { for (const c of this.WS()) for (const s of c.sub) for (const d of s.d) if (d[0] === id) return { cat: c.id, sub: s.id }; const dd = this.D.DESC[id]; return dd ? { cat: dd.cat, sub: dd.sub } : null; }
+  memHit(it) { if (this._mem.has(it.id)) return true; if (it.leaf) return false; for (const id of this._mem) { const p = this.parentsOf(id); if (p && (p.cat === it.id || p.sub === it.id)) return true; } return false; }
+  wheelItems() {
+    const cats = this.WS(), l = this.L(), { path } = this.state;
+    const nm = (o) => (l === 'ru' ? o.ru : o.en);
+    if (!path.length) return cats.map((c, i) => ({ id: c.id, label: nm(c), h: c.h, c: c.c, l: i % 2 ? 0.72 : 0.66, leaf: false }));
+    const cat = cats.find((c) => c.id === path[0]);
+    if (!cat) return [];
+    if (path.length === 1) return cat.sub.map((s, i) => ({ id: s.id, label: nm(s), h: cat.h, c: cat.c, l: 0.6 + i * 0.22 / Math.max(1, cat.sub.length - 1), leaf: false }));
+    const sub = cat.sub.find((s) => s.id === path[1]);
+    if (!sub) return [];
+    return sub.d.map((d, i) => ({ id: d[0], label: l === 'ru' ? d[1] : d[2], h: cat.h, c: cat.c, l: 0.6 + i * 0.24 / Math.max(1, sub.d.length - 1), leaf: true }));
+  }
+  hasWheelId(cats, id) { for (const c of cats) { if (c.id === id) return true; for (const s of c.sub) { if (s.id === id) return true; for (const d of s.d) if (d[0] === id) return true; } } return false; }
+  slugify(n) { const T = { 'а': 'a', 'б': 'b', 'в': 'v', 'г': 'g', 'д': 'd', 'е': 'e', 'ё': 'e', 'ж': 'zh', 'з': 'z', 'и': 'i', 'й': 'i', 'к': 'k', 'л': 'l', 'м': 'm', 'н': 'n', 'о': 'o', 'п': 'p', 'р': 'r', 'с': 's', 'т': 't', 'у': 'u', 'ф': 'f', 'х': 'h', 'ц': 'c', 'ч': 'ch', 'ш': 'sh', 'щ': 'sch', 'ъ': '', 'ы': 'y', 'ь': '', 'э': 'e', 'ю': 'yu', 'я': 'ya' }; const out = Array.from(n.toLowerCase()).map((ch) => T[ch] !== undefined ? T[ch] : ch).join('').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, ''); return out || 'node'; }
+  newCustomId(name, cats) { const base = 'u-' + this.slugify(name); if (!this.hasWheelId(cats, base)) return base; for (let i = 2; ; i++) { const id = base + '-' + i; if (!this.hasWheelId(cats, id)) return id; } }
+  composeWheel(base, edits) {
+    const draft = base.map((c) => ({ id: c.id, ru: c.ru, en: c.en, h: c.h, c: c.c, sub: c.sub.map((s) => ({ id: s.id, ru: s.ru, en: s.en, d: s.d.map((x) => [x[0], x[1], x[2]]) })) }));
+    for (const e of edits) {
+      if (e.op === 'add-cat') { if (!this.hasWheelId(draft, e.id)) draft.push({ id: e.id, ru: e.ru, en: e.en, h: e.h, c: e.c, sub: [] }); }
+      else if (e.op === 'add-sub') { if (!this.hasWheelId(draft, e.id)) { const cat = draft.find((c) => c.id === e.cat); if (cat) cat.sub.push({ id: e.id, ru: e.ru, en: e.en, d: [] }); } }
+      else if (e.op === 'add-desc') { if (!this.hasWheelId(draft, e.id)) { for (const c of draft) { const sub = c.sub.find((s) => s.id === e.sub); if (sub) { sub.d.push([e.id, e.ru, e.en]); break; } } } }
+      else if (e.op === 'rename') {
+        let done = false;
+        for (const c of draft) {
+          if (c.id === e.target) { c.ru = e.ru; c.en = e.en; done = true; break; }
+          for (const s of c.sub) { if (s.id === e.target) { s.ru = e.ru; s.en = e.en; done = true; break; } const d = s.d.find((x) => x[0] === e.target); if (d) { d[1] = e.ru; d[2] = e.en; done = true; break; } }
+          if (done) break;
+        }
+      }
+      else if (e.op === 'hide') {
+        let done = false;
+        for (const c of draft) { for (const s of c.sub) { const di = s.d.findIndex((x) => x[0] === e.target); if (di >= 0) { s.d.splice(di, 1); done = true; break; } } if (done) break; const si = c.sub.findIndex((s) => s.id === e.target); if (si >= 0) { c.sub.splice(si, 1); done = true; break; } }
+        if (!done) { const ci = draft.findIndex((c) => c.id === e.target); if (ci >= 0) draft.splice(ci, 1); }
+      }
+    }
+    return draft;
+  }
+  WS() { const edits = this.state.wheelEdits; if (this._wsEdits !== edits || !this._wsEff) { this._wsEdits = edits; this._wsFull = edits.length ? this.composeWheel(this.D.WHEEL, edits.filter((e) => e.op !== 'hide')) : this.D.WHEEL; this._wsEff = edits.length ? this.composeWheel(this.D.WHEEL, edits) : this.D.WHEEL; } return this._wsEff; }
+  weAdd() {
+    const v = (this.state.weAddVal || '').trim(), path = this.state.path;
+    if (!v || !path.length) return;
+    this.WS();
+    const parent = path[path.length - 1];
+    const id = this.newCustomId(v, this._wsFull);
+    const e = path.length === 1 ? { op: 'add-sub', id, cat: parent, ru: v, en: v } : { op: 'add-desc', id, sub: parent, ru: v, en: v };
+    this.setState({ wheelEdits: [...this.state.wheelEdits, e], weAddVal: '' });
+  }
+  weRenameOk(id) {
+    const v = (this.state.weRenameVal || '').trim();
+    if (!v || v === this.nameOf(id)) { this.setState({ weRenaming: null }); return; }
+    const ru = this.ru() ? v : this.nameOf(id, 'ru'), en = this.ru() ? this.nameOf(id, 'en') : v;
+    const edits = this.state.wheelEdits;
+    let patched = false;
+    let next = edits.map((e) => { if ((e.op === 'add-desc' || e.op === 'add-sub' || e.op === 'add-cat') && e.id === id) { patched = true; return { ...e, ru, en }; } return e; });
+    if (!patched) { next = next.filter((e) => !(e.op === 'rename' && e.target === id)); next.push({ op: 'rename', target: id, ru, en }); }
+    this.setState({ wheelEdits: next, weRenaming: null });
+  }
+  weHide(id) {
+    const edits = this.state.wheelEdits;
+    const added = edits.find((e) => e.op === 'add-desc' && e.id === id);
+    const used = this.state.journal.some((j) => (j.desc || []).some((x) => x[0] === id)) || this.state.picked.some((p) => p.id === id);
+    let next;
+    if (added && !used) next = edits.filter((e) => e !== added && !(e.op === 'rename' && e.target === id));
+    else if (edits.some((e) => e.op === 'hide' && e.target === id)) next = edits;
+    else next = [...edits, { op: 'hide', target: id }];
+    this.setState({ wheelEdits: next, weHiding: null });
+  }
+  weLabel(e) { const t = this.T(); if (e.op === 'hide') return t.wheel_edit_hidden + ': ' + this.nameOf(e.target); if (e.op === 'rename') return t.wheel_edit_renamed + ': ' + (this.ru() ? e.ru : e.en); return t.wheel_edit_added + ': ' + (this.ru() ? e.ru : e.en); }
+  arcPath(cx, cy, r0, r1, a0, a1) {
+    const p = (r, a) => [cx + Math.cos(a) * r, cy + Math.sin(a) * r];
+    const [x0, y0] = p(r1, a0), [x1, y1] = p(r1, a1), [x2, y2] = p(r0, a1), [x3, y3] = p(r0, a0);
+    const lg = a1 - a0 > Math.PI ? 1 : 0;
+    return `M ${x0} ${y0} A ${r1} ${r1} 0 ${lg} 1 ${x1} ${y1} L ${x2} ${y2} A ${r0} ${r0} 0 ${lg} 0 ${x3} ${y3} Z`;
+  }
+  wheelTap(it) { if (it.leaf) { if (!this.state.weOn) this.togglePick(it.id); return; } this.setState({ path: [...this.state.path, it.id], dir: 1, weRenaming: null, weHiding: null, weAddVal: '' }); }
+  wheelUp() { const p = this.state.path; if (!p.length) return; this.setState({ path: p.slice(0, -1), dir: -1, weRenaming: null, weHiding: null, weAddVal: '' }); }
+  nodeTypeOf(id) { for (const c of this.WS()) { if (c.id === id) return 'cat'; for (const s of c.sub) { if (s.id === id) return 'sub'; for (const d of s.d) if (d[0] === id) return 'leaf'; } } return null; }
+  mapTap(id) { if (this.state.weOn) { this.setState({ mapSel: id, weRenaming: null, weHiding: null }); return; } this.togglePick(id); }
+  weAddInto() {
+    const S = this.state, v = (S.weAddVal || '').trim();
+    if (!v || !S.mapSel) return;
+    const ty = this.nodeTypeOf(S.mapSel);
+    if (ty !== 'cat' && ty !== 'sub') return;
+    this.WS();
+    const id = this.newCustomId(v, this._wsFull);
+    const e = ty === 'cat' ? { op: 'add-sub', id, cat: S.mapSel, ru: v, en: v } : { op: 'add-desc', id, sub: S.mapSel, ru: v, en: v };
+    this.setState({ wheelEdits: [...S.wheelEdits, e], weAddVal: '' });
+  }
+  wheelMapSvg(big) {
+    const R = React.createElement, cats = this.WS(), S = this.state, l = this.L();
+    this._mem = this.memSet();
+    const isPicked = (id) => S.picked.some((p) => p.id === id);
+    const nm = (o) => (l === 'ru' ? o.ru : o.en);
+    const K = big ? 3 : 1, FK = big ? 2.7 : 1;
+    const SZ = 820 * K, c = SZ / 2, els = [];
+    const rC0 = 64 * K, rC1 = 128 * K, rS1 = 212 * K, rD1 = 356 * K;
+    const wOf = (ct) => ct.sub.reduce((x, sb) => x + Math.max(1, sb.d.length), 0) || 1;
+    const W = cats.reduce((s, ct) => s + wOf(ct), 0);
+    const unit = 2 * Math.PI / Math.max(1, W), g = 0.004;
+    const radial = (x, y, am) => { let rot = am * 180 / Math.PI; let flip = false; if (Math.cos(am) < 0) { rot += 180; flip = true; } return { rot: rot.toFixed(1), flip }; };
+    const label = (key, txt, rr, am, fs, fw) => { const x = c + Math.cos(am) * rr, y = c + Math.sin(am) * rr; const { rot } = radial(x, y, am); els.push(R('text', { key, x, y, fill: 'var(--wheel-ink)', fontSize: fs * FK, fontWeight: fw || 600, fontFamily: 'inherit', textAnchor: 'middle', dominantBaseline: 'middle', letterSpacing: 0.4, transform: 'rotate(' + rot + ' ' + x.toFixed(1) + ' ' + y.toFixed(1) + ')', style: { pointerEvents: 'none', textTransform: 'uppercase' } }, txt)); };
+    let a = -Math.PI / 2;
+    cats.forEach((ct, ci) => {
+      const cw = wOf(ct) * unit;
+      const selC = isPicked(ct.id);
+      els.push(R('path', { key: ct.id, d: this.arcPath(c, c, rC0, rC1, a + g, a + cw - g), fill: 'oklch(' + (ci % 2 ? 0.72 : 0.66) + ' ' + ct.c + ' ' + ct.h + ')', stroke: selC ? 'var(--text)' : 'var(--bg)', strokeWidth: (selC ? 2.5 : 1.5) * K, style: { cursor: 'pointer' }, onClick: () => this.mapTap(ct.id) }));
+      label('L' + ct.id, nm(ct), (rC0 + rC1) / 2, a + cw / 2, 9.5, 700);
+      let sa = a;
+      ct.sub.forEach((sb, si) => {
+        const sw = Math.max(1, sb.d.length) * unit;
+        const selS = isPicked(sb.id);
+        const lg = 0.6 + si * 0.22 / Math.max(1, ct.sub.length - 1);
+        els.push(R('path', { key: sb.id, d: this.arcPath(c, c, rC1, rS1, sa + g, sa + sw - g), fill: 'oklch(' + lg.toFixed(3) + ' ' + ct.c + ' ' + ct.h + ')', stroke: selS ? 'var(--text)' : 'var(--bg)', strokeWidth: (selS ? 2.5 : 1.2) * K, style: { cursor: 'pointer' }, onClick: () => this.mapTap(sb.id) }));
+        label('L' + sb.id, nm(sb), (rC1 + rS1) / 2, sa + sw / 2, 8.5);
+        sb.d.forEach((d, di) => {
+          const da0 = sa + di * unit + g, da1 = sa + (di + 1) * unit - g, dam = (da0 + da1) / 2;
+          const ll = 0.6 + di * 0.24 / Math.max(1, sb.d.length - 1);
+          const selD = isPicked(d[0]);
+          els.push(R('path', { key: d[0], d: this.arcPath(c, c, rS1, rD1, da0, da1), fill: 'oklch(' + ll.toFixed(3) + ' ' + ct.c + ' ' + ct.h + ')', stroke: selD ? 'var(--text)' : 'var(--bg)', strokeWidth: (selD ? 2.5 : 1) * K, style: { cursor: 'pointer' }, onClick: () => this.mapTap(d[0]) }));
+          const tx = c + Math.cos(dam) * (rS1 + 12 * K), ty = c + Math.sin(dam) * (rS1 + 12 * K);
+          const { rot, flip } = radial(tx, ty, dam);
+          els.push(R('text', { key: 't' + d[0], x: tx, y: ty, fill: 'var(--wheel-ink)', fontSize: 8 * FK, fontWeight: 500, fontFamily: 'inherit', textAnchor: flip ? 'end' : 'start', dominantBaseline: 'middle', letterSpacing: 0.3, transform: 'rotate(' + rot + ' ' + tx.toFixed(1) + ' ' + ty.toFixed(1) + ')', style: { pointerEvents: 'none', textTransform: 'uppercase' } }, l === 'ru' ? d[1] : d[2]));
+          if (this._mem.has(d[0])) els.push(R('circle', { key: 'm' + d[0], cx: c + Math.cos(dam) * (rD1 - 8 * K), cy: c + Math.sin(dam) * (rD1 - 8 * K), r: 2.5 * K, fill: 'var(--wheel-mark)', opacity: 0.9, style: { pointerEvents: 'none' } }));
+        });
+        sa += sw;
+      });
+      a += cw;
+    });
+    els.push(R('circle', { key: 'hub', cx: c, cy: c, r: rC0 - 8 * K, fill: 'var(--bg)', stroke: 'var(--line-4)', strokeWidth: K }));
+    els.push(R('text', { key: 'hubT', x: c, y: c + 3 * K, fill: 'var(--faint)', fontSize: 9 * FK, letterSpacing: 2 * K, textAnchor: 'middle', fontFamily: 'inherit', style: { textTransform: 'uppercase' } }, this.T().wheel_root));
+    const px = big ? SZ : Math.round(SZ * S.mapZoom);
+    return R('svg', { viewBox: '0 0 ' + SZ + ' ' + SZ, width: px, height: px, style: { display: 'block' } }, els);
+  }
+  wheelSvg() {
+    const R = React.createElement, { path, dir, picked } = this.state, items = this.wheelItems(), n = items.length;
+    this._mem = this.memSet();
+    const cx = 175, cy = 175, r0 = 74, r1 = 170, g = 0.016, els = [];
+    items.forEach((it, i) => {
+      const a0 = -Math.PI / 2 + i * 2 * Math.PI / n + g, a1 = -Math.PI / 2 + (i + 1) * 2 * Math.PI / n - g;
+      const sel = it.leaf && picked.some((p) => p.id === it.id);
+      els.push(R('path', { key: it.id, d: this.arcPath(cx, cy, r0, r1, a0, a1), fill: `oklch(${it.l.toFixed(3)} ${it.c} ${it.h})`, stroke: sel ? 'var(--text)' : 'var(--bg)', strokeWidth: sel ? 2.5 : 1.5, style: { cursor: 'pointer' }, onClick: () => this.wheelTap(it) }));
+      const am = (a0 + a1) / 2, rm = (r0 + r1) / 2 + 2, x = cx + Math.cos(am) * rm, y = cy + Math.sin(am) * rm;
+      let rot = am * 180 / Math.PI; if (Math.cos(am) < 0) rot += 180;
+      els.push(R('text', { key: 't' + it.id, x, y, fill: 'var(--wheel-ink)', fontSize: n > 10 ? 8 : n > 6 ? 9 : 10, fontWeight: 600, fontFamily: 'inherit', textAnchor: 'middle', dominantBaseline: 'middle', letterSpacing: 0.5, transform: `rotate(${rot.toFixed(1)} ${x.toFixed(1)} ${y.toFixed(1)})`, style: { pointerEvents: 'none', textTransform: 'uppercase' } }, it.label));
+      if (this.memHit(it)) els.push(R('circle', { key: 'm' + it.id, cx: cx + Math.cos(am) * (r1 - 9), cy: cy + Math.sin(am) * (r1 - 9), r: 2.3, fill: 'var(--wheel-mark)', opacity: 0.9, 'data-hint': 'wheel-mem', style: { pointerEvents: 'none' } }));
+    });
+    els.push(R('circle', { key: 'c0', cx, cy, r: r0 - 9, fill: 'var(--bg)', stroke: 'var(--line-4)', strokeWidth: 1, style: { cursor: path.length ? 'pointer' : 'default' }, onClick: () => this.wheelUp() }));
+    const t = this.T();
+    if (path.length) {
+      els.push(R('text', { key: 'c1', x: cx, y: cy - 7, fill: 'var(--dim)', fontSize: 13, textAnchor: 'middle', fontFamily: 'inherit', style: { pointerEvents: 'none' } }, '↑'));
+      els.push(R('text', { key: 'c2', x: cx, y: cy + 12, fill: 'var(--text)', fontSize: 8.5, letterSpacing: 1.5, textAnchor: 'middle', fontFamily: 'inherit', style: { pointerEvents: 'none', textTransform: 'uppercase' } }, this.nameOf(path[path.length - 1])));
+    } else {
+      els.push(R('text', { key: 'c2', x: cx, y: cy + 3, fill: 'var(--faint)', fontSize: 9, letterSpacing: 2, textAnchor: 'middle', fontFamily: 'inherit' }, t.wheel_root));
+    }
+    return R('div', { key: path.join('/') || 'root', style: { animation: (dir > 0 ? 'whzin' : 'whzout') + ' .32s cubic-bezier(.22,.8,.24,1)' } },
+      R('svg', { viewBox: '0 0 350 350', width: 322, height: 322, style: { display: 'block', maxWidth: '100%' } }, els));
+  }
+  miniWheelSvg() {
+    const R = React.createElement, cats = this.WS(), n = cats.length, cx = 40, cy = 40, els = [];
+    cats.forEach((c, i) => {
+      const a0 = -Math.PI / 2 + i * 2 * Math.PI / n + 0.03, a1 = -Math.PI / 2 + (i + 1) * 2 * Math.PI / n - 0.03;
+      els.push(R('path', { key: c.id, d: this.arcPath(cx, cy, 15, 38, a0, a1), fill: `oklch(${(i % 2 ? 0.72 : 0.66)} ${c.c} ${c.h})`, stroke: 'var(--bg)', strokeWidth: 1 }));
+    });
+    return R('svg', { viewBox: '0 0 80 80', width: 64, height: 64, style: { display: 'block' } }, els);
+  }
+  devSvg(d, big) {
+    const R = React.createElement, els = []; let k = 0;
+    const sc = { s: 0.82, m: 1, l: 1.15 }[d.vol] || 1, cx = 150, topY = 30;
+    let hb, by;
+    if (d.bottom === 'cone') { hb = 9; by = 148; }
+    else if (d.bottom === 'flat') { hb = 42 * sc; by = 136; }
+    else if (d.bottom === 'basket') { hb = 64 * sc; by = 110; }
+    else { hb = 54 * sc; by = 150; }
+    const ht = d.bottom === 'cyl' ? hb : 88 * sc;
+    const L1 = [cx - ht, topY], L2 = [cx - hb, by], R1 = [cx + ht, topY], R2 = [cx + hb, by];
+    const ln = (a, b, o = {}) => els.push(R('line', { key: 'e' + (k++), x1: a[0], y1: a[1], x2: b[0], y2: b[1], stroke: o.s || 'var(--text-secondary)', strokeWidth: o.w || 1.4, strokeDasharray: o.d, strokeLinecap: 'round' }));
+    ln([cx - ht - 9, topY], [cx + ht + 9, topY], { w: 1.8 });
+    ln(L1, L2); ln(R1, R2);
+    if (d.bottom !== 'cone') ln(L2, R2);
+    const off = { ceramic: 5.5, glass: 2.5, plastic: 0, metal: 1.8 }[d.material] || 0;
+    if (off) { const dy = d.bottom === 'cone' ? 7 : 0; ln([L1[0] + off, topY], [L2[0] + off * 0.7, by - dy], { w: 1 }); ln([R1[0] - off, topY], [R2[0] - off * 0.7, by - dy], { w: 1 }); if (d.bottom !== 'cone') ln([L2[0] + off * 0.7, by - off * 0.9], [R2[0] - off * 0.7, by - off * 0.9], { w: 1 }); }
+    const P = (a, b, t) => [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t];
+    const tex = { s: 'var(--mid)', w: 1 };
+    if (d.wall === 'ribs') [-0.62, -0.31, 0.31, 0.62].forEach((f) => ln([cx + f * ht, topY + 5], [cx + f * hb, by - 4], tex));
+    if (d.wall === 'spiral') [[L1, L2, 1], [R1, R2, -1]].forEach(([a, b, s]) => [0.18, 0.38, 0.58, 0.78].forEach((tt) => { const p = P(a, b, tt); ln([p[0] + s * 3, p[1] - 4], [p[0] + s * 14, p[1] + 5], tex); }));
+    if (d.wall === 'petal') [[L1, L2, 1], [R1, R2, -1]].forEach(([a, b, s]) => [0.15, 0.38, 0.61, 0.8].forEach((tt) => { const p = P(a, b, tt); els.push(R('path', { key: 'e' + (k++), d: `M ${p[0] + s * 2} ${p[1] - 6} q ${s * 9} 7 0 13`, fill: 'none', stroke: 'var(--mid)', strokeWidth: 1 })); }));
+    const dash = { pcone: '5 4', wave: '2 3', metal: '1 3', cloth: '7 3 2 3' }[d.filter];
+    if (dash) { const a1 = P(L1, L2, 0.14), b1 = P(L1, L2, 0.94), a2 = P(R1, R2, 0.14), b2 = P(R1, R2, 0.94); ln([a1[0] + 13, a1[1]], [b1[0] + 7, b1[1] - 4], { s: 'var(--dim)', w: 1, d: dash }); ln([a2[0] - 13, a2[1]], [b2[0] - 7, b2[1] - 4], { s: 'var(--dim)', w: 1, d: dash }); }
+    if (d.filter === 'pflat') ln([cx - hb + 8, by - 9], [cx + hb - 8, by - 9], { s: 'var(--dim)', w: 1, d: '4 3' });
+    if (d.flow === 'hybrid') { ln([cx, by], [cx, by + 9]); els.push(R('circle', { key: 'e' + (k++), cx, cy: by + 14, r: 4.5, fill: 'none', stroke: '#D8D8D3', strokeWidth: 1.4 })); ln([cx - 10, by + 22], [cx + 10, by + 22]); }
+    if (d.flow === 'perc') ln([cx, by + 6], [cx, by + 22], { s: 'var(--mid)', w: 1.2, d: '2 5' });
+    if (d.flow === 'imm' && d.bottom !== 'cyl') ln([cx - 13, by], [cx + 13, by], { w: 1.8 });
+    if (d.bottom === 'cyl') { ln([cx - hb + 6, 54], [cx + hb - 6, 54], { w: 1.6 }); ln([cx, 54], [cx, 36]); ln([cx - 16, 36], [cx + 16, 36], { w: 1.8 }); }
+    ln([cx - 102, 174], [cx + 102, 174], { s: 'var(--line-4)', w: 1 });
+    return R('svg', { viewBox: '0 0 300 190', width: big ? 276 : 58, height: big ? 175 : 37, style: { display: 'block' } }, els);
+  }
+  devLine(d) { const T = this.D.TRAITS, i = this.ru() ? 0 : 1; return [T.flow.opts[d.flow][i], T.bottom.opts[d.bottom][i], T.wall.opts[d.wall][i], T.filter.opts[d.filter][i], T.material.opts[d.material][i]].join(' · '); }
+  qrSvg(seed) {
+    const R = React.createElement; let h = 2166136261;
+    for (const c of seed) h = ((h ^ c.charCodeAt(0)) * 16777619) >>> 0;
+    const rnd = () => { h = (h * 1103515245 + 12345) >>> 0; return h / 4294967296; };
+    const N = 21, rects = []; let k = 0;
+    const inF = (x, y) => (x < 8 && y < 8) || (x >= N - 8 && y < 8) || (x < 8 && y >= N - 8);
+    for (let y = 0; y < N; y++) for (let x = 0; x < N; x++) { if (inF(x, y)) continue; if (rnd() > 0.55) rects.push(R('rect', { key: k++, x, y, width: 1, height: 1, fill: '#111110' })); }
+    const F = (fx, fy) => { rects.push(R('rect', { key: k++, x: fx, y: fy, width: 7, height: 7, fill: '#111110' })); rects.push(R('rect', { key: k++, x: fx + 1, y: fy + 1, width: 5, height: 5, fill: '#ededeb' })); rects.push(R('rect', { key: k++, x: fx + 2, y: fy + 2, width: 3, height: 3, fill: '#111110' })); };
+    F(0, 0); F(N - 7, 0); F(0, N - 7);
+    return R('svg', { viewBox: '-2 -2 25 25', width: 104, height: 104, style: { background: '#ededeb', display: 'block' } }, rects);
+  }
+  themePref() { return this.state.themeO ?? this.props.theme ?? 'dark'; }
+  resolvedTheme() { const p = this.themePref(); if (p !== 'system') return p; try { return matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark'; } catch (e) { return 'dark'; } }
+  applyThemeAttr() { const th = this.resolvedTheme(); if (document.documentElement.dataset.theme !== th) document.documentElement.dataset.theme = th; }
+  setThemePref(k) { try { localStorage.setItem('bj-theme', k); } catch (e) {} this.setState({ themeO: k }); }
+  maskDate(raw, prev) { const dg = (s) => (s || '').replace(/\D/g, '').slice(0, 8); const rd = dg(raw), pd = dg(prev); const digits = (raw || '').length < (prev || '').length && rd === pd && rd.length > 0 ? rd.slice(0, -1) : rd; let out = digits.slice(0, 2); if (digits.length >= 2) out += '.'; if (digits.length > 2) { out += digits.slice(2, 4); if (digits.length >= 4) out += '.'; } if (digits.length > 4) out += digits.slice(4, 8); return out; }
+  parseDateStr(raw) { const m = /^\s*(\d{1,2})[.\-\/](\d{1,2})[.\-\/](\d{4})\s*$/.exec(raw || ''); if (!m) return null; const day = Number(m[1]), mo = Number(m[2]); if (mo < 1 || mo > 12 || day < 1 || day > 31) return null; const iso = m[3] + '-' + String(mo).padStart(2, '0') + '-' + String(day).padStart(2, '0'); const p = new Date(iso + 'T00:00:00Z'); return isNaN(p.getTime()) || p.getUTCDate() !== day ? null : iso; }
+  longDate(iso) { return iso.slice(8, 10) + '.' + iso.slice(5, 7) + '.' + iso.slice(0, 4); }
+  ymOf(iso) { return { y: Number(iso.slice(0, 4)), m: Number(iso.slice(5, 7)) }; }
+  daysIn(ym) { return new Date(Date.UTC(ym.y, ym.m, 0)).getUTCDate(); }
+  firstWD(ym) { return (new Date(Date.UTC(ym.y, ym.m - 1, 1)).getUTCDay() + 6) % 7; }
+  shiftYM(ym, dir) { const i = ym.y * 12 + (ym.m - 1) + dir; return { y: Math.floor(i / 12), m: (i % 12) + 1 }; }
+  canShiftYM(ym, dir, min, max) { const here = ym.y * 12 + ym.m - 1; const e = this.ymOf(dir === -1 ? min : max); const edge = e.y * 12 + e.m - 1; return dir === -1 ? here > edge : here < edge; }
+  yearBefore(iso) { const y = Number(iso.slice(0, 4)) - 1, m = Number(iso.slice(5, 7)); const d = Math.min(Number(iso.slice(8, 10)), this.daysIn({ y, m })); return String(y).padStart(4, '0') + '-' + String(m).padStart(2, '0') + '-' + String(d).padStart(2, '0'); }
+  hintDefs() {
+    return [
+      { id: 'h-home-brew', screen: 'home', key: 'hint_home_brew', sel: 'home-brew' },
+      { id: 'h-home-conv', screen: 'home', key: 'hint_home_conv', sel: 'home-conv' },
+      { id: 'h-home-taste', screen: 'home', key: 'hint_home_taste', sel: 'home-taste' },
+      { id: 'h-home-pending', screen: 'home', key: 'hint_home_pending', sel: 'home-pending' },
+      { id: 'h-shelf-add', screen: 'shelf', key: 'hint_shelf_add', sel: 'shelf-add' },
+      { id: 'h-add-form', screen: 'beanAdd', key: 'hint_add_form', sel: 'bean-forms' },
+      { id: 'h-add-photo', screen: 'beanAdd', key: 'hint_add_photo', sel: 'bean-shots' },
+      { id: 'h-add-roast', screen: 'beanAdd', key: 'hint_add_roast', sel: 'bean-roast-row' },
+      { id: 'h-bean-brews', screen: 'bean', key: 'hint_bean_brews', sel: 'bean-brews' },
+      { id: 'h-brew-fields', screen: 'brew', key: 'hint_brew_fields', sel: 'brew-beans' },
+      { id: 'h-brew-device', screen: 'brew', key: 'hint_brew_device', sel: 'brew-devices' },
+      { id: 'h-brew-grind', screen: 'brew', key: 'hint_brew_grind', sel: 'brew-grind-hint' },
+      { id: 'h-brew-outputs', screen: 'brew', key: 'hint_brew_outputs', sel: 'brew-start' },
+      { id: 'h-rate-later', screen: 'rateLater', key: 'hint_rate_later', sel: 'rate-later' },
+      { id: 'h-diag-scales', screen: 'diag', key: 'hint_diag_scales', sel: 'diag-scales' },
+      { id: 'h-diag-wheel', screen: 'diag', key: 'hint_diag_wheel', sel: 'diag-to-wheel' },
+      { id: 'h-diag-note', screen: 'diag', key: 'hint_diag_note', sel: 'diag-note' },
+      { id: 'h-wheel-nav', screen: 'wheel', key: 'hint_wheel_nav', sel: 'wheel-stage' },
+      { id: 'h-wheel-here', screen: 'wheel', key: 'hint_wheel_here', sel: 'wheel-add-here' },
+      { id: 'h-wheel-tag', screen: 'wheel', key: 'hint_wheel_tag', sel: 'wheel-tags' },
+      { id: 'h-wheel-memory', screen: 'wheel', key: 'hint_wheel_memory', sel: 'wheel-mem' },
+      { id: 'h-conv-from', screen: 'conv', key: 'hint_conv_from', sel: 'conv-from' },
+      { id: 'h-conv-band', screen: 'conv', key: 'hint_conv_band', sel: 'conv-band' },
+      { id: 'h-conv-cal', screen: 'conv', key: 'hint_conv_cal', sel: 'conv-cal' },
+      { id: 'h-conv-use', screen: 'conv', key: 'hint_conv_use', sel: 'conv-use' },
+      { id: 'h-log-filters', screen: 'log', key: 'hint_log_filters', sel: 'log-filters' },
+      { id: 'h-log-compare', screen: 'log', key: 'hint_log_compare', sel: 'log-compare' },
+      { id: 'h-detail-repeat', screen: 'detail', key: 'hint_detail_repeat', sel: 'detail-repeat' },
+      { id: 'h-detail-stages', screen: 'detail', key: 'hint_detail_stages', sel: 'detail-stages' },
+      { id: 'h-detail-qr', screen: 'detail', key: 'hint_detail_qr', sel: 'detail-qr' },
+      { id: 'h-compare-diff', screen: 'compare', key: 'hint_compare_diff', sel: 'compare-rows' },
+      { id: 'h-more-grinders', screen: 'more', key: 'hint_more_grinders', sel: 'more-grinders' },
+      { id: 'h-more-transfer', screen: 'more', key: 'hint_more_transfer', sel: 'more-transfer' },
+      { id: 'h-devices-new', screen: 'devices', key: 'hint_devices_new', sel: 'devices-new' },
+      { id: 'h-device-presets', screen: 'device', key: 'hint_device_presets', sel: 'device-presets' },
+      { id: 'h-device-flow', screen: 'device', key: 'hint_device_flow', sel: 'trait-flow' },
+    ];
+  }
+  syncHints() { if (this._hintT) clearTimeout(this._hintT); this._hintT = setTimeout(() => this.measureHint(), 380); }
+  measureHint() {
+    const S = this.state;
+    if (!S.hintsOn || !this.D || !S.shelf) { if (S.hintCur) this.setState({ hintCur: null }); return; }
+    const root = document.querySelector('[data-bj-root]');
+    if (!root) return;
+    const scr = S.screen;
+    const pend = this.hintDefs().filter((h) => h.screen === scr && !S.hintsSeen[h.id]);
+    const found = [];
+    for (const h of pend) { const el = root.querySelector('[data-hint="' + h.sel + '"]'); if (!el) continue; const b = el.getBoundingClientRect(); if (b.width > 1 && b.height > 1) found.push({ h, el }); }
+    if (!found.length) { this._chain = null; if (S.hintCur) this.setState({ hintCur: null }); return; }
+    if (!this._chain || this._chain.scr !== scr) this._chain = { scr, total: found.length, done: 0 };
+    const { h, el } = found[0];
+    let p = el.parentElement;
+    while (p && p !== root && p.scrollHeight <= p.clientHeight + 4) p = p.parentElement;
+    if (p && p !== root && p.scrollHeight > p.clientHeight + 4) { const pb = p.getBoundingClientRect(), b0 = el.getBoundingClientRect(); if (b0.bottom > pb.bottom - 24) p.scrollTop += b0.bottom - pb.bottom + 96; else if (b0.top < pb.top + 8) p.scrollTop -= pb.top - b0.top + 40; }
+    const rb = root.getBoundingClientRect(), eb = el.getBoundingClientRect(), pad = 6;
+    const x = Math.max(0, eb.left - rb.left - pad), y = Math.max(0, eb.top - rb.top - pad);
+    const w = Math.min(rb.width, eb.right - rb.left + pad) - x, hh = Math.min(rb.height, eb.bottom - rb.top + pad) - y;
+    const cur = { id: h.id, key: h.key, x: Math.round(x), y: Math.round(y), w: Math.round(w), h: Math.round(hh), at: this._chain.done, total: this._chain.total, last: found.length === 1, rootH: Math.round(rb.height) };
+    const old = S.hintCur;
+    if (!old || old.id !== cur.id || old.x !== cur.x || old.y !== cur.y || old.w !== cur.w || old.h !== cur.h) this.setState({ hintCur: cur });
+  }
+  hintAdvance() { const c = this.state.hintCur; if (!c) return; if (this._chain) this._chain.done++; this.setState({ hintsSeen: { ...this.state.hintsSeen, [c.id]: 1 }, hintCur: null }); this.syncHints(); }
+  renderVals() {
+    if (!this.D || !this.state.shelf) return { phoneW: 393, phoneH: 852, showNav: false, isHome: false, t: {}, deskHint: '', ctrlHv: [], ctrlLang: [], ctrlTheme: [], frameDark: this.resolvedTheme() === 'dark', hintShow: false, calWeek: [], calCells: [] };
+    const D = this.D, t = this.T(), lang = this.L(), ru = this.ru(), S = this.state, scr = S.screen, hv = this.HV();
+    const is = (k) => scr === k;
+    const tabs = ['home', 'shelf', 'log', 'more'];
+    const done = S.journal.filter((j) => j.status === 'done');
+    const pendingE = S.journal.find((j) => j.status === 'pending');
+    const rowOf = (e) => ({ date: this.fd(e.date), time: e.time, title: this.entryTitle(e), sub: this.entrySub(e), mark: this.entryMark(e), desc: this.descChips(e.desc), pend: e.status === 'pending', open: () => this.go('detail', { viewId: e.id }), edit: (ev) => { ev.stopPropagation(); this.go('detail', { viewId: e.id, entryEdit: true }); } });
+    const c = this.cv(), win = Math.max(8, Math.ceil(c.hi * 1.4)), fromG = this.G(S.convFrom), toG = this.G(S.convTo);
+    const step = fromG.dp ? 0.5 : 1;
+    const bumpConv = (s) => this.setState({ convVal: Math.max(0, Math.round((S.convVal + s) * 10) / 10) });
+    const best = done.filter((j) => j.grind != null && j.diag).sort((a, b) => b.diag.balance - a.diag.balance)[0];
+    const bn = this.bean(S.beanId) || S.shelf[0];
+    const bnAge = D.ageDays(bn.roast);
+    const addIso = this.parseDateStr(S.addRoast);
+    const addReady = !!addIso && !!(S.addName || '').trim();
+    const bcalMax = D.TODAY, bcalMin = this.yearBefore(D.TODAY);
+    const bcalYM = S.bcalYM || this.ymOf(addIso || bcalMax);
+    const canPrev = this.canShiftYM(bcalYM, -1, bcalMin, bcalMax), canNext = this.canShiftYM(bcalYM, 1, bcalMin, bcalMax);
+    const calCells = [];
+    if (S.bcalOpen) {
+      for (let i = this.firstWD(bcalYM); i > 0; i--) calCells.push({ label: '', fg: 'transparent', bc: 'transparent', cur: 'default' });
+      for (let d = 1, n = this.daysIn(bcalYM); d <= n; d++) {
+        const iso = String(bcalYM.y).padStart(4, '0') + '-' + String(bcalYM.m).padStart(2, '0') + '-' + String(d).padStart(2, '0');
+        const inR = iso >= bcalMin && iso <= bcalMax, on = iso === addIso;
+        calCells.push({ label: d, fg: !inR ? 'var(--muted)' : on ? 'var(--text)' : 'var(--text-secondary)', bc: on ? 'var(--text)' : 'transparent', cur: inR ? 'pointer' : 'default', pick: inR ? () => this.setState({ addRoast: this.longDate(iso), bcalOpen: false }) : undefined });
+      }
+    }
+    let hintCardTop = 'auto', hintCardBottom = 'auto';
+    if (S.hintCur) {
+      const hcH = S.hintCur.rootH || 852;
+      const below = S.hintCur.y + S.hintCur.h + 12;
+      if (hcH - 100 - below >= 132) hintCardTop = below + 'px';
+      else hintCardBottom = Math.min(Math.max(100, hcH - S.hintCur.y + 12), hcH - 132) + 'px';
+    }
+    const brewBean = this.bean(S.brew.bean), brewDev = this.dev(S.brew.device);
+    const showDevice = brewBean.form !== 'drip';
+    const isHy = showDevice && brewDev && brewDev.flow === 'hybrid';
+    const gcv = this.cv();
+    const dose = S.brew.dose;
+    const bump = (key, s, min, max) => this.setState({ brew: { ...S.brew, [key]: Math.min(max, Math.max(min, Math.round((S.brew[key] + s) * 10) / 10)) } });
+    const rateE = S.journal.find((j) => j.id === S.rateId);
+    const diagKeys = [['acid', t.diag_acid], ['bitter', t.diag_bitter], ['body', t.diag_body], ['balance', t.diag_balance]];
+    const filters = [{ k: 'all', label: t.log_all }, ...S.shelf.map((s) => ({ k: s.id, label: s.name.split(' ·')[0].split(' (')[0] })), { k: 'm-perc', label: ru ? 'ПРОЛИВ' : 'PERC' }, { k: 'm-imm', label: ru ? 'ИММЕРСИЯ' : 'IMM' }, { k: 'm-hybrid', label: ru ? 'ГИБРИД' : 'HYBRID' }, { k: 'm-drip', label: ru ? 'ДРИП' : 'DRIP' }, { k: 'm-cup', label: ru ? 'ЧАШКИ' : 'CUPS' }];
+    const logEntries = S.journal.filter((e) => S.logFilter === 'all' ? true : S.logFilter.startsWith('m-') ? e.mode === S.logFilter.slice(2) : e.bean === S.logFilter);
+    const de = S.journal.find((j) => j.id === S.viewId);
+    let cmpRows = [], cmpA = '', cmpB = '';
+    if (S.cmpPair) {
+      const [a, b] = S.cmpPair;
+      cmpA = `A · ${this.fd(a.date)}${a.grind != null ? ' · ' + a.grind : ''}`; cmpB = `B · ${this.fd(b.date)}${b.grind != null ? ' · ' + b.grind : ''}`;
+      const row = (label, va, vb) => { const df = String(va ?? '—') !== String(vb ?? '—'); return { label, a: String(va ?? '—'), b: String(vb ?? '—'), ca: df ? 'var(--text)' : 'var(--mid)', cb: df ? 'var(--text)' : 'var(--mid)', wa: df ? 700 : 400, wb: df ? 700 : 400 }; };
+      const dn = (e) => this.devLabelOf(e);
+      cmpRows = [
+        row(ru ? 'ЗЕРНО' : 'COFFEE', this.bean(a.bean).name, this.bean(b.bean).name),
+        row(ru ? 'ДЕВАЙС' : 'BREWER', dn(a), dn(b)),
+        row(ru ? 'РЕЖИМ' : 'MODE', D.modeName(a.mode, lang), D.modeName(b.mode, lang)),
+        row(t.brew_grind, a.grind, b.grind),
+        row(t.brew_dose, a.dose + ' ' + t.grams, b.dose + ' ' + t.grams),
+        row(t.brew_water, a.water + ' ' + t.grams, b.water + ' ' + t.grams),
+        row(t.brew_temp, a.temp + '°', b.temp + '°'),
+        row(ru ? 'ВРЕМЯ' : 'TIME', D.fmtT(a.total), D.fmtT(b.total)),
+        row(ru ? 'КЛАПАН' : 'VALVE', a.valveAt != null ? D.fmtT(a.valveAt) : '—', b.valveAt != null ? D.fmtT(b.valveAt) : '—'),
+        row(t.diag_acid, a.diag && a.diag.acid, b.diag && b.diag.acid),
+        row(t.diag_bitter, a.diag && a.diag.bitter, b.diag && b.diag.bitter),
+        row(t.diag_body, a.diag && a.diag.body, b.diag && b.diag.body),
+        row(t.diag_balance, a.diag && a.diag.balance, b.diag && b.diag.balance),
+        row(t.log_desc, (a.desc || []).map(([i]) => this.nameOf(i)).join(', ') || '—', (b.desc || []).map(([i]) => this.nameOf(i)).join(', ') || '—'),
+        row(t.log_note, a.note || '—', b.note || '—'),
+      ];
+    }
+    const tm = S.timer; let tv = {};
+    if (tm) {
+      const st = tm.stages, cur = st[tm.idx], total = st.reduce((s, x) => s + x[1], 0);
+      const el = this.tEl(tm), sel = this.tSel(tm);
+      const cum = st.slice(0, tm.idx + 1).reduce((s, x) => s + x[2], 0);
+      const nxt = st[tm.idx + 1];
+      tv = {
+        tElapsed: D.fmtT(el), tTargetLine: (ru ? 'рецепт ' : 'recipe ') + D.fmtT(total),
+        tSegs: st.map((x, i) => ({ w: x[1] ? Math.max(1.2, x[1] / total * 100 - 0.6).toFixed(1) : 1, fill: i < tm.idx ? 100 : i > tm.idx ? 0 : tm.paused ? 100 : x[1] ? Math.min(100, sel / x[1] * 100).toFixed(1) : 0 })),
+        tStageNum: tm.paused ? '· · ·' : `${tm.idx + 1} / ${st.length}`, tStageName: tm.paused ? t.t_pause : D.stageName(cur[0], lang),
+        tStageEl: tm.paused ? `+ ${D.fmtT(sel)}` : D.fmtT(sel),
+        tStageRec: tm.paused ? (ru ? 'даём стечь' : 'letting it drain') : ((cur[1] || cur[2]) ? (ru ? 'рецепт' : 'recipe') + (cur[1] ? ' ' + D.fmtT(cur[1]) : '') + (cur[2] ? ' · ' + cur[2] + ' ' + t.grams : '') : ''),
+        tNextLine: nxt ? `${ru ? 'дальше' : 'next'}: ${D.stageName(nxt[0], lang)}${nxt[2] ? ' · ' + nxt[2] + ' ' + t.grams : ''}` : (ru ? 'последняя стадия' : 'last stage'),
+        tBtnLabel: tm.paused ? (nxt ? D.stageName(nxt[0], lang) : t.t_finish) : tm.idx >= st.length - 1 ? t.t_finish : (nxt && nxt[1] === 0 ? D.stageName(nxt[0], lang) : t.t_next),
+        tPauseShow: !tm.paused && tm.idx < st.length - 1, tPause: () => this.tPause(), tPauseLabel: t.t_pause,
+        tAdv: () => this.tAdv(), tCancel: () => this.setState({ timer: null, screen: 'brew' }),
+        tBeanLine: `${brewBean.name} · ${showDevice ? (brewDev ? brewDev.name.replace('Hario ', '') : '—') : t.form_drip} · ${S.brew.temp}°`,
+      };
+    }
+    const crumbs = [{ label: t.wheel_root, col: S.path.length ? 'var(--faint)' : 'var(--text)', jump: () => this.setState({ path: [], dir: -1, weRenaming: null, weHiding: null, weAddVal: '' }) },
+      ...S.path.map((id, i) => ({ label: ' / ' + this.nameOf(id), col: i === S.path.length - 1 ? 'var(--text)' : 'var(--faint)', jump: () => this.setState({ path: S.path.slice(0, i + 1), dir: -1, weRenaming: null, weHiding: null, weAddVal: '' }) }))];
+    const lastPath = S.path[S.path.length - 1];
+    const matNote = { ceramic: ru ? 'керамика держит тепло — прогревать дольше' : 'ceramic holds heat — preheat longer', glass: ru ? 'стекло — быстрый прогрев, быстрое остывание' : 'glass — fast preheat, fast cooling', plastic: ru ? 'пластик почти не крадёт тепло' : 'plastic steals almost no heat', metal: ru ? 'металл — мгновенный прогрев, следи за температурой' : 'metal — instant heat, watch the temp' };
+    const wallNote = { petal: ru ? 'лепестки уменьшают контакт бумаги — поток быстрее' : 'petals reduce paper contact — faster flow', flat: '', ribs: ru ? 'рёбра держат бумагу от стенки' : 'ribs keep paper off the wall', spiral: ru ? 'спираль ведёт поток к центру' : 'spiral guides flow to the center', smooth: ru ? 'гладкая стенка — медленнее дренаж' : 'smooth wall — slower drawdown' };
+    return {
+      phoneW: 393, phoneH: 852, t, appTitle: t.appName.toUpperCase(), todayLine: '01.08.2026',
+      deskHint: ru ? 'интерактивный прототип · колесо: тап по секторам, центр — вверх · таймер живой · на пачки полки можно бросить свои фото · ✎ — правка записи' : 'interactive prototype · wheel: tap sectors, center goes up · live timer · drop your own pack photos on the shelf · ✎ — edit an entry',
+      ctrlLang: ['ru', 'en'].map((k) => ({ label: k.toUpperCase(), col: lang === k ? 'var(--bg)' : 'var(--faint)', bg: lang === k ? 'var(--dim)' : 'none', pick: () => this.setState({ langO: k }) })),
+      isHome: is('home'), isConv: is('conv'), isShelf: is('shelf'), isBean: is('bean'), isBeanAdd: is('beanAdd'), isDevices: is('devices'), isDevice: is('device'), isBrew: is('brew'), isTimer: is('timer'), isRateLater: is('rateLater'), isDiag: is('diag'), isWheel: is('wheel'), isLog: is('log'), isDetail: is('detail'), isCompare: is('compare'), isMore: is('more'), isSpec: is('spec'),
+      showNav: tabs.includes(scr), back: () => this.back(),
+      goTabHome: () => this.setTab('home'), goTabShelf: () => this.setTab('shelf'), goTabLog: () => this.setTab('log'), goTabMore: () => this.setTab('more'),
+      tabCHome: is('home') ? 'var(--text)' : 'var(--faint)', tabCShelf: is('shelf') ? 'var(--text)' : 'var(--faint)', tabCLog: is('log') ? 'var(--text)' : 'var(--faint)', tabCMore: is('more') ? 'var(--text)' : 'var(--faint)',
+      hvC: true,
+      pending: !!pendingE, pendingTitle: pendingE ? `${this.entryTitle(pendingE)}${pendingE.grind != null ? ' · ' + pendingE.grind : ''}` : '', pendingWhen: pendingE ? (pendingE.date === D.TODAY ? (ru ? 'сегодня' : 'today') : this.fd(pendingE.date)) + ' · ' + pendingE.time : '',
+      ratePending: () => this.ratePending(),
+      openBrew: () => this.go('brew'), openConv: () => this.go('conv'),
+      ctaSub: done[0] ? `${this.entryTitle(done[0])}${done[0].grind != null ? ' · ' + done[0].grind : ''} · ${done[0].temp}°` : '',
+      convHomeLine: `${this.shortOf(fromG)} ${S.convVal} → ${this.shortOf(toG)} ${c.center}`,
+      lastRows: done.slice(0, 2).map(rowOf), feedRows: S.journal.slice(0, 5).map(rowOf),
+      shelfRows: S.shelf.map((s) => ({ name: s.name, tech: this.beanTech(s), open: () => this.go('bean', { beanId: s.id }) })),
+      heroName: S.shelf[0].name, heroTech: this.beanTech(S.shelf[0]), heroOpen: () => this.go('bean', { beanId: S.shelf[0].id }), slotPh: ru ? 'фото пачки — брось сюда' : 'pack photo — drop here',
+      fromName: fromG.name, toName: toG.name,
+      dbCountLine: D.GRINDER_DB.length + (ru ? ' кофемолки · база' : ' grinders · base'),
+      gPickOpen: !!S.gPickOpen, gPickToggle: () => this.setState({ gPickOpen: !S.gPickOpen, gQuery: '' }),
+      gQueryVal: S.gQuery || '', setGQuery: (e) => this.setState({ gQuery: e.target.value }),
+      dbRows: (S.gPickOpen ? D.GRINDER_DB.filter((g) => !S.gQuery || g.name.toLowerCase().includes(S.gQuery.toLowerCase())) : []).map((g) => ({ name: g.name, meta: g.step + ' µm', sel: g.id === S.convFrom, bc: g.id === S.convFrom ? 'var(--text)' : 'transparent', pick: () => this.setState({ convFrom: g.id, gPickOpen: false }) })),
+      toHint: ru ? 'своя · из настроек' : 'yours · from settings',
+      convVal: S.convVal, convDec: () => bumpConv(-step), convInc: () => bumpConv(step),
+      convTech: `${S.convVal} ${this.unitOf(fromG)} · ${c.um} µm`,
+      rangeLo: c.lo.toFixed(1), rangeHi: c.hi.toFixed(1), rangeUnit: this.unitOf(toG).toUpperCase(),
+      cycleTo: () => this.cycleG('convTo'),
+      bandL: (c.lo / win * 100).toFixed(1), bandW: ((c.hi - c.lo) / win * 100).toFixed(1), centerPct: (c.center / win * 100).toFixed(1), scaleMax: win,
+      centerLine: `${t.conv_center} ${c.center} · ${c.um} µm · ${toG.step} ${t.conv_permark}`,
+      hasCalib: S.calib !== 0, calibLine: `${t.conv_calibrated} ${S.calib > 0 ? '+' : ''}${S.calib} · ${S.calibSrc === 'log' ? t.conv_from_log : (ru ? 'вручную' : 'manual')}`,
+      calReset: () => this.setState({ calib: 0, calibSrc: null }),
+      calOpen: S.calOpen, toggleCal: () => this.setState({ calOpen: !S.calOpen, calVal: best ? best.grind : c.center }),
+      calSuggestLine: best ? `${t.conv_from_log}: ${ru ? 'баланс' : 'balance'} ${best.diag.balance}/10 ${ru ? 'при' : 'at'} ${best.grind}` : '',
+      calVal: S.calVal.toFixed(1), calDec: () => this.setState({ calVal: Math.max(0, S.calVal - 0.1) }), calInc: () => this.setState({ calVal: S.calVal + 0.1 }),
+      calApply: () => { const raw = this.cv(true); const off = Math.round((S.calVal - raw.center) * 10) / 10; this.setState({ calib: off, calibSrc: best && Math.abs(S.calVal - best.grind) < 0.05 ? 'log' : 'manual', calOpen: false }); },
+      useInBrew: () => this.setState({ brew: { ...S.brew, grind: c.center }, screen: 'brew', stack: [...S.stack, 'conv'] }),
+      shelfCount: S.shelf.length + ' · ' + (ru ? 'пачки' : 'packs'),
+      shelfCards: S.shelf.map((s) => ({ name: s.name, tech: `${this.formL(s.form)} · ${this.beanTech(s)}`, slotId: s.id + '-0', ph: ru ? 'фото пачки' : 'pack photo', open: () => this.go('bean', { beanId: s.id }) })),
+      addPhoto: () => this.go('beanAdd'),
+      beanName: bn.name, beanFormTag: this.formL(bn.form),
+      beanStats: [{ label: t.shelf_age.toUpperCase(), val: `${bnAge} ${t.days} · ${this.phaseL(bnAge)}` }, { label: t.shelf_left.toUpperCase(), val: this.leftStr(bn) }, { label: t.bean_roast, val: this.fd(bn.roast) }],
+      beanRows: [{ label: ru ? 'ОБЖАРЩИК' : 'ROASTER', val: bn.roaster || '—' }, { label: t.bean_roast, val: bn.roast.split('-').reverse().join('.') }],
+      beanDripNote: bn.form === 'drip',
+      beanSlots: Array.from({ length: bn.photos || 1 }, (_, i) => ({ sid: bn.id + '-' + i, ph: i === 0 ? (ru ? 'лицо пачки' : 'front of bag') : (ru ? 'шов · дата обжарки' : 'seam · roast date') })),
+      beanBrews: S.journal.filter((j) => j.bean === bn.id).map(rowOf),
+      brewThis: () => this.setState({ brew: { ...S.brew, bean: bn.id, dose: bn.form === 'drip' && bn.dose ? bn.dose : S.brew.dose }, recipe: null, recipeTouched: false, entryEdit: false, wheelMode: 'drill', mapZoom: 1, mapSel: null, screen: 'brew', stack: [...S.stack, 'bean'] }),
+      addFormChips: ['beans', 'ground', 'drip'].map((f) => ({ label: this.formL(f), bc: S.addForm === f ? 'var(--text)' : 'var(--line-4)', fg: S.addForm === f ? 'var(--text)' : 'var(--dim)', pick: () => this.setState({ addForm: f }) })),
+      addSlotPh: ru ? 'снимок пачки — камера или брось файл' : 'shoot the bag — or drop a file',
+      addPhotoHint: ru ? 'хватит одного снимка — лицо пачки' : 'one shot is enough — the front of the bag',
+      addRoastVal: S.addRoast, setAddRoast: (e) => { const masked = this.maskDate(e.target.value, S.addRoast); const iso = this.parseDateStr(masked); this.setState({ addRoast: masked, ...(iso ? { bcalYM: this.ymOf(iso) } : {}) }); },
+      addAmtLabel: S.addForm === 'drip' ? (ru ? 'ШТУК В КОРОБКЕ' : 'BAGS IN BOX') : t.bean_weight, addAmtUnit: S.addForm === 'drip' ? t.pcs : t.grams,
+      addAmtVal: S.addForm === 'drip' ? S.addCount : S.addWeight,
+      addAmtDec: () => S.addForm === 'drip' ? this.setState({ addCount: Math.max(1, S.addCount - 1) }) : this.setState({ addWeight: Math.max(50, S.addWeight - 25) }),
+      addAmtInc: () => S.addForm === 'drip' ? this.setState({ addCount: S.addCount + 1 }) : this.setState({ addWeight: S.addWeight + 25 }),
+      addNameVal: S.addName, setAddName: (e) => this.setState({ addName: e.target.value }),
+      addSave: () => { if (!addReady) return; const iso = addIso; const nb = { id: 'b' + Date.now(), form: S.addForm, name: S.addName.trim(), roaster: '', roast: iso, photos: 1 }; if (S.addForm === 'drip') { nb.count = S.addCount; nb.leftCount = S.addCount; nb.dose = 12; } else { nb.weight = S.addWeight; nb.left = S.addWeight; } const fromBrew = S.stack[S.stack.length - 1] === 'brew'; this.setState({ shelf: [nb, ...S.shelf], screen: fromBrew ? 'brew' : 'shelf', stack: fromBrew ? S.stack.slice(0, -1) : [], brew: fromBrew ? { ...S.brew, bean: nb.id, dose: nb.dose || S.brew.dose } : S.brew, recipe: fromBrew ? null : S.recipe, recipeTouched: fromBrew ? false : S.recipeTouched }); },
+      addBeanGo: () => this.go('beanAdd'), addBeanLabel: ru ? '+ ЗЕРНО' : '+ COFFEE', addDevLabel: ru ? '+ ДЕВАЙС' : '+ BREWER',
+      devRows: S.devices.map((d) => ({ name: d.name, line: this.devLine(d), svg: this.devSvg(d, false), open: () => this.setState({ draft: { ...d }, devId: d.id, screen: 'device', stack: [...S.stack, scr] }) })),
+      newDev: () => this.setState({ draft: { name: '', flow: 'perc', bottom: 'cone', wall: 'petal', filter: 'pcone', material: 'plastic', vol: 'm' }, devId: null, screen: 'device', stack: [...S.stack, scr] }),
+      draftSvg: S.draft ? this.devSvg(S.draft, true) : null,
+      draftCaption: S.draft ? this.devLine(S.draft) : '',
+      draftNote: S.draft ? [wallNote[S.draft.wall], matNote[S.draft.material]].filter(Boolean).join(' · ') : '',
+      draftNameVal: S.draft ? S.draft.name : '', setDraftName: (e) => this.setState({ draft: { ...S.draft, name: e.target.value } }),
+      traitRows: S.draft ? Object.entries(D.TRAITS).map(([key, tr]) => ({ key, label: (ru ? tr.ru : tr.en).toUpperCase(), opts: Object.entries(tr.opts).map(([k, pair]) => ({ label: (ru ? pair[0] : pair[1]).toUpperCase(), bc: S.draft[key] === k ? 'var(--text)' : 'var(--line-4)', fg: S.draft[key] === k ? 'var(--text)' : 'var(--dim)', pick: () => this.setState({ draft: { ...S.draft, [key]: k } }) })) })) : [],
+      saveDev: () => { const d = { ...S.draft, name: S.draft.name || 'Custom' }; const nid = S.devId || 'd' + Date.now(); const devices = S.devId ? S.devices.map((x) => x.id === S.devId ? { ...d, id: S.devId } : x) : [...S.devices, { ...d, id: nid }]; const st = [...S.stack]; const prev = st.pop() || 'home'; this.setState({ devices, screen: prev, stack: st, brew: prev === 'brew' && !S.devId ? { ...S.brew, device: nid } : S.brew }); },
+      ratioLine: `1:${(S.brew.water / dose).toFixed(1)}`,
+      pickBeans: S.shelf.map((s) => ({ name: s.name, tech: this.beanTech(s), tag: this.formL(s.form), bc: S.brew.bean === s.id ? 'var(--text)' : 'var(--line-3)', fg: S.brew.bean === s.id ? 'var(--text)' : 'var(--text-secondary)', pick: () => this.setState({ brew: { ...S.brew, bean: s.id, dose: s.form === 'drip' && s.dose ? s.dose : S.brew.dose }, recipe: null, recipeTouched: false }) })),
+      dripNote: brewBean.form === 'drip', showDevice,
+      pickDevs: S.devices.map((d) => ({ name: d.name, svg: this.devSvg(d, false), bc: S.brew.device === d.id ? 'var(--text)' : 'var(--line-3)', fg: S.brew.device === d.id ? 'var(--text)' : 'var(--text-secondary)', pick: () => this.setState({ brew: { ...S.brew, device: d.id }, recipe: null, recipeTouched: false }) })),
+      isHybridSel: isHy,
+      hyChips: [['imm', ru ? 'ИММЕРСИЯ' : 'IMMERSION', ru ? 'клапан в конце' : 'open at end'], ['perc', ru ? 'ПРОЛИВ' : 'PERC', ru ? 'открыт всегда' : 'always open'], ['mid', ru ? 'СЕРЕДИНА' : 'MID']].map(([k, l1]) => ({ label: l1, bc: S.brew.hyMode === k ? 'var(--text)' : 'var(--line-4)', fg: S.brew.hyMode === k ? 'var(--text)' : 'var(--dim)', pick: () => this.setState({ brew: { ...S.brew, hyMode: k }, recipe: null, recipeTouched: false }) })),
+      showValve: isHy && S.brew.hyMode === 'mid',
+      valveVal: (ru ? 'открыть на ' : 'open at ') + D.fmtT(S.brew.valveAt), valveDec: () => bump('valveAt', -10, 20, 600), valveInc: () => bump('valveAt', 10, 20, 600),
+      showGrind: brewBean.form === 'beans',
+      grindVal: S.grindText != null ? S.grindText : S.brew.grind.toFixed(1),
+      setGrind: (e) => { const v = e.target.value.replace(',', '.'); const n = parseFloat(v); this.setState({ grindText: v, brew: isNaN(n) ? S.brew : { ...this.state.brew, grind: Math.min(36, Math.max(0, n)) } }); },
+      grindBlur: () => this.setState({ grindText: null }),
+      grindDec: () => { this.setState({ grindText: null }); bump('grind', -0.1, 0, 36); }, grindInc: () => { this.setState({ grindText: null }); bump('grind', 0.1, 0, 36); },
+      grindHint: `${ru ? 'конвертер' : 'converter'}: ${gcv.lo.toFixed(1)} — ${gcv.hi.toFixed(1)} · ${t.conv_center} ${gcv.center}`,
+      doseVar: true,
+      doseVal: `${S.brew.dose} ${t.grams}`, doseDec: () => bump('dose', -0.5, 8, 40), doseInc: () => bump('dose', 0.5, 8, 40),
+      waterVal: `${S.brew.water} ${t.grams}`, waterDec: () => bump('water', -10, 80, 900), waterInc: () => bump('water', 10, 80, 900),
+      tempVal: `${S.brew.temp} °C`, tempDec: () => bump('temp', -1, 70, 100), tempInc: () => bump('temp', 1, 70, 100),
+      showPours: brewBean.form === 'drip' || (showDevice && brewDev && (brewDev.flow === 'perc' || (brewDev.flow === 'hybrid' && S.brew.hyMode === 'perc'))), poursVal: S.brew.pours, poursDec: () => bump('pours', -1, 1, 6), poursInc: () => bump('pours', 1, 1, 6),
+      recTouched: S.recipeTouched,
+      recReset: () => this.setState({ recipe: null, recipeTouched: false }),
+      recRows: is('brew') ? (() => {
+        const st = this.recStages(), vis = [];
+        st.forEach((x, i) => { if (x[0] === 'drain') return; const wk = x[0] === 'pour' || x[0] === 'bloom' || x[0] === 'steep'; if (!wk && !x[1]) return; vis.push({ i, wk }); });
+        const one = vis.length <= 1;
+        return vis.map((r, vi) => { const x = st[r.i]; return {
+          name: vi === 0 ? D.stageName(x[0], lang) : (r.wk ? D.stageName('pour', lang) : D.stageName(x[0], lang)),
+          dur: D.fmtT(x[1]), wat: x[2] + ' ' + t.grams, hasWater: r.wk, noWater: !r.wk,
+          durDec: () => this.touchRec((b) => { b[r.i][1] = Math.max(0, b[r.i][1] - 5); }),
+          durInc: () => this.touchRec((b) => { b[r.i][1] = b[r.i][1] + 5; }),
+          watDec: () => this.touchRec((b) => { b[r.i][2] = Math.max(0, b[r.i][2] - 10); }),
+          watInc: () => this.touchRec((b) => { b[r.i][2] = b[r.i][2] + 10; }),
+          remC: one ? 'var(--line-4)' : 'var(--muted)', remCur: one ? 'default' : 'pointer',
+          remove: () => { if (!one) this.touchRec((b) => { b.splice(r.i, 1); }); },
+        }; });
+      })() : [],
+      recAdd: () => this.touchRec((b) => { let at = b.length; for (let i = b.length - 1; i >= 0; i--) { if (b[i][0] === 'drain') at = i; else break; } b.splice(at, 0, ['pour', 30, 50]); }),
+      recTotal: (() => { if (!is('brew')) return ''; const st = this.recStages(); const dur = st.reduce((s, x) => s + x[1], 0), w = st.reduce((s, x) => s + x[2], 0); return (ru ? 'итого ' : 'total ') + D.fmtT(dur) + ' · ' + w + ' ' + t.grams; })(),
+      recWaterOff: is('brew') && this.recStages().reduce((s, x) => s + x[2], 0) !== S.brew.water,
+      recWaterNote: (() => { if (!is('brew')) return ''; const w = this.recStages().reduce((s, x) => s + x[2], 0); return (ru ? 'в рецепте ' : 'recipe holds ') + w + ' ' + t.grams + (ru ? ' из ' : ' of ') + S.brew.water; })(),
+      startBrew: () => this.startBrew(), logManual: () => this.logManual(),
+      openTaste: () => this.openTaste(), tasteLabel: ru ? 'ОЦЕНИТЬ ЧАШКУ' : 'RATE A CUP', tasteSub: ru ? 'кофейня · не моя заварка' : 'café · not my brew',
+      ...tv,
+      rlOk: () => this.setState({ screen: 'home', stack: [] }),
+      rlNow: () => { this.setState({ screen: 'home', stack: [] }); this.ratePending(); }, rlNowLabel: ru ? 'ОЦЕНИТЬ СЕЙЧАС' : 'RATE NOW', rlLaterLabel: ru ? 'ПОЗЖЕ' : 'LATER',
+      diagCtx: rateE ? (rateE.mode === 'cup' ? (ru ? 'дегустация' : 'tasting') : `${this.entryTitle(rateE)}${rateE.grind != null ? ' · ' + rateE.grind : ''}`) : '',
+      diagSubLine: rateE && rateE.mode === 'cup' ? (ru ? 'что в чашке — по ощущению' : 'what is in the cup — by feel') : t.diag_sub,
+      isTasting: !!(rateE && rateE.mode === 'cup'),
+      tasteNameLabel: (ru ? 'ЧТО ЗА КОФЕ' : 'WHAT COFFEE') + ' · ' + t.bean_optional,
+      tasteNameVal: S.tasteName || '', setTasteName: (e) => this.setState({ tasteName: e.target.value }),
+      tasteNamePh: ru ? 'кофейня, зерно — как запомнишь' : 'café, coffee — as you will recall it',
+      diagRows: diagKeys.map(([k, label]) => ({ label, val: S.diag[k], cells: Array.from({ length: 11 }, (_, i) => ({ bg: i <= S.diag[k] ? 'var(--text)' : 'var(--plane)', set: () => this.setState({ diag: { ...S.diag, [k]: i } }) })) })),
+      miniWheel: is('diag') ? this.miniWheelSvg() : null,
+      wheelCtaTitle: ru ? 'ДЕСКРИПТОРЫ' : 'DESCRIPTORS',
+      wheelCtaSub: ru ? 'колесо вкусов' : 'flavor wheel',
+      noteVal: S.note, setNote: (e) => this.setState({ note: e.target.value }),
+      micGo: () => { if (S.listening) return; this.setState({ listening: true }); setTimeout(() => { const tr = this.ru() ? 'черника и мёд, чище на остывании' : 'blueberry and honey, cleaner as it cools'; this.setState({ note: (this.state.note ? this.state.note + ' ' : '') + tr, listening: false, sug: ['blueberry', 'honey'].filter((id) => !this.state.picked.some((p) => p.id === id)) }); }, 1600); },
+      micBc: S.listening ? 'var(--text)' : 'var(--line-4)', micDot: S.listening ? 'var(--text)' : 'var(--faint)', micAnim: S.listening ? 'blink 0.9s infinite' : 'none',
+      hasSug: S.sug.length > 0, sugChips: S.sug.map((id) => ({ label: '+ ' + this.nameOf(id), add: () => this.setState({ picked: [...S.picked, { id, int: 2 }], sug: S.sug.filter((x) => x !== id) }) })),
+      hasPicked: S.picked.length > 0, noPicked: S.picked.length === 0, pickedCount: S.picked.length || '', pickedChips: this.pickedChipsV(),
+      saveDiag: () => this.saveDiag(), toWheel: () => this.go('wheel', { path: [], dir: 1 }),
+      crumbs, canAddHere: !!lastPath && !S.picked.some((p) => p.id === lastPath), addHere: () => this.togglePick(lastPath), addHereLabel: lastPath ? '+ ' + this.nameOf(lastPath) : '',
+      wheelEl: is('wheel') && S.wheelMode === 'drill' ? this.wheelSvg() : null, wheelDone: () => { this.setState({ weOn: false, weRenaming: null, weHiding: null, weAddVal: '', mapSel: null }); this.back(); }, tapWord: ru ? 'тап по тегу' : 'tap the tag',
+      wheelEditDrill: S.weOn && S.wheelMode === 'drill', wheelEditNode: S.weOn && S.wheelMode !== 'drill', wheelNotEditing: !S.weOn,
+      wIsDrill: S.wheelMode === 'drill', wIsMap: S.wheelMode === 'map', wIsList: S.wheelMode === 'list', wIsCanvas: S.wheelMode === 'canvas',
+      cnvEl: is('wheel') && S.wheelMode === 'canvas' ? this.wheelMapSvg(true) : null,
+      cnvW: 2460,
+      cnvMini: is('wheel') && S.wheelMode === 'canvas' ? this.miniWheelSvg() : null,
+      cnvDown: (e) => { if (e.pointerType !== 'mouse') return; const el = e.currentTarget; this._drag = { x: e.clientX, y: e.clientY, sl: el.scrollLeft, st: el.scrollTop }; el.style.cursor = 'grabbing'; },
+      cnvMove: (e) => { if (!this._drag) return; const el = e.currentTarget; el.scrollLeft = this._drag.sl - (e.clientX - this._drag.x); el.scrollTop = this._drag.st - (e.clientY - this._drag.y); },
+      cnvUp: (e) => { this._drag = null; e.currentTarget.style.cursor = 'grab'; },
+      cnvScroll: (e) => { const el = e.currentTarget, vp = document.getElementById('bj-cnv-vp'); if (!vp) return; const M = 74; vp.style.left = (el.scrollLeft / el.scrollWidth * M).toFixed(1) + 'px'; vp.style.top = (el.scrollTop / el.scrollHeight * M).toFixed(1) + 'px'; vp.style.width = Math.max(8, el.clientWidth / el.scrollWidth * M).toFixed(1) + 'px'; vp.style.height = Math.max(8, el.clientHeight / el.scrollHeight * M).toFixed(1) + 'px'; },
+      wModeChips: [['drill', t.wheel_mode_drill], ['map', t.wheel_mode_map], ['canvas', t.wheel_mode_canvas], ['list', t.wheel_mode_list]].map(([k, label]) => ({ label, bc: S.wheelMode === k ? 'var(--text)' : 'var(--line-4)', fg: S.wheelMode === k ? 'var(--text)' : 'var(--dim)', pick: () => this.setState({ wheelMode: k, mapSel: null, weRenaming: null, weHiding: null, weAddVal: '' }) })),
+      mapEl: is('wheel') && S.wheelMode === 'map' ? this.wheelMapSvg() : null,
+      mapW: Math.round(820 * S.mapZoom),
+      mapZoomPct: Math.round(S.mapZoom * 100) + '%',
+      mapZoomOut: () => this.setState({ mapZoom: Math.max(0.55, Math.round((S.mapZoom - 0.15) * 100) / 100) }),
+      mapZoomIn: () => this.setState({ mapZoom: Math.min(1.3, Math.round((S.mapZoom + 0.15) * 100) / 100) }),
+      listCats: is('wheel') && S.wheelMode === 'list' ? (this._mem = this.memSet(), this.WS().map((ct, ci) => ({
+        name: ru ? ct.ru : ct.en, color: 'oklch(' + (ci % 2 ? 0.72 : 0.66) + ' ' + ct.c + ' ' + ct.h + ')',
+        fg: S.picked.some((p) => p.id === ct.id) ? 'var(--text)' : 'var(--text-secondary)',
+        count: ct.sub.reduce((x, sb) => x + sb.d.length, 0),
+        tap: () => this.mapTap(ct.id),
+        subs: ct.sub.map((sb) => ({
+          name: ru ? sb.ru : sb.en,
+          fg: S.picked.some((p) => p.id === sb.id) ? 'var(--text)' : 'var(--faint)',
+          tap: () => this.mapTap(sb.id),
+          chips: sb.d.map((d) => { const on = S.picked.some((p) => p.id === d[0]); return { label: ru ? d[1] : d[2], dot: this.colOf(d[0]), bc: on ? this.colOf(d[0], 0.8) : 'var(--line-4)', fg: on ? 'var(--text)' : 'var(--text-secondary)', mem: this._mem.has(d[0]), tap: () => this.mapTap(d[0]) }; }),
+        })),
+      }))) : [],
+      nodeNone: !S.mapSel, nodeSome: !!S.mapSel,
+      nodeName: S.mapSel ? this.nameOf(S.mapSel) : '', nodeDot: S.mapSel ? this.colOf(S.mapSel) : 'transparent',
+      nodeRenaming: !!S.mapSel && S.weRenaming === S.mapSel, nodeHiding: !!S.mapSel && S.weHiding === S.mapSel,
+      nodePlain: !!S.mapSel && S.weRenaming !== S.mapSel && S.weHiding !== S.mapSel,
+      nodeRenameStart: () => this.setState({ weHiding: null, weRenaming: S.mapSel, weRenameVal: this.nameOf(S.mapSel) }),
+      nodeRenameOk: () => this.weRenameOk(S.mapSel),
+      nodeHideStart: () => this.setState({ weRenaming: null, weHiding: S.mapSel }),
+      nodeHideYes: () => { this.weHide(S.mapSel); this.setState({ mapSel: null }); },
+      nodeCancel: () => this.setState({ weRenaming: null, weHiding: null }),
+      nodeCanAdd: !!S.mapSel && S.weRenaming !== S.mapSel && S.weHiding !== S.mapSel && (this.nodeTypeOf(S.mapSel) === 'cat' || this.nodeTypeOf(S.mapSel) === 'sub'),
+      nodeAddGo: () => this.weAddInto(),
+      weBc: S.weOn ? 'var(--line-5)' : 'transparent', weFg: S.weOn ? 'var(--text)' : 'var(--text-secondary)',
+      wheelEditToggle: () => this.setState({ weOn: !S.weOn, weRenaming: null, weHiding: null, weAddVal: '' }),
+      wheelHintLine: S.wheelMode === 'drill' ? (S.weOn ? t.wheel_edit_hint : t.wheel_hint) : (S.weOn ? t.wheel_map_edit_hint : (ru ? 'тап — выбрать. категория тоже ответ' : 'tap to pick. a category is an answer too')),
+      weRows: is('wheel') && S.weOn ? this.wheelItems().map((it) => ({
+        label: it.label, dot: this.colOf(it.id),
+        renaming: S.weRenaming === it.id, hiding: S.weHiding === it.id, plain: S.weRenaming !== it.id && S.weHiding !== it.id,
+        rename: () => this.setState({ weHiding: null, weRenaming: it.id, weRenameVal: it.label }),
+        hide: () => this.setState({ weRenaming: null, weHiding: it.id }),
+        renameOk: () => this.weRenameOk(it.id), hideYes: () => this.weHide(it.id),
+        cancel: () => this.setState({ weRenaming: null, weHiding: null }),
+      })) : [],
+      weRenameVal: S.weRenameVal, setWeRename: (e) => this.setState({ weRenameVal: e.target.value }),
+      weAddVal: S.weAddVal, setWeAdd: (e) => this.setState({ weAddVal: e.target.value }),
+      weAddGo: () => this.weAdd(),
+      weCanAdd: S.path.length > 0, weRootNote: S.path.length === 0,
+      hasWheelEdits: S.wheelEdits.length > 0,
+      wheelEditRows: S.wheelEdits.map((e) => ({ label: this.weLabel(e), undo: () => this.setState({ wheelEdits: S.wheelEdits.filter((x) => x !== e) }) })),
+      wheelEditsReset: () => this.setState({ wheelEdits: [] }),
+      cmpBc: S.cmpMode ? 'var(--text)' : 'var(--line-4)', cmpFg: S.cmpMode ? 'var(--text)' : 'var(--dim)',
+      toggleCmp: () => this.setState({ cmpMode: !S.cmpMode, cmpSel: [] }),
+      filterChips: filters.map((f) => ({ label: f.label, bc: S.logFilter === f.k ? 'var(--text)' : 'var(--line-4)', fg: S.logFilter === f.k ? 'var(--text)' : 'var(--dim)', pick: () => this.setState({ logFilter: f.k }) })),
+      cmpMode: S.cmpMode,
+      logRows: logEntries.map((e) => ({ ...rowOf(e), boxBg: S.cmpSel.includes(e.id) ? 'var(--text)' : 'transparent', tap: S.cmpMode ? () => { const sel = S.cmpSel.includes(e.id) ? S.cmpSel.filter((x) => x !== e.id) : [...S.cmpSel, e.id].slice(-2); this.setState({ cmpSel: sel }); } : () => this.go('detail', { viewId: e.id }) })),
+      cmpReady: S.cmpMode && S.cmpSel.length === 2,
+      openCompare: () => { const pair = S.cmpSel.map((id) => S.journal.find((j) => j.id === id)).sort((x, y) => x.date < y.date ? 1 : -1); this.go('compare', { cmpPair: pair }); },
+      cmpA, cmpB, cmpRows,
+      bdTitle: de ? `${this.fd(de.date)} · ${de.time}` : '', bdMeta: de ? this.entryTitle(de) : '',
+      bdRepeat: de ? () => { const b = this.bean(de.bean); const patch = { bean: de.bean, dose: de.dose != null ? de.dose : S.brew.dose, water: de.water, temp: de.temp }; if (de.device) patch.device = de.device; if (de.grind != null) patch.grind = de.grind; if (de.pours) patch.pours = de.pours; if (de.valveAt) { patch.hyMode = 'mid'; patch.valveAt = de.valveAt; } this.setState({ brew: { ...S.brew, ...patch }, recipe: null, recipeTouched: false, entryEdit: false, wheelMode: 'drill', mapZoom: 1, mapSel: null, screen: 'brew', stack: [...S.stack, scr] }); } : null,
+      entryEditOn: is('detail') && S.entryEdit,
+      eeBc: S.entryEdit ? 'var(--line-5)' : 'var(--line-4)', eeFg: S.entryEdit ? 'var(--text)' : 'var(--text-secondary)',
+      entryEditToggle: () => this.setState({ entryEdit: !S.entryEdit }),
+      bdParams: de ? (() => {
+        const ed = is('detail') && S.entryEdit;
+        const bumpE = (k, s, min, max) => () => { const cur = this.state.journal.find((j) => j.id === de.id); const v = Math.min(max, Math.max(min, Math.round(((cur[k] || 0) + s) * 10) / 10)); this.setState({ journal: this.state.journal.map((j) => j.id === de.id ? { ...j, [k]: v } : j) }); };
+        const P = (cond, label, val, k, s, min, max) => cond ? { label, val, edit: ed && !!k, dec: k ? bumpE(k, -s, min, max) : undefined, inc: k ? bumpE(k, s, min, max) : undefined } : null;
+        return [P(de.grind != null, t.brew_grind, de.grind, 'grind', 0.1, 0, 36), P(de.dose != null, t.brew_dose, de.dose + ' ' + t.grams, 'dose', 0.5, 4, 60), P(de.water != null, t.brew_water, de.water + ' ' + t.grams, 'water', 10, 40, 900), P(de.temp != null, 'T°', de.temp + '°', 'temp', 1, 60, 100), P(de.total != null, ru ? 'ВРЕМЯ' : 'TIME', D.fmtT(de.total), null, 0, 0, 0), P(true, ru ? 'РЕЖИМ' : 'MODE', D.modeName(de.mode, lang), null, 0, 0, 0), P(de.valveAt != null, ru ? 'КЛАПАН' : 'VALVE', D.fmtT(de.valveAt), null, 0, 0, 0)].filter(Boolean);
+      })() : [],
+      bdNoteRead: !!(de && de.note) && !(is('detail') && S.entryEdit),
+      bdSetNote: (ev) => this.setState({ journal: S.journal.map((j) => j.id === S.viewId ? { ...j, note: ev.target.value } : j) }),
+      bdReRateLabel: ru ? 'ПЕРЕОЦЕНИТЬ — ШКАЛЫ И КОЛЕСО' : 'RE-RATE — SCALES & WHEEL',
+      bdReRate: () => { if (!de) return; this.setState({ rateId: de.id, diag: de.diag ? { ...de.diag } : { acid: 5, bitter: 5, body: 5, balance: 5 }, note: de.note || '', picked: (de.desc || []).map((d) => ({ id: d[0], int: d[1] || 2 })), sug: [], path: [], tasteName: de.title || '', stack: [...S.stack, scr], screen: 'diag', entryEdit: false }); },
+      bdStageRows: de && de.stages ? de.stages.map(([k, dur, w]) => ({ name: D.stageName(k, lang), dur: dur ? D.fmtT(dur) : '·', w: w ? w + ' ' + t.grams : '' })) : [],
+      bdHasDiag: !!(de && de.diag), bdDiagLine: de && de.diag ? diagKeys.map(([k, label]) => `${label.slice(0, ru ? 1 : 2)} ${de.diag[k]}`).join(' · ') : '',
+      bdHasDesc: !!(de && de.desc && de.desc.length), bdDesc: de && de.desc ? de.desc.map(([id, int]) => ({ name: this.nameOf(id), bc: this.colOf(id, 0.8), dotCol: this.colOf(id), dots: '●'.repeat(int || 2) + '○'.repeat(3 - (int || 2)) })) : [],
+      bdHasNote: !!(de && de.note), bdNote: de ? de.note : '', bdQr: de ? this.qrSvg(de.id) : null,
+      qrHint: ru ? 'передача — файлом или с экрана. без сети, без аккаунтов' : 'hand over as a file or from the screen. no network, no accounts',
+      grinderLines: S.grinders.map((g) => ({ name: g.name, meta: `${this.unitOf(g)} · ${g.step} µm`, canDel: S.grinders.length > 1 && S.gDelId !== g.id, confirm: S.gDelId === g.id, confirmNot: S.gDelId !== g.id, ask: () => this.setState({ gDelId: g.id }), no: () => this.setState({ gDelId: null }), yes: () => { const gs = S.grinders.filter((x) => x.id !== g.id); const p = { gDelId: null }; if (S.convTo === g.id) p.convTo = gs[0].id; this.setState({ grinders: gs, ...p }); } })),
+      delQ: ru ? 'УДАЛИТЬ?' : 'DELETE?', delYes: ru ? 'ДА' : 'YES',
+      gAddOpen: S.gAddOpen, toggleGAdd: () => this.setState({ gAddOpen: !S.gAddOpen }), gAddLabel: ru ? '+ КОФЕМОЛКА' : '+ GRINDER',
+      gNameLabel: ru ? 'НАЗВАНИЕ' : 'NAME', gNameVal: S.gName || '', setGName: (e) => this.setState({ gName: e.target.value }),
+      gStepLabel: ru ? 'ШАГ, µm' : 'STEP, µm', gStepVal: (S.gStep || 10).toFixed(1),
+      gStepDec: () => this.setState({ gStep: Math.max(0.5, (S.gStep || 10) - 0.5) }), gStepInc: () => this.setState({ gStep: Math.min(40, (S.gStep || 10) + 0.5) }),
+      gSave: () => this.setState({ grinders: [...S.grinders, { id: 'g' + Date.now(), name: S.gName || 'Grinder', step: S.gStep || 10, zero: 300, dp: 1, unit: { ru: 'кликов', en: 'clicks' } }], gAddOpen: false, gName: '' }), gSaveLabel: ru ? 'СОХРАНИТЬ' : 'SAVE',
+      devCount: S.devices.length, openDevices: () => this.go('devices'), openSpec: () => this.go('spec'),
+      exportTap: () => this.setState({ exported: true }), exported: S.exported,
+      frameDark: this.resolvedTheme() === 'dark',
+      ctrlTheme: ['dark', 'light', 'system'].map((k) => ({ label: (ru ? { dark: 'Т', light: 'С', system: 'А' } : { dark: 'D', light: 'L', system: 'A' })[k], col: this.themePref() === k ? 'var(--bg)' : 'var(--faint)', bg: this.themePref() === k ? 'var(--dim)' : 'none', pick: () => this.setThemePref(k) })),
+      langChips: ['ru', 'en'].map((k) => ({ label: k.toUpperCase(), bc: lang === k ? 'var(--text)' : 'var(--line-4)', fg: lang === k ? 'var(--text)' : 'var(--dim)', pick: () => this.setState({ langO: k }) })),
+      themeChips: ['dark', 'light', 'system'].map((k) => ({ label: t['theme_' + k], bc: this.themePref() === k ? 'var(--text)' : 'var(--line-4)', fg: this.themePref() === k ? 'var(--text)' : 'var(--dim)', pick: () => this.setThemePref(k) })),
+      hintChips: [[true, t.set_hints_on], [false, t.set_hints_off]].map(([v, label]) => ({ label, bc: S.hintsOn === v ? 'var(--text)' : 'var(--line-4)', fg: S.hintsOn === v ? 'var(--text)' : 'var(--dim)', pick: () => { this.setState({ hintsOn: v, hintCur: v ? S.hintCur : null }); if (v) this.syncHints(); } })),
+      hintsReset: () => { this._chain = null; this.setState({ hintsSeen: {}, hintCur: null, hintsOn: true }); this.syncHints(); },
+      presetsLabel: ru ? 'ЗАГОТОВКИ' : 'PRESETS',
+      devIsNew: !!S.draft && !S.devId,
+      devPresets: [['V60', { flow: 'perc', bottom: 'cone', wall: 'spiral', filter: 'pcone', material: 'ceramic', vol: 'm' }], ['SWITCH', { flow: 'hybrid', bottom: 'cone', wall: 'smooth', filter: 'pcone', material: 'glass', vol: 'm' }], ['AEROPRESS', { flow: 'imm', bottom: 'cyl', wall: 'smooth', filter: 'pflat', material: 'plastic', vol: 's' }]].map(([label, tr]) => ({ label, pick: () => this.setState({ draft: { ...this.state.draft, ...tr } }) })),
+      addSaveBg: addReady ? 'var(--text)' : 'var(--line-4)', addSaveFg: addReady ? 'var(--bg)' : 'var(--dim)', addSaveCur: addReady ? 'pointer' : 'default',
+      calOpenAdd: S.bcalOpen,
+      calToggle: () => { const sel = this.parseDateStr(S.addRoast); this.setState({ bcalOpen: !S.bcalOpen, bcalYM: this.ymOf(sel || D.TODAY) }); },
+      calTitle: (t.cal_months ? t.cal_months[bcalYM.m - 1] : '') + ' ' + bcalYM.y,
+      calWeek: t.cal_week || [],
+      calPrev: () => { if (canPrev) this.setState({ bcalYM: this.shiftYM(bcalYM, -1) }); },
+      calNext: () => { if (canNext) this.setState({ bcalYM: this.shiftYM(bcalYM, 1) }); },
+      calPrevBc: canPrev ? 'var(--line-4)' : 'var(--line-3)', calPrevFg: canPrev ? 'var(--text-secondary)' : 'var(--muted)',
+      calNextBc: canNext ? 'var(--line-4)' : 'var(--line-3)', calNextFg: canNext ? 'var(--text-secondary)' : 'var(--muted)',
+      calCells,
+      hintShow: !!S.hintCur && S.hintsOn,
+      hintX: S.hintCur ? S.hintCur.x : 0, hintY: S.hintCur ? S.hintCur.y : 0, hintW: S.hintCur ? S.hintCur.w : 0, hintH: S.hintCur ? S.hintCur.h : 0,
+      hintScrim: this.resolvedTheme() === 'light' ? 'rgba(12,12,12,0.55)' : 'rgba(0,0,0,0.78)',
+      hintText: S.hintCur ? t[S.hintCur.key] : '',
+      hintCount: S.hintCur && S.hintCur.total > 1 ? (S.hintCur.at + 1) + ' / ' + S.hintCur.total : '',
+      hintBtn: S.hintCur && !S.hintCur.last ? t.hint_next : t.hint_done,
+      hintNext: () => this.hintAdvance(),
+      hintHide: (e) => { e.stopPropagation(); this.setState({ hintsOn: false, hintCur: null }); },
+      hintCardTop, hintCardBottom,
+      specSwatches: [{ v: 'var(--bg)', tok: '--bg', name: ru ? 'фон' : 'bg' }, { v: 'var(--plane)', tok: '--plane', name: ru ? 'плоскость' : 'surface' }, { v: 'var(--line-4)', tok: '--line-4', name: ru ? 'линия' : 'line' }, { v: 'var(--faint)', tok: '--faint', name: 'faint' }, { v: 'var(--dim)', tok: '--dim', name: 'dim' }, { v: 'var(--text)', tok: '--text', name: ru ? 'текст' : 'text' }],
+      specWheelNote: ru ? 'цвет живёт только на колесе: oklch(0.60–0.78 · C по категории · 9 хью). измерения серые, ощущения цветные' : 'color lives only on the wheel: oklch(0.60–0.78 · per-category C · 9 hues). measurements are gray, sensations are colored',
+    };
+  }
+}
+</script>
+</body>
+</html>
