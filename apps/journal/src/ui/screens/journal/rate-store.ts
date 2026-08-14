@@ -25,7 +25,13 @@ import { type Screen, useNav } from '../../../app/nav.js';
 import { isoDate, isoTime } from '../../../data/freshness.js';
 import { BASE_WHEEL, type WheelSet, nameOf } from '../../../data/wheel.js';
 import { makeCupEntry, putEntry, updateEntry } from '../../../db/repo/entries.js';
-import type { Descriptor, Diagnostics, Intensity, Lang } from '../../../db/schema.js';
+import type {
+  Descriptor,
+  Diagnostics,
+  EntryRecord,
+  Intensity,
+  Lang,
+} from '../../../db/schema.js';
 import { START_INTENSITY, nextIntensity } from '../../components/Tag.js';
 import { START_DIAG, type ScaleKey, setScale } from './diag-scales.js';
 
@@ -101,9 +107,22 @@ export interface RateState {
   sug: string[];
   /** «Что за кофе» — только для дегустаций. */
   tasteName: string;
+  /**
+   * Оценка открыта поверх записи и обязана вернуться в неё (BJ-12).
+   *
+   * Обычная оценка приходит с главного экрана и заканчивается там же, а
+   * переоценка — это правка открытой записи: уводить с неё на главную значило бы
+   * терять место, куда человек смотрел.
+   */
+  resume: boolean;
 
   /** Начать оценку сохранённого заваривания. Сбрасывает всё остальное. */
   startRating: (entryId: string) => void;
+  /**
+   * Переоценка записи: те же шкалы, заметка, дескрипторы и имя дегустации, что
+   * у неё уже есть. Человек правит своё, а не набирает заново.
+   */
+  startReRating: (entry: EntryRecord) => void;
   /** Начать дегустацию «вне журнала». */
   startTasting: () => void;
   setScaleValue: (key: ScaleKey, value: number) => void;
@@ -125,13 +144,27 @@ const EMPTY = {
   picked: [] as Descriptor[],
   sug: [] as string[],
   tasteName: '',
+  resume: false,
 };
+
+/** Оценка записи, разобранная в состояние экрана. Чистая — её проверяет тест. */
+export function rateStateFromEntry(entry: EntryRecord): Omit<typeof EMPTY, 'resume'> {
+  return {
+    diag: { ...entry.diag },
+    note: entry.note,
+    picked: entry.desc.map(([id, intensity]): Descriptor => [id, intensity]),
+    sug: [],
+    tasteName: entry.title ?? '',
+  };
+}
 
 export const useRate = create<RateState>((set, get) => ({
   target: null,
   ...EMPTY,
 
   startRating: (entryId) => set({ target: { kind: 'entry', id: entryId }, ...EMPTY }),
+  startReRating: (entry) =>
+    set({ target: { kind: 'entry', id: entry.id }, ...rateStateFromEntry(entry), resume: true }),
   startTasting: () => set({ target: { kind: 'taste' }, ...EMPTY }),
 
   setScaleValue: (key, value) => set((s) => ({ diag: setScale(s.diag, key, value) })),

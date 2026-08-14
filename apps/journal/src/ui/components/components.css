@@ -610,3 +610,33 @@
   border: 1px solid var(--text);
   color: var(--text);
 }
+
+/* ── Карандаш строки ─────────────────────────────────────────────────────── */
+/*
+ * ✎ в строке журнала и ленты главной (BJ-12): открыть запись сразу в режиме
+ * правки. Живёт здесь, а не рядом с журналом, потому что строк две — в разных
+ * файлах стилей, — а квадрат один.
+ *
+ * Видимых 28×28 по макету; нажимается 48 за счёт прозрачного `::after` — тот
+ * же приём, что у степпера и чипов выше.
+ */
+.bj-pencil {
+  display: flex;
+  position: relative;
+  flex: none;
+  align-self: center;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border: 1px solid var(--line-4);
+  color: var(--text-secondary);
+  font-size: 11px;
+  line-height: 1;
+}
+
+.bj-pencil::after {
+  content: '';
+  position: absolute;
+  inset: -10px;
+}

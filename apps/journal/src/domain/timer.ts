@@ -239,9 +239,15 @@ export function decrementBean(bean: BeanRecord, dose: number): BeanRecord {
  * Теперь стадий у такой записи нет вовсе, а `total` приходит от человека:
  * столько, сколько он засёк, или ноль — «не засекал». Ноль ниже по течению
  * показывается прочерком, а не «0:00» (`entrySub`, `paramsOf`, `compareRows`).
+ *
+ * Единственное исключение — правленый рецепт (BJ-12): стадии, которые человек
+ * набрал руками, выдумкой не являются, и терять их не за что. Нетронутый
+ * авто-план по-прежнему сюда не попадает, поэтому по умолчанию стадий нет.
  */
-export function logManual(input: Omit<MakeEntryInput, 'stages'>): MakeEntryResult {
-  return makeEntry({ ...input, stages: [] });
+export function logManual(
+  input: Omit<MakeEntryInput, 'stages'> & { stages?: readonly Stage[] },
+): MakeEntryResult {
+  return makeEntry({ ...input, stages: [...(input.stages ?? [])] });
 }
 
 /* ── Стор ────────────────────────────────────────────────────────────────── */

@@ -129,48 +129,72 @@ export function Log() {
           const mark = entryMark(entry, lang);
 
           return (
-            <button
-              type="button"
-              key={entry.id}
-              className="jr-row"
-              data-testid="log-row"
-              onClick={() => tapRow(entry.id)}
-            >
-              {cmpMode ? (
-                <span
-                  className={
-                    cmpSel.includes(entry.id) ? 'jr-row__box jr-row__box--on' : 'jr-row__box'
-                  }
-                />
-              ) : null}
-
-              <span className="jr-row__when">
-                <span className="jr-row__date">{shortDate(entry.date)}</span>
-                <span className="jr-row__time">{entry.time}</span>
-              </span>
-
-              <span className="jr-row__main">
-                <span className="jr-row__title">{entryTitle(entry, lang, { bean, device })}</span>
-                <span className="jr-row__sub">{entrySub(entry, lang)}</span>
-                {entry.desc.length > 0 ? (
-                  <span className="jr-row__desc">
-                    {entry.desc.map(([id]) => (
-                      <span className="jr-dot" key={id}>
-                        <span className="jr-dot__mark" style={{ background: colOf(id, undefined, ws) }} />
-                        {nameOf(id, lang, ws)}
-                      </span>
-                    ))}
-                  </span>
+            /* Строка — контейнер, а не кнопка: рядом с ней живёт ✎, а кнопку в
+               кнопку вложить нельзя. Открывает запись внутренняя кнопка. */
+            <div key={entry.id} className="jr-row">
+              <button
+                type="button"
+                className="jr-row__open"
+                data-testid="log-row"
+                onClick={() => tapRow(entry.id)}
+              >
+                {cmpMode ? (
+                  <span
+                    className={
+                      cmpSel.includes(entry.id) ? 'jr-row__box jr-row__box--on' : 'jr-row__box'
+                    }
+                  />
                 ) : null}
-              </span>
 
-              <span className="jr-row__right">
-                {mark ? <span className="jr-row__mark">{mark}</span> : null}
-                {isPending(entry) ? (
-                  <span className="jr-row__pending">{t.log_pending}</span>
-                ) : null}
-              </span>
-            </button>
+                <span className="jr-row__when">
+                  <span className="jr-row__date">{shortDate(entry.date)}</span>
+                  <span className="jr-row__time">{entry.time}</span>
+                </span>
+
+                <span className="jr-row__main">
+                  <span className="jr-row__title">{entryTitle(entry, lang, { bean, device })}</span>
+                  <span className="jr-row__sub">{entrySub(entry, lang)}</span>
+                  {entry.desc.length > 0 ? (
+                    <span className="jr-row__desc">
+                      {entry.desc.map(([id]) => (
+                        <span className="jr-dot" key={id}>
+                          <span
+                            className="jr-dot__mark"
+                            style={{ background: colOf(id, undefined, ws) }}
+                          />
+                          {nameOf(id, lang, ws)}
+                        </span>
+                      ))}
+                    </span>
+                  ) : null}
+                </span>
+
+                <span className="jr-row__right">
+                  {mark ? <span className="jr-row__mark">{mark}</span> : null}
+                  {isPending(entry) ? (
+                    <span className="jr-row__pending">{t.log_pending}</span>
+                  ) : null}
+                </span>
+              </button>
+
+              {/* В режиме сравнения ✎ не показываем: тап по строке там значит
+                  «отметить», и карандаш уводил бы из выбора пары. */}
+              {cmpMode ? null : (
+                <button
+                  type="button"
+                  className="bj-pencil"
+                  data-testid="log-row-edit"
+                  aria-label={`${t.log_edit}: ${entryTitle(entry, lang, { bean, device })}`}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    openEntry(entry.id, true);
+                    go('detail');
+                  }}
+                >
+                  ✎
+                </button>
+              )}
+            </div>
           );
         })}
       </div>

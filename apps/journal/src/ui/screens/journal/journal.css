@@ -365,12 +365,22 @@
   padding-top: 0;
 }
 
+/* Строка ленты: кнопка «открыть» во всю ширину и ✎ рядом (BJ-12). Рамка и
+   отступы живут на контейнере, чтобы карандаш стоял внутри той же линии. */
 .jr-row {
   display: flex;
-  gap: 11px;
+  gap: 8px;
+  align-items: center;
   width: 100%;
   padding: 13px 0;
   border-bottom: 1px solid var(--line-1);
+}
+
+.jr-row__open {
+  display: flex;
+  flex: 1;
+  gap: 11px;
+  min-width: 0;
   text-align: left;
 }
 
@@ -531,6 +541,84 @@
 .jr-param__value {
   margin-top: 6px;
   font-size: var(--fs-body);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Правка ячейки: −/+ во всю ширину ячейки, по 26 видимых пикселей высоты. */
+.jr-param__pair {
+  display: flex;
+  gap: 4px;
+  margin-top: 8px;
+}
+
+.jr-param__btn {
+  display: flex;
+  position: relative;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  height: 26px;
+  border: 1px solid var(--line-4);
+  color: var(--text-secondary);
+  font-size: 12px;
+  line-height: 1;
+}
+
+.jr-param__btn::after {
+  content: '';
+  position: absolute;
+  inset: -11px -2px;
+}
+
+/* Переключатель правки в шапке записи — 44×40, как «←» рядом. */
+.jr-detail__edit {
+  display: flex;
+  position: relative;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 40px;
+  border: 1px solid var(--line-4);
+  color: var(--text-secondary);
+  font-size: 13px;
+  line-height: 1;
+}
+
+.jr-detail__edit::after {
+  content: '';
+  position: absolute;
+  inset: -4px 0;
+}
+
+.jr-detail__edit--on {
+  border-color: var(--line-5);
+  color: var(--text);
+}
+
+/* Заметка в режиме правки — то же поле ввода, что на диагностике. */
+.jr-detail__note {
+  width: 100%;
+  min-height: 64px;
+  margin-top: 8px;
+  padding: 12px;
+  border: 1px solid var(--line-4);
+  background: none;
+  color: var(--text);
+  font-family: inherit;
+  font-size: var(--fs-body-min);
+  line-height: 1.6;
+  resize: none;
+}
+
+.jr-detail__rerate {
+  width: 100%;
+  height: var(--touch);
+  margin-top: 14px;
+  border: 1px solid var(--line-4);
+  color: var(--text-secondary);
+  font-size: var(--fs-micro);
+  letter-spacing: var(--ls-micro);
 }
 
 .jr-stage {

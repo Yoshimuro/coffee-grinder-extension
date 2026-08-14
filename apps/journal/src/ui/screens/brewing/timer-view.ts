@@ -67,9 +67,14 @@ export function segments(
 
 /* ── Строки ──────────────────────────────────────────────────────────────── */
 
-/** `цель 3:35` — плановая длительность всего рецепта (`DC:1198`). */
+/**
+ * `рецепт 3:35` — плановая длительность всего плана (`DC:1198`).
+ *
+ * Было «цель». Слово поменялось не ради слова: таймер больше не подгоняет к
+ * числу, а показывает рядом то, что человек сам себе назначил (BJ-12).
+ */
 export function targetLine(stages: readonly Stage[], lang: Lang): string {
-  return `${STR[lang].t_target} ${fmtT(plannedTotal(stages))}`;
+  return `${STR[lang].t_recipe} ${fmtT(plannedTotal(stages))}`;
 }
 
 /** `1 / 5`; в паузе счёт стадий стоит и вместо номера идут точки (`DC:1200`). */
@@ -96,16 +101,33 @@ export function stageTitle(
 }
 
 /**
- * `45 г из 250` — вода **включая текущую стадию** (`cum`, `DC:1195`).
+ * Фактическое время текущей стадии: `0:39`, в паузе — растущее `+ 0:05`
+ * стекания (BJ-12).
  *
- * Прочерк ставится, только пока не налито ничего и текущая стадия воды не
- * несёт: в иммерсии вся вода уходит в первую же стадию, и «—» там был бы
- * враньём.
+ * Заменило обратный отсчёт `− 0:12` с овертаймом `+ 0:0N`. Отсчёт назад
+ * превращал подсказку в норматив: человек смотрел, сколько он «должен», а не
+ * сколько прошло. Теперь счёт идёт только вперёд, а рецепт стоит рядом серым
+ * ({@link recipeLine}).
+ *
+ * Плюс здесь — обычный, а минус ушёл вместе с отсчётом.
  */
-export function waterLine(
+export function stageElapsedLine(stageSec: number, paused: boolean): string {
+  return paused ? `+ ${fmtT(stageSec)}` : fmtT(stageSec);
+}
+
+/**
+ * Тихая цель стадии: `рецепт 0:45 · 150 г` (BJ-12).
+ *
+ * Пустая строка у стадии без цели — у отметки нулевой длительности говорить
+ * нечего. В паузе вместо неё «даём стечь»: это единственное, что сейчас
+ * происходит, и никакого рецепта у стекания нет.
+ *
+ * Заменила строку «150 г из 250»: накопительная вода отвечала на вопрос, за
+ * которым к таймеру не приходят, а место занимала.
+ */
+export function recipeLine(
   stages: readonly Stage[],
   idx: number,
-  water: number,
   lang: Lang,
   paused: boolean,
 ): string {
@@ -113,29 +135,11 @@ export function waterLine(
   if (paused) return t.t_draining;
 
   const cur = stages[idx];
-  const cum = stages.slice(0, idx + 1).reduce((sum, stage) => sum + stage[2], 0);
-  if (!cum && !(cur && cur[2])) return t.entry_none;
-  return `${cum} ${t.grams} ${t.t_of} ${water}`;
-}
+  if (!cur || (!cur[1] && !cur[2])) return '';
 
-/**
- * Отклонение от целевой длительности стадии: `− 0:39` до цели, `+ 0:12` после
- * (`DC:1202`). В паузе — растущее время стекания. У маркера цели нет, поэтому
- * строка пустая.
- *
- * Минус здесь — типографский U+2212, как в прототипе: дефис на цифрах 10 px
- * читается как перенос.
- */
-export function deviationLine(
-  stages: readonly Stage[],
-  idx: number,
-  stageSec: number,
-  paused: boolean,
-): string {
-  if (paused) return `+ ${fmtT(stageSec)}`;
-  const cur = stages[idx];
-  if (!cur || !cur[1]) return '';
-  return stageSec <= cur[1] ? `− ${fmtT(cur[1] - stageSec)}` : `+ ${fmtT(stageSec - cur[1])}`;
+  const dur = cur[1] ? ` ${fmtT(cur[1])}` : '';
+  const water = cur[2] ? `${SEP}${cur[2]} ${t.grams}` : '';
+  return `${t.t_recipe}${dur}${water}`;
 }
 
 /** `дальше: ПРОЛИВ · 70 г` либо `последняя стадия` (`DC:1203`). */

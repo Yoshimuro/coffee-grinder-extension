@@ -209,6 +209,155 @@
   border: 1px solid var(--line-4);
 }
 
+/* ── Рецепт-подсказка ────────────────────────────────────────────────────── */
+/*
+ * Редактор плана стадий (BJ-12). Строка узкая — 26×30 у кнопок, — поэтому все
+ * пять целей добираются до тач-минимума прозрачным `::after`, как степпер и
+ * чипы в `components.css`. Строки шире экрана не бывает: имя стадии сжимается
+ * многоточием, а степперы держат свою ширину.
+ */
+.bj-rec {
+  margin-top: 20px;
+}
+
+.bj-rec__head {
+  display: flex;
+  gap: 8px;
+  align-items: baseline;
+}
+
+/* Появляется только у правленого рецепта: возвращать нетронутый некуда. */
+.bj-rec__auto {
+  position: relative;
+  flex: none;
+  margin-left: auto;
+  border-bottom: 1px solid var(--line-5);
+  color: var(--faint);
+  font-size: var(--fs-tech-min);
+  letter-spacing: 1.5px;
+}
+
+.bj-rec__auto::after {
+  content: '';
+  position: absolute;
+  inset: -14px -8px;
+}
+
+.bj-rec__rows {
+  margin-top: 9px;
+  border-top: 1px solid var(--line-2);
+}
+
+.bj-rec__row {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  padding: 6px 0;
+  border-bottom: 1px solid var(--line-1);
+}
+
+.bj-rec__name {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  font-size: var(--fs-micro);
+  letter-spacing: 1.5px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.bj-rec__pair {
+  display: flex;
+  flex: none;
+  gap: 3px;
+  align-items: center;
+}
+
+.bj-rec__btn {
+  display: flex;
+  position: relative;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 30px;
+  border: 1px solid var(--line-4);
+  color: var(--text-secondary);
+  font-size: 12px;
+  line-height: 1;
+}
+
+.bj-rec__btn::after {
+  content: '';
+  position: absolute;
+  inset: -9px -6px;
+}
+
+.bj-rec__val {
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+}
+
+.bj-rec__val--dur {
+  width: 40px;
+}
+
+.bj-rec__val--water {
+  width: 44px;
+}
+
+/* Слот воды у стадии, в которую не льют: ширина та же, чтобы столбцы стояли. */
+.bj-rec__none {
+  flex: none;
+  width: 102px;
+  color: var(--muted);
+  font-size: var(--fs-micro);
+  text-align: center;
+}
+
+.bj-rec__del {
+  display: flex;
+  position: relative;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 30px;
+  color: var(--muted);
+}
+
+.bj-rec__del::after {
+  content: '';
+  position: absolute;
+  inset: -9px -8px;
+}
+
+.bj-rec__del:disabled {
+  color: var(--line-4);
+  cursor: default;
+}
+
+/* Приглашение, а не кнопка: пунктир говорит, что строки тут прибавляются. */
+.bj-rec__add {
+  width: 100%;
+  height: 40px;
+  margin-top: 8px;
+  border: 1px dashed var(--line-5);
+  color: var(--dim);
+  font-size: var(--fs-tech-min);
+  letter-spacing: 1.5px;
+}
+
+.bj-rec__foot {
+  display: flex;
+  gap: 12px;
+  margin-top: 8px;
+  color: var(--faint);
+  font-size: var(--fs-tech-min);
+  font-variant-numeric: tabular-nums;
+}
+
 /* ── Таймер ──────────────────────────────────────────────────────────────── */
 
 /* Экран не скроллится: всё должно быть видно, не отрывая рук от чайника. */
@@ -323,16 +472,20 @@
   letter-spacing: var(--ls-stage);
 }
 
-.bj-timer__water {
+/* Фактическое время стадии — то, что сейчас происходит. */
+.bj-timer__stage-el {
   margin-top: 12px;
   color: var(--text-secondary);
   font-size: 14px;
+  font-variant-numeric: tabular-nums;
 }
 
-.bj-timer__dev {
+/* Рецепт этой стадии — подсказка, поэтому мельче и серым. */
+.bj-timer__rec {
   margin-top: 8px;
   color: var(--faint);
   font-size: var(--fs-micro);
+  font-variant-numeric: tabular-nums;
 }
 
 .bj-timer__next {

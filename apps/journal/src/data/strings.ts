@@ -97,7 +97,9 @@ const RU = {
   brew_suggest: 'старт из конвертера',
   brew_pours: 'ПРОЛИВЫ',
   brew_no_grind: 'помол задан производителем',
-  brew_drip_note: 'пакет = упаковка и воронка. девайс не выбирается',
+  /* Дрип разлочен (BJ-12): у пакета нет только помола и девайса — вес задан
+     пакетом, а температура, проливы и рецепт настраиваются как у воронки. */
+  brew_drip_note: 'дрип-пакет: молоть нечего, вес задан пакетом — остальное как у воронки',
   brew_valve: 'КЛАПАН',
   brew_valve_hint: 'момент открытия — переменная рецепта',
 
@@ -118,6 +120,15 @@ const RU = {
   t_target: 'цель',
   t_water_total: 'воды всего',
   t_of: 'из',
+  /* Таймер больше не подгоняет: вместо «цель» под временем и в строке стадии
+     стоит «рецепт» — то же число, но названное подсказкой (BJ-12). */
+  t_recipe: 'рецепт',
+
+  /* Редактор рецепта на сетапе (BJ-12). */
+  rec_title: 'РЕЦЕПТ',
+  rec_auto: 'ВЕРНУТЬ АВТО',
+  rec_total: 'итого',
+  rec_holds: 'в рецепте',
 
   rate_later_t: 'ОЦЕНКА ПОЗЖЕ',
   rate_later_s:
@@ -159,6 +170,17 @@ const RU = {
   wheel_edit_hidden: 'скрыто',
   wheel_edits_reset: 'СБРОСИТЬ ПРАВКИ КОЛЕСА',
 
+  /* Четыре режима колеса (BJ-12). */
+  wheel_mode_drill: 'УРОВНИ',
+  wheel_mode_map: 'КАРТА',
+  wheel_mode_canvas: 'ПОЛОТНО',
+  wheel_mode_list: 'СПИСОК',
+  wheel_map_hint: 'тап — выбрать. категория тоже ответ',
+  wheel_map_edit_hint: 'тапни модуль — переименовать, скрыть или добавить внутрь',
+  wheel_add_inside: 'ВНУТРЬ',
+  wheel_zoom_out: 'МЕЛЬЧЕ',
+  wheel_zoom_in: 'КРУПНЕЕ',
+
   log_title: 'ЖУРНАЛ',
   log_all: 'ВСЁ',
   log_compare: 'СРАВНИТЬ',
@@ -170,6 +192,9 @@ const RU = {
   log_desc: 'ДЕСКРИПТОРЫ',
   log_stages: 'СТАДИИ',
   log_repeat: 'ПОВТОРИТЬ',
+  /* Правка записи «карандашиком» (BJ-12). */
+  log_edit: 'ПРАВКА',
+  log_rerate: 'ПЕРЕОЦЕНИТЬ — ШКАЛЫ И КОЛЕСО',
 
   set_title: 'НАСТРОЙКИ',
   set_grinders: 'МОИ КОФЕМОЛКИ',
@@ -601,7 +626,7 @@ const EN: Readonly<Record<StrKey, string>> = {
   brew_suggest: 'start from converter',
   brew_pours: 'POURS',
   brew_no_grind: 'grind set by the producer',
-  brew_drip_note: 'the bag is both pack and dripper. no device to pick',
+  brew_drip_note: 'drip bag: nothing to grind, weight set by the bag — the rest is as a pourover',
   brew_valve: 'VALVE',
   brew_valve_hint: 'open moment is a recipe variable',
 
@@ -622,6 +647,12 @@ const EN: Readonly<Record<StrKey, string>> = {
   t_target: 'target',
   t_water_total: 'water total',
   t_of: 'of',
+  t_recipe: 'recipe',
+
+  rec_title: 'RECIPE',
+  rec_auto: 'BACK TO AUTO',
+  rec_total: 'total',
+  rec_holds: 'recipe holds',
 
   rate_later_t: 'RATE LATER',
   rate_later_s:
@@ -658,6 +689,16 @@ const EN: Readonly<Record<StrKey, string>> = {
   wheel_edit_renamed: 'renamed',
   wheel_edit_hidden: 'hidden',
   wheel_edits_reset: 'RESET WHEEL EDITS',
+
+  wheel_mode_drill: 'LEVELS',
+  wheel_mode_map: 'MAP',
+  wheel_mode_canvas: 'CANVAS',
+  wheel_mode_list: 'LIST',
+  wheel_map_hint: 'tap to pick. a category is an answer too',
+  wheel_map_edit_hint: 'tap a module to rename, hide or add inside',
+  wheel_add_inside: 'INSIDE',
+  wheel_zoom_out: 'ZOOM OUT',
+  wheel_zoom_in: 'ZOOM IN',
   wheel_prev: 'LAST TIME ABOUT THIS COFFEE',
   wheel_empty: 'nothing yet',
 
@@ -672,6 +713,8 @@ const EN: Readonly<Record<StrKey, string>> = {
   log_desc: 'DESCRIPTORS',
   log_stages: 'STAGES',
   log_repeat: 'REPEAT',
+  log_edit: 'EDIT',
+  log_rerate: 'RE-RATE — SCALES & WHEEL',
 
   set_title: 'SETTINGS',
   set_grinders: 'MY GRINDERS',

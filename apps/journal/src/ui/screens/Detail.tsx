@@ -16,11 +16,13 @@
  * блоком стоит офлайн-кодировщик и контракт №3, и блок вернулся.
  */
 
+import { useEffect, useRef, useState } from 'react';
+
 import { useNav } from '../../app/nav.js';
 import { STR, modeName, stageName } from '../../data/strings.js';
 import { colOf, nameOf } from '../../data/wheel.js';
 import { useBean } from '../../db/repo/beans.js';
-import { useEntry } from '../../db/repo/entries.js';
+import { updateEntry, useEntry } from '../../db/repo/entries.js';
 import { useDevice } from '../../db/repo/devices.js';
 import { useLang } from '../../db/repo/settings.js';
 import { useWheel } from '../../db/repo/wheel.js';
@@ -32,15 +34,22 @@ import { Tag } from '../components/Tag.js';
 import { entryTitle } from '../entry-format.js';
 import { useBrewSetup } from './brewing/brew-store.js';
 import { diagLine } from './journal/diag-scales.js';
+import { type EntryField, entryFieldPatch, hasEditableParams } from './journal/entry-edit.js';
 import { entryStamp, stageWater } from './journal/format.js';
 import { hasRecipe, recipeText } from './journal/qr.js';
 import { QrSvg } from './journal/QrSvg.js';
+import { useRate } from './journal/rate-store.js';
 import { useJournalView } from './journal/view-store.js';
 import './journal/journal.css';
+
+/** Пауза перед записью заметки: пишем не на каждую букву, но и без кнопки. */
+const NOTE_DEBOUNCE_MS = 300;
 
 interface Param {
   label: string;
   value: string;
+  /** Числовое поле записи — в режиме правки под ним появляются −/+. */
+  field?: EntryField;
 }
 
 /**
@@ -54,10 +63,11 @@ function paramsOf(entry: EntryRecord, lang: Lang): Param[] {
 
   const t = STR[lang];
   const out: Param[] = [];
-  if (entry.grind !== null) out.push({ label: t.brew_grind, value: String(entry.grind) });
-  out.push({ label: t.brew_dose, value: `${entry.dose} ${t.grams}` });
-  out.push({ label: t.brew_water, value: `${entry.water} ${t.grams}` });
-  out.push({ label: t.temp_short, value: `${entry.temp}${t.deg}` });
+  if (entry.grind !== null)
+    out.push({ label: t.brew_grind, value: String(entry.grind), field: 'grind' });
+  out.push({ label: t.brew_dose, value: `${entry.dose} ${t.grams}`, field: 'dose' });
+  out.push({ label: t.brew_water, value: `${entry.water} ${t.grams}`, field: 'water' });
+  out.push({ label: t.temp_short, value: `${entry.temp}${t.deg}`, field: 'temp' });
   // Времени может не быть вовсе: запись без таймера, время не засекали.
   if (entry.total > 0) out.push({ label: t.log_time, value: fmtT(entry.total) });
   out.push({ label: t.log_mode, value: modeName(entry.mode, lang) });
@@ -72,11 +82,47 @@ export function Detail() {
   const go = useNav((s) => s.go);
 
   const viewId = useJournalView((s) => s.viewId);
+  const viewEdit = useJournalView((s) => s.viewEdit);
   const fromEntry = useBrewSetup((s) => s.fromEntry);
+  const startReRating = useRate((s) => s.startReRating);
 
   const entry = useEntry(viewId);
   const bean = useBean(entry?.bean);
   const device = useDevice(entry?.device);
+
+  /* Режим правки — состояние экрана: правки уходят в базу сразу, уносить с
+     собой нечего. Уход с экрана его размонтирует, и режим гаснет сам. ✎ из
+     строки журнала открывает деталь уже включённой. */
+  const [editing, setEditing] = useState(viewEdit);
+
+  /*
+   * Заметка пишется с задержкой, без кнопки «сохранить».
+   *
+   * Черновик держится в состоянии, потому что запись приезжает из базы, а живой
+   * ответ Dexie отстаёт от набора на пару кадров: без черновика курсор прыгал бы
+   * в конец строки. Незаписанное дописывается при уходе с экрана — иначе
+   * последние буквы терялись бы на «назад».
+   */
+  const [noteDraft, setNoteDraft] = useState<string | null>(null);
+  const pending = useRef<{ id: string; note: string } | null>(null);
+  const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const flushNote = (): void => {
+    if (timer.current !== null) clearTimeout(timer.current);
+    timer.current = null;
+    const last = pending.current;
+    pending.current = null;
+    if (last) void updateEntry(last.id, { note: last.note });
+  };
+
+  useEffect(() => flushNote, []);
+
+  const changeNote = (id: string, note: string): void => {
+    setNoteDraft(note);
+    pending.current = { id, note };
+    if (timer.current !== null) clearTimeout(timer.current);
+    timer.current = setTimeout(flushNote, NOTE_DEBOUNCE_MS);
+  };
 
   if (!entry) {
     return (
@@ -91,6 +137,7 @@ export function Detail() {
 
   const rated = entry.status === 'done';
   const params = paramsOf(entry, lang);
+  const editable = editing && hasEditableParams(entry);
 
   /* Разбор записи обратно в сетап живёт в сторе заваривания: он же знает, что
      из этих полей вообще редактируется (`setupFromEntry`). */
@@ -99,23 +146,56 @@ export function Detail() {
     go('brew');
   };
 
+  /* Шаг степпера пишется сразу и целиком: подтверждать правку одной цифры
+     нечем, а «сохранить» на экране, где всё остальное живое, было бы обманом. */
+  const bump = (field: EntryField, direction: 1 | -1): void => {
+    const patch = entryFieldPatch(entry, field, direction);
+    if (Object.keys(patch).length > 0) void updateEntry(entry.id, patch);
+  };
+
+  /* Переоценка — тот же флоу оценки, но с предзаполнением: шкалы, заметка,
+     дескрипторы и имя дегустации приезжают из записи, а «ГОТОВО» возвращает
+     назад по стеку, то есть сюда. Правка параметров при этом `status` не
+     трогает — его меняет только сохранённая оценка. */
+  const reRate = (): void => {
+    flushNote();
+    startReRating(entry);
+    go('diag');
+  };
+
   return (
     <div className="jr" data-screen="detail">
       <ScreenHeader
         title={entryStamp(entry)}
         plain
         right={
-          /* Дегустацию повторять нечем: рецепта за ней нет. */
-          entry.mode === 'cup' ? undefined : (
+          <>
+            {/* Переключатель правки — тот же язык, что ПРАВКА у колеса. */}
             <button
               type="button"
-              className="jr-detail__repeat"
-              data-testid="detail-repeat"
-              onClick={repeat}
+              className={editing ? 'jr-detail__edit jr-detail__edit--on' : 'jr-detail__edit'}
+              data-testid="detail-edit"
+              aria-pressed={editing}
+              aria-label={t.log_edit}
+              onClick={() => {
+                setEditing(!editing);
+              }}
             >
-              {t.log_repeat}
+              ✎
             </button>
-          )
+
+            {/* Дегустацию повторять нечем: рецепта за ней нет. */}
+            {entry.mode === 'cup' ? null : (
+              <button
+                type="button"
+                className="jr-detail__repeat"
+                data-testid="detail-repeat"
+                onClick={repeat}
+              >
+                {t.log_repeat}
+              </button>
+            )}
+          </>
         }
       />
 
@@ -124,12 +204,43 @@ export function Detail() {
 
         {params.length > 0 ? (
           <div className="jr-params">
-            {params.map((p) => (
-              <div className="jr-param" key={p.label}>
-                <div className="jr-param__label">{p.label}</div>
-                <div className="jr-param__value">{p.value}</div>
-              </div>
-            ))}
+            {params.map((p) => {
+              const { field } = p;
+              return (
+                <div className="jr-param" key={p.label}>
+                  <div className="jr-param__label">{p.label}</div>
+                  <div className="jr-param__value">{p.value}</div>
+                  {/* ВРЕМЯ, РЕЖИМ и КЛАПАН степперов не получают: это следы
+                      заваривания, а не его настройки. */}
+                  {editable && field !== undefined ? (
+                    <div className="jr-param__pair">
+                      <button
+                        type="button"
+                        className="jr-param__btn"
+                        data-testid={`detail-dec-${field}`}
+                        aria-label={`${p.label} −`}
+                        onClick={() => {
+                          bump(field, -1);
+                        }}
+                      >
+                        −
+                      </button>
+                      <button
+                        type="button"
+                        className="jr-param__btn"
+                        data-testid={`detail-inc-${field}`}
+                        aria-label={`${p.label} +`}
+                        onClick={() => {
+                          bump(field, 1);
+                        }}
+                      >
+                        +
+                      </button>
+                    </div>
+                  ) : null}
+                </div>
+              );
+            })}
           </div>
         ) : null}
 
@@ -173,11 +284,38 @@ export function Detail() {
           </div>
         ) : null}
 
-        {entry.note ? (
+        {entry.note && !editing ? (
           <div className="jr__group">
             <div className="jr__label">{t.log_note}</div>
             <div className="jr-note-text">{entry.note}</div>
           </div>
+        ) : null}
+
+        {editing ? (
+          <>
+            <div className="jr__group">
+              <div className="jr__label">{t.log_note}</div>
+              <textarea
+                className="jr-detail__note"
+                data-testid="detail-note"
+                placeholder={t.note_ph}
+                aria-label={t.log_note}
+                value={noteDraft ?? entry.note}
+                onChange={(e) => {
+                  changeNote(entry.id, e.target.value);
+                }}
+              />
+            </div>
+
+            <button
+              type="button"
+              className="jr-detail__rerate"
+              data-testid="detail-rerate"
+              onClick={reRate}
+            >
+              {t.log_rerate}
+            </button>
+          </>
         ) : null}
 
         {hasRecipe(entry) ? (

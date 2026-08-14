@@ -34,14 +34,14 @@ import { useBrewSetup } from './brewing/brew-store.js';
 import { brewSetup } from './brewing/brew-view.js';
 import {
   beanLine,
-  deviationLine,
   mainButtonLabel,
   nextLine,
+  recipeLine,
   segments,
   stageCounter,
+  stageElapsedLine,
   stageTitle,
   targetLine,
-  waterLine,
 } from './brewing/timer-view.js';
 import './brewing/brewing.css';
 
@@ -171,10 +171,10 @@ export function Timer() {
       <div className="bj-timer__stage">
         <div className="bj-timer__num">{stageCounter(stages, view.idx, lang, paused)}</div>
         <div className="bj-timer__name">{stageTitle(stages, view.idx, lang, paused)}</div>
-        <div className="bj-timer__water">
-          {waterLine(stages, view.idx, setup.water, lang, paused)}
-        </div>
-        <div className="bj-timer__dev">{deviationLine(stages, view.idx, stageSec, paused)}</div>
+        {/* Факт крупнее подсказки: сколько идёт эта стадия — и, серым, что о
+            ней говорит рецепт. */}
+        <div className="bj-timer__stage-el">{stageElapsedLine(stageSec, paused)}</div>
+        <div className="bj-timer__rec">{recipeLine(stages, view.idx, lang, paused)}</div>
       </div>
 
       <div className="bj-timer__next">{nextLine(stages, view.idx, lang)}</div>

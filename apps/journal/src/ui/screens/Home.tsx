@@ -68,6 +68,12 @@ export function Home() {
     go('detail');
   };
 
+  /** ✎ в строке: та же запись, но сразу в режиме правки (BJ-12). */
+  const editEntry = (id: string) => {
+    openEntry(id, true);
+    go('detail');
+  };
+
   return (
     <section className="screen" data-screen="home">
       <header className="bj-head bj-head--root home-head">
@@ -121,22 +127,38 @@ export function Home() {
 
         <Section label={t.log_title}>
           {feed.map((entry) => (
-            <button
-              key={entry.id}
-              type="button"
-              className="home-feed__row"
-              data-testid="home-feed-row"
-              onClick={() => openDetail(entry.id)}
-            >
-              <span className="home-feed__date">{shortDate(entry.date)}</span>
-              <span className="home-feed__main">
-                <span className="home-feed__title">
-                  {entryTitle(entry, lang, refsOf(entry.bean, entry.device))}
+            /* Как и в журнале: строка — контейнер, открывает её внутренняя
+               кнопка, а ✎ стоит рядом и уводит в правку. */
+            <div key={entry.id} className="home-feed__row">
+              <button
+                type="button"
+                className="home-feed__open"
+                data-testid="home-feed-row"
+                onClick={() => openDetail(entry.id)}
+              >
+                <span className="home-feed__date">{shortDate(entry.date)}</span>
+                <span className="home-feed__main">
+                  <span className="home-feed__title">
+                    {entryTitle(entry, lang, refsOf(entry.bean, entry.device))}
+                  </span>
+                  <span className="home-feed__sub">{entrySub(entry, lang)}</span>
                 </span>
-                <span className="home-feed__sub">{entrySub(entry, lang)}</span>
-              </span>
-              <span className="home-feed__mark">{entryMark(entry, lang)}</span>
-            </button>
+                <span className="home-feed__mark">{entryMark(entry, lang)}</span>
+              </button>
+
+              <button
+                type="button"
+                className="bj-pencil"
+                data-testid="home-feed-edit"
+                aria-label={`${t.log_edit}: ${entryTitle(entry, lang, refsOf(entry.bean, entry.device))}`}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  editEntry(entry.id);
+                }}
+              >
+                ✎
+              </button>
+            </div>
           ))}
 
           {/* Журнал пуст — приглашение заварить, а не сообщение об отсутствии. */}

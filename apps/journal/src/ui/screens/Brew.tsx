@@ -22,8 +22,8 @@ import { useDevices } from '../../db/repo/devices.js';
 import { saveEntryWithDecrement } from '../../db/repo/entries.js';
 import { useOwnGrinders } from '../../db/repo/grinders.js';
 import { useLang, useSettings } from '../../db/repo/settings.js';
-import type { BeanRecord, DeviceRecord } from '../../db/schema.js';
-import { plannedTotal, stagesFor } from '../../domain/stages.js';
+import type { BeanRecord, DeviceRecord, Stage } from '../../db/schema.js';
+import { plannedTotal } from '../../domain/stages.js';
 import { logManual, useTimer } from '../../domain/timer.js';
 import { Chip, EmptyState, InverseButton, ScreenHeader, Stepper, Tag } from '../components/index.js';
 import { DevSvg } from './devices/DevSvg.js';
@@ -47,6 +47,7 @@ import {
   manualTimeLabel,
   plannedLine,
   ratioLine,
+  recipeStages,
   showDevice,
   showDose,
   showGrind,
@@ -54,6 +55,17 @@ import {
   showValve,
   valveLabel,
 } from './brewing/brew-view.js';
+import {
+  RECIPE_DUR_STEP,
+  RECIPE_WATER_STEP,
+  addPour,
+  bumpStageDuration,
+  bumpStageWater,
+  recipeRows,
+  recipeTotalLine,
+  recipeWaterNote,
+  removeStage,
+} from './brewing/recipe.js';
 import './brewing/brewing.css';
 
 export function Brew() {
@@ -90,9 +102,19 @@ export function Brew() {
      ЗАВАРИВАНИЕ» или посчитанный из его же сохранённого состояния (D-9). */
   const hint = grindHint(grindSpan(grinders ?? [], settings, setup.span), lang);
 
+  /* План заваривания: правленый рецепт, если он есть, иначе авто-пересчёт.
+     Из него живут и таймер, и запись, и весь блок РЕЦЕПТ ниже. */
+  const stages: Stage[] = bean ? recipeStages(setup, bean, device) : [];
+
+  /* Любая правка стадии материализует копию плана: с этого момента параметры
+     сетапа на стадии не влияют (README:37). */
+  const editRecipe = (next: Stage[]): void => {
+    setup.setRecipe(next);
+  };
+
   const start = () => {
     if (!bean) return;
-    useTimer.getState().start(stagesFor(brewPlan(setup, bean, device)));
+    useTimer.getState().start(stages);
     go('timer');
   };
 
@@ -109,13 +131,16 @@ export function Brew() {
   const [manualOpen, setManualOpen] = useState(false);
   const [manualTotal, setManualTotal] = useState(0);
 
-  const planned = bean ? plannedTotal(stagesFor(brewPlan(setup, bean, device))) : 0;
+  const planned = plannedTotal(stages);
 
   const saveManual = async () => {
     if (!bean) return;
     const { entry } = logManual({
       setup: brewSetup(setup, bean, device),
       bean,
+      // Стадии уходят в запись только когда их набрал человек: авто-план
+      // никто не засекал (BJ-8), а правленый рецепт — факт его решения.
+      ...(setup.recipeTouched ? { stages } : {}),
       total: manualTotal,
       now: new Date(),
     });
@@ -277,6 +302,125 @@ export function Brew() {
             />
           ) : null}
         </div>
+
+        {/* ── Рецепт ───────────────────────────────────────────────────── */}
+        {/* Подсказка, а не план: таймер по нему не подгоняет, а показывает
+            рядом. Пока рецепт не тронут, он пересчитывается сам. */}
+        {bean ? (
+          <div className="bj-rec" data-testid="brew-recipe">
+            <div className="bj-rec__head">
+              <div className="micro">{t.rec_title}</div>
+              {setup.recipeTouched ? (
+                <button
+                  type="button"
+                  className="bj-rec__auto"
+                  data-testid="recipe-auto"
+                  onClick={setup.resetRecipe}
+                >
+                  {t.rec_auto}
+                </button>
+              ) : null}
+            </div>
+
+            <div className="bj-rec__rows">
+              {recipeRows(stages, lang).map((row) => (
+                <div className="bj-rec__row" key={row.index} data-testid="recipe-row">
+                  <div className="bj-rec__name">{row.name}</div>
+
+                  <div className="bj-rec__pair">
+                    <button
+                      type="button"
+                      className="bj-rec__btn"
+                      aria-label={`${row.name} − ${String(RECIPE_DUR_STEP)}`}
+                      onClick={() => {
+                        editRecipe(bumpStageDuration(stages, row.index, -RECIPE_DUR_STEP));
+                      }}
+                    >
+                      −
+                    </button>
+                    <div className="bj-rec__val bj-rec__val--dur">{row.dur}</div>
+                    <button
+                      type="button"
+                      className="bj-rec__btn"
+                      data-testid={`recipe-dur-inc-${String(row.index)}`}
+                      aria-label={`${row.name} + ${String(RECIPE_DUR_STEP)}`}
+                      onClick={() => {
+                        editRecipe(bumpStageDuration(stages, row.index, RECIPE_DUR_STEP));
+                      }}
+                    >
+                      +
+                    </button>
+                  </div>
+
+                  {row.water === null ? (
+                    <div className="bj-rec__none">—</div>
+                  ) : (
+                    <div className="bj-rec__pair">
+                      <button
+                        type="button"
+                        className="bj-rec__btn"
+                        aria-label={`${row.name} − ${String(RECIPE_WATER_STEP)} ${t.grams}`}
+                        onClick={() => {
+                          editRecipe(bumpStageWater(stages, row.index, -RECIPE_WATER_STEP));
+                        }}
+                      >
+                        −
+                      </button>
+                      <div className="bj-rec__val bj-rec__val--water">{row.water}</div>
+                      <button
+                        type="button"
+                        className="bj-rec__btn"
+                        data-testid={`recipe-water-inc-${String(row.index)}`}
+                        aria-label={`${row.name} + ${String(RECIPE_WATER_STEP)} ${t.grams}`}
+                        onClick={() => {
+                          editRecipe(bumpStageWater(stages, row.index, RECIPE_WATER_STEP));
+                        }}
+                      >
+                        +
+                      </button>
+                    </div>
+                  )}
+
+                  {/* Последнюю видимую строку удалить нельзя: рецепт без
+                      единственной стадии перестал бы быть рецептом. */}
+                  <button
+                    type="button"
+                    className="bj-rec__del"
+                    data-testid={`recipe-del-${String(row.index)}`}
+                    aria-label={`${t.a11y_remove}: ${row.name}`}
+                    disabled={!row.canRemove}
+                    onClick={() => {
+                      editRecipe(removeStage(stages, row.index));
+                    }}
+                  >
+                    ×
+                  </button>
+                </div>
+              ))}
+            </div>
+
+            <button
+              type="button"
+              className="bj-rec__add"
+              data-testid="recipe-add"
+              onClick={() => {
+                editRecipe(addPour(stages));
+              }}
+            >
+              {`+ ${t.t_pour}`}
+            </button>
+
+            <div className="bj-rec__foot">
+              <span>{recipeTotalLine(stages, lang)}</span>
+              {/* Расхождение с полем ВОДА — заметка, а не ошибка. */}
+              {recipeWaterNote(stages, setup.water, lang) === null ? null : (
+                <span data-testid="recipe-water-note">
+                  {recipeWaterNote(stages, setup.water, lang)}
+                </span>
+              )}
+            </div>
+          </div>
+        ) : null}
 
         {/* ── Выходы ───────────────────────────────────────────────────── */}
         <InverseButton

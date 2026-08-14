@@ -15,7 +15,7 @@
 
 import { create } from 'zustand';
 
-import type { EntryRecord } from '../../../db/schema.js';
+import type { EntryRecord, Stage } from '../../../db/schema.js';
 import type { Span } from '../../../domain/calibration.js';
 import type { HybridMode } from '../../../domain/stages.js';
 
@@ -41,6 +41,16 @@ export interface BrewSetupValues {
    * показывает именно его; без него она считается по своей кофемолке.
    */
   span: Span | null;
+  /**
+   * Правленый план стадий (BJ-12). `null` — рецепт ещё авто и пересчитывается
+   * из параметров при каждом их изменении.
+   */
+  recipe: Stage[] | null;
+  /**
+   * Тронут ли рецепт руками. Отдельный флаг, а не `recipe !== null`, потому что
+   * «ВЕРНУТЬ АВТО» должно возвращать именно авто-пересчёт, а не последнюю копию.
+   */
+  recipeTouched: boolean;
 }
 
 /**
@@ -59,7 +69,16 @@ export const BREW_DEFAULTS: Readonly<BrewSetupValues> = Object.freeze({
   pours: 3,
   valveAt: 80,
   span: null,
+  recipe: null,
+  recipeTouched: false,
 });
+
+/**
+ * Что обнуляет рецепт до авто: смена пачки, девайса, режима гибрида и приход
+ * готового сетапа со стороны (README:38). Общий кусок патча — чтобы ни одна из
+ * пяти точек про него не забыла.
+ */
+const AUTO_RECIPE = { recipe: null, recipeTouched: false } as const;
 
 export interface BrewStore extends BrewSetupValues {
   setBean: (id: string | null) => void;
@@ -73,15 +92,25 @@ export interface BrewStore extends BrewSetupValues {
   fromConverter: (span: Span) => void;
   /** «ПОВТОРИТЬ» с детали записи (`DC:1334`): параметры записи назад в сетап. */
   fromEntry: (entry: EntryRecord) => void;
+  /**
+   * Правка рецепта: мутатор получает копию текущего плана — авто-пересчёт, если
+   * рецепт ещё не трогали, — и её результат становится рецептом.
+   *
+   * Копию собирает экран (он знает пачку и девайс, а стор — нет), поэтому сюда
+   * приходит уже готовый список стадий.
+   */
+  setRecipe: (stages: Stage[]) => void;
+  /** «ВЕРНУТЬ АВТО». */
+  resetRecipe: () => void;
   reset: () => void;
 }
 
 export const useBrewSetup = create<BrewStore>((set) => ({
   ...BREW_DEFAULTS,
 
-  setBean: (bean) => set({ bean }),
-  setDevice: (device) => set({ device }),
-  setHyMode: (hyMode) => set({ hyMode }),
+  setBean: (bean) => set({ bean, ...AUTO_RECIPE }),
+  setDevice: (device) => set({ device, ...AUTO_RECIPE }),
+  setHyMode: (hyMode) => set({ hyMode, ...AUTO_RECIPE }),
   // Вычисляемый ключ из объединения литералов TypeScript выводит как
   // `{ [x: string]: number }`, поэтому связь «поле ↔ тип значения» здесь может
   // выразить только утверждение. Все шесть полей числовые — врать оно не может.
@@ -89,7 +118,10 @@ export const useBrewSetup = create<BrewStore>((set) => ({
 
   fromConverter: (span) => set({ grind: span.center, span }),
 
-  fromEntry: (entry) => set(setupFromEntry(entry)),
+  fromEntry: (entry) => set({ ...setupFromEntry(entry), ...AUTO_RECIPE }),
+
+  setRecipe: (recipe) => set({ recipe, recipeTouched: true }),
+  resetRecipe: () => set({ ...AUTO_RECIPE }),
 
   reset: () => set({ ...BREW_DEFAULTS }),
 }));

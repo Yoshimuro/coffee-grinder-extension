@@ -16,14 +16,16 @@ import type {
   DeviceRecord,
   GrinderRecord,
   Lang,
+  Stage,
 } from '../../../db/schema.js';
 import type { Span } from '../../../domain/calibration.js';
 import { fmtT } from '../../../domain/format.js';
-import type { BrewPlan, HybridMode } from '../../../domain/stages.js';
+import { type BrewPlan, type HybridMode, plannedWater, stagesFor } from '../../../domain/stages.js';
 import type { BrewSetup } from '../../../domain/timer.js';
 import type { StepperRange } from '../../components/index.js';
 import { type ConverterState, converterSpan } from '../conv/model.js';
 import type { BrewSetupValues } from './brew-store.js';
+import { recipeValveAt } from './recipe.js';
 
 /* ── Диапазоны полей (component-report §10.11) ───────────────────────────── */
 
@@ -200,14 +202,42 @@ export function brewPlan(
   };
 }
 
-/** План плюс то, что нужно только записи журнала: помол и температура. */
+/**
+ * Стадии, по которым реально заваривают: правленый рецепт, если он есть, иначе
+ * авто-пересчёт от текущих параметров (BJ-12).
+ *
+ * Копия, а не ссылка на стор: таймер живёт со своим списком стадий и дописывает
+ * в него факт, и общий массив он бы испортил.
+ */
+export function recipeStages(
+  values: BrewSetupValues,
+  bean: BeanRecord,
+  device: DeviceRecord | null,
+): Stage[] {
+  const own = values.recipeTouched ? values.recipe : null;
+  if (own) return own.map((stage) => [...stage] as Stage);
+  return stagesFor(brewPlan(values, bean, device));
+}
+
+/**
+ * План плюс то, что нужно только записи журнала: помол и температура.
+ *
+ * Вода и секунда клапана берутся **из рецепта**, а не из полей сетапа: если
+ * человек поправил стадии, запись обязана назвать то, что он налил и на какой
+ * секунде открыл клапан, а не то, что осталось в степперах (решение по BJ-12).
+ * У нетронутого рецепта обе величины совпадают с полями — `stagesFor` сводит
+ * сумму воды с полем ВОДА, а `valveAt` и есть длительность настаивания.
+ */
 export function brewSetup(
   values: BrewSetupValues,
   bean: BeanRecord,
   device: DeviceRecord | null,
 ): BrewSetup {
+  const stages = recipeStages(values, bean, device);
   return {
     ...brewPlan(values, bean, device),
+    water: plannedWater(stages),
+    valveAt: recipeValveAt(stages, values.valveAt),
     grind: showGrind(bean.form) ? values.grind : null,
     temp: values.temp,
   };

@@ -113,13 +113,23 @@
 
 /* ── Лента ───────────────────────────────────────────────────────────────── */
 
+/* Как строка журнала: контейнер держит линию, внутри — «открыть» и ✎ (BJ-12).
+   Сам карандаш общий с журналом — `.jr-row__edit` в `journal.css`. */
 .home-feed__row {
   display: flex;
-  gap: 12px;
+  gap: 8px;
+  align-items: center;
   width: 100%;
+  border-bottom: 1px solid var(--line-1);
+}
+
+.home-feed__open {
+  display: flex;
+  flex: 1;
+  gap: 12px;
+  min-width: 0;
   min-height: var(--touch);
   padding: 13px 0;
-  border-bottom: 1px solid var(--line-1);
   text-align: left;
 }
 

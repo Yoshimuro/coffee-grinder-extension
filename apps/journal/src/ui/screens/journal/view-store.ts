@@ -22,18 +22,24 @@ import type { EntryRecord } from '../../../db/schema.js';
 export interface ViewState {
   /** Запись, открытая на детали. */
   viewId: string | null;
+  /**
+   * Открыть деталь сразу в режиме правки — то, ради чего ✎ стоит в строках
+   * ленты (BJ-12). Дальше режимом распоряжается сам экран.
+   */
+  viewEdit: boolean;
   /** Пара для сравнения: A новее B (`openCompare`, `DC:1329`). */
   pair: readonly [string, string] | null;
 
-  openEntry: (id: string) => void;
+  openEntry: (id: string, edit?: boolean) => void;
   openPair: (pair: readonly [string, string]) => void;
 }
 
 export const useJournalView = create<ViewState>((set) => ({
   viewId: null,
+  viewEdit: false,
   pair: null,
 
-  openEntry: (viewId) => set({ viewId }),
+  openEntry: (viewId, edit = false) => set({ viewId, viewEdit: edit }),
   openPair: (pair) => set({ pair }),
 }));
 

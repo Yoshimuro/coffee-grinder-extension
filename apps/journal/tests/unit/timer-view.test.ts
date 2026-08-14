@@ -4,14 +4,14 @@ import type { DeviceRecord, Stage } from '../../src/db/schema.js';
 import {
   beanLine,
   brewerLabel,
-  deviationLine,
   mainButtonLabel,
   nextLine,
+  recipeLine,
   segments,
   stageCounter,
+  stageElapsedLine,
   stageTitle,
   targetLine,
-  waterLine,
 } from '../../src/ui/screens/brewing/timer-view.js';
 
 /* Перколяция на два пролива: 45 + 40 + 40 + 50 = 175 с, 250 г воды. */
@@ -70,8 +70,8 @@ describe('segments — шкала стадий', () => {
 
 describe('targetLine', () => {
   it('складывает плановые длительности', () => {
-    expect(targetLine(perc, 'ru')).toBe('цель 2:55');
-    expect(targetLine(imm, 'en')).toBe('target 2:30');
+    expect(targetLine(perc, 'ru')).toBe('рецепт 2:55');
+    expect(targetLine(imm, 'en')).toBe('recipe 2:30');
   });
 });
 
@@ -95,46 +95,37 @@ describe('stageCounter и stageTitle', () => {
   });
 });
 
-describe('waterLine — накопительная вода', () => {
-  it('включает текущую стадию', () => {
-    expect(waterLine(perc, 0, 250, 'ru', false)).toBe('45 г из 250');
-    expect(waterLine(perc, 1, 250, 'ru', false)).toBe('150 г из 250');
-    expect(waterLine(perc, 3, 250, 'ru', false)).toBe('250 г из 250');
+describe('stageElapsedLine — фактическое время стадии', () => {
+  it('считает вперёд, а не назад', () => {
+    expect(stageElapsedLine(6, false)).toBe('0:06');
+    expect(stageElapsedLine(57, false)).toBe('0:57');
   });
 
-  it('в паузе воды не льют', () => {
-    expect(waterLine(perc, 1, 250, 'ru', true)).toBe('даём стечь');
-    expect(waterLine(perc, 1, 250, 'en', true)).toBe('letting it drain');
-  });
-
-  it('прочерк — только пока не налито ничего', () => {
-    const dry: Stage[] = [['steep', 60, 0], ['drain', 30, 0]];
-    expect(waterLine(dry, 0, 0, 'ru', false)).toBe('—');
-    // Иммерсия: вся вода в первой же стадии, «—» здесь был бы враньём.
-    expect(waterLine(imm, 0, 250, 'ru', false)).toBe('250 г из 250');
-    expect(waterLine(imm, 2, 250, 'ru', false)).toBe('250 г из 250');
+  it('в паузе время стекания растёт со знаком', () => {
+    expect(stageElapsedLine(12, true)).toBe('+ 0:12');
   });
 });
 
-describe('deviationLine — отклонение от цели', () => {
-  it('до цели отсчитывает назад', () => {
-    expect(deviationLine(perc, 0, 6, false)).toBe('− 0:39');
+describe('recipeLine — тихая цель стадии', () => {
+  it('называет время и воду стадии', () => {
+    expect(recipeLine(perc, 0, 'ru', false)).toBe('рецепт 0:45 · 45 г');
+    expect(recipeLine(perc, 1, 'en', false)).toBe('recipe 0:40 · 105 g');
   });
 
-  it('после цели отсчитывает вперёд', () => {
-    expect(deviationLine(perc, 0, 57, false)).toBe('+ 0:12');
-  });
-
-  it('ровно в цель показывает ноль со знаком минус', () => {
-    expect(deviationLine(perc, 0, 45, false)).toBe('− 0:00');
+  it('стадию без воды называет одним временем', () => {
+    expect(recipeLine(perc, 3, 'ru', false)).toBe('рецепт 0:50');
+    expect(recipeLine(imm, 2, 'en', false)).toBe('recipe 0:30');
   });
 
   it('у маркера цели нет — строка пустая', () => {
-    expect(deviationLine(imm, 1, 3, false)).toBe('');
+    expect(recipeLine(imm, 1, 'ru', false)).toBe('');
+    // Индекс за краем плана строку не ломает.
+    expect(recipeLine(perc, 9, 'ru', false)).toBe('');
   });
 
-  it('в паузе время стекания растёт', () => {
-    expect(deviationLine(perc, 1, 12, true)).toBe('+ 0:12');
+  it('в паузе говорит про стекание', () => {
+    expect(recipeLine(perc, 1, 'ru', true)).toBe('даём стечь');
+    expect(recipeLine(perc, 1, 'en', true)).toBe('letting it drain');
   });
 });
 

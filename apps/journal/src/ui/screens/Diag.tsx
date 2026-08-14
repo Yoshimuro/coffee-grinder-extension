@@ -40,6 +40,7 @@ export function Diag() {
   const t = STR[lang];
   const setTab = useNav((s) => s.setTab);
   const go = useNav((s) => s.go);
+  const back = useNav((s) => s.back);
 
   const target = useRate((s) => s.target);
   const diag = useRate((s) => s.diag);
@@ -114,11 +115,16 @@ export function Diag() {
 
   async function save(): Promise<void> {
     closing.current = true;
+    /* Читаем до сохранения: `saveRating` закрывает сессию и обнуляет стор. */
+    const resume = useRate.getState().resume;
     await saveRating();
     /* Оценили раньше, чем пришло напоминание, — снимаем его. Уведомление про
        чашку, которую уже оценили, — мусор (D-4). */
     void notify.cancel();
-    setTab('home');
+    /* Переоценка вернётся в запись, с которой её открыли; обычная оценка
+       заканчивается дома — она и начиналась оттуда (BJ-12). */
+    if (resume) back();
+    else setTab('home');
   }
 
   const context = tasting
