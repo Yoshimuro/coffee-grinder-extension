@@ -266,3 +266,110 @@
   font-size: var(--fs-micro);
   color: var(--muted);
 }
+
+/* ── Режим правки (BJ-11) ────────────────────────────────────────────────── */
+
+/* Тот же язык, что у «ГОТОВО», только тише: рамка появляется во включённом
+   состоянии — кнопка-переключатель, а не действие. */
+.bj-wheel__pencil {
+  display: flex;
+  align-items: center;
+  height: 40px;
+  margin-right: 8px;
+  padding: 0 14px;
+  border: 1px solid transparent;
+  color: var(--text-secondary);
+  font-size: var(--fs-tech);
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+}
+
+.bj-wheel__pencil--on {
+  border-color: var(--line-5);
+  color: var(--text);
+}
+
+/* Панель занимает место подвала выбранного; список уровня прокручивается сам,
+   как и набор тегов. */
+.bj-wheel__rows {
+  max-height: 118px;
+  margin-top: 6px;
+  overflow-y: auto;
+}
+
+.bj-wheel__row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  min-height: 28px;
+  border-bottom: 1px solid var(--line-2);
+}
+
+.bj-wheel__row-dot {
+  flex: none;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+}
+
+.bj-wheel__row-name {
+  flex: 1;
+  overflow: hidden;
+  font-size: var(--fs-micro);
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.bj-wheel__row-act {
+  flex: none;
+  padding: 2px 8px;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.bj-wheel__row-ask {
+  color: var(--muted);
+  font-size: var(--fs-micro);
+}
+
+.bj-wheel__row-yes {
+  padding: 2px 8px;
+  border: 1px solid var(--line-5);
+  color: var(--text);
+  font-size: var(--fs-micro);
+  letter-spacing: 1px;
+}
+
+.bj-wheel__row-no {
+  padding: 2px 6px;
+  color: var(--muted);
+  font-size: var(--fs-micro);
+}
+
+.bj-wheel__row-input {
+  flex: 1;
+  min-width: 0;
+  padding: 3px 6px;
+  border: 1px solid var(--line-4);
+  background: none;
+  color: var(--text);
+  font-family: inherit;
+  font-size: var(--fs-micro);
+}
+
+.bj-wheel__addrow {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+/* Пунктир — как у «+ <имя>» в крошках: предложение добавить, а не выбранное. */
+.bj-wheel__addbtn {
+  flex: none;
+  padding: 6px 10px;
+  border: 1px dashed var(--line-5);
+  color: var(--text-secondary);
+  font-size: 8.5px;
+  letter-spacing: 1px;
+}

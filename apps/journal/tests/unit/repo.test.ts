@@ -280,6 +280,7 @@ describe('настройки', () => {
       recents: [],
       hints: [],
       hintsOn: true,
+      wheelEdits: [],
     });
   });
 

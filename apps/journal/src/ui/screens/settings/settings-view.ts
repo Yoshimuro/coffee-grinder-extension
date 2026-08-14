@@ -6,6 +6,8 @@
  */
 
 import { STR } from '../../../data/strings.js';
+import { type WheelSet, nameOf } from '../../../data/wheel.js';
+import type { WheelEdit } from '../../../data/wheel-edits.js';
 import type { GrinderRecord, Lang } from '../../../db/schema.js';
 import type { ImportFailure } from '../../../db/transfer.js';
 import type { StepperRange } from '../../components/index.js';
@@ -52,6 +54,23 @@ export function grinderMeta(grinder: GrinderRecord, lang: Lang): string {
  */
 export function canDelete(count: number): boolean {
   return count > 1;
+}
+
+/* ── Правки колеса (BJ-11) ───────────────────────────────────────────────── */
+
+/**
+ * Подпись правки в списке настроек: «добавлено: Амаретто», «скрыто: Виски»,
+ * «переименовано: Скотч».
+ *
+ * Добавления и переименования несут свои подписи сами. Цель скрытия называет
+ * набор: его цепочка fallback знает и скрытые узлы, поэтому подпись не
+ * вырождается в голый id.
+ */
+export function wheelEditLabel(edit: WheelEdit, lang: Lang, ws: WheelSet): string {
+  const t = STR[lang];
+  if (edit.op === 'hide') return `${t.wheel_edit_hidden}: ${nameOf(edit.target, lang, ws)}`;
+  if (edit.op === 'rename') return `${t.wheel_edit_renamed}: ${edit[lang]}`;
+  return `${t.wheel_edit_added}: ${edit[lang]}`;
 }
 
 /* ── Обмен базой (BJ-6) ──────────────────────────────────────────────────── */

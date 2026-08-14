@@ -12,6 +12,8 @@
 
 import Dexie, { type Table } from 'dexie';
 
+import type { WheelEdit } from '../data/wheel-edits.js';
+
 /* ── Кофемолки ───────────────────────────────────────────────────────────── */
 
 /** What one unit on a grinder's dial is called. Mirrors `GrinderScale` in @coffee/core. */
@@ -246,6 +248,15 @@ export interface SettingsValues {
    * что уже показывали.
    */
   hintsOn: boolean;
+  /**
+   * Правки колеса вкусов — пользовательский оверлей поверх встроенной базы
+   * (`data/wheel-edits.ts`). Порядок значим, применяются по очереди.
+   *
+   * Ключ, а не таблица: список маленький (десятки правок), читается и пишется
+   * целиком, а главное — как строка настроек он попадает в экспорт/импорт
+   * (`transfer.ts`) без единой правки формата архива.
+   */
+  wheelEdits: WheelEdit[];
 }
 
 export type SettingKey = keyof SettingsValues;
