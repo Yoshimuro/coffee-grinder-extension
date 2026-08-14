@@ -19,6 +19,8 @@
  */
 
 import {
+  BASE_WHEEL,
+  WHEEL,
   type WheelCategory,
   type WheelSet,
   buildDesc,
@@ -79,9 +81,9 @@ interface DraftCat {
   sub: DraftSub[];
 }
 
-/** Занят ли id на любом из трёх уровней черновика. */
-function hasId(draft: readonly DraftCat[], id: string): boolean {
-  for (const c of draft) {
+/** Занят ли id на любом из трёх уровней дерева. */
+export function hasWheelId(cats: readonly WheelCategory[], id: string): boolean {
+  for (const c of cats) {
     if (c.id === id) return true;
     for (const s of c.sub) {
       if (s.id === id) return true;
@@ -94,18 +96,18 @@ function hasId(draft: readonly DraftCat[], id: string): boolean {
 function apply(draft: DraftCat[], e: WheelEdit): void {
   switch (e.op) {
     case 'add-cat': {
-      if (hasId(draft, e.id)) return;
+      if (hasWheelId(draft, e.id)) return;
       draft.push({ id: e.id, ru: e.ru, en: e.en, h: e.h, c: e.c, sub: [] });
       return;
     }
     case 'add-sub': {
-      if (hasId(draft, e.id)) return;
+      if (hasWheelId(draft, e.id)) return;
       const cat = draft.find((c) => c.id === e.cat);
       if (cat) cat.sub.push({ id: e.id, ru: e.ru, en: e.en, d: [] });
       return;
     }
     case 'add-desc': {
-      if (hasId(draft, e.id)) return;
+      if (hasWheelId(draft, e.id)) return;
       for (const c of draft) {
         const sub = c.sub.find((s) => s.id === e.sub);
         if (sub) {
@@ -187,6 +189,24 @@ export function composeWheel(
 }
 
 /** Дерево вместе с плоской проекцией — то, что ждут функции `wheel.ts`. */
-export function makeWheelSet(cats: readonly WheelCategory[]): WheelSet {
-  return Object.freeze({ cats, desc: buildDesc(cats) });
+export function makeWheelSet(
+  cats: readonly WheelCategory[],
+  fallback: WheelSet = BASE_WHEEL,
+): WheelSet {
+  return Object.freeze({ cats, desc: buildDesc(cats), fallback });
+}
+
+/**
+ * Эффективное колесо: правки поверх базы, двумя наборами.
+ *
+ * Показывается «effective» — с применёнными скрытиями. Его fallback — «full»,
+ * тот же список правок без единого `hide`: там живут имена и цвета скрытых
+ * узлов, в том числе пользовательских, которых база не знает. Так старая
+ * запись со скрытым дескриптором остаётся подписанной и цветной, а
+ * переименованный и затем скрытый узел зовётся новым именем.
+ */
+export function effectiveWheelSet(edits: readonly WheelEdit[]): WheelSet {
+  if (edits.length === 0) return BASE_WHEEL;
+  const full = makeWheelSet(composeWheel(WHEEL, edits.filter((e) => e.op !== 'hide')));
+  return makeWheelSet(composeWheel(WHEEL, edits), full);
 }

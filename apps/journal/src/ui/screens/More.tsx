@@ -35,8 +35,10 @@ import {
   setTheme,
   useHintsOn,
   useLang,
+  useSetting,
   useTheme,
 } from '../../db/repo/settings.js';
+import { resetWheelEdits, undoWheelEdit, useWheel } from '../../db/repo/wheel.js';
 import type { Lang, ThemePref } from '../../db/schema.js';
 import { EXPORT_FILE, ImportError, importExport, packExport } from '../../db/transfer.js';
 import { files, pickFile } from '../../platform/files.js';
@@ -50,6 +52,7 @@ import {
   grinderMeta,
   makeGrinder,
   transferNote,
+  wheelEditLabel,
 } from './settings/settings-view.js';
 import './settings/settings.css';
 
@@ -79,6 +82,8 @@ export function More() {
 
   const grinders = useOwnGrinders();
   const devices = useDevices();
+  const wheelEdits = useSetting('wheelEdits');
+  const ws = useWheel();
 
   /* Форма добавления и подтверждение удаления — состояние экрана, а не стора:
      оба живут ровно пока человек на нём стоит, и уходят вместе с ним. */
@@ -296,6 +301,35 @@ export function More() {
         />
 
         <Row label={t.set_spec} right="→" onClick={() => go('spec')} />
+
+        {/* Правки колеса вкусов (BJ-11). Секции нет, пока правок нет: пустой
+            список объяснял бы фичу, которой человек не пользовался. Каждую
+            правку можно отменить крестиком; сброс возвращает встроенную базу. */}
+        {wheelEdits.length > 0 ? (
+          <Section label={t.wheel_title} testId="set-wheel">
+            {wheelEdits.map((edit) => (
+              <div key={JSON.stringify(edit)} className="bj-set__grinder" data-testid="wheel-edit-row">
+                <div className="bj-set__grinder-name">{wheelEditLabel(edit, lang, ws)}</div>
+                <button
+                  type="button"
+                  className="bj-set__del"
+                  data-testid="wheel-edit-undo"
+                  aria-label={t.a11y_remove}
+                  onClick={() => void undoWheelEdit(edit)}
+                >
+                  ×
+                </button>
+              </div>
+            ))}
+            <Row
+              label={t.wheel_edits_reset}
+              right="↻"
+              flush
+              testId="set-wheel-reset"
+              onClick={() => void resetWheelEdits()}
+            />
+          </Section>
+        ) : null}
 
         {/* Обмен базой стоит последним и без своего заголовка: это не настройка,
             а действие, и разделять две строки лишней секцией не за чем. */}

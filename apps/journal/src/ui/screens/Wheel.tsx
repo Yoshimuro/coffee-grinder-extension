@@ -22,7 +22,7 @@ import { STR } from '../../data/strings.js';
 import { colOf, nameOf } from '../../data/wheel.js';
 import { useDoneEntries } from '../../db/repo/entries.js';
 import { useLang } from '../../db/repo/settings.js';
-import { useWheel } from '../../db/repo/wheel.js';
+import { addWheelNode, hideWheelNode, renameWheelNode, useWheel } from '../../db/repo/wheel.js';
 import { ScreenHeader } from '../components/ScreenHeader.js';
 import { Tag } from '../components/Tag.js';
 import { useRate } from './journal/rate-store.js';
@@ -55,6 +55,21 @@ export function Wheel() {
   const [path, setPath] = useState<string[]>([]);
   const [dir, setDir] = useState<Dir>(1);
 
+  /* Режим правки (BJ-11). Всё его состояние — экранное: правки пишутся в базу
+     сразу, и уносить с экрана нечего. Смена уровня сбрасывает недописанное —
+     строки списка на новом уровне другие. */
+  const [editing, setEditing] = useState(false);
+  const [renaming, setRenaming] = useState<string | null>(null);
+  const [renameVal, setRenameVal] = useState('');
+  const [hiding, setHiding] = useState<string | null>(null);
+  const [addVal, setAddVal] = useState('');
+
+  function resetEditRows(): void {
+    setRenaming(null);
+    setHiding(null);
+    setAddVal('');
+  }
+
   /* Память колеса — живая: сохранённая оценка проявляет точки без перезахода
      на экран. `undefined` — база ещё не ответила, точек пока нет. */
   const done = useDoneEntries();
@@ -67,17 +82,21 @@ export function Wheel() {
 
   function tap(item: WheelItem): void {
     if (item.leaf) {
-      togglePick(item.id);
+      /* В режиме правки лист не выбирается: выбор — дело оценки, а сюда пришли
+         за структурой. Правится он в списке под колесом. */
+      if (!editing) togglePick(item.id);
       return;
     }
     setPath(pathInto(path, item));
     setDir(1);
+    resetEditRows();
   }
 
   function up(): void {
     if (path.length === 0) return;
     setPath(pathUp(path));
     setDir(-1);
+    resetEditRows();
   }
 
   /** Крошки и «наверх» ходят в одну сторону — отсюда общий `dir: -1`. */
@@ -85,6 +104,32 @@ export function Wheel() {
     if (depth === path.length) return;
     setPath(path.slice(0, depth));
     setDir(-1);
+    resetEditRows();
+  }
+
+  function startRename(item: WheelItem): void {
+    setHiding(null);
+    setRenaming(item.id);
+    setRenameVal(item.label);
+  }
+
+  /** Правится подпись текущего языка; вторая остаётся какой была. */
+  function submitRename(id: string): void {
+    const value = renameVal.trim();
+    setRenaming(null);
+    if (!value || value === nameOf(id, lang, ws)) return;
+    const ru = lang === 'ru' ? value : nameOf(id, 'ru', ws);
+    const en = lang === 'en' ? value : nameOf(id, 'en', ws);
+    void renameWheelNode(id, ru, en);
+  }
+
+  function submitAdd(): void {
+    const value = addVal.trim();
+    if (!value || path.length === 0) return;
+    const parent = path[path.length - 1];
+    if (parent === undefined) return;
+    setAddVal('');
+    void addWheelNode(path.length === 1 ? 'sub' : 'desc', parent, value);
   }
 
   return (
@@ -92,9 +137,23 @@ export function Wheel() {
       <ScreenHeader
         title={t.wheel_title}
         right={
-          <button type="button" className="bj-wheel__done" data-testid="wheel-done" onClick={back}>
-            {t.wheel_done}
-          </button>
+          <>
+            <button
+              type="button"
+              className={editing ? 'bj-wheel__pencil bj-wheel__pencil--on' : 'bj-wheel__pencil'}
+              data-testid="wheel-edit"
+              aria-pressed={editing}
+              onClick={() => {
+                setEditing(!editing);
+                resetEditRows();
+              }}
+            >
+              {t.wheel_edit}
+            </button>
+            <button type="button" className="bj-wheel__done" data-testid="wheel-done" onClick={back}>
+              {t.wheel_done}
+            </button>
+          </>
         }
       />
 
@@ -151,34 +210,158 @@ export function Wheel() {
         </div>
       </div>
 
-      <div className="bj-wheel__hint">{t.wheel_hint}</div>
+      <div className="bj-wheel__hint">{editing ? t.wheel_edit_hint : t.wheel_hint}</div>
 
-      <div className="bj-wheel__foot">
-        <div className="bj-wheel__foot-label">
-          {`${t.wheel_picked} ${picked.length > 0 ? String(picked.length) : ''}`}
-          <span className="bj-wheel__foot-note">{` · ${t.wheel_intensity} — ${t.wheel_tap_tag}`}</span>
-        </div>
+      {editing ? (
+        <div className="bj-wheel__foot bj-wheel__foot--edit" data-testid="wheel-edit-panel">
+          <div className="bj-wheel__rows">
+            {items.map((item) => (
+              <div className="bj-wheel__row" key={item.id} data-testid={`wheel-row-${item.id}`}>
+                <span
+                  className="bj-wheel__row-dot"
+                  style={{ background: colOf(item.id, undefined, ws) }}
+                />
+                {renaming === item.id ? (
+                  <>
+                    <input
+                      className="bj-wheel__row-input"
+                      type="text"
+                      autoFocus
+                      aria-label={t.wheel_rename}
+                      data-testid="wheel-rename-input"
+                      value={renameVal}
+                      onChange={(e) => setRenameVal(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter') submitRename(item.id);
+                        if (e.key === 'Escape') setRenaming(null);
+                      }}
+                    />
+                    <button
+                      type="button"
+                      className="bj-wheel__row-yes"
+                      data-testid="wheel-rename-save"
+                      onClick={() => submitRename(item.id)}
+                    >
+                      OK
+                    </button>
+                    <button
+                      type="button"
+                      className="bj-wheel__row-no"
+                      aria-label={t.back}
+                      onClick={() => setRenaming(null)}
+                    >
+                      ✕
+                    </button>
+                  </>
+                ) : hiding === item.id ? (
+                  <>
+                    <span className="bj-wheel__row-name">{item.label}</span>
+                    <span className="bj-wheel__row-ask">{t.wheel_hide_q}</span>
+                    <button
+                      type="button"
+                      className="bj-wheel__row-yes"
+                      data-testid="wheel-hide-yes"
+                      onClick={() => {
+                        setHiding(null);
+                        void hideWheelNode(item.id);
+                      }}
+                    >
+                      {t.set_del_yes}
+                    </button>
+                    <button
+                      type="button"
+                      className="bj-wheel__row-no"
+                      aria-label={t.back}
+                      onClick={() => setHiding(null)}
+                    >
+                      ✕
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <span className="bj-wheel__row-name">{item.label}</span>
+                    <button
+                      type="button"
+                      className="bj-wheel__row-act"
+                      aria-label={`${t.wheel_rename}: ${item.label}`}
+                      data-testid={`wheel-rename-${item.id}`}
+                      onClick={() => startRename(item)}
+                    >
+                      ✎
+                    </button>
+                    <button
+                      type="button"
+                      className="bj-wheel__row-act"
+                      aria-label={`${t.a11y_remove}: ${item.label}`}
+                      data-testid={`wheel-hide-${item.id}`}
+                      onClick={() => {
+                        setRenaming(null);
+                        setHiding(item.id);
+                      }}
+                    >
+                      ×
+                    </button>
+                  </>
+                )}
+              </div>
+            ))}
+          </div>
 
-        <div className="bj-wheel__picked" data-testid="wheel-picked">
-          {picked.length === 0 ? <div className="bj-wheel__empty">{t.wheel_empty}</div> : null}
-          {picked.map(([id, intensity]) => (
-            <Tag
-              key={id}
-              label={nameOf(id, lang, ws)}
-              caps={false}
-              intensity={intensity}
-              borderColor={colOf(id, 0.8, ws)}
-              dotColor={colOf(id, undefined, ws)}
-              onCycle={(next) => {
-                setPickIntensity(id, next);
-              }}
-              onRemove={() => {
-                removePick(id);
-              }}
-            />
-          ))}
+          {path.length > 0 ? (
+            <div className="bj-wheel__addrow">
+              <input
+                className="bj-wheel__row-input"
+                type="text"
+                placeholder={t.bean_name}
+                aria-label={t.wheel_add}
+                data-testid="wheel-add-input"
+                value={addVal}
+                onChange={(e) => setAddVal(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') submitAdd();
+                }}
+              />
+              <button
+                type="button"
+                className="bj-wheel__addbtn"
+                data-testid="wheel-add-save"
+                onClick={submitAdd}
+              >
+                {`+ ${t.wheel_add}`}
+              </button>
+            </div>
+          ) : (
+            <div className="bj-wheel__empty">{t.wheel_edit_root}</div>
+          )}
         </div>
-      </div>
+      ) : (
+        <div className="bj-wheel__foot">
+          <div className="bj-wheel__foot-label">
+            {`${t.wheel_picked} ${picked.length > 0 ? String(picked.length) : ''}`}
+            <span className="bj-wheel__foot-note">{` · ${t.wheel_intensity} — ${t.wheel_tap_tag}`}</span>
+          </div>
+
+          <div className="bj-wheel__picked" data-testid="wheel-picked">
+            {picked.length === 0 ? <div className="bj-wheel__empty">{t.wheel_empty}</div> : null}
+            {picked.map(([id, intensity]) => (
+              <Tag
+                key={id}
+                label={nameOf(id, lang, ws)}
+                caps={false}
+                intensity={intensity}
+                borderColor={colOf(id, 0.8, ws)}
+                dotColor={colOf(id, undefined, ws)}
+                onCycle={(next) => {
+                  setPickIntensity(id, next);
+                }}
+                onRemove={() => {
+                  removePick(id);
+                }}
+              />
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -42,6 +42,7 @@ export const DEFAULT_SETTINGS: Readonly<SettingsValues> = Object.freeze({
   recents: [],
   hints: [],
   hintsOn: true,
+  wheelEdits: [],
 });
 
 /** Сколько кофемолок помнит конвертер (BJ-3, «три последних, а не вся история»). */
@@ -58,6 +59,7 @@ export async function readSettings(database: BrewJournalDB = db): Promise<Settin
     calib: { ...DEFAULT_SETTINGS.calib },
     recents: [...DEFAULT_SETTINGS.recents],
     hints: [...DEFAULT_SETTINGS.hints],
+    wheelEdits: [...DEFAULT_SETTINGS.wheelEdits],
   };
 
   // Строка таблицы — один тип с union-значением, и связь «ключ ↔ тип значения»

@@ -485,6 +485,13 @@ export const DESC = buildDesc(WHEEL);
 export interface WheelSet {
   readonly cats: readonly WheelCategory[];
   readonly desc: Readonly<Record<string, DescriptorInfo>>;
+  /**
+   * Куда откатываться, когда id в этом наборе не найден. У базы отката нет;
+   * составные наборы указывают сюда набор без скрытий (см. `effectiveWheelSet`)
+   * — так скрытый узел, встроенный или пользовательский, не теряет ни имени,
+   * ни цвета в старых записях журнала.
+   */
+  readonly fallback?: WheelSet;
 }
 
 /** База как набор — дефолт всех параметризованных функций ниже. */
@@ -504,9 +511,9 @@ export function catColor(cat: WheelCategory, l = 0.7, cMul = 1, a = 1): string {
  * Тон/цветность по id любого уровня: дескриптор → его категория, иначе поиск
  * среди категорий и подкатегорий (`DC:962`). Неизвестный id даёт серый.
  *
- * Составной набор перед «серым» откатывается на базу: правка могла скрыть
- * встроенный узел, но база неизменяема и знает все встроенные id — старые
- * записи журнала не теряют цвет.
+ * Составной набор перед «серым» откатывается по цепочке `fallback`: правка
+ * могла скрыть узел, но наборы без скрытий и база знают его — старые записи
+ * журнала не теряют цвет.
  */
 export function hueOf(id: string, ws: WheelSet = BASE_WHEEL): { h: number; c: number } {
   const d = descById(id, ws);
@@ -515,7 +522,7 @@ export function hueOf(id: string, ws: WheelSet = BASE_WHEEL): { h: number; c: nu
     if (c.id === id) return { h: c.h, c: c.c };
     for (const s of c.sub) if (s.id === id) return { h: c.h, c: c.c };
   }
-  if (ws !== BASE_WHEEL) return hueOf(id, BASE_WHEEL);
+  if (ws.fallback) return hueOf(id, ws.fallback);
   return { h: 0, c: 0 };
 }
 
@@ -535,8 +542,8 @@ export function nameOf(id: string, lang: 'ru' | 'en', ws: WheelSet = BASE_WHEEL)
     if (c.id === id) return c[lang];
     for (const s of c.sub) if (s.id === id) return s[lang];
   }
-  // Как и в hueOf: скрытый правкой встроенный узел называет база.
-  if (ws !== BASE_WHEEL) return nameOf(id, lang, BASE_WHEEL);
+  // Как и в hueOf: скрытый правкой узел называет цепочка fallback.
+  if (ws.fallback) return nameOf(id, lang, ws.fallback);
   return id;
 }
 
