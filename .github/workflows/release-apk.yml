@@ -23,8 +23,14 @@ on:
       - '.github/workflows/release-apk.yml'
   workflow_dispatch:
 
+# Every non-tag run publishes to the *same* rolling release, so they all share
+# one concurrency group: the newest push cancels whatever is still building and
+# wins the asset. Per-ref groups let two branches build in parallel and finish
+# out of order, which would leave `android-latest` serving the older APK — and an
+# APK with a lower versionCode than the one already on the phone cannot be
+# installed over it. Tags get a group each and are never cancelled.
 concurrency:
-  group: release-apk-${{ github.ref }}
+  group: release-apk-${{ github.ref_type == 'tag' && github.ref_name || 'rolling' }}
   cancel-in-progress: true
 
 permissions:
@@ -60,24 +66,46 @@ jobs:
           yes | "$sdkmanager" --licenses > /dev/null 2>&1 || true
           "$sdkmanager" 'platforms;android-34' 'build-tools;34.0.0' > /dev/null
 
+      # versionName and versionCode both come from apps/journal/package.json, so
+      # the number on the phone is the number in the repo. A tag must agree with
+      # it: publishing v0.3.0 off a tree that still says 0.2.0 would ship a
+      # versionCode of 0.3.0 with the contents of 0.2.0.
       - name: Resolve version
         id: version
         run: |
+          base="$(node -p "require('./apps/journal/package.json').version")"
           if [ "${GITHUB_REF_TYPE}" = "tag" ]; then
             name="${GITHUB_REF_NAME#v}"
+            if [ "${name}" != "${base}" ]; then
+              echo "::error::tag ${GITHUB_REF_NAME} does not match apps/journal/package.json (${base}); bump the package version in the same commit you tag"
+              exit 1
+            fi
             tag="${GITHUB_REF_NAME}"
             title="Brew Journal ${GITHUB_REF_NAME}"
             latest=false
           else
-            name="0.1.0-build.${GITHUB_RUN_NUMBER}"
+            name="${base}-build.${GITHUB_RUN_NUMBER}"
             tag="android-latest"
             title="Brew Journal — latest build"
             latest=true
           fi
-          # versionCode must only ever climb, and run numbers do exactly that.
+          # MAJOR*10000 + MINOR*100 + PATCH. Android refuses an update whose
+          # versionCode is below the installed one, so this number must never go
+          # backwards; tying it to the version instead of to a build counter is
+          # what guarantees that. Two preview builds of the same version share a
+          # code, which is fine — equal codes install over each other, only lower
+          # ones are rejected.
+          code="$(node -e '
+            const parts = process.argv[1].split(/[.-]/).slice(0, 3).map(Number);
+            if (parts.length !== 3 || parts.some((n) => !Number.isInteger(n) || n < 0)) {
+              console.error(`unusable version: ${process.argv[1]}`);
+              process.exit(1);
+            }
+            console.log(parts[0] * 10000 + parts[1] * 100 + parts[2]);
+          ' "${name}")"
           {
             echo "name=${name}"
-            echo "code=${GITHUB_RUN_NUMBER}"
+            echo "code=${code}"
             echo "tag=${tag}"
             echo "title=${title}"
             echo "rolling=${latest}"
@@ -135,7 +163,14 @@ jobs:
           allow installation from this source when Android asks. Updates install
           over the previous APK — every build here is signed with the same key.
 
+          **Once, and only once:** an install that came from the old
+          `apk/brew-journal-debug.apk` was signed with a throwaway debug key, and
+          Android will not accept a signed build over it. Uninstall Brew Journal,
+          install this APK, and every later update lands in place. Uninstalling
+          wipes the local journal, so export first from ЕЩЁ → ЭКСПОРТ БАЗЫ В ФАЙЛ.
+
           - version: `${{ steps.version.outputs.name }}` (versionCode `${{ steps.version.outputs.code }}`)
+          - built from: `${{ github.ref_name }}`
           - commit: ${{ github.sha }}
           EOF
           )"
