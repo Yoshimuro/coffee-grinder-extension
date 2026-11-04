@@ -18,7 +18,7 @@
     "@coffee/core": "*"
   },
   "devDependencies": {
-    "@playwright/test": "1.56.1",
+    "@playwright/test": "1.64.1",
     "@types/chrome": "0.0.287",
     "@types/node": "22.10.2",
     "typescript": "5.7.3",

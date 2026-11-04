@@ -301,13 +301,11 @@ also run in CI; final home-screen installation should be checked on real phones.
 Persistent-profile tests in Chromium and WebKit additionally save records and
 photos offline, restart the browser process using the same on-disk profile,
 and compare every database field and photo hash. They also check cache-only
-clearing. On macOS, the WebKit process-restart case is explicitly skipped due to
-[Playwright 1.56.1 issue #37909](https://github.com/microsoft/playwright/issues/37909);
-its server-unavailable reload check still runs. WebKit checks refuse connections
-at the origin instead of using Playwright's broken offline flag
-([issue #42775](https://github.com/microsoft/playwright/issues/42775)). Chromium
-additionally enables browser offline emulation. Linux CI runs both restart
-cases. A physical phone reboot is not simulated by these tests.
+clearing. Playwright is pinned to 1.64.1, which includes the WebKit persistent
+cache fix ([issue #41618](https://github.com/microsoft/playwright/issues/41618)).
+WebKit checks refuse connections at the origin; Chromium additionally enables
+browser offline emulation. Both restart cases run locally and in Linux CI.
+A physical phone reboot is not simulated by these tests.
 
 ## Brew Journal for Android
 

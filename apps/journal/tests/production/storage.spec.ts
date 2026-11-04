@@ -41,8 +41,6 @@ async function snapshot(page: Page) {
 
 test('saved data and photo files survive offline writes, reload, browser process restart and cache clearing', async ({ site, browserName }, testInfo) => {
   test.setTimeout(60_000);
-  test.skip(browserName === 'webkit' && process.platform === 'darwin',
-    'Playwright 1.56.1 cannot launch a persistent WebKit context on macOS: https://github.com/microsoft/playwright/issues/37909');
   const browserType = browserName === 'webkit' ? webkit : chromium;
   const profile = testInfo.outputPath('persistent-profile');
   let context = await browserType.launchPersistentContext(profile, { headless: true, viewport: { width: 393, height: 852 } });

@@ -42,6 +42,10 @@ async function openApp(page: Page) {
   await expect(screen(page, 'home')).toBeVisible();
   // Демо-журнал приезжает асинхронно — ждём его, а не фиксированную паузу.
   await expect(page.getByTestId('home-feed-row').first()).toBeVisible();
+  // The first-run overlay appears after a short delay. Close it explicitly;
+  // clicking a tab before that delay races the overlay on slower machines.
+  await page.getByRole('button', { name: 'СКРЫТЬ ПОДСКАЗКИ', exact: true }).click();
+  await expect(page.getByRole('dialog', { name: 'ПОДСКАЗКИ' })).not.toBeVisible();
 }
 
 test.describe('цикл заваривания', () => {

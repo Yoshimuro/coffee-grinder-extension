@@ -11,7 +11,7 @@ concurrency:
 
 jobs:
   journal:
-    # Playwright 1.56 supports Ubuntu 24.04, not the newer ubuntu-latest image.
+    # Keep browser dependencies on the validated LTS image.
     runs-on: ubuntu-24.04
     timeout-minutes: 15
     steps:
