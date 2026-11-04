@@ -1,4 +1,5 @@
 import { chromium, webkit, type Page } from '@playwright/test';
+import { STR } from '../../src/data/strings.js';
 import { test, expect, openJournal, workerControls } from './fixtures.js';
 
 const BAG_PNG = 'iVBORw0KGgoAAAANSUhEUgAAABgAAAAgCAIAAACHPC9vAAAARklEQVR42mPoitKCIC0pITgiQ5CBKqZoSQkxUMUUkEFUMQXFIAoDi4EqpoACmyqmIGJtNPpHo380+kejfzT6R6N/NPqRBQHqae9AcMxQdQAAAABJRU5ErkJggg==';
@@ -72,8 +73,8 @@ test('saved data and photo files survive offline writes, reload, browser process
     await expect(page.getByTestId('grinder-row')).toHaveCount(2);
     const persisted = await page.evaluate(async () => navigator.storage?.persisted ? navigator.storage.persisted() : null);
     await expect(page.getByTestId('set-storage')).toContainText(persisted === null
-      ? 'браузер не сообщает о защите хранения'
-      : persisted ? 'защищены от автоочистки' : 'защита не включена');
+      ? STR.ru.set_storage_unavailable
+      : persisted ? STR.ru.set_storage_protected : STR.ru.set_storage_best_effort);
 
     await page.getByRole('button', { name: 'главный', exact: true }).click();
     await page.getByTestId('home-brew').click();
