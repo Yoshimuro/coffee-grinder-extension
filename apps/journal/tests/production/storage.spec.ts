@@ -72,8 +72,10 @@ test('saved data and photo files survive offline writes, reload, browser process
     await page.getByTestId('grinder-name').fill('Моя кофемолка');
     await page.getByTestId('grinder-save').click();
     await expect(page.getByTestId('grinder-row')).toHaveCount(2);
-    const persisted = await page.evaluate(async () => navigator.storage.persisted ? navigator.storage.persisted() : null);
-    await expect(page.getByTestId('set-storage')).toContainText(persisted ? 'защищены от автоочистки' : 'защита не включена');
+    const persisted = await page.evaluate(async () => navigator.storage?.persisted ? navigator.storage.persisted() : null);
+    await expect(page.getByTestId('set-storage')).toContainText(persisted === null
+      ? 'браузер не сообщает о защите хранения'
+      : persisted ? 'защищены от автоочистки' : 'защита не включена');
 
     await page.getByRole('button', { name: 'ГЛАВНЫЙ', exact: true }).click();
     await page.getByTestId('home-brew').click();
