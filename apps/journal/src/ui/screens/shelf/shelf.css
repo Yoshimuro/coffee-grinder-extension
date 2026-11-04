@@ -41,7 +41,7 @@
   gap: 9px;
   width: 100%;
   border: 1px dashed var(--line-4);
-  color: var(--faint);
+  color: var(--text-muted);
   overflow: hidden;
 }
 
@@ -146,7 +146,7 @@
   font-size: var(--fs-tech);
   letter-spacing: 1.5px;
   text-align: center;
-  text-transform: uppercase;
+  text-transform: none;
 }
 
 /* ── Карточка пачки ──────────────────────────────────────────────────────── */
@@ -164,7 +164,7 @@
 .bj-bean__hint {
   padding-top: 9px;
   font-size: var(--fs-tech-min);
-  color: var(--faint);
+  color: var(--text-muted);
 }
 
 /*
@@ -194,8 +194,8 @@
   font-size: 8.5px;
   font-weight: var(--fw-medium);
   letter-spacing: 1.5px;
-  color: var(--faint);
-  text-transform: uppercase;
+  color: var(--text-muted);
+  text-transform: none;
 }
 
 .bj-bean__stat-value {
@@ -207,7 +207,7 @@
 .bj-bean__note {
   padding-top: 12px;
   font-size: var(--fs-tech);
-  color: var(--faint);
+  color: var(--text-muted);
 }
 
 .bj-bean__brew {
@@ -224,7 +224,7 @@
   flex: none;
   width: 42px;
   font-size: var(--fs-tech);
-  color: var(--muted);
+  color: var(--text-muted);
 }
 
 .bj-bean__brew-sub {
@@ -263,7 +263,7 @@
 .bj-add__hint {
   margin-top: 8px;
   font-size: var(--fs-tech-min);
-  color: var(--faint);
+  color: var(--text-muted);
 }
 
 .bj-add__field {
@@ -285,7 +285,7 @@
 }
 
 .bj-add__input::placeholder {
-  color: var(--faint);
+  color: var(--text-muted);
 }
 
 /*

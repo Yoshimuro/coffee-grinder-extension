@@ -39,10 +39,10 @@ const TODAY = '2026-08-01';
 
 describe('formLabel', () => {
   it('называет три формы кофе', () => {
-    expect(formLabel('beans', 'ru')).toBe('ЗЕРНО');
-    expect(formLabel('ground', 'ru')).toBe('МОЛОТЫЙ');
-    expect(formLabel('drip', 'ru')).toBe('ДРИП-ПАКЕТ');
-    expect(formLabel('beans', 'en')).toBe('BEANS');
+    expect(formLabel('beans', 'ru')).toBe('зерно');
+    expect(formLabel('ground', 'ru')).toBe('молотый');
+    expect(formLabel('drip', 'ru')).toBe('дрип-пакет');
+    expect(formLabel('beans', 'en')).toBe('beans');
   });
 });
 
@@ -68,12 +68,12 @@ describe('ageLabel / beanTech', () => {
   it('собирает возраст, фазу и остаток', () => {
     expect(ageLabel(java, 'ru', TODAY)).toBe('5 дн · пик');
     expect(beanTech(java, 'ru', TODAY)).toBe('5 дн · пик · 187 г');
-    expect(beanTechWithForm(java, 'ru', TODAY)).toBe('ЗЕРНО · 5 дн · пик · 187 г');
+    expect(beanTechWithForm(java, 'ru', TODAY)).toBe('зерно · 5 дн · пик · 187 г');
   });
 
   it('ставит фазу по возрасту, а не по форме', () => {
     // 22 дня от 10.07 — уже спад (порог 21).
-    expect(beanTechWithForm(drip, 'ru', TODAY)).toBe('ДРИП-ПАКЕТ · 22 дн · спад · 3 шт');
+    expect(beanTechWithForm(drip, 'ru', TODAY)).toBe('дрип-пакет · 22 дн · спад · 3 шт');
     expect(ageLabel({ ...java, roast: '2026-07-30' }, 'ru', TODAY)).toBe('2 дн · дегазация');
   });
 

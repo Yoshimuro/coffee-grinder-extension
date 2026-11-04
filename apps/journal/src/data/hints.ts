@@ -42,16 +42,16 @@ export const HINTS: readonly Hint[] = [
     selector: '[data-testid="home-brew"]',
   },
   {
-    id: 'h-home-conv',
-    screen: 'home',
-    key: 'hint_home_conv',
-    selector: '[data-testid="home-conv"]',
-  },
-  {
     id: 'h-home-taste',
     screen: 'home',
     key: 'hint_home_taste',
     selector: '[data-testid="home-taste"]',
+  },
+  {
+    id: 'h-home-conv',
+    screen: 'home',
+    key: 'hint_home_conv',
+    selector: '[data-testid="home-conv"]',
   },
   /* Карточки нет, пока нет ждущей оценки записи, — до первой заварки шаг
      пропускается сам собой. */

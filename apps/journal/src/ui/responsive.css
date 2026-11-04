@@ -53,8 +53,8 @@
   }
 
   .bj-head__title {
-    font-size: 10px;
-    letter-spacing: 1.5px;
+    font-size: 12px;
+    letter-spacing: 1px;
   }
 }
 
@@ -91,8 +91,8 @@
     padding: 16px 12px;
     border-left: 2px solid transparent;
     text-align: left;
-    font-size: 10px;
-    letter-spacing: 1.5px;
+    font-size: 12px;
+    letter-spacing: 1px;
   }
 
   .tab--on {

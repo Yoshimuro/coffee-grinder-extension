@@ -49,14 +49,14 @@
   font-size: var(--fs-tech);
   font-weight: var(--fw-medium);
   letter-spacing: var(--ls-micro);
-  color: var(--faint);
-  text-transform: uppercase;
+  color: var(--text-muted);
+  text-transform: none;
 }
 
 .jr__hint {
   margin-top: 8px;
   font-size: var(--fs-tech);
-  color: var(--faint);
+  color: var(--text-muted);
   line-height: 1.7;
 }
 
@@ -68,7 +68,7 @@
 
 .jr-diag__sub {
   font-size: var(--fs-tech);
-  color: var(--faint);
+  color: var(--text-muted);
 }
 
 .jr-field {
@@ -80,7 +80,7 @@
   font-weight: var(--fw-medium);
   letter-spacing: var(--ls-micro);
   color: var(--dim);
-  text-transform: uppercase;
+  text-transform: none;
 }
 
 .jr-input,
@@ -103,7 +103,7 @@
 
 .jr-input::placeholder,
 .jr-textarea::placeholder {
-  color: var(--faint);
+  color: var(--text-muted);
 }
 
 /* Шкала 0…10 одиннадцатью ячейками. */
@@ -123,7 +123,7 @@
   font-weight: var(--fw-medium);
   letter-spacing: var(--ls-micro);
   color: var(--dim);
-  text-transform: uppercase;
+  text-transform: none;
 }
 
 .jr-scale__value {
@@ -211,7 +211,7 @@
 
 .jr-wheel-cta__go {
   flex: none;
-  color: var(--faint);
+  color: var(--text-muted);
 }
 
 /* На записи дескрипторы только читают, поэтому тег ниже, чем в диагностике,
@@ -341,7 +341,7 @@
   color: var(--dim);
   font-size: 9px;
   letter-spacing: 1.5px;
-  text-transform: uppercase;
+  text-transform: none;
 }
 
 .jr-log__cmp--on {
@@ -358,7 +358,7 @@
   flex: none;
   padding: 0 var(--pad-screen) 8px;
   font-size: 9px;
-  color: var(--faint);
+  color: var(--text-muted);
 }
 
 .jr-log__list {
@@ -418,13 +418,13 @@
 
 .jr-row__date {
   font-size: var(--fs-tech);
-  color: var(--faint);
+  color: var(--text-muted);
 }
 
 .jr-row__time {
   margin-top: 3px;
   font-size: 8px;
-  color: var(--muted);
+  color: var(--text-muted);
 }
 
 .jr-row__main {
@@ -501,7 +501,7 @@
   color: var(--text-secondary);
   font-size: 9px;
   letter-spacing: 1.5px;
-  text-transform: uppercase;
+  text-transform: none;
 }
 
 /* 40px в макете, 48 под пальцем. */
@@ -534,8 +534,8 @@
   font-size: 8px;
   font-weight: var(--fw-medium);
   letter-spacing: 1.5px;
-  color: var(--faint);
-  text-transform: uppercase;
+  color: var(--text-muted);
+  text-transform: none;
 }
 
 .jr-param__value {
@@ -633,7 +633,7 @@
   flex: 1;
   font-size: var(--fs-micro);
   letter-spacing: 1.5px;
-  text-transform: uppercase;
+  text-transform: none;
 }
 
 .jr-stage__water {
@@ -644,7 +644,7 @@
 .jr-stage__dur {
   width: 44px;
   font-size: var(--fs-micro);
-  color: var(--faint);
+  color: var(--text-muted);
   text-align: right;
 }
 
@@ -695,7 +695,7 @@
 .jr-qr__hint {
   margin-top: 10px;
   font-size: var(--fs-tech);
-  color: var(--faint);
+  color: var(--text-muted);
   text-align: center;
 }
 
@@ -734,8 +734,8 @@
   padding-top: 2px;
   font-size: 8.5px;
   letter-spacing: 1.2px;
-  color: var(--faint);
-  text-transform: uppercase;
+  color: var(--text-muted);
+  text-transform: none;
 }
 
 /* Отличие — белым и жирным, совпадение — приглушённым (§9, README:80). */
@@ -744,7 +744,7 @@
   min-width: 0;
   font-size: 11.5px;
   font-weight: var(--fw-regular);
-  color: var(--mid);
+  color: var(--text-muted);
   line-height: 1.6;
 }
 

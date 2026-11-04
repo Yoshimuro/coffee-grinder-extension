@@ -59,7 +59,7 @@ test.describe('экспорт и импорт базы', () => {
     /* ── Пачка со снимком ──────────────────────────────────────────────────
        Съёмка в вебе — скрытый `<input type=file>`, поэтому файл отдаётся через
        системный диалог, который Playwright перехватывает. */
-    await tab(page, 'ПОЛКА').click();
+    await tab(page, 'полка').click();
     await expect(screen(page, 'shelf')).toBeVisible();
     await page.getByTestId('shelf-add').click();
     await expect(screen(page, 'beanAdd')).toBeVisible();
@@ -82,14 +82,14 @@ test.describe('экспорт и импорт базы', () => {
 
     const shelfBefore = await page.getByTestId('shelf-card').count();
 
-    await tab(page, 'ЖУРНАЛ').click();
+    await tab(page, 'журнал').click();
     await expect(screen(page, 'log')).toBeVisible();
     await expect(page.getByTestId('log-row').first()).toBeVisible();
     const entriesBefore = await page.getByTestId('log-row').count();
     expect(entriesBefore).toBeGreaterThan(0);
 
     /* ── Экспорт ──────────────────────────────────────────────────────────── */
-    await tab(page, 'ЕЩЁ').click();
+    await tab(page, 'ещё').click();
     await expect(screen(page, 'more')).toBeVisible();
 
     const downloading = page.waitForEvent('download');
@@ -107,28 +107,28 @@ test.describe('экспорт и импорт базы', () => {
     await page.goto('/');
     await expect(screen(page, 'home')).toBeVisible();
 
-    await tab(page, 'ЖУРНАЛ').click();
+    await tab(page, 'журнал').click();
     await expect(screen(page, 'log')).toBeVisible();
     await expect(page.getByTestId('log-row')).toHaveCount(0);
 
-    await tab(page, 'ПОЛКА').click();
+    await tab(page, 'полка').click();
     await expect(page.getByTestId('shelf-card')).toHaveCount(0);
 
     /* ── Импорт ───────────────────────────────────────────────────────────── */
-    await tab(page, 'ЕЩЁ').click();
+    await tab(page, 'ещё').click();
     await expect(screen(page, 'more')).toBeVisible();
 
     const picking = page.waitForEvent('filechooser');
     await page.getByTestId('set-import').click();
     await (await picking).setFiles(zipPath as string);
 
-    await expect(page.getByTestId('set-import')).toContainText('база восстановлена из файла');
+    await expect(page.getByTestId('set-import')).toContainText('данные восстановлены из архива');
 
     /* ── Всё на месте ─────────────────────────────────────────────────────── */
-    await tab(page, 'ЖУРНАЛ').click();
+    await tab(page, 'журнал').click();
     await expect(page.getByTestId('log-row')).toHaveCount(entriesBefore);
 
-    await tab(page, 'ПОЛКА').click();
+    await tab(page, 'полка').click();
     await expect(page.getByTestId('shelf-card')).toHaveCount(shelfBefore);
     await expect(page.getByText(BEAN_NAME)).toBeVisible();
 
@@ -149,11 +149,11 @@ test.describe('экспорт и импорт базы', () => {
     await page.goto('/?seed=demo');
     await expect(page.getByTestId('home-feed-row').first()).toBeVisible();
 
-    await tab(page, 'ЖУРНАЛ').click();
+    await tab(page, 'журнал').click();
     await expect(page.getByTestId('log-row').first()).toBeVisible();
     const before = await page.getByTestId('log-row').count();
 
-    await tab(page, 'ЕЩЁ').click();
+    await tab(page, 'ещё').click();
     const picking = page.waitForEvent('filechooser');
     await page.getByTestId('set-import').click();
     await (
@@ -164,9 +164,9 @@ test.describe('экспорт и импорт базы', () => {
       buffer: Buffer.from('это не архив', 'utf8'),
     });
 
-    await expect(page.getByTestId('set-import')).toContainText('файл не читается');
+    await expect(page.getByTestId('set-import')).toContainText('не удалось прочитать архив');
 
-    await tab(page, 'ЖУРНАЛ').click();
+    await tab(page, 'журнал').click();
     await expect(page.getByTestId('log-row')).toHaveCount(before);
   });
 });

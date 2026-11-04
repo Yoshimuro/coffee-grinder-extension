@@ -19,7 +19,7 @@ export const CARD_GAP = 12;
 /**
  * Насколько высоко над низом окна стоит карточка, поставленная «сверху».
  *
- * Ниже — полоса «СКРЫТЬ ПОДСКАЗКИ»: тач-таргет 48px, безопасная зона снизу
+ * Ниже остаётся нижняя навигация: тач-таргет 48px, безопасная зона снизу
  * (до 34px на телефонах с жестовой навигацией) и зазор. Числом, а не
  * измерением: полоса рисуется тем же кадром, что и карточка, и мерить её было
  * бы нечем.
@@ -29,9 +29,8 @@ export const MIN_ABOVE = 100;
 /**
  * Сколько места карточка занимает: две строки текста плюс подвал со счётчиком.
  *
- * Оценка, а не измерение, и это осознанно: сторона выбирается до отрисовки, а
- * измерить ещё не нарисованную карточку нечем. Ошибка в меньшую сторону здесь
- * дороже — она вернула бы карточку под нижнюю полосу.
+ * Начальная оценка: сторона выбирается до отрисовки, а
+ * после появления карточки слой передаёт её измеренную высоту.
  */
 export const CARD_ROOM = 132;
 
@@ -101,16 +100,21 @@ export interface CardAnchor {
   offset: number;
 }
 
-export function cardAnchor(hole: Box, view: Viewport, gap: number = CARD_GAP): CardAnchor {
+export function cardAnchor(
+  hole: Box,
+  view: Viewport,
+  gap: number = CARD_GAP,
+  cardHeight: number = CARD_ROOM,
+): CardAnchor {
   const below = Math.round(hole.top + hole.height + gap);
-  if (view.height - MIN_ABOVE - below >= CARD_ROOM) return { side: 'below', offset: below };
+  if (view.height - MIN_ABOVE - below >= cardHeight) return { side: 'below', offset: below };
 
   /* Сверху: не ниже полосы «СКРЫТЬ ПОДСКАЗКИ» и не выше края экрана — зона
      высотой во весь экран иначе вытолкнула бы карточку за верхнюю границу. */
   const above = Math.round(view.height - hole.top + gap);
   return {
     side: 'above',
-    offset: Math.min(Math.max(MIN_ABOVE, above), view.height - CARD_ROOM),
+    offset: Math.min(Math.max(MIN_ABOVE, above), view.height - cardHeight),
   };
 }
 

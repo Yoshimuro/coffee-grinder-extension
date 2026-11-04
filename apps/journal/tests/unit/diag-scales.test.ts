@@ -90,10 +90,10 @@ describe('cellFilled', () => {
 
 describe('diagLine', () => {
   it('сворачивает диагностику в строку с одной буквой на шкалу', () => {
-    expect(diagLine(DIAG, 'ru')).toBe('К 5 · Г 4 · Т 6 · С 6');
+    expect(diagLine(DIAG, 'ru')).toBe('к 5 · г 4 · т 6 · с 6');
   });
 
   it('в английском букв две — иначе шкалы не различить', () => {
-    expect(diagLine(DIAG, 'en')).toBe('AC 5 · BI 4 · BO 6 · SW 6');
+    expect(diagLine(DIAG, 'en')).toBe('ac 5 · bi 4 · bo 6 · sw 6');
   });
 });

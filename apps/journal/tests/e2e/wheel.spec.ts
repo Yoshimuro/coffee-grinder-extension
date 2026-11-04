@@ -106,21 +106,21 @@ test.describe('колесо вкусов', () => {
     // На корне наверх некуда, и добавлять нечего.
     await expect(page.getByTestId('wheel-up')).toHaveAttribute('aria-disabled', 'true');
     await expect(page.getByTestId('wheel-add-here')).toHaveCount(0);
-    await expect(page.getByTestId('wheel-picked')).toContainText('пока ничего');
+    await expect(page.getByTestId('wheel-picked')).toContainText('ты пока не выбрал ни одного вкуса');
 
     /* ── Уровень категории ─────────────────────────────────────────────────
        Шесть подкатегорий фруктового, и появилась кнопка «остановиться здесь». */
     await page.getByTestId('wheel-sector-fruit').click();
     await expect(sectors(page)).toHaveCount(6);
-    await expect(page.getByTestId('wheel-crumb-1')).toHaveText('/ Фруктовое');
+    await expect(page.getByTestId('wheel-crumb-1')).toHaveText('/ фруктовое');
 
     const addHere = page.getByTestId('wheel-add-here');
-    await expect(addHere).toHaveText('+ Фруктовое');
+    await expect(addHere).toHaveText('+ фруктовое');
 
     /* «+ Фруктовое» кладёт саму категорию дескриптором — и предлагать её второй
        раз кнопке уже незачем. */
     await addHere.click();
-    await expect(page.getByTestId('wheel-picked')).toContainText('Фруктовое');
+    await expect(page.getByTestId('wheel-picked')).toContainText('фруктовое');
     await expect(page.getByTestId('wheel-add-here')).toHaveCount(0);
 
     /* ── Уровень подкатегории и лист ───────────────────────────────────────
@@ -139,7 +139,7 @@ test.describe('колесо вкусов', () => {
 
     // Тег внизу — с интенсивностью 2 по умолчанию (D-4 BJ-4).
     const picked = page.getByTestId('wheel-picked');
-    const berry = picked.getByRole('button', { name: /Черника/ });
+    const berry = picked.getByRole('button', { name: /черника/ });
     await expect(berry).toContainText('●●○');
 
     // Тап по телу тега крутит интенсивность: 2 → 3.
@@ -159,11 +159,11 @@ test.describe('колесо вкусов', () => {
     /* ── ГОТОВО: набранное уезжает в диагностику ───────────────────────────── */
     await page.getByTestId('wheel-done').click();
     await expect(screen(page, 'diag')).toBeVisible();
-    await expect(screen(page, 'diag')).toContainText('Фруктовое');
-    await expect(screen(page, 'diag')).toContainText('Черника');
+    await expect(screen(page, 'diag')).toContainText('фруктовое');
+    await expect(screen(page, 'diag')).toContainText('черника');
     // Интенсивность приехала той же, какой её оставили на колесе.
     await expect(
-      screen(page, 'diag').getByRole('button', { name: /Черника/ }),
+      screen(page, 'diag').getByRole('button', { name: /черника/ }),
     ).toContainText('●●●');
   });
 
@@ -207,8 +207,8 @@ test.describe('колесо вкусов', () => {
     await page.getByTestId('wheel-list-cat-sweet').click();
 
     await page.getByTestId('wheel-done').click();
-    await expect(screen(page, 'diag')).toContainText('Черника');
-    await expect(screen(page, 'diag')).toContainText('Сладкое');
+    await expect(screen(page, 'diag')).toContainText('черника');
+    await expect(screen(page, 'diag')).toContainText('сладкое');
 
     /* Режим — настройка: вернувшись на колесо, человек видит тот же список. */
     await page.getByTestId('diag-to-wheel').click();
@@ -231,6 +231,6 @@ test.describe('колесо вкусов', () => {
 
     await page.getByTestId('map-arc-blueberry').click();
     await expect(page.getByTestId('map-arc-blueberry')).toHaveAttribute('aria-pressed', 'true');
-    await expect(page.getByTestId('wheel-picked')).toContainText('Черника');
+    await expect(page.getByTestId('wheel-picked')).toContainText('черника');
   });
 });

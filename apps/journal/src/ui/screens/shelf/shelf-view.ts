@@ -50,9 +50,9 @@ export function amountUnit(form: BeanForm, lang: Lang): string {
   return form === 'drip' ? STR[lang].pcs : STR[lang].grams;
 }
 
-/** Счётчик в шапке полки: «3 · пачки» (`shelfCount`, `DC:1252`). */
+/** Счётчик в шапке полки: «пачек: 3». */
 export function shelfCountLine(count: number, lang: Lang): string {
-  return `${count} · ${STR[lang].shelf_packs}`;
+  return `${STR[lang].shelf_packs}: ${count}`;
 }
 
 /* ── Карточка пачки ──────────────────────────────────────────────────────── */
@@ -70,8 +70,8 @@ export interface BeanStat {
 export function beanStats(bean: BeanRecord, lang: Lang, today: string): BeanStat[] {
   const t = STR[lang];
   return [
-    { label: t.shelf_age.toUpperCase(), value: ageLabel(bean, lang, today) },
-    { label: t.shelf_left.toUpperCase(), value: leftLabel(bean, lang) },
+    { label: t.shelf_age, value: ageLabel(bean, lang, today) },
+    { label: t.shelf_left, value: leftLabel(bean, lang) },
     { label: t.bean_roast, value: longDate(bean.roast) },
   ];
 }

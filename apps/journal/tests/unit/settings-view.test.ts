@@ -40,13 +40,13 @@ describe('makeGrinder', () => {
 describe('grinderMeta', () => {
   it('пишет название делений и цену шага', () => {
     const g = makeGrinder('g1', 'C40', 8.7);
-    expect(grinderMeta(g, 'ru')).toBe('кликов · 8.7 µm');
+    expect(grinderMeta(g, 'ru')).toBe('1 деление = 8.7 µm');
     expect(grinderMeta(g, 'en')).toBe('clicks · 8.7 µm');
   });
 
-  it('называет деления по шкале, а не «кликами» для всех', () => {
+  it('показывает размер деления для шкалы с отметками', () => {
     const marked = { ...makeGrinder('g2', 'S3', 8.7), scale: { min: 0, max: 40, step: 0.5, unit: 'mark' as const } };
-    expect(grinderMeta(marked, 'ru')).toBe('меток · 8.7 µm');
+    expect(grinderMeta(marked, 'ru')).toBe('1 деление = 8.7 µm');
   });
 });
 

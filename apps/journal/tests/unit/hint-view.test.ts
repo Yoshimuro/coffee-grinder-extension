@@ -45,8 +45,8 @@ describe('pendingHints', () => {
   it('отдаёт подсказки экрана в порядке реестра', () => {
     expect(pendingHints('home', [], true).map((h) => h.id)).toEqual([
       'h-home-brew',
-      'h-home-conv',
       'h-home-taste',
+      'h-home-conv',
       'h-home-pending',
     ]);
   });
@@ -81,6 +81,15 @@ describe('holeBox', () => {
 });
 
 describe('cardAnchor', () => {
+  it('учитывает измеренную высоту увеличенного или перенесённого текста', () => {
+    const view = { width: 320, height: 568 };
+    const height = 300;
+    const anchor = cardAnchor({ left: 20, top: 100, width: 280, height: 60 }, view, 12, height);
+    expect(anchor.side).toBe('above');
+    expect(view.height - anchor.offset - height).toBeGreaterThanOrEqual(0);
+    expect(anchor.offset).toBeGreaterThanOrEqual(MIN_ABOVE);
+  });
+
   it('зона в верхней половине — карточка под ней', () => {
     const anchor = cardAnchor({ left: 0, top: 100, width: 393, height: 60 }, VIEW, 12);
     expect(anchor).toEqual({ side: 'below', offset: 172 });

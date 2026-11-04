@@ -59,17 +59,17 @@ describe('entryTitle', () => {
   it('для дрипа вместо девайса — форма кофе', () => {
     const e = entry({ mode: 'drip', device: null, devName: '' });
     expect(entryTitle(e, 'ru', { bean: { ...BEAN, name: 'Дрип · Колумбия Уила' } })).toBe(
-      'Дрип · Колумбия Уила · ДРИП-ПАКЕТ',
+      'Дрип · Колумбия Уила · дрип-пакет',
     );
-    expect(entryTitle(e, 'en', { bean: BEAN })).toBe('Ява Золотая · DRIP BAG');
+    expect(entryTitle(e, 'en', { bean: BEAN })).toBe('Ява Золотая · drip bag');
   });
 
   it('дегустация берёт своё имя, иначе — «Чашка»', () => {
     expect(entryTitle(entry({ mode: 'cup', title: 'кофейня, зерно' }), 'ru')).toBe(
       'кофейня, зерно',
     );
-    expect(entryTitle(entry({ mode: 'cup' }), 'ru')).toBe('Чашка');
-    expect(entryTitle(entry({ mode: 'cup' }), 'en')).toBe('Cup');
+    expect(entryTitle(entry({ mode: 'cup' }), 'ru')).toBe('чашка');
+    expect(entryTitle(entry({ mode: 'cup' }), 'en')).toBe('cup');
   });
 });
 
@@ -105,8 +105,8 @@ describe('entrySub', () => {
 
 describe('entryMark', () => {
   it('показывает сладость из диагностики', () => {
-    expect(entryMark(entry(), 'ru')).toBe('С 6');
-    expect(entryMark(entry(), 'en')).toBe('S 6');
+    expect(entryMark(entry(), 'ru')).toBe('с 6');
+    expect(entryMark(entry(), 'en')).toBe('s 6');
   });
 
   it('молчит, пока запись ждёт оценки', () => {
@@ -115,7 +115,7 @@ describe('entryMark', () => {
 
   it('не прячет честный ноль у оценённой записи', () => {
     expect(entryMark(entry({ diag: { acid: 0, bitter: 0, body: 0, balance: 0 } }), 'ru')).toBe(
-      'С 0',
+      'с 0',
     );
   });
 });

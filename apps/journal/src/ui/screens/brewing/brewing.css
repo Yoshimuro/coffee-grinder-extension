@@ -94,7 +94,7 @@
 
 .bj-brew__note {
   margin-top: 12px;
-  color: var(--faint);
+  color: var(--text-muted);
   font-size: var(--fs-tech);
 }
 
@@ -107,7 +107,7 @@
 
 .bj-brew__hint {
   margin-top: 8px;
-  color: var(--faint);
+  color: var(--text-muted);
   font-size: 9px;
 }
 
@@ -149,12 +149,12 @@
 }
 
 .bj-brew__manual-hint {
-  color: var(--faint);
+  color: var(--text-muted);
   font-size: 8.5px;
 }
 
 .bj-brew__manual:disabled .bj-brew__manual-label {
-  color: var(--faint);
+  color: var(--text-muted);
 }
 
 /* ── Панель записи без таймера ───────────────────────────────────────────── */
@@ -188,7 +188,7 @@
 
 .bj-brew__log-note {
   margin-top: 8px;
-  color: var(--faint);
+  color: var(--text-muted);
   font-size: var(--fs-tech);
 }
 
@@ -232,7 +232,7 @@
   flex: none;
   margin-left: auto;
   border-bottom: 1px solid var(--line-5);
-  color: var(--faint);
+  color: var(--text-muted);
   font-size: var(--fs-tech-min);
   letter-spacing: 1.5px;
 }
@@ -311,7 +311,7 @@
 .bj-rec__none {
   flex: none;
   width: 102px;
-  color: var(--muted);
+  color: var(--text-muted);
   font-size: var(--fs-micro);
   text-align: center;
 }
@@ -324,7 +324,7 @@
   justify-content: center;
   width: 24px;
   height: 30px;
-  color: var(--muted);
+  color: var(--text-muted);
 }
 
 .bj-rec__del::after {
@@ -353,7 +353,7 @@
   display: flex;
   gap: 12px;
   margin-top: 8px;
-  color: var(--faint);
+  color: var(--text-muted);
   font-size: var(--fs-tech-min);
   font-variant-numeric: tabular-nums;
 }
@@ -367,7 +367,7 @@
   flex-direction: column;
   min-height: 0;
   padding: 0 var(--pad-screen);
-  overflow: hidden;
+  overflow-y: auto;
 }
 
 .bj-timer__head {
@@ -389,7 +389,7 @@
   width: 44px;
   height: 40px;
   border: 1px solid var(--line-4);
-  color: var(--faint);
+  color: var(--text-muted);
   font-size: 15px;
 }
 
@@ -411,7 +411,7 @@
 
 .bj-timer__awake {
   flex: none;
-  color: var(--faint);
+  color: var(--text-muted);
   font-size: 8.5px;
   letter-spacing: 1px;
 }
@@ -427,7 +427,7 @@
 
 .bj-timer__target {
   margin-top: 2px;
-  color: var(--faint);
+  color: var(--text-muted);
   font-size: var(--fs-tech);
   text-align: center;
 }
@@ -460,12 +460,14 @@
 }
 
 .bj-timer__num {
-  color: var(--faint);
+  color: var(--text-muted);
   font-size: 9px;
   letter-spacing: var(--ls-micro);
 }
 
 .bj-timer__name {
+  overflow-wrap: anywhere;
+  line-height: 1.25;
   margin-top: 10px;
   font-size: var(--fs-stage);
   font-weight: var(--fw-bold);
@@ -483,14 +485,14 @@
 /* Рецепт этой стадии — подсказка, поэтому мельче и серым. */
 .bj-timer__rec {
   margin-top: 8px;
-  color: var(--faint);
+  color: var(--text-muted);
   font-size: var(--fs-micro);
   font-variant-numeric: tabular-nums;
 }
 
 .bj-timer__next {
   margin-top: 22px;
-  color: var(--faint);
+  color: var(--text-muted);
   font-size: var(--fs-tech);
   text-align: center;
 }
@@ -527,7 +529,10 @@
   color: var(--inverse-text);
   font-size: 15px;
   font-weight: var(--fw-bold);
-  letter-spacing: 3.5px;
+  padding: 12px;
+  letter-spacing: 1px;
+  line-height: 1.4;
+  text-align: center;
 }
 
 /* ── Оценка позже ────────────────────────────────────────────────────────── */

@@ -108,7 +108,7 @@ describe('makeWheelSet — составной набор в функциях к�
     const items = wheelItems(['ferment', 'spirits'], 'ru', ws);
     expect(items.map((i) => i.id)).not.toContain('whisky');
     // Старая запись журнала с whisky не сереет и не превращается в голый id.
-    expect(nameOf('whisky', 'ru', ws)).toBe('Виски');
+    expect(nameOf('whisky', 'ru', ws)).toBe('виски');
     expect(hueOf('whisky', ws)).toEqual({ h: 310, c: 0.12 });
   });
 
@@ -127,6 +127,6 @@ describe('makeWheelSet — составной набор в функциях к�
 
   it('дефолтный набор — база: поведение без правок не изменилось', () => {
     expect(wheelItems([], 'ru')).toEqual(wheelItems([], 'ru', BASE_WHEEL));
-    expect(nameOf('whisky', 'ru')).toBe('Виски');
+    expect(nameOf('whisky', 'ru')).toBe('виски');
   });
 });

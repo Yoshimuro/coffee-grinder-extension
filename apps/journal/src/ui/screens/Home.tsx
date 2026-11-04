@@ -24,6 +24,7 @@ import { entryMark, entrySub, entryTitle } from '../entry-format.js';
 import { feedEntries, pendingTitle, pendingWhen, todayLine } from './home/home-view.js';
 import { useRate } from './journal/rate-store.js';
 import { useJournalView } from './journal/view-store.js';
+import { useBeanAdd } from './shelf/bean-add-store.js';
 import './Home.css';
 
 export function Home() {
@@ -39,6 +40,17 @@ export function Home() {
 
   const today = isoDate(new Date());
   const feed = feedEntries(entries);
+  const hasCoffee = beans !== undefined && beans.length > 0;
+  const firstCoffee = beans !== undefined && beans.length === 0;
+
+  const start = () => {
+    if (firstCoffee) {
+      useBeanAdd.getState().start();
+      go('beanAdd');
+    } else if (hasCoffee) {
+      go('brew');
+    }
+  };
 
   /** Пачка и девайс записи — заголовок собирается как `Пачка · Девайс`. */
   const refsOf = (bean: string | null, device: string | null) => ({
@@ -75,9 +87,9 @@ export function Home() {
   };
 
   return (
-    <section className="screen" data-screen="home">
+    <section className="screen" data-screen="home" data-hints-ready={hasCoffee}>
       <header className="bj-head bj-head--root home-head">
-        <h1 className="bj-head__title home-head__title">{t.appName.toUpperCase()}</h1>
+        <h1 className="bj-head__title home-head__title">{t.appName}</h1>
         <div className="bj-head__right">{todayLine(today)}</div>
       </header>
 
@@ -101,29 +113,37 @@ export function Home() {
           </div>
         ) : null}
 
-        <div className="home-cta">
-          <button
-            type="button"
-            className="home-cta__brew"
-            data-testid="home-brew"
-            onClick={() => go('brew')}
-          >
-            {t.home_brew}
-          </button>
-          <button
-            type="button"
-            className="home-cta__conv"
-            data-testid="home-conv"
-            aria-label={t.home_convert}
-            onClick={() => go('conv')}
-          >
-            ⇄
-          </button>
-        </div>
+        {firstCoffee ? (
+          <p className="home-welcome" data-testid="home-welcome">
+            {t.home_first_coffee}
+          </p>
+        ) : null}
 
-        <button type="button" className="home-taste" data-testid="home-taste" onClick={taste}>
-          {t.home_taste}
-        </button>
+        {beans !== undefined ? (
+          <div className="home-cta">
+            <button
+              type="button"
+              className="home-cta__brew"
+              data-testid="home-brew"
+              onClick={start}
+            >
+              {firstCoffee ? t.shelf_add_bean : t.home_brew}
+            </button>
+            <button type="button" className="home-taste" data-testid="home-taste" onClick={taste}>
+              {t.home_taste}
+            </button>
+            <button
+              type="button"
+              className="home-cta__conv"
+              data-testid="home-conv"
+              aria-label={t.home_convert}
+              onClick={() => go('conv')}
+            >
+              <span aria-hidden="true">⇄</span>
+              {t.home_convert}
+            </button>
+          </div>
+        ) : null}
 
         <Section label={t.log_title}>
           {feed.map((entry) => (
@@ -162,7 +182,7 @@ export function Home() {
           ))}
 
           {/* Журнал пуст — приглашение заварить, а не сообщение об отсутствии. */}
-          {entries !== undefined && entries.length === 0 ? (
+          {hasCoffee && entries !== undefined && entries.length === 0 ? (
             <EmptyState text={t.home_empty} onClick={() => go('brew')} />
           ) : null}
         </Section>

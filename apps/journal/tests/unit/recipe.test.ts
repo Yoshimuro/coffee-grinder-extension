@@ -60,11 +60,11 @@ describe('что видно в редакторе', () => {
 describe('recipeRows', () => {
   it('каждая строка названа своей стадией', () => {
     expect(recipeRows(perc, 'ru').map((r) => r.name)).toEqual([
-      'СМАЧИВАНИЕ',
-      'ПРОЛИВ',
-      'ПРОЛИВ',
+      'смачивание',
+      'пролив',
+      'пролив',
     ]);
-    expect(recipeRows(perc, 'en').map((r) => r.name)).toEqual(['BLOOM', 'POUR', 'POUR']);
+    expect(recipeRows(perc, 'en').map((r) => r.name)).toEqual(['bloom', 'pour', 'pour']);
   });
 
   /* Между проливами дрипа стоит настаивание, и звать его проливом нельзя: те же
@@ -79,16 +79,16 @@ describe('recipeRows', () => {
       ['drain', 30, 0],
     ];
     expect(recipeRows(drip, 'ru').map((r) => r.name)).toEqual([
-      'ПРОЛИВ',
-      'НАСТАИВАНИЕ',
-      'ПРОЛИВ',
-      'НАСТАИВАНИЕ',
-      'ПРОЛИВ',
+      'пролив',
+      'настаивание',
+      'пролив',
+      'настаивание',
+      'пролив',
     ]);
   });
 
   it('иммерсия: настаивание и продавливание — под своими именами', () => {
-    expect(recipeRows(imm, 'ru').map((r) => r.name)).toEqual(['НАСТАИВАНИЕ', 'ПРОДАВИТЬ']);
+    expect(recipeRows(imm, 'ru').map((r) => r.name)).toEqual(['настаивание', 'продавить']);
   });
 
   it('индекс — позиция в полном плане, а не в списке строк', () => {

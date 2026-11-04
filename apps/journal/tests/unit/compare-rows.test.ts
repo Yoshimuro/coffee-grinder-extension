@@ -109,21 +109,21 @@ describe('compareRows — пятнадцать строк §9', () => {
     const rows = compareRows(side(brew()), side(brew({ id: 'j2' })), 'ru');
     expect(rows).toHaveLength(15);
     expect(rows.map((r) => r.label)).toEqual([
-      'ЗЕРНО',
-      'ДЕВАЙС',
-      'РЕЖИМ',
-      'ПОМОЛ',
-      'ВЕС',
-      'ВОДА',
-      'ТЕМПЕРАТУРА',
-      'ВРЕМЯ',
-      'КЛАПАН',
-      'КИСЛОТНОСТЬ',
-      'ГОРЕЧЬ',
-      'ТЕЛО',
-      'СЛАДОСТЬ',
-      'ДЕСКРИПТОРЫ',
-      'ЗАМЕТКА',
+      'зерно',
+      'устройство',
+      'режим',
+      'помол',
+      'вес',
+      'вода',
+      'температура',
+      'время',
+      'клапан',
+      'кислотность',
+      'горечь',
+      'тело',
+      'сладость',
+      'оттенки вкуса',
+      'заметка',
     ]);
   });
 
@@ -139,17 +139,17 @@ describe('compareRows — пятнадцать строк §9', () => {
       'ru',
     );
     const diff = rows.filter((r) => r.diff).map((r) => r.label);
-    expect(diff).toEqual(['ПОМОЛ', 'ВОДА', 'КИСЛОТНОСТЬ', 'СЛАДОСТЬ']);
+    expect(diff).toEqual(['помол', 'вода', 'кислотность', 'сладость']);
   });
 
   it('форматирует единицы и время', () => {
     const rows = compareRows(side(brew()), side(brew({ id: 'j2' })), 'ru');
     const by = (label: string) => rows.find((r) => r.label === label);
-    expect(by('ВЕС')?.a).toBe('15 г');
-    expect(by('ВОДА')?.a).toBe('250 г');
-    expect(by('ТЕМПЕРАТУРА')?.a).toBe('94°');
-    expect(by('ВРЕМЯ')?.a).toBe('2:50');
-    expect(by('ДЕВАЙС')?.a).toBe('Hario V60-02');
+    expect(by('вес')?.a).toBe('15 г');
+    expect(by('вода')?.a).toBe('250 г');
+    expect(by('температура')?.a).toBe('94°');
+    expect(by('время')?.a).toBe('2:50');
+    expect(by('устройство')?.a).toBe('Hario V60-02');
   });
 
   it('перечисляет дескрипторы именами через запятую', () => {
@@ -158,8 +158,8 @@ describe('compareRows — пятнадцать строк §9', () => {
       side(brew({ id: 'j2', desc: [] })),
       'ru',
     );
-    const row = rows.find((r) => r.label === 'ДЕСКРИПТОРЫ');
-    expect(row?.a).toBe('Черника, Мёд');
+    const row = rows.find((r) => r.label === 'оттенки вкуса');
+    expect(row?.a).toBe('черника, мёд');
     expect(row?.b).toBe('—');
     expect(row?.diff).toBe(true);
   });
@@ -170,8 +170,8 @@ describe('compareRows — пятнадцать строк §9', () => {
       side(brew({ id: 'j2' })),
       'ru',
     );
-    expect(rows.find((r) => r.label === 'КИСЛОТНОСТЬ')?.a).toBe('—');
-    expect(rows.find((r) => r.label === 'КИСЛОТНОСТЬ')?.b).toBe('5');
+    expect(rows.find((r) => r.label === 'кислотность')?.a).toBe('—');
+    expect(rows.find((r) => r.label === 'кислотность')?.b).toBe('5');
   });
 });
 
@@ -183,7 +183,7 @@ describe('compareRows — записи-дегустации', () => {
   it('не падает, когда пачки нет, и ставит прочерк', () => {
     const rows = compareRows(side(cup()), side(brew()), 'ru');
     expect(rows).toHaveLength(15);
-    expect(rows[0]?.label).toBe('ЗЕРНО');
+    expect(rows[0]?.label).toBe('зерно');
     expect(rows[0]?.a).toBe('—');
     expect(rows[0]?.b).toBe('Ява Золотая');
     expect(rows[0]?.diff).toBe(true);
@@ -197,30 +197,30 @@ describe('compareRows — записи-дегустации', () => {
   it('показывает рецепт дегустации прочерками, а не нулями', () => {
     const rows = compareRows(side(cup()), side(cup({ id: 'j-cup2' })), 'ru');
     const by = (label: string) => rows.find((r) => r.label === label)?.a;
-    expect(by('ВЕС')).toBe('—');
-    expect(by('ВОДА')).toBe('—');
-    expect(by('ТЕМПЕРАТУРА')).toBe('—');
-    expect(by('ВРЕМЯ')).toBe('—');
-    expect(by('ПОМОЛ')).toBe('—');
+    expect(by('вес')).toBe('—');
+    expect(by('вода')).toBe('—');
+    expect(by('температура')).toBe('—');
+    expect(by('время')).toBe('—');
+    expect(by('помол')).toBe('—');
   });
 
   it('режим у дегустации всё-таки называется', () => {
     const rows = compareRows(side(cup()), side(brew()), 'ru');
-    expect(rows.find((r) => r.label === 'РЕЖИМ')?.a).toBe('Дегустация');
+    expect(rows.find((r) => r.label === 'режим')?.a).toBe('дегустация');
   });
 
   it('девайса у дегустации нет', () => {
     const rows = compareRows(side(cup()), side(brew()), 'ru');
-    expect(rows.find((r) => r.label === 'ДЕВАЙС')?.a).toBe('—');
+    expect(rows.find((r) => r.label === 'устройство')?.a).toBe('—');
   });
 });
 
 describe('compareHeading', () => {
   it('дописывает помол, когда он есть', () => {
-    expect(compareHeading('a', brew(), 'ru')).toBe('A · 31.07 · 4.8');
+    expect(compareHeading('a', brew(), 'ru')).toBe('a · 31.07 · 4.8');
   });
 
   it('без помола ограничивается датой', () => {
-    expect(compareHeading('b', cup(), 'ru')).toBe('B · 31.07');
+    expect(compareHeading('b', cup(), 'ru')).toBe('b · 31.07');
   });
 });

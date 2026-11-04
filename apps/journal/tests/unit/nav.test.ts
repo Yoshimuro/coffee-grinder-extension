@@ -92,12 +92,12 @@ describe('nav store', () => {
 describe('подписи табов', () => {
   it('берутся из таблицы строк и меняются вместе с языком', () => {
     expect(TABS.map((tab) => tabLabel(tab, 'ru'))).toEqual([
-      'ГЛАВНЫЙ',
-      'ПОЛКА',
-      'ЖУРНАЛ',
-      'ЕЩЁ',
+      'главный',
+      'полка',
+      'журнал',
+      'ещё',
     ]);
-    expect(TABS.map((tab) => tabLabel(tab, 'en'))).toEqual(['HOME', 'SHELF', 'LOG', 'MORE']);
+    expect(TABS.map((tab) => tabLabel(tab, 'en'))).toEqual(['home', 'shelf', 'log', 'more']);
   });
 
   it('у каждого таба свой ключ, и все они из группы nav_*', () => {

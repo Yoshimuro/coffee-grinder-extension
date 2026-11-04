@@ -44,8 +44,8 @@ async function openApp(page: Page) {
   await expect(page.getByTestId('home-feed-row').first()).toBeVisible();
   // The first-run overlay appears after a short delay. Close it explicitly;
   // clicking a tab before that delay races the overlay on slower machines.
-  await page.getByRole('button', { name: 'СКРЫТЬ ПОДСКАЗКИ', exact: true }).click();
-  await expect(page.getByRole('dialog', { name: 'ПОДСКАЗКИ' })).not.toBeVisible();
+  await page.getByRole('button', { name: 'отключить подсказки', exact: true }).click();
+  await expect(page.getByTestId('hint')).not.toBeVisible();
 }
 
 test.describe('цикл заваривания', () => {
@@ -56,7 +56,7 @@ test.describe('цикл заваривания', () => {
        Кнопка на полке одна — «ДОБАВИТЬ КОФЕ»; камера по ней не открывается,
        снимок при желании делают отдельным фото-слотом внутри формы, так что
        здесь до него дело не доходит и оговорка про headless-браузер не нужна. */
-    await page.getByRole('button', { name: 'ПОЛКА' }).click();
+    await page.getByRole('button', { name: 'полка' }).click();
     await expect(screen(page, 'shelf')).toBeVisible();
 
     /* Считать пачки можно только после того, как живой запрос Dexie ответил:
@@ -84,7 +84,7 @@ test.describe('цикл заваривания', () => {
     await expect(page.getByText('Тестовая Ява')).toBeVisible();
 
     /* ── Сетап ────────────────────────────────────────────────────────────── */
-    await page.getByRole('button', { name: 'ГЛАВНЫЙ' }).click();
+    await page.getByRole('button', { name: 'главный' }).click();
     await page.getByTestId('home-brew').click();
     await expect(screen(page, 'brew')).toBeVisible();
 
@@ -140,13 +140,13 @@ test.describe('цикл заваривания', () => {
     await expect(screen(page, 'home')).toBeVisible();
 
     /* ── Журнал ───────────────────────────────────────────────────────────── */
-    await page.getByRole('button', { name: 'ЖУРНАЛ' }).click();
+    await page.getByRole('button', { name: 'журнал' }).click();
     await expect(screen(page, 'log')).toBeVisible();
 
     const brewed = page.getByTestId('log-row').filter({ hasText: 'Тестовая Ява' });
     await expect(brewed).toHaveCount(1);
     // Оценка проставилась: «С 8» — сладость, которую поставили выше.
-    await expect(brewed).toContainText('С 8');
+    await expect(brewed).toContainText('с 8');
 
     /* ── Деталь ───────────────────────────────────────────────────────────── */
     await brewed.click();
@@ -158,7 +158,7 @@ test.describe('цикл заваривания', () => {
     /* ── Сравнение двух записей ─────────────────────────────────────────────
        Назад — кнопкой «←», а не вкладкой: деталь вложена в журнал, и нижней
        навигации на ней нет (вкладки рисуются только на корневых экранах). */
-    await page.getByRole('button', { name: 'НАЗАД' }).click();
+    await page.getByRole('button', { name: 'назад' }).click();
     await expect(screen(page, 'log')).toBeVisible();
 
     await page.getByTestId('log-compare').click();
@@ -168,14 +168,14 @@ test.describe('цикл заваривания', () => {
 
     await expect(screen(page, 'compare')).toBeVisible();
     // Строки §9 на месте — сравнение собралось, а не упало на пустой паре.
-    await expect(page.getByText('ПОМОЛ', { exact: false }).first()).toBeVisible();
+    await expect(page.getByText('помол', { exact: false }).first()).toBeVisible();
 
     /* ── Настройки: кофемолка ───────────────────────────────────────────────
        Сравнение тоже вложено — сначала «←» на журнал, и только оттуда вкладка. */
-    await page.getByRole('button', { name: 'НАЗАД' }).click();
+    await page.getByRole('button', { name: 'назад' }).click();
     await expect(screen(page, 'log')).toBeVisible();
 
-    await page.getByRole('button', { name: 'ЕЩЁ' }).click();
+    await page.getByRole('button', { name: 'ещё' }).click();
     await expect(screen(page, 'more')).toBeVisible();
 
     // Как и на полке: считаем только после ответа живого запроса. Первый
@@ -183,7 +183,7 @@ test.describe('цикл заваривания', () => {
     await expect(page.getByTestId('grinder-row').first()).toBeVisible();
     const grindersBefore = await page.getByTestId('grinder-row').count();
 
-    await page.getByText('+ КОФЕМОЛКА').click();
+    await page.getByText('+ кофемолка').click();
     await expect(page.getByTestId('grinder-form')).toBeVisible();
     await page.getByTestId('grinder-name').fill('Смоук C40');
     await page.getByTestId('grinder-save').click();
@@ -203,7 +203,7 @@ test.describe('цикл заваривания', () => {
   test('последнюю кофемолку удалить нельзя', async ({ page }) => {
     await openApp(page);
 
-    await page.getByRole('button', { name: 'ЕЩЁ' }).click();
+    await page.getByRole('button', { name: 'ещё' }).click();
     await expect(screen(page, 'more')).toBeVisible();
 
     // Первый запуск сеет ровно одну молку — кнопки удаления у неё нет вовсе:
@@ -224,7 +224,7 @@ test.describe('цикл заваривания', () => {
     // Режим правки включён сразу: ячейки уже со степперами.
     await expect(page.getByTestId('detail-inc-water')).toBeVisible();
 
-    const water = page.locator('.jr-param').filter({ hasText: 'ВОДА' });
+    const water = page.locator('.jr-param').filter({ hasText: 'вода' });
     const before = await water.locator('.jr-param__value').innerText();
     await page.getByTestId('detail-inc-water').click();
     await expect(water.locator('.jr-param__value')).not.toHaveText(before);

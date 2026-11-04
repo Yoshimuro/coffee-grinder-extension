@@ -148,10 +148,10 @@ describe('видимость полей', () => {
 
 describe('строки сетапа', () => {
   it('метка формы кофе', () => {
-    expect(formLabel('beans', 'ru')).toBe('ЗЕРНО');
-    expect(formLabel('ground', 'ru')).toBe('МОЛОТЫЙ');
-    expect(formLabel('drip', 'ru')).toBe('ДРИП-ПАКЕТ');
-    expect(formLabel('drip', 'en')).toBe('DRIP BAG');
+    expect(formLabel('beans', 'ru')).toBe('зерно');
+    expect(formLabel('ground', 'ru')).toBe('молотый');
+    expect(formLabel('drip', 'ru')).toBe('дрип-пакет');
+    expect(formLabel('drip', 'en')).toBe('drip bag');
   });
 
   it('остаток: граммы у зерна, штуки у дрипа', () => {

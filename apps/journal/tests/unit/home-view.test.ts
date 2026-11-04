@@ -58,7 +58,7 @@ describe('pendingTitle', () => {
 
   it('называет дегустацию своим именем', () => {
     const cup: EntryRecord = { ...entry, mode: 'cup', bean: null, devName: '', grind: null };
-    expect(pendingTitle(cup, 'ru')).toBe('Чашка');
+    expect(pendingTitle(cup, 'ru')).toBe('чашка');
     expect(pendingTitle({ ...cup, title: 'Кофейня на углу' }, 'ru')).toBe('Кофейня на углу');
   });
 });

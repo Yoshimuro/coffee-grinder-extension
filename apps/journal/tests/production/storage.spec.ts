@@ -54,7 +54,7 @@ test('saved data and photo files survive offline writes, reload, browser process
     if (browserName === 'chromium') await context.setOffline(true);
 
     // All user records, including a real photo, are created with no network.
-    await page.getByRole('button', { name: 'ПОЛКА', exact: true }).click();
+    await page.getByRole('button', { name: 'полка', exact: true }).click();
     await page.getByTestId('shelf-add').click();
     const choosing = page.waitForEvent('filechooser');
     await page.getByTestId('bean-photo-add').click();
@@ -63,10 +63,10 @@ test('saved data and photo files survive offline writes, reload, browser process
     await page.getByTestId('bean-name').fill(BEAN);
     await page.getByTestId('bean-roast').fill('01.01.2026');
     await page.getByTestId('bean-save').click();
-    await page.getByRole('button', { name: 'ЕЩЁ', exact: true }).click();
+    await page.getByRole('button', { name: 'ещё', exact: true }).click();
     await page.getByTestId('set-theme-light').click();
     await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
-    await page.getByText('+ КОФЕМОЛКА', { exact: true }).click();
+    await page.getByText('+ кофемолка', { exact: true }).click();
     await page.getByTestId('grinder-name').fill('Моя кофемолка');
     await page.getByTestId('grinder-save').click();
     await expect(page.getByTestId('grinder-row')).toHaveCount(2);
@@ -75,9 +75,9 @@ test('saved data and photo files survive offline writes, reload, browser process
       ? 'браузер не сообщает о защите хранения'
       : persisted ? 'защищены от автоочистки' : 'защита не включена');
 
-    await page.getByRole('button', { name: 'ГЛАВНЫЙ', exact: true }).click();
+    await page.getByRole('button', { name: 'главный', exact: true }).click();
     await page.getByTestId('home-brew').click();
-    await page.getByText('+ ДЕВАЙС', { exact: true }).click();
+    await page.getByText('+ устройство', { exact: true }).click();
     await page.getByRole('button', { name: /V60/ }).click();
     await page.getByTestId('device-save').click();
     await page.getByTestId('recipe-dur-inc-0').click();
@@ -115,7 +115,7 @@ test('saved data and photo files survive offline writes, reload, browser process
     await expect(page.getByTestId('home-feed-row')).toHaveCount(1);
     await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
     expect(await snapshot(page)).toEqual(before);
-    await page.getByRole('button', { name: 'ПОЛКА', exact: true }).click();
+    await page.getByRole('button', { name: 'полка', exact: true }).click();
     const image = page.getByTestId('shelf-card').locator('img');
     await expect(image).toBeVisible();
     expect(await image.evaluate((img) => (img as HTMLImageElement).naturalWidth)).toBeGreaterThan(0);

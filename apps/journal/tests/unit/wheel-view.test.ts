@@ -66,8 +66,8 @@ describe('wheelItems — уровни колеса', () => {
 
     // i % 2 ? 0.72 : 0.66 — чередование, чтобы соседние сектора различались.
     expect(items.map((i) => i.l)).toEqual([0.66, 0.72, 0.66, 0.72, 0.66, 0.72, 0.66, 0.72, 0.66]);
-    expect(items[0]?.label).toBe('Фруктовое');
-    expect(wheelItems([], 'en')[0]?.label).toBe('Fruity');
+    expect(items[0]?.label).toBe('фруктовое');
+    expect(wheelItems([], 'en')[0]?.label).toBe('fruity');
   });
 
   it('уровень категории — её подкатегории, светлота 0.6 + i·0.22/(n−1)', () => {
@@ -89,7 +89,7 @@ describe('wheelItems — уровни колеса', () => {
 
     expect(items[0]?.l).toBeCloseTo(0.6, 10);
     expect(items[6]?.l).toBeCloseTo(0.84, 10);
-    expect(items[6]?.label).toBe('Чёрная смородина');
+    expect(items[6]?.label).toBe('чёрная смородина');
   });
 
   it('тон и цветность на всех уровнях — категорийные', () => {
@@ -140,13 +140,13 @@ describe('путь', () => {
 
 describe('crumbs', () => {
   it('на корне — одна крошка «ВСЁ», и она текущая', () => {
-    expect(crumbs([], 'ru')).toEqual([{ key: 'root', label: 'ВСЁ', current: true, depth: 0 }]);
-    expect(crumbs([], 'en')[0]?.label).toBe('ALL');
+    expect(crumbs([], 'ru')).toEqual([{ key: 'root', label: 'всё', current: true, depth: 0 }]);
+    expect(crumbs([], 'en')[0]?.label).toBe('all');
   });
 
   it('глубже — цепочка имён, текущая только последняя', () => {
     const trail = crumbs(['fruit', 'berry'], 'ru');
-    expect(trail.map((c) => c.label)).toEqual(['ВСЁ', 'Фруктовое', 'Ягоды']);
+    expect(trail.map((c) => c.label)).toEqual(['всё', 'фруктовое', 'ягоды']);
     expect(trail.map((c) => c.current)).toEqual([false, false, true]);
     // depth — во сколько элементов обрезать путь при тапе.
     expect(trail.map((c) => c.depth)).toEqual([0, 1, 2]);

@@ -68,8 +68,8 @@ describe('DESC — плоский индекс', () => {
 
   it('несёт обратные ссылки на категорию и подкатегорию и её цвет', () => {
     expect(DESC.blackcurrant).toEqual({
-      ru: 'Чёрная смородина',
-      en: 'Blackcurrant',
+      ru: 'чёрная смородина',
+      en: 'blackcurrant',
       cat: 'fruit',
       sub: 'berry',
       h: 20,

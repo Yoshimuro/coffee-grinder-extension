@@ -88,10 +88,22 @@ describe('defaultSetting', () => {
 });
 
 describe('unitOf', () => {
-  it('знает три вида шкал каталога', () => {
-    expect(unitOf({ min: 0, max: 1, step: 1, unit: 'click' }, 'ru')).toBe('кликов');
-    expect(unitOf({ min: 0, max: 1, step: 1, unit: 'mark' }, 'ru')).toBe('меток');
+  it('использует единое русское название для шкал каталога', () => {
+    expect(unitOf({ min: 0, max: 1, step: 1, unit: 'click' }, 'ru')).toBe('делений');
+    expect(unitOf({ min: 0, max: 1, step: 1, unit: 'mark' }, 'ru')).toBe('делений');
     expect(unitOf({ min: 0, max: 1, step: 1, unit: 'number' }, 'en')).toBe('numbers');
+  });
+
+  it('склоняет целые и дробные значения с учётом показанной точности', () => {
+    const scale = { min: 0, max: 40, step: 0.1, unit: 'mark' as const };
+    for (const [value, expected] of [
+      [1, 'деление'], [2, 'деления'], [5, 'делений'], [11, 'делений'],
+      [21, 'деление'], [22, 'деления'], [25, 'делений'], [6.6, 'деления'],
+    ] as const) {
+      expect(unitOf(scale, 'ru', value), String(value)).toBe(expected);
+    }
+    // Главный результат всегда показан с десятой: «1.0 деления».
+    expect(unitOf(scale, 'ru', 1, 1)).toBe('деления');
   });
 });
 
@@ -132,12 +144,12 @@ describe('convView — что видит пользователь', () => {
   it('собирает обе тех-строки из ответа ядра', () => {
     const view = convView(base);
     expect(view.fromName).toBe('Comandante C40 MK4 Nitro Blade');
-    expect(view.tech).toMatch(/^30 кликов · \d+(\.\d+)? µm$/);
+    expect(view.tech).toMatch(/^30 делений · \d+(\.\d+)? µm$/);
     expect(view.center).toContain('диапазон');
     expect(view.centerBig).toBe(String(view.span.center.toFixed(1)));
     expect(view.center).toContain('разрешение');
     expect(view.center).toContain('мкм/шаг');
-    expect(view.unit).toBe('меток');
+    expect(view.unit).toBe('деления');
   });
 
   it('границы диапазона показаны с десятой — иначе результат прыгает шириной', () => {
@@ -287,8 +299,8 @@ describe('калибровка — от подсказки до применён
 
 describe('счётчик базы', () => {
   it('считает записи каталога, а не свои молки', () => {
-    expect(dbCountLine('ru')).toMatch(/^\d+ кофемолки · база$/);
-    expect(dbCountLine('en')).toMatch(/^\d+ grinders · base$/);
+    expect(dbCountLine('ru')).toMatch(/^кофемолок: \d+$/);
+    expect(dbCountLine('en')).toMatch(/^grinders: \d+$/);
   });
 });
 

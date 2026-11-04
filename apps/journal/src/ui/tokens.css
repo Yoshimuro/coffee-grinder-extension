@@ -1,7 +1,7 @@
 /*
  * Design tokens — transcribed from `design_handoff_brew_journal 3/README.md`,
- * section «Токены». The hex values, the type scale and the grid figures are the
- * handoff verbatim; nothing here is rounded, renamed or "improved".
+ * section «Токены». Readability changes use a separate text-muted role and a
+ * larger type scale; decorative palette values and the square grid remain.
  *
  * Two rules the whole visual system rests on:
  *   - there is no accent colour (colour appears only on the flavour wheel and
@@ -49,16 +49,19 @@
      system font. The fallbacks only cover the frame before the faces load. */
   --font: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
 
+  /* Readable secondary text; faint/muted remain decorative palette steps. */
+  --text-muted: var(--dim);
+
   /* ── Шкала ─────────────────────────────────────────────────────────────── */
-  /* микро-лейбл 10px / letter-spacing 2px / капс / #8C8C87 */
-  --fs-micro: 10px;
-  --ls-micro: 2px;
-  /* тех-строка 9–9.5px / #575752 */
-  --fs-tech: 9.5px;
-  --fs-tech-min: 9px;
-  /* body 12–13px */
-  --fs-body: 13px;
-  --fs-body-min: 12px;
+  /* micro labels: 12px, restrained spacing */
+  --fs-micro: 12px;
+  --ls-micro: 1.2px;
+  /* secondary details: 11px, readable text color */
+  --fs-tech: 11px;
+  --fs-tech-min: 11px;
+  /* body 13–14px */
+  --fs-body: 14px;
+  --fs-body-min: 13px;
   /* степпер 19–21px */
   --fs-stepper: 21px;
   --fs-stepper-min: 19px;
@@ -152,8 +155,8 @@
  *     применение — `.jr-cell` в `journal.css`, — и семантика «чуть отделено от
  *     страницы» на светлом означает именно темнее.
  *
- * `--faint` даёт 2.7:1, ниже AA. Ровно столько же он даёт и в тёмной теме: это
- * паритет, а не регресс. Поднимать его — отдельное решение сразу для обеих тем.
+ * `--faint` остаётся декоративным. Рабочий текст использует `--text-muted`
+ * (через `--dim`): около 5.8:1 в обеих темах, включая невыбранные вкладки.
  */
 :root[data-theme='light'] {
   color-scheme: light;
@@ -273,9 +276,9 @@ button {
   flex: 1;
   min-height: var(--touch);
   padding: 14px 0;
-  font-size: 9px;
-  letter-spacing: var(--ls-micro);
-  color: var(--faint);
+  font-size: 12px;
+  letter-spacing: 0.8px;
+  color: var(--text-muted);
   text-align: center;
 }
 
@@ -290,12 +293,12 @@ button {
   font-weight: var(--fw-medium);
   letter-spacing: var(--ls-micro);
   color: var(--dim);
-  text-transform: uppercase;
+  text-transform: none;
 }
 
 .tech {
   font-size: var(--fs-tech);
-  color: var(--faint);
+  color: var(--text-muted);
 }
 
 .body {
@@ -328,7 +331,7 @@ button {
   font-size: var(--fs-stage);
   font-weight: var(--fw-bold);
   letter-spacing: var(--ls-stage);
-  text-transform: uppercase;
+  text-transform: none;
 }
 
 /* ── Кнопки и теги ───────────────────────────────────────────────────────── */
@@ -342,7 +345,7 @@ button {
   color: var(--text-secondary);
   font-size: var(--fs-micro);
   letter-spacing: var(--ls-micro);
-  text-transform: uppercase;
+  text-transform: none;
 }
 
 .btn--inverse {
@@ -364,14 +367,14 @@ button {
   font-size: var(--fs-micro);
   letter-spacing: 1px;
   color: var(--text-secondary);
-  text-transform: uppercase;
+  text-transform: none;
 }
 
 /* Пустые состояния: плоская строка, без восклицаний. */
 .empty {
   padding: 16px 0;
   font-size: var(--fs-body-min);
-  color: var(--faint);
+  color: var(--text-muted);
 }
 
 /* ── Секции ──────────────────────────────────────────────────────────────── */
@@ -382,8 +385,8 @@ button {
   font-size: var(--fs-micro);
   font-weight: var(--fw-medium);
   letter-spacing: var(--ls-micro);
-  color: var(--faint);
-  text-transform: uppercase;
+  color: var(--text-muted);
+  text-transform: none;
 }
 
 .hairline {

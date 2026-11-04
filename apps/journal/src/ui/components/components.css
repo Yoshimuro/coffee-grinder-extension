@@ -36,7 +36,7 @@
   font-weight: var(--fw-bold);
   letter-spacing: 2.5px;
   color: var(--text);
-  text-transform: uppercase;
+  text-transform: none;
 }
 
 /*
@@ -58,7 +58,7 @@
   margin-left: auto;
   font-size: var(--fs-tech);
   letter-spacing: 1px;
-  color: var(--faint);
+  color: var(--text-muted);
   text-align: right;
 }
 
@@ -93,9 +93,8 @@
 /* ── Stepper ─────────────────────────────────────────────────────────────── */
 
 /*
- * Без `text-transform: uppercase`: подписи и так приходят капсом из
- * `strings.ts`, а единственная, где есть строчные, — «ШАГ, µm» — от подъёма
- * регистра превращалась в «ШАГ, ΜM» (знак микро поднимается в греческую «Мю»).
+ * Регистр задаётся текстом, а не стилем: единица µm и пользовательские
+ * названия должны сохранять своё написание.
  */
 .bj-stepper__label {
   display: flex;
@@ -151,7 +150,7 @@
 }
 
 .bj-stepper__btn:disabled {
-  color: var(--faint);
+  color: var(--text-muted);
   cursor: default;
 }
 
@@ -191,7 +190,7 @@
 .bj-stepper__hint {
   margin-top: 8px;
   font-size: var(--fs-tech);
-  color: var(--faint);
+  color: var(--text-muted);
 }
 
 /* ── InverseButton ───────────────────────────────────────────────────────── */
@@ -217,7 +216,7 @@
   font-weight: var(--fw-bold);
   letter-spacing: var(--ls-micro);
   text-align: center;
-  text-transform: uppercase;
+  text-transform: none;
 }
 
 /*
@@ -275,7 +274,7 @@
   color: var(--dim);
   font-size: 8.5px;
   letter-spacing: 1.5px;
-  text-transform: uppercase;
+  text-transform: none;
 }
 
 .bj-tag--caps .bj-tag__body {
@@ -316,7 +315,7 @@
   justify-content: center;
   width: 28px;
   border-left: 1px solid var(--line-3);
-  color: var(--faint);
+  color: var(--text-muted);
   font-size: 12px;
 }
 
@@ -407,13 +406,13 @@
   font-size: var(--fs-micro);
   font-weight: var(--fw-medium);
   letter-spacing: var(--ls-micro);
-  color: var(--faint);
-  text-transform: uppercase;
+  color: var(--text-muted);
+  text-transform: none;
 }
 
 .bj-section__aside {
   font-size: var(--fs-tech);
-  color: var(--faint);
+  color: var(--text-muted);
 }
 
 .bj-row {
@@ -444,13 +443,15 @@
 .bj-row__sub {
   margin-top: 4px;
   font-size: var(--fs-tech);
+  line-height: 1.5;
+  overflow-wrap: anywhere;
   color: var(--dim);
 }
 
 .bj-row__right {
   flex: none;
   font-size: var(--fs-tech);
-  color: var(--faint);
+  color: var(--text-muted);
   text-align: right;
 }
 
@@ -467,7 +468,7 @@
   width: 100%;
   padding: 16px 0;
   font-size: var(--fs-body-min);
-  color: var(--faint);
+  color: var(--text-muted);
   text-align: left;
 }
 
@@ -480,14 +481,14 @@
 .bj-empty--action {
   position: relative;
   justify-content: flex-start;
-  height: 44px;
-  padding: 0 13px;
+  min-height: 44px;
+  padding: 10px 13px;
   border: 1px dashed var(--line-4);
   color: var(--dim);
   font-size: var(--fs-tech);
   letter-spacing: 1.5px;
   text-align: left;
-  text-transform: uppercase;
+  text-transform: none;
 }
 
 .bj-empty--action::after {
@@ -531,7 +532,7 @@
   letter-spacing: var(--ls-micro);
   color: var(--text-secondary);
   text-align: center;
-  text-transform: uppercase;
+  text-transform: none;
 }
 
 /* Стрелки месяца: видимые 40×32 по плотности панели, нажимаемые 48×48 за счёт
@@ -558,7 +559,7 @@
 
 .bj-cal__nav:disabled {
   border-color: var(--line-3);
-  color: var(--muted);
+  color: var(--text-muted);
   cursor: default;
 }
 
@@ -574,9 +575,9 @@
   border-bottom: 1px solid var(--line-1);
   font-size: 8.5px;
   letter-spacing: 1.5px;
-  color: var(--faint);
+  color: var(--text-muted);
   text-align: center;
-  text-transform: uppercase;
+  text-transform: none;
 }
 
 .bj-cal__grid {
@@ -600,7 +601,7 @@
 /* Дни вне [min, max] остаются на своих местах: сетка месяца не должна
    перестраиваться от границ, иначе теряется опора на день недели. */
 .bj-cal__day:disabled {
-  color: var(--muted);
+  color: var(--text-muted);
   cursor: default;
 }
 

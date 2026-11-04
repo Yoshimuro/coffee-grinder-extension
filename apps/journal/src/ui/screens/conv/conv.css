@@ -35,7 +35,7 @@
 
 .conv-picker__caret {
   flex: none;
-  color: var(--faint);
+  color: var(--text-muted);
   font-size: var(--fs-micro);
 }
 
@@ -60,7 +60,7 @@
 }
 
 .conv-picker__search::placeholder {
-  color: var(--faint);
+  color: var(--text-muted);
 }
 
 /* 236px — примерно пять строк: список остаётся списком, а не экраном. */
@@ -109,7 +109,7 @@
 
 .conv-picker__meta {
   flex: none;
-  color: var(--faint);
+  color: var(--text-muted);
   font-size: var(--fs-tech-min);
 }
 
@@ -118,13 +118,13 @@
   font-size: var(--fs-tech-min);
   font-weight: var(--fw-medium);
   letter-spacing: var(--ls-micro);
-  color: var(--faint);
-  text-transform: uppercase;
+  color: var(--text-muted);
+  text-transform: none;
 }
 
 .conv-picker__empty {
   padding: 16px 14px;
-  color: var(--faint);
+  color: var(--text-muted);
   font-size: var(--fs-body-min);
 }
 
@@ -154,7 +154,7 @@
 .conv-warn {
   margin-top: 6px;
   font-size: var(--fs-tech);
-  color: var(--faint);
+  color: var(--text-muted);
 }
 
 .conv-split {
@@ -170,7 +170,7 @@
 }
 
 .conv-label__hint {
-  color: var(--faint);
+  color: var(--text-muted);
   font-size: var(--fs-tech-min);
 }
 
@@ -193,7 +193,7 @@
 
 .conv-to__caret {
   flex: none;
-  color: var(--faint);
+  color: var(--text-muted);
   font-size: 11px;
 }
 
@@ -217,7 +217,7 @@
   font-size: 10.5px;
   letter-spacing: var(--ls-micro);
   color: var(--dim);
-  text-transform: uppercase;
+  text-transform: none;
 }
 
 /* ── Полоса-шкала ────────────────────────────────────────────────────────── */
@@ -250,7 +250,7 @@
   justify-content: space-between;
   margin-top: 6px;
   font-size: var(--fs-tech-min);
-  color: var(--muted);
+  color: var(--text-muted);
 }
 
 .conv-center {
@@ -277,7 +277,7 @@
   position: relative;
   min-height: 20px;
   border-bottom: 1px solid var(--line-4);
-  color: var(--faint);
+  color: var(--text-muted);
   font-size: var(--fs-tech-min);
   letter-spacing: 1.5px;
 }
@@ -321,7 +321,7 @@
 .conv-cal__hint {
   margin-top: 9px;
   font-size: var(--fs-tech-min);
-  color: var(--faint);
+  color: var(--text-muted);
 }
 
 .conv-cal__actions {

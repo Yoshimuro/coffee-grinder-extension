@@ -28,8 +28,8 @@ describe('количество', () => {
 
     expect(amountUnit('drip', 'ru')).toBe('шт');
     expect(amountUnit('beans', 'ru')).toBe('г');
-    expect(amountLabel('drip', 'ru')).toBe('ШТУК В КОРОБКЕ');
-    expect(amountLabel('beans', 'ru')).toBe('ВЕС');
+    expect(amountLabel('drip', 'ru')).toBe('штук в коробке');
+    expect(amountLabel('beans', 'ru')).toBe('вес');
   });
 
   it('держит шаги прототипа: ±25 г от 50 и ±1 шт от 1', () => {
@@ -46,8 +46,8 @@ describe('количество', () => {
 
 describe('shelfCountLine', () => {
   it('считает пачки', () => {
-    expect(shelfCountLine(3, 'ru')).toBe('3 · пачки');
-    expect(shelfCountLine(0, 'en')).toBe('0 · packs');
+    expect(shelfCountLine(3, 'ru')).toBe('пачек: 3');
+    expect(shelfCountLine(0, 'en')).toBe('packs: 0');
   });
 });
 
@@ -123,8 +123,8 @@ describe('makeBean', () => {
       'en',
     );
 
-    expect(ru.name).toBe('Без названия');
-    expect(en.name).toBe('Untitled');
+    expect(ru.name).toBe('без названия');
+    expect(en.name).toBe('untitled');
   });
 
   it('копирует снимки, а не ссылается на черновик', () => {
@@ -153,16 +153,16 @@ describe('карточка пачки', () => {
 
   it('показывает возраст, остаток и дату обжарки', () => {
     expect(beanStats(java, 'ru', TODAY)).toEqual([
-      { label: 'ВОЗРАСТ', value: '5 дн · пик' },
-      { label: 'ОСТАТОК', value: '187 г' },
-      { label: 'ДАТА ОБЖАРКИ', value: '27.07.2026' },
+      { label: 'возраст', value: '5 дн · пик' },
+      { label: 'остаток', value: '187 г' },
+      { label: 'дата обжарки', value: '27.07.2026' },
     ]);
   });
 
   it('первый слот — лицо пачки, остальные — шов с датой', () => {
-    expect(slotPlaceholder(0, 'ru')).toBe('лицо пачки');
-    expect(slotPlaceholder(1, 'ru')).toBe('шов · дата обжарки');
-    expect(slotPlaceholder(4, 'ru')).toBe('шов · дата обжарки');
+    expect(slotPlaceholder(0, 'ru')).toBe('фото пачки');
+    expect(slotPlaceholder(1, 'ru')).toBe('дата обжарки на пачке');
+    expect(slotPlaceholder(4, 'ru')).toBe('дата обжарки на пачке');
   });
 
   it('всегда один пустой слот в конце, минимума в два больше нет (BJ-8)', () => {

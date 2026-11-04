@@ -40,7 +40,7 @@ async function openSettings(page: Page) {
   await expect(screen(page, 'home')).toBeVisible();
   // Вкладка — по подписи, как в смоуке цикла: своего `data-testid` у неё нет,
   // а язык на чистой базе всегда русский.
-  await page.getByRole('button', { name: 'ЕЩЁ' }).click();
+  await page.getByRole('button', { name: 'ещё' }).click();
   await expect(screen(page, 'more')).toBeVisible();
 }
 

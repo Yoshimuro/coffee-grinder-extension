@@ -78,7 +78,7 @@ export async function openJournal(page: Page, url: string) {
 }
 
 export async function addBean(page: Page, name: string) {
-  await page.getByRole('button', { name: 'ПОЛКА', exact: true }).click();
+  await page.getByRole('button', { name: 'полка', exact: true }).click();
   await page.getByTestId('shelf-add').click();
   await page.getByTestId('bean-name').fill(name);
   await page.getByTestId('bean-roast').fill('01.01.2026');

@@ -120,7 +120,7 @@ export function Log() {
 
       <div className="jr__body jr-log__list">
         {entries !== undefined && entries.length === 0 ? (
-          <EmptyState text={t.home_empty} />
+          <EmptyState text={filter.kind === 'all' ? t.home_empty : t.log_no_matches} />
         ) : null}
 
         {(entries ?? []).map((entry) => {

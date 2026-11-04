@@ -40,8 +40,11 @@ export function makeGrinder(id: string, name: string, micronsPerStep: number): G
   };
 }
 
-/** Мета кофемолки в списке: «кликов · 8.7 µm» (`DC:1339`). */
+/** В русском интерфейсе явно показываем, сколько микрон в одном делении. */
 export function grinderMeta(grinder: GrinderRecord, lang: Lang): string {
+  if (lang === 'ru') {
+    return `1 ${unitOf(grinder.scale, lang, 1)} = ${grinder.micronsPerStep} ${STR[lang].um}`;
+  }
   return `${unitOf(grinder.scale, lang)} · ${grinder.micronsPerStep} ${STR[lang].um}`;
 }
 

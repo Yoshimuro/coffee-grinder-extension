@@ -255,7 +255,7 @@ export function More() {
               {LANGS.map((code) => (
                 <Chip
                   key={code}
-                  label={code.toUpperCase()}
+                  label={code}
                   active={lang === code}
                   onClick={() => void putSetting('lang', code)}
                 />

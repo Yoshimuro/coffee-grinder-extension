@@ -83,13 +83,13 @@ describe('stageCounter и stageTitle', () => {
 
   it('в паузе счёт стоит, а имя стадии — «ПАУЗА»', () => {
     expect(stageCounter(perc, 1, 'ru', true)).toBe('· · ·');
-    expect(stageTitle(perc, 1, 'ru', true)).toBe('ПАУЗА');
-    expect(stageTitle(perc, 1, 'en', true)).toBe('PAUSE');
+    expect(stageTitle(perc, 1, 'ru', true)).toBe('пауза');
+    expect(stageTitle(perc, 1, 'en', true)).toBe('pause');
   });
 
   it('называет активную стадию', () => {
-    expect(stageTitle(perc, 0, 'ru', false)).toBe('СМАЧИВАНИЕ');
-    expect(stageTitle(perc, 3, 'en', false)).toBe('DRAWDOWN');
+    expect(stageTitle(perc, 0, 'ru', false)).toBe('смачивание');
+    expect(stageTitle(perc, 3, 'en', false)).toBe('let the water drain');
     // Индекс за краем плана строку не ломает.
     expect(stageTitle(perc, 9, 'ru', false)).toBe('');
   });
@@ -131,9 +131,9 @@ describe('recipeLine — тихая цель стадии', () => {
 
 describe('nextLine', () => {
   it('называет следующую стадию и её воду', () => {
-    expect(nextLine(perc, 0, 'ru')).toBe('дальше: ПРОЛИВ · 105 г');
-    expect(nextLine(perc, 2, 'ru')).toBe('дальше: ДРЕНАЖ');
-    expect(nextLine(perc, 0, 'en')).toBe('next: POUR · 105 g');
+    expect(nextLine(perc, 0, 'ru')).toBe('дальше: пролив · 105 г');
+    expect(nextLine(perc, 2, 'ru')).toBe('дальше: стекание');
+    expect(nextLine(perc, 0, 'en')).toBe('next: pour · 105 g');
   });
 
   it('на последней стадии так и говорит', () => {
@@ -144,26 +144,31 @@ describe('nextLine', () => {
 
 describe('mainButtonLabel', () => {
   it('обычный переход — «ДАЛЬШЕ»', () => {
-    expect(mainButtonLabel(perc, 0, 'ru', false)).toBe('ДАЛЬШЕ');
-    expect(mainButtonLabel(perc, 1, 'en', false)).toBe('NEXT');
+    expect(mainButtonLabel(perc, 0, 'ru', false)).toBe('дальше');
+    expect(mainButtonLabel(perc, 1, 'en', false)).toBe('next');
   });
 
-  it('на последней стадии — «ГОТОВО» (D-6, а не прототипное «ЗАВЕРШИТЬ»)', () => {
-    expect(mainButtonLabel(perc, 3, 'ru', false)).toBe('ГОТОВО');
-    expect(mainButtonLabel(perc, 3, 'en', false)).toBe('DONE');
+  it('на последней стадии явно обещает сохранение', () => {
+    expect(mainButtonLabel(perc, 3, 'ru', false)).toBe('завершить и сохранить');
+    expect(mainButtonLabel(perc, 3, 'en', false)).toBe('finish and save');
+  });
+
+  it('переход к стеканию называет следующий этап, включая выход из паузы', () => {
+    expect(mainButtonLabel(perc, 2, 'ru', false)).toBe('перейти к стеканию');
+    expect(mainButtonLabel(perc, 2, 'en', true)).toBe('let the water drain');
   });
 
   it('маркер виден пользователю только как подпись кнопки', () => {
-    expect(mainButtonLabel(imm, 0, 'ru', false)).toBe('РАЗМЕШАТЬ');
+    expect(mainButtonLabel(imm, 0, 'ru', false)).toBe('размешать');
     expect(mainButtonLabel([['steep', 150, 250], ['valve', 0, 0], ['drain', 60, 0]], 0, 'ru', false)).toBe(
-      'ОТКРЫТЬ КЛАПАН',
+      'открыть клапан',
     );
   });
 
   it('в паузе кнопка называет стадию, к которой возвращает', () => {
-    expect(mainButtonLabel(perc, 1, 'ru', true)).toBe('ПРОЛИВ');
+    expect(mainButtonLabel(perc, 1, 'ru', true)).toBe('пролив');
     // Пауза на последней стадии недоступна, но подпись всё равно осмысленна.
-    expect(mainButtonLabel(perc, 3, 'ru', true)).toBe('ГОТОВО');
+    expect(mainButtonLabel(perc, 3, 'ru', true)).toBe('завершить и сохранить');
   });
 });
 
@@ -171,7 +176,7 @@ describe('шапка таймера', () => {
   it('срезает бренд и подставляет форму кофе у дрипа', () => {
     expect(brewerLabel('beans', v60, 'ru')).toBe('V60-02');
     expect(brewerLabel('beans', null, 'ru')).toBe('—');
-    expect(brewerLabel('drip', v60, 'ru')).toBe('ДРИП-ПАКЕТ');
+    expect(brewerLabel('drip', v60, 'ru')).toBe('дрип-пакет');
   });
 
   it('собирает строку пачки, девайса и температуры', () => {

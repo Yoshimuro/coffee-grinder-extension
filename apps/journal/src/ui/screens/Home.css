@@ -1,9 +1,8 @@
 /*
  * Домашний экран, вариант C (README:25).
  *
- * Геометрия из макета: [ЗАВАРИТЬ 60px, flex:1] + [квадрат 60×60 «⇄»], ниже
- * «ОЦЕНИТЬ ЧАШКУ» 48px во всю ширину, ниже лента. Токены — из `tokens.css`,
- * голыми пикселями только раскладка (`DC:125-144`).
+ * Главное действие занимает отдельную строку. Конвертер имеет видимое имя,
+ * а пустая полка объясняет следующий шаг прямо над кнопкой добавления кофе.
  */
 
 .home-head__title {
@@ -54,7 +53,7 @@
   border: 1px solid var(--text);
   font-size: 10.5px;
   letter-spacing: var(--ls-micro);
-  text-transform: uppercase;
+  text-transform: none;
 }
 
 .home-pending__rate::after {
@@ -67,48 +66,47 @@
 
 .home-cta {
   display: flex;
+  flex-direction: column;
   gap: 8px;
   margin-top: 14px;
 }
 
-.home-cta__brew {
+.home-cta__brew,
+.home-taste {
   display: flex;
   flex: 1;
   align-items: center;
   justify-content: center;
-  height: 60px;
+  min-height: 60px;
+  width: 100%;
+  padding: 12px;
   background: var(--inverse-bg);
   color: var(--inverse-text);
   font-size: var(--fs-body);
   font-weight: var(--fw-bold);
   letter-spacing: 3px;
-  text-transform: uppercase;
+  text-transform: none;
 }
 
 .home-cta__conv {
   display: flex;
-  flex: none;
   align-items: center;
   justify-content: center;
-  width: 60px;
-  height: 60px;
-  border: 1px solid var(--line-4);
-  color: var(--text-secondary);
-  font-size: 15px;
-}
-
-.home-taste {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  gap: 10px;
   width: 100%;
   min-height: var(--touch);
-  margin-top: 8px;
+  padding: 10px;
   border: 1px solid var(--line-4);
   color: var(--text-secondary);
   font-size: var(--fs-micro);
-  letter-spacing: var(--ls-micro);
-  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.home-welcome {
+  margin: 14px 0 0;
+  color: var(--text-secondary);
+  font-size: var(--fs-body);
+  line-height: 1.5;
 }
 
 /* ── Лента ───────────────────────────────────────────────────────────────── */
@@ -139,7 +137,7 @@
   width: 42px;
   padding-top: 2px;
   font-size: var(--fs-tech);
-  color: var(--faint);
+  color: var(--text-muted);
 }
 
 .home-feed__main {

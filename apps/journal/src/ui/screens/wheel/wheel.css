@@ -36,7 +36,7 @@
   color: var(--text);
   font-size: var(--fs-tech);
   letter-spacing: 1.5px;
-  text-transform: uppercase;
+  text-transform: none;
 }
 
 /* ── Крошки ──────────────────────────────────────────────────────────────── */
@@ -54,7 +54,7 @@
 .bj-wheel__crumb {
   font-size: 9px;
   letter-spacing: 1.5px;
-  color: var(--faint);
+  color: var(--text-muted);
 }
 
 /* Уровень, на котором стоим, — светлый; пройденные тише. */
@@ -176,7 +176,7 @@
   font-family: inherit;
   font-weight: 600;
   letter-spacing: 0.5px;
-  text-transform: uppercase;
+  text-transform: none;
   pointer-events: none;
 }
 
@@ -220,7 +220,7 @@
   fill: var(--text);
   font-size: 8.5px;
   letter-spacing: 1.5px;
-  text-transform: uppercase;
+  text-transform: none;
 }
 
 /* ── Подсказка и подвал ──────────────────────────────────────────────────── */
@@ -229,7 +229,7 @@
   flex: none;
   padding: 0 30px 8px;
   font-size: 8.5px;
-  color: var(--faint);
+  color: var(--text-muted);
   line-height: 1.6;
   text-align: center;
 }
@@ -245,11 +245,11 @@
   font-size: 9px;
   font-weight: var(--fw-medium);
   letter-spacing: 2px;
-  color: var(--faint);
+  color: var(--text-muted);
 }
 
 .bj-wheel__foot-note {
-  color: var(--muted);
+  color: var(--text-muted);
 }
 
 /* Набор растёт вниз, но подвал за экран не уезжает: после четырёх тегов список
@@ -266,7 +266,7 @@
 .bj-wheel__empty {
   padding: 6px 0;
   font-size: var(--fs-micro);
-  color: var(--muted);
+  color: var(--text-muted);
 }
 
 /* ── Режим правки (BJ-11) ────────────────────────────────────────────────── */
@@ -283,7 +283,7 @@
   color: var(--text-secondary);
   font-size: var(--fs-tech);
   letter-spacing: 1.5px;
-  text-transform: uppercase;
+  text-transform: none;
 }
 
 .bj-wheel__pencil--on {
@@ -326,12 +326,12 @@
 .bj-wheel__row-act {
   flex: none;
   padding: 2px 8px;
-  color: var(--muted);
+  color: var(--text-muted);
   font-size: 12px;
 }
 
 .bj-wheel__row-ask {
-  color: var(--muted);
+  color: var(--text-muted);
   font-size: var(--fs-micro);
 }
 
@@ -345,7 +345,7 @@
 
 .bj-wheel__row-no {
   padding: 2px 6px;
-  color: var(--muted);
+  color: var(--text-muted);
   font-size: var(--fs-micro);
 }
 
@@ -415,13 +415,13 @@
 }
 
 .bj-wheel__zoom-btn:disabled {
-  color: var(--faint);
+  color: var(--text-muted);
   cursor: default;
 }
 
 .bj-wheel__zoom-val {
   width: 40px;
-  color: var(--faint);
+  color: var(--text-muted);
   font-size: var(--fs-tech-min);
   font-variant-numeric: tabular-nums;
   text-align: center;
@@ -456,7 +456,7 @@
   fill: var(--wheel-ink);
   letter-spacing: 0.3px;
   pointer-events: none;
-  text-transform: uppercase;
+  text-transform: none;
 }
 
 .bj-map__mem {
@@ -473,7 +473,7 @@
 .bj-map__root {
   fill: var(--faint);
   letter-spacing: 2px;
-  text-transform: uppercase;
+  text-transform: none;
 }
 
 /* ── ПОЛОТНО ─────────────────────────────────────────────────────────────── */
@@ -570,12 +570,12 @@
   font-size: var(--fs-micro);
   font-weight: var(--fw-bold);
   letter-spacing: var(--ls-micro);
-  text-transform: uppercase;
+  text-transform: none;
 }
 
 .bj-list__count {
   margin-left: auto;
-  color: var(--muted);
+  color: var(--text-muted);
   font-size: 8.5px;
   font-variant-numeric: tabular-nums;
 }
@@ -586,10 +586,10 @@
 
 .bj-list__subname {
   position: relative;
-  color: var(--faint);
+  color: var(--text-muted);
   font-size: 8.5px;
   letter-spacing: 1.5px;
-  text-transform: uppercase;
+  text-transform: none;
 }
 
 .bj-list__subname--on {

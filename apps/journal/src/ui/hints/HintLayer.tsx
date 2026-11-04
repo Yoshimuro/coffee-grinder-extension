@@ -1,31 +1,12 @@
 /**
- * Слой подсказок первого входа (BJ-10).
- *
- * Один компонент на всё приложение: он смотрит, на каком экране человек стоит,
- * какие подсказки этого экрана ещё не показаны, и — когда зона появилась в
- * DOM — затемняет экран, оставляя её в вырезе.
- *
- * Три решения, которые стоит знать, прежде чем править:
- *
- * 1. **Зона ищется селектором, а не ref'ом.** Половина зон уже помечена
- *    `data-testid` ради e2e; заводить второй механизм разметки ради подсветки
- *    не за чем, а `ref` пришлось бы прокидывать через компоненты, которые о
- *    подсказках знать не должны.
- * 2. **Опрос, а не наблюдатель.** Зона может появиться позже экрана — карточка
- *    «оценка ждёт» после ответа базы, кнопка «+ имя» на колесе после захода
- *    вглубь. Дешёвый `querySelector` по двум-трём селекторам раз в
- *    {@link POLL_MS} стоит меньше, чем `MutationObserver` на всё дерево, и не
- *    срабатывает на каждый тик таймера.
- * 3. **Показанное пишется по шагам.** Свернул приложение на середине цепочки —
- *    прочитанное останется прочитанным, а непоказанное дождётся следующего
- *    захода. Цепочка при этом фиксируется в состоянии, поэтому счётчик «2 / 3»
- *    не пересчитывается на ходу.
- *
- * Таймер намеренно не имеет подсказок: там идёт заваривание, и затемнение
- * экрана стоило бы человеку секунд.
+ * Contextual first-use help. The highlighted element keeps its real action;
+ * the surrounding UI stays available and blank space never advances a tip.
+ * Explicit next/close controls handle explanatory steps. Using a highlighted
+ * control pauses further help until the next screen visit.
+ * Hint IDs remain persisted individually; the timer never receives a tip.
  */
 
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 
 import { useNav } from '../../app/nav.js';
 import type { Hint } from '../../data/hints.js';
@@ -33,6 +14,7 @@ import { STR } from '../../data/strings.js';
 import { markHint, setHintsOn, useLang, useSettings } from '../../db/repo/settings.js';
 import {
   type Box,
+  CARD_ROOM,
   cardAnchor,
   holeBox,
   isVisibleBox,
@@ -55,7 +37,7 @@ function boxOf(element: Element): Box {
 /** Зона подсказки, если она сейчас на экране и что-то занимает. */
 function findZone(selector: string): Box | null {
   const element = document.querySelector(selector);
-  if (!element) return null;
+  if (!element || element.closest('[data-hints-ready="false"]')) return null;
   const box = boxOf(element);
   return isVisibleBox(box) ? box : null;
 }
@@ -71,6 +53,9 @@ export function HintLayer() {
   const [chain, setChain] = useState<Hint[]>([]);
   const [at, setAt] = useState(0);
   const [hole, setHole] = useState<Box | null>(null);
+  const [usedScreen, setUsedScreen] = useState(false);
+  const cardRef = useRef<HTMLDivElement>(null);
+  const [cardHeight, setCardHeight] = useState(CARD_ROOM);
 
   const current = chain[at];
 
@@ -88,12 +73,13 @@ export function HintLayer() {
     setChain([]);
     setAt(0);
     setHole(null);
+    setUsedScreen(false);
   }, [screen, wheelMode]);
 
   /* Старт цепочки. Пока она идёт, эффект молчит — иначе пометка показанного
      тут же перезапускала бы поиск. */
   useEffect(() => {
-    if (chain.length > 0) return;
+    if (chain.length > 0 || usedScreen) return;
 
     const pending = pendingHints(screen, shownKey === '' ? [] : shownKey.split('|'), hintsOn);
     if (pending.length === 0) return;
@@ -111,7 +97,40 @@ export function HintLayer() {
       clearTimeout(first);
       clearInterval(poll);
     };
-  }, [screen, shownKey, hintsOn, wheelMode, chain.length]);
+  }, [screen, shownKey, hintsOn, wheelMode, chain.length, usedScreen]);
+
+  // Keep the control's real action. After using it, pause help for this visit
+  // so another hint cannot interrupt typing or the user's next action.
+  useEffect(() => {
+    if (!current) return;
+    const zone = document.querySelector(current.selector);
+    if (!zone) return;
+    const onUse = (event: MouseEvent) => {
+      if (!(event.target instanceof Element)) return;
+      const control = event.target.closest('button, input, textarea, select, a[href], [role="button"]');
+      if (
+        !control || !zone.contains(control) ||
+        control.matches(':disabled, [aria-disabled="true"]')
+      ) return;
+      void markHint(current.id);
+      setChain([]);
+      setAt(0);
+      setHole(null);
+      setUsedScreen(true);
+    };
+    document.addEventListener('click', onUse, true);
+    return () => document.removeEventListener('click', onUse, true);
+  }, [current]);
+
+  useLayoutEffect(() => {
+    const card = cardRef.current;
+    if (!card) return;
+    const measure = () => setCardHeight(Math.ceil(card.getBoundingClientRect().height));
+    measure();
+    const observer = new ResizeObserver(measure);
+    observer.observe(card);
+    return () => observer.disconnect();
+  }, [current, hole !== null]);
 
   /* Замер активного шага. Зона может лежать ниже сгиба — сначала подводим её к
      середине экрана, и только потом меряем: иначе вырез встал бы по старым
@@ -136,13 +155,19 @@ export function HintLayer() {
     };
 
     /* Два кадра: первый отдаёт браузеру прокрутку, второй меряет уже приехавшее. */
-    const frame = requestAnimationFrame(() => requestAnimationFrame(measure));
+    let measureFrame = 0;
+    const frame = requestAnimationFrame(() => {
+      measureFrame = requestAnimationFrame(measure);
+    });
     window.addEventListener('resize', measure);
     window.addEventListener('orientationchange', measure);
+    window.addEventListener('scroll', measure, true);
     return () => {
       cancelAnimationFrame(frame);
+      cancelAnimationFrame(measureFrame);
       window.removeEventListener('resize', measure);
       window.removeEventListener('orientationchange', measure);
+      window.removeEventListener('scroll', measure, true);
     };
   }, [current]);
 
@@ -159,7 +184,7 @@ export function HintLayer() {
     setHole(null);
   }, [current, at, chain.length]);
 
-  /* «СКРЫТЬ ПОДСКАЗКИ» ничего не помечает показанным: выключатель — не «я это
+  /* «ОТКЛЮЧИТЬ ПОДСКАЗКИ» ничего не помечает показанным: выключатель — не «я это
      прочитал», а «не показывай». Вернуть их можно строкой в настройках, и
      тогда всё, что не дочитано, покажется снова. */
   const hideAll = (): void => {
@@ -171,7 +196,12 @@ export function HintLayer() {
 
   if (!current || !hole) return null;
 
-  const anchor = cardAnchor(hole, { width: window.innerWidth, height: window.innerHeight });
+  const anchor = cardAnchor(
+    hole,
+    { width: window.innerWidth, height: window.innerHeight },
+    undefined,
+    cardHeight,
+  );
   const counter = stepCounter(at, chain.length);
   const last = at === chain.length - 1;
 
@@ -179,10 +209,8 @@ export function HintLayer() {
     <div
       className="bj-hint"
       data-testid="hint"
-      role="dialog"
-      aria-modal="true"
+      role="region"
       aria-label={t.set_hints}
-      onClick={next}
     >
       <div
         className="bj-hint__hole"
@@ -194,25 +222,12 @@ export function HintLayer() {
         }}
       />
 
-      {/* Полоса идёт до карточки: они соседи, и при столкновении наверху
-          обязана оказаться карточка, а не выключатель. */}
-      <button
-        type="button"
-        className="bj-hint__hide"
-        data-testid="hint-hide"
-        onClick={(e) => {
-          // Иначе тап уехал бы в «дальше» на подложке и закрыл не то.
-          e.stopPropagation();
-          hideAll();
-        }}
-      >
-        {t.hint_close}
-      </button>
-
       <div
+        ref={cardRef}
         className={`bj-hint__card bj-hint__card--${anchor.side}`}
         style={anchor.side === 'below' ? { top: `${String(anchor.offset)}px` } : { bottom: `${String(anchor.offset)}px` }}
       >
+        <div className="bj-hint__label">{t.set_hints}</div>
         <p className="bj-hint__text" data-testid="hint-text">
           {t[current.key]}
         </p>
@@ -222,6 +237,9 @@ export function HintLayer() {
             {last ? t.hint_done : t.hint_next}
           </button>
         </div>
+        <button type="button" className="bj-hint__hide" data-testid="hint-hide" onClick={hideAll}>
+          {t.hint_close}
+        </button>
       </div>
     </div>
   );

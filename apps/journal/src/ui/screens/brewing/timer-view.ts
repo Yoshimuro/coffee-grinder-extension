@@ -97,6 +97,7 @@ export function stageTitle(
 ): string {
   if (paused) return STR[lang].t_pause;
   const cur = stages[idx];
+  if (cur?.[0] === 'drain') return STR[lang].t_drain_wait;
   return cur ? stageName(cur[0], lang) : '';
 }
 
@@ -155,7 +156,7 @@ export function nextLine(stages: readonly Stage[], idx: number, lang: Lang): str
  * Подпись главной кнопки (`tBtnLabel`, `DC:1204`).
  *
  * Три случая помимо обычного «ДАЛЬШЕ»:
- *   - последняя стадия — «ГОТОВО» (D-6);
+ *   - последняя стадия — явное завершение с сохранением;
  *   - следующая стадия нулевой длительности — кнопка называет само действие
  *     («РАЗМЕШАТЬ», «ОТКРЫТЬ КЛАПАН»): маркер не становится активной стадией и
  *     виден пользователю только здесь;
@@ -170,6 +171,7 @@ export function mainButtonLabel(
   const t = STR[lang];
   const nxt = stages[idx + 1];
 
+  if (nxt?.[0] === 'drain') return t.t_to_drain;
   if (paused) return nxt ? stageName(nxt[0], lang) : t.t_done;
   if (idx >= stages.length - 1) return t.t_done;
   return nxt && nxt[1] === 0 ? stageName(nxt[0], lang) : t.t_next;

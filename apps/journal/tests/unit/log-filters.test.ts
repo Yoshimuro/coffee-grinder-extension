@@ -82,24 +82,24 @@ describe('filterLabel', () => {
   it('называет режимы коротко и в обоих языках', () => {
     const modes = logFilters([]).slice(1);
     expect(modes.map((f) => filterLabel(f, 'ru', []))).toEqual([
-      'ПРОЛИВ',
-      'ИММЕРСИЯ',
-      'ГИБРИД',
-      'ДРИП',
-      'ЧАШКИ',
+      'пролив',
+      'иммерсия',
+      'гибрид',
+      'дрип',
+      'чашки',
     ]);
     expect(modes.map((f) => filterLabel(f, 'en', []))).toEqual([
-      'PERC',
-      'IMM',
-      'HYBRID',
-      'DRIP',
-      'CUPS',
+      'perc',
+      'imm',
+      'hybrid',
+      'drip',
+      'cups',
     ]);
   });
 
   it('«ВСЁ» берётся из таблицы строк', () => {
-    expect(filterLabel({ kind: 'all' }, 'ru', BEANS)).toBe('ВСЁ');
-    expect(filterLabel({ kind: 'all' }, 'en', BEANS)).toBe('ALL');
+    expect(filterLabel({ kind: 'all' }, 'ru', BEANS)).toBe('всё');
+    expect(filterLabel({ kind: 'all' }, 'en', BEANS)).toBe('all');
   });
 
   it('удалённая пачка не оставляет пустой чип', () => {

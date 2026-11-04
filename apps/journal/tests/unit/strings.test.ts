@@ -57,9 +57,10 @@ describe('STR — таблицы строк', () => {
    *
    * PWA: 335 → 340. Состояние защиты локальных данных в настройках.
    */
-  it('содержит 340 ключей в каждом языке', () => {
-    expect(Object.keys(STR.ru)).toHaveLength(340);
-    expect(Object.keys(STR.en)).toHaveLength(340);
+  // First-use/drainage copy and two Russian division inflections.
+  it('содержит 346 ключей в каждом языке', () => {
+    expect(Object.keys(STR.ru)).toHaveLength(346);
+    expect(Object.keys(STR.en)).toHaveLength(346);
   });
 
   it('множества ключей ru и en идентичны', () => {
@@ -80,8 +81,8 @@ describe('STR — таблицы строк', () => {
   });
 
   it('t() достаёт строку по ключу', () => {
-    expect(t('nav_home', 'ru')).toBe('ГЛАВНЫЙ');
-    expect(t('nav_home', 'en')).toBe('HOME');
+    expect(t('nav_home', 'ru')).toBe('главный');
+    expect(t('nav_home', 'en')).toBe('home');
   });
 });
 
@@ -91,22 +92,22 @@ describe('stageName', () => {
       expect(stageName(k, 'ru')).toBeTruthy();
       expect(stageName(k, 'en')).toBeTruthy();
     }
-    expect(stageName('bloom', 'ru')).toBe('СМАЧИВАНИЕ');
-    expect(stageName('drain', 'en')).toBe('DRAWDOWN');
-    expect(stageName('pause', 'ru')).toBe('ПАУЗА');
-    expect(stageName('valve', 'en')).toBe('OPEN VALVE');
+    expect(stageName('bloom', 'ru')).toBe('смачивание');
+    expect(stageName('drain', 'en')).toBe('drawdown');
+    expect(stageName('pause', 'ru')).toBe('пауза');
+    expect(stageName('valve', 'en')).toBe('open valve');
   });
 });
 
 describe('modeName', () => {
   it('берёт три режима из TRAITS.flow, а drip и cup — из своих веток', () => {
-    expect(modeName('perc', 'ru')).toBe('Пролив');
-    expect(modeName('imm', 'en')).toBe('Immersion');
-    expect(modeName('hybrid', 'ru')).toBe('Гибрид · клапан');
-    expect(modeName('drip', 'ru')).toBe('ДРИП-ПАКЕТ');
-    expect(modeName('drip', 'en')).toBe('DRIP BAG');
-    expect(modeName('cup', 'ru')).toBe('Дегустация');
-    expect(modeName('cup', 'en')).toBe('Tasting');
+    expect(modeName('perc', 'ru')).toBe('пролив');
+    expect(modeName('imm', 'en')).toBe('immersion');
+    expect(modeName('hybrid', 'ru')).toBe('гибрид · клапан');
+    expect(modeName('drip', 'ru')).toBe('дрип-пакет');
+    expect(modeName('drip', 'en')).toBe('drip bag');
+    expect(modeName('cup', 'ru')).toBe('дегустация');
+    expect(modeName('cup', 'en')).toBe('tasting');
   });
 });
 

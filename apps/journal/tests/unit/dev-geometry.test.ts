@@ -226,13 +226,13 @@ describe('devShapes', () => {
 
 describe('dev-view', () => {
   it('собирает тех-строку из пяти признаков без объёма', () => {
-    expect(devLine(v60, 'ru')).toBe('Пролив · Конус · Спираль · Бумага · конус · Пластик');
-    expect(devLine(v60, 'en')).toBe('Percolation · Cone · Spiral · Paper cone · Plastic');
+    expect(devLine(v60, 'ru')).toBe('пролив · конус · спираль · бумага · конус · пластик');
+    expect(devLine(v60, 'en')).toBe('percolation · cone · spiral · paper cone · plastic');
   });
 
   it('объясняет стенку и материал', () => {
     expect(draftNote(v60, 'ru')).toBe(
-      'спираль ведёт поток к центру · пластик почти не крадёт тепло',
+      'спираль направляет воду к центру · пластик забирает меньше тепла у воды',
     );
     expect(draftNote({ ...v60, wall: 'petal', material: 'ceramic' }, 'en')).toBe(
       'petals reduce paper contact — faster flow · ceramic holds heat — preheat longer',

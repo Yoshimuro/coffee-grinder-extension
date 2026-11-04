@@ -61,14 +61,25 @@ export function rawCenter(from: Grinder, setting: number, to: GrinderRecord): nu
   return convertFromCatalogue(from, setting, to, 0).center;
 }
 
-/** Название деления шкалы: «кликов», «делений», «меток». */
+/** Типы шкал остаются в данных; русская подпись едина для всех типов. */
 const UNIT_KEY: Record<GrinderUnit, StrKey> = {
   click: 'unit_click',
   number: 'unit_number',
   mark: 'unit_mark',
 };
 
-export function unitOf(scale: GrinderScale, lang: Lang): string {
+export function unitOf(
+  scale: GrinderScale,
+  lang: Lang,
+  value?: number,
+  fractionDigits = 0,
+): string {
+  if (lang === 'ru' && value !== undefined) {
+    const plural = new Intl.PluralRules('ru', { minimumFractionDigits: fractionDigits }).select(value);
+    if (plural === 'one') return STR.ru.unit_division_one;
+    if (plural === 'few' || plural === 'other') return STR.ru.unit_division_few;
+    return STR.ru.unit_number;
+  }
   return STR[lang][UNIT_KEY[scale.unit]];
 }
 
@@ -167,7 +178,7 @@ export interface ConvView {
   fromName: string;
   /** Диапазон и шаг исходной шкалы для степпера значения. */
   fromScale: GrinderScale;
-  /** «30 кликов · 730 µm» — тех-строка под значением. */
+  /** «30 делений · 730 µm» — тех-строка под значением. */
   tech: string;
   /** Границы главного результата, уже с фиксированной точностью. */
   lo: string;
@@ -204,8 +215,8 @@ export function convView({ from, setting, to, offset, lang }: ConvInput): ConvVi
   const t = STR[lang];
   const result = convertFromCatalogue(from, setting, to, offset);
 
-  const fromUnit = unitOf(from.scale, lang);
-  const toUnit = unitOf(to.scale, lang);
+  const fromUnit = unitOf(from.scale, lang, setting);
+  const toUnit = unitOf(to.scale, lang, result.center, 1);
   const span: Span = { lo: result.lo, center: result.center, hi: result.hi };
 
   const warnings: ConvWarning[] = [];
@@ -228,9 +239,9 @@ export function convView({ from, setting, to, offset, lang }: ConvInput): ConvVi
   };
 }
 
-/** Счётчик в шапке: «134 кофемолки · база». */
+/** Счётчик в шапке: «кофемолок: 134». */
 export function dbCountLine(lang: Lang): string {
-  return `${allGrinders().length} ${STR[lang].conv_db}`;
+  return `${STR[lang].conv_db}: ${allGrinders().length}`;
 }
 
 /** «калибровано +0.4 · из журнала». Знак «+» проставляется руками. */

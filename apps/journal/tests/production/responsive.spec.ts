@@ -35,9 +35,9 @@ test('journal, filled shelf, recipe and flavour wheel fit the viewport', async (
   } else expect(first.y).not.toBe(second.y);
   await page.screenshot({ path: testInfo.outputPath('shelf.png') });
 
-  await page.getByRole('button', { name: 'ГЛАВНЫЙ', exact: true }).click();
+  await page.getByRole('button', { name: 'главный', exact: true }).click();
   await page.getByTestId('home-brew').click();
-  await page.getByText('+ ДЕВАЙС', { exact: true }).click();
+  await page.getByText('+ устройство', { exact: true }).click();
   await page.getByRole('button', { name: /V60/ }).click();
   await page.getByTestId('device-save').click();
   await expect(page.getByTestId('brew-recipe')).toBeVisible();
@@ -48,10 +48,10 @@ test('journal, filled shelf, recipe and flavour wheel fit the viewport', async (
   await page.getByTestId('recipe-dur-inc-0').click();
   await fits(page);
 
-  await page.getByRole('button', { name: 'НАЗАД', exact: true }).click();
+  await page.getByRole('button', { name: 'назад', exact: true }).click();
   await page.getByTestId('home-conv').click();
   await fits(page);
-  await page.getByRole('button', { name: 'НАЗАД', exact: true }).click();
+  await page.getByRole('button', { name: 'назад', exact: true }).click();
   await page.getByTestId('home-taste').click();
   await page.getByTestId('diag-to-wheel').click();
   await fits(page);
@@ -62,10 +62,10 @@ test('journal, filled shelf, recipe and flavour wheel fit the viewport', async (
   }
   await page.getByTestId('wheel-list-chip-blueberry').click();
   await page.getByTestId('wheel-done').click();
-  await expect(page.locator('[data-screen="diag"]')).toContainText('Черника');
+  await expect(page.locator('[data-screen="diag"]')).toContainText('черника');
   await fits(page);
   await page.getByTestId('diag-save').click();
-  await page.getByRole('button', { name: 'ЕЩЁ', exact: true }).click();
+  await page.getByRole('button', { name: 'ещё', exact: true }).click();
   await fits(page);
   await page.getByTestId('set-theme-light').click();
   await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');

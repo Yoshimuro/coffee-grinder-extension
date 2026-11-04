@@ -27,7 +27,7 @@ test('production shell, icons and saved data survive offline reload', async ({ p
   // Its check uses an unreachable origin; Chromium also sets browser offline.
   if (browserName === 'chromium') await context.setOffline(true);
   await page.reload();
-  await page.getByRole('button', { name: 'ПОЛКА', exact: true }).click();
+  await page.getByRole('button', { name: 'полка', exact: true }).click();
   await expect(page.getByTestId('shelf-card')).toContainText('Офлайн кофе');
   expect(await page.evaluate(async () => {
     const paths = ['manifest.webmanifest', 'icons/icon-192.png', 'icons/icon-512.png'];

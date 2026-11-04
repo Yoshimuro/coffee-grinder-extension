@@ -1,103 +1,96 @@
-/*
- * Подсказки первого входа.
- *
- * Затемнение рисуется не отдельной подложкой, а тенью самого выреза: одна
- * `box-shadow` с огромным разбросом закрашивает всё, кроме зоны, — и никакие
- * четыре прямоугольника вокруг неё не разъедутся на дробных координатах.
- *
- * Плёнка поверх экрана ловит тапы целиком: тап где угодно — следующий шаг, и
- * ни один из них не проваливается в интерфейс под ней. Поэтому же
- * `touch-action: none` — под подсказкой ничего не прокручивается.
- */
-
+/* Contextual help leaves the highlighted control and the surrounding UI usable. */
 .bj-hint {
+  --hint-bg: #292927;
+  --hint-border: #64645f;
+  --hint-divider: #51514d;
+  --hint-target-wash: rgb(255 255 255 / 6%);
   position: fixed;
   inset: 0;
   z-index: 40;
-  touch-action: none;
-
-  /* Затемнение — своё, а не токен: это не цвет интерфейса, а плёнка поверх
-     него, и на светлой теме она обязана остаться тёмной, иначе вырез перестаёт
-     читаться как вырез. Разная плотность — потому что на светлом фоне та же
-     плотность выглядит грязью. */
-  --hint-scrim: rgb(0 0 0 / 78%);
-}
-
-:root[data-theme='light'] .bj-hint {
-  --hint-scrim: rgb(12 12 12 / 55%);
-}
-
-.bj-hint__hole {
-  position: absolute;
-  box-shadow: 0 0 0 9999px var(--hint-scrim);
-  outline: 1px solid var(--line-5);
   pointer-events: none;
 }
-
+:root[data-theme='light'] .bj-hint {
+  --hint-bg: #e1e1dc;
+  --hint-border: #a1a19a;
+  --hint-divider: #b9b9b1;
+  --hint-target-wash: rgb(0 0 0 / 4%);
+}
+.bj-hint__hole {
+  position: absolute;
+  outline: 2px solid var(--text-secondary);
+  background: var(--hint-target-wash);
+  pointer-events: none;
+}
 .bj-hint__card {
   position: absolute;
   left: var(--pad-screen);
   right: var(--pad-screen);
+  max-height: calc(100vh - 120px);
+  overflow-y: auto;
   padding: 16px;
-  background: var(--bg);
-  border: 1px solid var(--line-5);
+  background: var(--hint-bg);
+  color: var(--text);
+  border: 1px solid var(--hint-border);
+  box-shadow: 0 8px 24px rgb(0 0 0 / 24%);
+  pointer-events: auto;
 }
-
+.bj-hint__label {
+  margin-bottom: 12px;
+  font-size: var(--fs-micro);
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--ls-micro);
+  color: var(--text-secondary);
+}
 .bj-hint__text {
   margin: 0;
   font-size: var(--fs-body);
-  line-height: 1.45;
+  line-height: 1.5;
   color: var(--text);
 }
-
 .bj-hint__foot {
   display: flex;
+  gap: 12px;
   align-items: center;
   justify-content: space-between;
-  margin-top: 12px;
-  /* Пустой счётчик у одиночной подсказки не должен схлопывать высоту строки. */
-  min-height: 24px;
+  margin-top: 8px;
 }
-
 .bj-hint__count {
-  font-size: var(--fs-micro);
-  letter-spacing: var(--ls-micro);
-  color: var(--faint);
+  flex: none;
+  font-size: var(--fs-tech);
+  color: var(--text-secondary);
 }
-
 .bj-hint__next {
-  min-height: 40px;
-  padding: 0 20px;
+  min-width: 0;
+  min-height: var(--touch);
+  padding: 8px 0 8px 12px;
   font: inherit;
   font-size: var(--fs-micro);
-  font-weight: var(--fw-medium);
-  letter-spacing: var(--ls-micro);
-  color: var(--inverse-text);
-  background: var(--inverse-bg);
+  line-height: 1.4;
+  text-align: right;
+  color: var(--text);
+  background: none;
+  text-decoration: underline;
+  text-underline-offset: 3px;
   border: 0;
   cursor: pointer;
 }
-
-/*
- * Полосой во всю ширину и с непрозрачным фоном — потому что под ней стоит
- * нижняя панель приложения. Прозрачная кнопка легла бы прямо на подписи табов:
- * читаются оба слоя, а нажимается только верхний.
- */
 .bj-hint__hide {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  min-height: calc(var(--touch) + var(--safe-bottom));
-  padding: 0 var(--pad-screen) var(--safe-bottom);
-  /* Не наследуем выравнивание кнопок приложения: строка одна и стоит по центру. */
-  text-align: center;
+  width: 100%;
+  min-height: var(--touch);
+  margin-top: 4px;
+  padding: 8px 0;
+  text-align: left;
   font: inherit;
-  font-size: var(--fs-micro);
-  letter-spacing: var(--ls-micro);
-  color: var(--dim);
-  background: var(--bg);
+  font-size: var(--fs-tech);
+  color: var(--text-secondary);
+  background: none;
+  text-decoration: underline;
+  text-underline-offset: 3px;
   border: 0;
-  border-top: 1px solid var(--line-3);
+  border-top: 1px solid var(--hint-divider);
   cursor: pointer;
+}
+.bj-hint button:focus-visible {
+  outline: 2px solid var(--text);
+  outline-offset: 3px;
 }
