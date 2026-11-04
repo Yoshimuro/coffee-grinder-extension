@@ -29,6 +29,7 @@ import { Timer } from './screens/Timer.js';
 import { Wheel } from './screens/Wheel.js';
 import { HintLayer } from './hints/HintLayer.js';
 import { useThemeAttribute } from './theme.js';
+import './responsive.css';
 
 const VIEWS: Record<Screen, ComponentType> = {
   home: Home,
@@ -60,7 +61,7 @@ export function App() {
   useThemeAttribute();
 
   return (
-    <div className="app">
+    <div className={isTab(screen) ? 'app app--tabs' : 'app'}>
       <View />
       {/* Табы только на корневых экранах — иначе вложенность не читается. */}
       {isTab(screen) ? <TabBar /> : null}

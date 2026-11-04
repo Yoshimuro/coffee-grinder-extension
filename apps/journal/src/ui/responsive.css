@@ -1,0 +1,158 @@
+/* Phone first; the installed PWA and browser use the same layout. */
+.app {
+  height: 100dvh;
+  width: 100%;
+  margin-inline: auto;
+}
+
+.app:not(.app--tabs) {
+  padding-bottom: var(--safe-bottom);
+}
+
+.screen,
+.screen__body {
+  min-width: 0;
+}
+
+.bj-brew__grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+@media (max-width: 480px) {
+  .bj-rec__row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) 24px;
+    gap: 8px 6px;
+    padding-block: 10px;
+  }
+
+  .bj-rec__name {
+    grid-column: 1 / -1;
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+
+  .bj-rec__pair {
+    justify-content: space-between;
+  }
+
+  .bj-rec__none {
+    width: auto;
+  }
+}
+
+/* Keep the value and both stepper buttons readable on narrow phones. */
+@media (max-width: 374px) {
+  .bj-brew__grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .bj-head {
+    gap: 8px;
+    padding-inline: 12px;
+  }
+
+  .bj-head__title {
+    font-size: 10px;
+    letter-spacing: 1.5px;
+  }
+}
+
+@media (min-width: 768px) {
+  .app {
+    --pad-screen: 28px;
+    max-width: 1180px;
+    border-inline: 1px solid var(--line-2);
+  }
+
+  .app--tabs {
+    display: grid;
+    grid-template-columns: 152px minmax(0, 1fr);
+    grid-template-rows: minmax(0, 1fr);
+  }
+
+  .app--tabs > .screen {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  .tabs {
+    grid-column: 1;
+    grid-row: 1;
+    flex-direction: column;
+    gap: 8px;
+    padding: 64px 12px max(20px, var(--safe-bottom));
+    border-top: 0;
+    border-right: 1px solid var(--line-2);
+  }
+
+  .tab {
+    flex: none;
+    padding: 16px 12px;
+    border-left: 2px solid transparent;
+    text-align: left;
+    font-size: 10px;
+    letter-spacing: 1.5px;
+  }
+
+  .tab--on {
+    border-left-color: var(--text);
+    background: var(--plane);
+  }
+
+  .screen__body {
+    width: 100%;
+    max-width: 800px;
+    margin-inline: auto;
+    padding-top: 28px;
+  }
+
+  .bj-head {
+    min-height: 64px;
+    padding-inline: var(--pad-screen);
+  }
+
+  /* A nested form stays a comfortable reading width, including its header. */
+  .app:not(.app--tabs) > .screen:not([data-screen='wheel']) {
+    width: 100%;
+    max-width: 800px;
+    margin-inline: auto;
+  }
+
+  .bj-wheel__zoom-in {
+    width: min(480px, 60dvh);
+  }
+
+  .bj-wheel__svg {
+    width: 100%;
+    height: auto;
+  }
+}
+
+@media (min-width: 1024px) {
+  .bj-shelf {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-content: start;
+    max-width: none;
+    gap: 16px;
+  }
+
+  .bj-shelf__add {
+    grid-column: 1 / -1;
+  }
+}
+
+/* A landscape phone must be able to scroll past the wheel to its controls. */
+@media (max-height: 500px) {
+  .bj-wheel {
+    overflow-y: auto;
+  }
+
+  .bj-wheel__stage,
+  .bj-map,
+  .bj-canvas {
+    flex: none;
+    min-height: 280px;
+  }
+}

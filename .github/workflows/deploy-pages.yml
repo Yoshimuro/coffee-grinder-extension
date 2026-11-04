@@ -1,0 +1,61 @@
+name: Deploy Brew Journal to Pages
+
+on:
+  push:
+    branches: [main]
+    # Publish a reviewed snapshot from a development branch without merging it.
+    tags: ['pages-*']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: github-pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run check:data
+      - run: npm test
+      # The default build targets the extension, not the website.
+      - run: npm run build:journal
+      - run: npx playwright install --with-deps chromium webkit
+      - run: npm run test:e2e:journal
+      - run: npm run test:production:journal
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v4
+        with:
+          path: apps/journal/dist
+      - name: Upload journal test evidence
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: pages-test-results
+          path: |
+            apps/journal/test-results/
+            apps/journal/playwright-report/
+          retention-days: 7
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy
+        id: deployment
+        uses: actions/deploy-pages@v4

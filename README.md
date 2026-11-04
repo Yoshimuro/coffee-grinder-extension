@@ -234,6 +234,81 @@ positions. These are the checks that catch a bad import, and they earn their
 keep — an extrapolated fit that read −126 µm at zero, and another reaching
 3288 µm, both looked entirely reasonable in the source CSV.
 
+## Brew Journal on GitHub Pages (PWA)
+
+The journal is a static website with a web app manifest and an offline service
+worker. It needs no backend. Build it with `npm run build:journal` and publish
+**`apps/journal/dist/`**; the default `npm run build` produces the Chrome extension.
+All asset, manifest and worker paths are relative, so the same build works at
+`https://yoshimuro.github.io/coffee-grinder-extension/` or a custom domain root.
+
+To enable publication:
+
+1. In the repository's **Settings → Pages → Build and deployment**, select
+   **GitHub Actions** as the source.
+2. Merge the reviewed changes into `main`. The **Deploy Brew Journal to Pages**
+   workflow runs checks and publishes only after they pass. It also supports
+   pushing a `pages-*` tag to publish a reviewed commit from another branch.
+   **Run workflow** is available once the workflow exists on the repository's
+   default branch; it accepts an explicitly selected ref. The `github-pages`
+   environment must allow the chosen ref. Development branches do not publish
+   on push.
+3. Open the HTTPS URL reported by the deployment. Install through the browser's
+   app menu, or **Share → Add to Home Screen** on iPhone/iPad.
+
+The shell, local fonts, manifest and icons are available offline after a
+successful first visit. Journal data stays in the browser's IndexedDB; use the
+app's database export to back it up or transfer it to another device. The web
+version does not implement the APK's speech input or scheduled reminders.
+
+Saved entries, recipes, shelf, equipment and settings live in IndexedDB;
+full-size browser photos live in OPFS (or a stored data URL where OPFS writing
+is unsupported). These are disk storage, separate from cached application
+files. Reloading or restarting the browser does not reset them. Clearing only
+cached files does not delete the journal; clearing **site data** does.
+Unsaved forms and an unfinished timer are in-memory state and are not restored.
+
+On production startup the app requests persistent storage. **Settings → Data
+storage** reports the browser's actual decision and allows retrying a declined
+request. A granted request protects against automatic storage eviction, not
+explicit site-data deletion. The browser may decline it; private browsing,
+storage pressure and browser policies mean there is no unconditional promise
+of keeping browser-local data forever. Keep a database export for recovery.
+See [browser storage rules](https://developer.mozilla.org/en-US/docs/Web/API/Storage_API/Storage_quotas_and_eviction_criteria).
+
+Updates download a complete new shell before becoming eligible for activation.
+Close all tabs/windows of the journal and reopen it to switch to a downloaded
+update; an active timer or unsaved form is not reloaded automatically. A failed
+download retains the previous version. Cache cleanup is limited to this app's
+URL scope, leaving other Pages projects on the same origin alone.
+
+The phone layout keeps bottom navigation; tablet and desktop layouts use a
+sidebar, bounded form widths, and (on desktop) a two-column coffee shelf.
+
+Local release checks:
+
+```bash
+npm ci
+npx playwright install chromium webkit
+npm run verify:journal
+```
+
+`test:production:journal` expects a current `build:journal`. It serves the actual
+build under `/coffee-grinder-extension/`, checks offline data/assets, successful
+and interrupted updates, cache isolation, and responsive flows at 320, 393,
+768, 1280 px and in landscape, plus an emulated iPhone in WebKit. These checks
+also run in CI; final home-screen installation should be checked on real phones.
+Persistent-profile tests in Chromium and WebKit additionally save records and
+photos offline, restart the browser process using the same on-disk profile,
+and compare every database field and photo hash. They also check cache-only
+clearing. On macOS, the WebKit process-restart case is explicitly skipped due to
+[Playwright 1.56.1 issue #37909](https://github.com/microsoft/playwright/issues/37909);
+its server-unavailable reload check still runs. WebKit checks refuse connections
+at the origin instead of using Playwright's broken offline flag
+([issue #42775](https://github.com/microsoft/playwright/issues/42775)). Chromium
+additionally enables browser offline emulation. Linux CI runs both restart
+cases. A physical phone reboot is not simulated by these tests.
+
 ## Brew Journal for Android
 
 Install the latest signed build straight from the phone:

@@ -10,5 +10,5 @@
 | `db/` | `schema.ts` — Dexie v1 (контракт, версии только добавляются), `seed.ts` — первый запуск, `repo/` — доступ к таблицам, `transfer.ts` — экспорт/импорт базы (контракт №2) |
 | `domain/` | чистая логика (BJ-3): `stages.ts`, `timer.ts`, `calibration.ts`, `convert.ts` (обёртка `@coffee/core`), `format.ts`, `geometry.ts` |
 | `platform/` | BJ-6: интерфейсы с веб-реализацией плюс `*.capacitor.ts` за ними — фото, файлы, голос, уведомления, keep-awake; выбор в `native.ts` |
-| `pwa/` | BJ-6: `register.ts` — условия регистрации service worker'а (сам воркер генерирует `vite.config.ts`) |
+| `pwa/` | `register.ts` — условия регистрации service worker'а (сам воркер генерирует `../build/pwa.ts`) |
 | `ui/` | `tokens.css` (токены хендоффа), `App.tsx`, `components/`, `screens/` — 17 экранов |

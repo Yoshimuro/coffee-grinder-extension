@@ -72,5 +72,5 @@ export function registerServiceWorker(): void {
   )
     return;
 
-  navigator.serviceWorker.register(SW_URL).catch(() => undefined);
+  navigator.serviceWorker.register(SW_URL, { updateViaCache: 'none' }).catch(() => undefined);
 }

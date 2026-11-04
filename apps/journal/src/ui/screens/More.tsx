@@ -22,7 +22,7 @@
  * это и есть точка отказа. Отдельного «вы уверены?» поверх неё не нужно.
  */
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { useNav } from '../../app/nav.js';
 import { STR } from '../../data/strings.js';
@@ -42,6 +42,7 @@ import { resetWheelEdits, undoWheelEdit, useWheel } from '../../db/repo/wheel.js
 import type { Lang, ThemePref } from '../../db/schema.js';
 import { EXPORT_FILE, ImportError, importExport, packExport } from '../../db/transfer.js';
 import { files, pickFile } from '../../platform/files.js';
+import { storagePersistence, type StoragePersistence } from '../../pwa/storage.js';
 import { Chip, EmptyState, InverseButton, Row, Section, Stepper } from '../components/index.js';
 import {
   DEFAULT_STEP,
@@ -92,6 +93,18 @@ export function More() {
   const [step, setStep] = useState(DEFAULT_STEP);
   const [confirming, setConfirming] = useState<string | null>(null);
   const [transfer, setTransfer] = useState<TransferState>(TRANSFER_IDLE);
+  const [storage, setStorage] = useState<StoragePersistence | 'checking'>('checking');
+
+  useEffect(() => {
+    let active = true;
+    void storagePersistence().then((value) => { if (active) setStorage(value); });
+    return () => { active = false; };
+  }, []);
+
+  const protectStorage = async () => {
+    setStorage('checking');
+    setStorage(await storagePersistence(true));
+  };
 
   const list = grinders ?? [];
   const busy = transfer.kind === 'busy';
@@ -347,6 +360,18 @@ export function More() {
           testId="set-import"
           onClick={() => void runImport()}
         />
+
+        {storage !== 'native' ? (
+          <Row
+            label={t.set_storage}
+            sub={storage === 'checking' ? t.set_storage_checking
+              : storage === 'persistent' ? t.set_storage_protected
+                : storage === 'best-effort' ? t.set_storage_best_effort : t.set_storage_unavailable}
+            right={storage === 'persistent' ? '✓' : storage === 'best-effort' ? '→' : '…'}
+            testId="set-storage"
+            {...(storage === 'best-effort' ? { onClick: () => void protectStorage() } : {})}
+          />
+        ) : null}
 
         <div className="bj-set__footer">
           {t.set_offline} · {t.set_ver}

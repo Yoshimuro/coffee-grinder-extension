@@ -20,7 +20,7 @@ const PORT = 4319;
 
 export default defineConfig({
   testDir: './tests/e2e',
-  outputDir: './test-results',
+  outputDir: './test-results/e2e',
   workers: 1,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 1 : 0,
@@ -34,9 +34,9 @@ export default defineConfig({
   },
 
   /*
-   * Размер экрана телефона, а не десктопа: раскладка рассчитана на 393×852, и
-   * на 1280px она разъезжается так, что смоук перестаёт проверять то, что
-   * увидит человек. `viewport` стоит ПОСЛЕ разворота `devices[...]` — иначе
+   * Основные сценарии идут на телефоне; широкий экран и production-сборку
+   * проверяет playwright.production.config.ts.
+   * `viewport` стоит ПОСЛЕ разворота `devices[...]` — иначе
    * пресет Desktop Chrome перебивает его своими 1280×720.
    */
   projects: [

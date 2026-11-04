@@ -10,6 +10,30 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  journal:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run build:journal
+      - run: npx playwright install --with-deps chromium webkit
+      - run: npm run test:e2e:journal
+      - run: npm run test:production:journal
+      - name: Upload journal test evidence
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: journal-test-results
+          path: |
+            apps/journal/test-results/
+            apps/journal/playwright-report/
+          retention-days: 7
+
   verify:
     runs-on: ubuntu-latest
     timeout-minutes: 15

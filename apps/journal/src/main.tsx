@@ -32,6 +32,7 @@ import { seedDemo, wantsDemo } from './db/demo-seed.js';
 import { seed } from './db/seed.js';
 import { startBackButton } from './platform/back.js';
 import { registerServiceWorker } from './pwa/register.js';
+import { storagePersistence } from './pwa/storage.js';
 import { App } from './ui/App.js';
 
 const host = document.getElementById('root');
@@ -66,6 +67,11 @@ createRoot(host).render(
  * условия и их причины — в `pwa/register.ts`.
  */
 registerServiceWorker();
+
+// IndexedDB and OPFS already survive reloads. Persistent storage additionally
+// asks the browser to exempt this origin from automatic storage eviction.
+// Recheck on launch: an installed PWA may qualify after a browser visit did not.
+if (import.meta.env.PROD) void storagePersistence(true);
 
 /*
  * Системная «назад» на телефоне — во внутреннюю навигацию, а не в лаунчер.
