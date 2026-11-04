@@ -133,9 +133,14 @@ test('saved data and photo files survive offline writes, reload, browser process
     await page.reload();
     await expect(page.getByTestId('home-feed-row')).toHaveCount(1);
     expect(await snapshot(page)).toEqual(before);
+    site.state.online = false;
+    if (browserName === 'chromium') await context.setOffline(true);
+    await page.reload();
+    await expect(page.getByTestId('home-feed-row')).toHaveCount(1);
+    expect(await snapshot(page)).toEqual(before);
     await testInfo.attach('storage-verification', {
       contentType: 'application/json',
-      body: JSON.stringify({ browserName, persisted, photoStorage: before.photos[0]!.path.split(':')[0], tables: Object.fromEntries(Object.entries(before.data).map(([name, rows]) => [name, rows.length])), offlineReload: true, processRestart: true, cacheOnlyClear: true }),
+      body: JSON.stringify({ browserName, persisted, photoStorage: before.photos[0]!.path.split(':')[0], tables: Object.fromEntries(Object.entries(before.data).map(([name, rows]) => [name, rows.length])), offlineReload: true, processRestart: true, cacheOnlyClear: true, offlineAfterCacheRepair: true }),
     });
   } finally {
     await context.close();

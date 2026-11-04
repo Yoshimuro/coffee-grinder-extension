@@ -19,7 +19,6 @@ export default defineConfig({
     {
       name: 'storage-webkit',
       testMatch: /(?:pwa|storage)\.spec\.ts/,
-      grep: /production shell|saved data and photo files/,
       use: { browserName: 'webkit' },
     },
     ...[

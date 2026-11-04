@@ -282,6 +282,14 @@ update; an active timer or unsaved form is not reloaded automatically. A failed
 download retains the previous version. Cache cleanup is limited to this app's
 URL scope, leaving other Pages projects on the same origin alone.
 
+If only the application cache is cleared, an online navigation rebuilds the
+complete offline shell before serving it. Installation and recovery commit the
+whole batch atomically, so a failed rollback cannot delete an active version's
+cache. Each file is checked against its build hash to avoid mixing releases.
+An interrupted recovery allows online use and retries on a later cache miss.
+If the server has already replaced that release, the normal update lifecycle
+above applies: close the old tabs to activate the newly downloaded version.
+
 The phone layout keeps bottom navigation; tablet and desktop layouts use a
 sidebar, bounded form widths, and (on desktop) a two-column coffee shelf.
 
@@ -295,7 +303,7 @@ npm run verify:journal
 
 `test:production:journal` expects a current `build:journal`. It serves the actual
 build under `/coffee-grinder-extension/`, checks offline data/assets, successful
-and interrupted updates, cache isolation, and responsive flows at 320, 393,
+and interrupted updates and rollbacks, cache recovery and isolation, and responsive flows at 320, 393,
 768, 1280 px and in landscape, plus an emulated iPhone in WebKit. These checks
 also run in CI; final home-screen installation should be checked on real phones.
 Persistent-profile tests in Chromium and WebKit additionally save records and
